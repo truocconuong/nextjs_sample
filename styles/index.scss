@@ -1,0 +1,12 @@
+@use 'colors';
+@font-face {
+    font-family: recoleta-regular;
+    src: url('/fonts/Recoleta/Recoleta-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+h1 {
+    font-family: 'recoleta-regular';
+
+}
