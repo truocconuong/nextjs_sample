@@ -1,12 +1,11 @@
 @use 'colors';
+@import url('./custom-global.antd.scss');
 @font-face {
-    font-family: recoleta-regular;
+    font-family: Recoleta;
     src: url('/fonts/Recoleta/Recoleta-Regular.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-
-h1 {
-    font-family: 'recoleta-regular';
-
+    src: url('/fonts/Recoleta/Recoleta-Black.ttf');
+    src: url('/fonts/Recoleta/Recoleta-Bold.ttf');
+    src: url('/fonts/Recoleta/Recoleta-Light.ttf');
+    src: url('/fonts/Recoleta/Recoleta-Medium.ttf');
+    src: url('/fonts/Recoleta/Recoleta-SemiBold.ttf');
 }
