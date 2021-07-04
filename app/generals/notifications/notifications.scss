@@ -1,0 +1,40 @@
+.ant-notification-notice-icon {
+    line-height: 0px;
+}
+
+.ant-notification-notice-with-icon .ant-notification-notice-description {
+    margin-left: 44px;
+    font-size: 16px;
+    color: #001064;
+    font-family: Graphik;
+    margin-right: 40px;
+}
+
+.ant-notification-notice {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: none
+}
+
+.ant-notification-notice-icon {
+    line-height: 0px;
+    margin-top: -2px;
+}
+
+.notification-success{
+    border: 2px solid #001064;
+    background-color: #e3f8f0;
+}
+
+.notification-warning{
+    border: 2px solid #001064;
+    background-color: #ffebec;
+}
+
+.notification-info{
+    border: 2px solid #00199e;
+    background-color: #e9f0ff;
+    .ant-notification-notice-with-icon .ant-notification-notice-description {
+        color: #00199e;
+    }
+}
