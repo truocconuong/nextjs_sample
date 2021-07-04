@@ -15,19 +15,7 @@ const Example = () => {
   const [selectedValue, setSelectedValue] = useState<string>(
     defaultValueSelect
   );
-  const percent = useSelector(
-    createSelector(
-      (state: any) => state?.progress,
-      (progress) => progress?.percent
-    )
-  );
-  useEffect(() => {
-    dispatch(
-      ProgressActions.saveProgress({
-        percent: 50
-      })
-    );
-  }, [])
+
   const onSearch = () => {
     console.log("inputValue", inputValue);
   };
@@ -75,6 +63,7 @@ const Example = () => {
                   label="Input Field"
                   selectProps={{
                     placeholder: "Select",
+                    className: "full-width"
                   }}
                 ></SelectField>
               </div>
