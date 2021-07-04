@@ -1,15 +1,33 @@
 import { Col, Row, Select } from "antd";
 import SelectField from "generals/SelectField";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../InputField";
+import { createSelector } from "reselect";
+import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
+import { ProgressActions } from "../../../redux/actions";
+
 const { Option } = Select;
 const Example = () => {
+  const dispatch = useDispatch();
   const defaultValueSelect = "Select";
   const [inputValue, setInputValue] = useState<string>("");
   const [selectedValue, setSelectedValue] = useState<string>(
     defaultValueSelect
   );
-
+  const percent = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.percent
+    )
+  );
+  useEffect(() => {
+    dispatch(
+      ProgressActions.saveProgress({
+        percent: 50
+      })
+    );
+  }, [])
   const onSearch = () => {
     console.log("inputValue", inputValue);
   };
