@@ -104,4 +104,32 @@
   .border-color {
     border-color: #001064;
   }
+  .ant-select-arrow {
+    // padding: 20px 20px 20px 0px;
+    margin-top: -7px;
+    margin-right: 20px;
+  }
+  .btn-search {
+    background: #e5e7ef;
+    border-radius: 8px;
+    height: 46px;
+    width: 116px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .icon-wrapper {
+      svg {
+        margin-left: 0px;
+        margin-right: 13px;
+      }
+    }
+    span {
+      font-size: 16px;
+      line-height: 140%;
+      display: flex;
+      align-items: flex-end;
+      letter-spacing: -0.5px;
+      color: #a0a5be;
+    }
+  }
 }

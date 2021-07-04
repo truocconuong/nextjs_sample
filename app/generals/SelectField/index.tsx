@@ -1,5 +1,6 @@
 import { Col, Row, Select, SelectProps } from "antd";
 import React, { ReactElement } from "react";
+import { SelectUp, SelectDown } from "../../../public/images";
 interface SelectFieldPropsInterface {
   label?: string;
   displayLabel?: boolean;
@@ -21,7 +22,7 @@ const SelectField = (props: SelectFieldPropsInterface) => {
         </Col>
         <Col span={24}>
           <Select
-            suffixIcon={<DownCircleTwoTone />}
+            suffixIcon={selectProps?.value ? <SelectUp /> : <SelectDown />}
             {...selectProps}
             className={
               selectProps?.value && !selectProps?.disabled ? " box-shadow " : ""

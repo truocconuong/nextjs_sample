@@ -6,7 +6,13 @@ const { Option } = Select;
 const Example = () => {
   const defaultValueSelect = "Select";
   const [inputValue, setInputValue] = useState<string>("");
-  const [selectedValue, setSelectedValue] = useState<string>(defaultValueSelect);
+  const [selectedValue, setSelectedValue] = useState<string>(
+    defaultValueSelect
+  );
+
+  const onSearch = () => {
+    console.log("inputValue", inputValue);
+  };
 
   return (
     <div className="tf-container">
@@ -28,6 +34,7 @@ const Example = () => {
                 />
               </div>
             </Col>
+
             <Col span={24}>
               <div className="container-input">
                 <div className="description">INPUT / FILLED</div>
@@ -51,7 +58,7 @@ const Example = () => {
                   selectProps={{
                     placeholder: "Select",
                   }}
-                />
+                ></SelectField>
               </div>
             </Col>
             <Col span={24}>
@@ -76,7 +83,7 @@ const Example = () => {
                   displayLabel
                   label="Input Field"
                   inputProps={{
-                    placeholder: "usergoogle@gmail.com",
+                    placeholder: "e.g. S-000-0000-G",
                   }}
                   multipleLines
                   limitLines={5}
@@ -84,6 +91,48 @@ const Example = () => {
                   supportText="The NRIC and Passport No. may only contain letters and numbers."
                 />
               </div>
+            </Col>
+            <Col span={24}>
+              <div className="container-input">
+                <div className="description">INPUT / ADDRESS</div>
+                <InputField
+                  displayLabel
+                  label="Input Field Label"
+                  inputProps={{
+                    placeholder: "6 digit postal code",
+                    value: inputValue,
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                      setInputValue(e?.target?.value),
+                  }}
+                  searchable
+                  onSearch={onSearch}
+                />
+              </div>
+            </Col>
+            <Col span={24}>
+              <div className="container-input">
+                <div className="description">INPUT / EMPTY</div>
+                <InputField
+                  displayLabel
+                  label="Input Field Label"
+                  inputProps={{
+                    placeholder: "usergoogle@gmail.com",
+                    value: inputValue,
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                      setInputValue(e?.target?.value),
+                  }}
+                />
+              </div>
+            </Col>
+            <Col span={24}>
+              <InputField
+                inputProps={{
+                  placeholder: "no label",
+                  value: inputValue,
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                    setInputValue(e?.target?.value),
+                }}
+              />
             </Col>
           </Row>
         </Col>

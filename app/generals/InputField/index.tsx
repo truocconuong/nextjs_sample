@@ -1,5 +1,6 @@
-import { Input, InputProps } from "antd";
+import { Button, Col, Input, InputProps, Row } from "antd";
 import TextArea, { TextAreaProps } from "antd/lib/input/TextArea";
+import { SearchIcon } from "../../../public/images";
 import React from "react";
 interface InputFieldPropsInterface {
   label?: string;
@@ -13,6 +14,9 @@ interface InputFieldPropsInterface {
   limitLines?: number;
   displaySupportText?: boolean;
   supportText?: string;
+  searchable?: boolean;
+  onSearch?: () => void;
+  searchText?: string;
 }
 const InputField = (props: InputFieldPropsInterface) => {
   const {
@@ -26,6 +30,9 @@ const InputField = (props: InputFieldPropsInterface) => {
     limitLines,
     displaySupportText,
     supportText,
+    searchable,
+    onSearch,
+    searchText,
   } = props;
   const className =
     "input-field " +
@@ -50,12 +57,35 @@ const InputField = (props: InputFieldPropsInterface) => {
           autoSize={{ minRows: 2, maxRows: limitLines }}
           className={className}
         />
+      ) : searchable ? (
+        <Row gutter={12}>
+          <Col span={16}>
+            <Input
+              {...((inputProps as unknown) as InputProps)}
+              className={className}
+            />
+          </Col>
+          <Col span={4}>
+            <Button
+              icon={
+                <div className="icon-wrapper">
+                  <SearchIcon />
+                </div>
+              }
+              onClick={onSearch}
+              className="btn-search"
+            >
+              {searchText || "Search"}
+            </Button>
+          </Col>
+        </Row>
       ) : (
         <Input
           {...((inputProps as unknown) as InputProps)}
           className={className}
         />
       )}
+
       {displayErrorText && <div className="error-text">{errorTextStr}</div>}
       {displaySupportText && <div className="support-text">{supportText}</div>}
     </div>
