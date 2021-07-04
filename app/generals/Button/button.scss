@@ -1,0 +1,111 @@
+.custom-button {
+  .ant-btn {
+    display: flex;
+    align-items: center;
+    min-width: 104px;
+    padding: 10px 24px 11px;
+    font-size: 18px;
+    border-radius: 6px;
+    color: #2d3b80;
+    background-color: #eef3ff;
+    border: unset;
+    &:hover,
+    &:focus {
+      outline: unset;
+    }
+    &:active {
+      color: #ffffff;
+      background: #001064;
+    }
+    &:disabled {
+      background-color: #eef3ff;
+      border: unset;
+      color: #a0a5be;
+    }
+    [ant-click-animating-without-extra-node="true"]::after,
+    .ant-click-animating-node {
+      --antd-wave-shadow-color: red;
+    }
+    svg {
+      margin-right: 8px;
+    }
+  }
+  .ant-btn-lg {
+    min-width: 110px;
+    height: 60px;
+    padding: 17px 24px 18px;
+    font-size: 20px;
+  }
+
+  .ant-btn-md {
+    min-width: 104px;
+    height: 46px;
+    padding: 10px 24px 11px;
+    font-size: 18px;
+  }
+
+  .ant-btn-primary {
+    color: #ffffff;
+    background-color: #00199e;
+  }
+
+  .ant-btn-dashed,
+  .ant-btn-ghost,
+  .ant-btn-primary {
+    box-shadow: 0px 8px 10px rgba(0, 22, 136, 0.16);
+  }
+
+  .ant-btn-ghost {
+    color: #2d3b80;
+    background: transparent;
+    border: 2px solid #001064;
+    &:hover {
+      border: 2px solid #001064;
+    }
+  }
+
+  .ant-btn-dashed {
+    color: #ffffff;
+    background: #17c67e;
+    border-color: #17c67e;
+    padding: 15px 24px 16px;
+    &:active {
+      border-color: #001064;
+    }
+  }
+
+  .ant-btn-dangerous {
+    color: #ff6868;
+    background: #fff;
+    border: 1px solid #ff6868;
+    box-shadow: unset;
+    &:hover {
+      border: 1px solid #ff6868;
+    }
+    &:active {
+      color: #fb3640;
+      border: 1px solid #fb3640;
+      background: #fff;
+    }
+  }
+
+  .ant-btn-custom {
+    background-color: #fff;
+    border: 1px solid #6670a2;
+    color: #6670a2;
+    box-shadow: unset;
+    &:hover {
+      border: 1px solid #6670a2;
+    }
+    &:disabled {
+      color: #c3c5d2;
+      border: 1px solid #c3c5d2;
+      background-color: #fff;
+    }
+    &:active {
+      background-color: #fff;
+      border: 1px solid #49527f;
+      color: #49527f;
+    }
+  }
+}
