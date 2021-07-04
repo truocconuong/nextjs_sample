@@ -1,5 +1,7 @@
 @use 'colors';
+@use 'spacing-scale.scss';
 @import './custom-global.antd.scss';
 @import './fonts.scss';
 @import '/app/generals/Example/InputFieldExample.scss';
 @import '/app/generals/InputField/TextField.scss';
+@import '/app/generals/notifications/notifications.scss'
