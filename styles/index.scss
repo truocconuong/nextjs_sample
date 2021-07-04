@@ -1,5 +1,5 @@
 @use 'colors';
 @import './custom-global.antd.scss';
 @import './fonts.scss';
-@import './InputFieldExample.scss';
-@import './TextField.scss';
+@import '/app/generals/Example/InputFieldExample.scss';
+@import '/app/generals/InputField/TextField.scss';
