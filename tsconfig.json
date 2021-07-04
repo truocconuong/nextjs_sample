@@ -26,6 +26,6 @@
     "jsx": "preserve",
     "types": ["cypress"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "public/images/index.js"],
   "exclude": ["node_modules"]
 }
