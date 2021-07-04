@@ -1,5 +1,4 @@
 import React from 'react';
-import Carousel from 'react-material-ui-carousel'
 
 function Question(props) {
     const answers = [
@@ -41,7 +40,7 @@ function Question(props) {
                 <p>Tation argumentum et usu, dicit viderer evertitur te has. Eu dictas </p>
             </div>
             <div>
-                <Carousel>
+                {/* <Carousel>
                     {answers.map(item => (
                         <label className="need-job-icon-text text-center">
                             <input type="radio" name="job_title" defaultValue="Ux designer label" className="j-checkbox" defaultChecked />
@@ -57,7 +56,7 @@ function Question(props) {
                             </span>
                         </label>
                     ))}
-                </Carousel>
+                </Carousel> */}
             </div>
         </div>
     );

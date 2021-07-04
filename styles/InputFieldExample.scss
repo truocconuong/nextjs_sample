@@ -1,0 +1,31 @@
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+.tf-container {
+  width: 80%;
+  height: 80%;
+  margin: 50px auto 0px;
+  .container-input {
+    .description {
+      font-family: Graphik-Regular;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 17px;
+      letter-spacing: 0.005em;
+      text-transform: uppercase;
+      color: #c3c5d2;
+      margin-bottom: 24px;
+    }
+    .custom-class-input {
+      width: 416px;
+      height: 50px;
+    }
+    .error-text {
+      color: #FB3640;
+      margin-top: 16px;
+    }
+  }
+}
