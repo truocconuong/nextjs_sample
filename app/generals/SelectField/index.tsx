@@ -9,7 +9,6 @@ interface SelectFieldPropsInterface {
 }
 const SelectField = (props: SelectFieldPropsInterface) => {
   const { displayLabel, label, selectProps, children } = props;
-  console.log("selectProps", selectProps)
   return (
     <div className="select-field-container">
       <Row>

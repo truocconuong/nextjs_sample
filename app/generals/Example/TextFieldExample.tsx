@@ -6,6 +6,7 @@ import { createSelector } from "reselect";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { ProgressActions } from "../../../redux/actions";
+import ProgressBar from "generals/Progress";
 
 const { Option } = Select;
 const Example = () => {

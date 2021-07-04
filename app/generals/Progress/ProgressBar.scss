@@ -1,0 +1,69 @@
+.based-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.progress-container {
+  width: 100%;
+  height: 100%;
+  @extend .based-flex-row;
+  .text-percent {
+    margin-right: $spacing-32;
+    margin-left: $spacing-16;
+    font-size: 18px;
+    line-height: 155%;
+    color: #001064;
+    font-style: normal;
+    font-weight: normal;
+    .percent-completed {
+      font-weight: bold;
+    }
+  }
+
+  .button-progress {
+    background: #eef3ff;
+    border-radius: 8px;
+    height: 46px;
+    font-size: 18px;
+    line-height: 140%;
+    text-align: center;
+    letter-spacing: -0.5px;
+
+    font-style: normal;
+    font-weight: normal;
+  }
+  .button-progress-disabled {
+    @extend .button-progress;
+    color: #a0a5be;
+  }
+  .button-progress-active {
+    @extend .button-progress;
+    color: #001064;
+    font-family: "Graphik-Medium";
+  }
+  .progress-icon-container {
+    position: absolute;
+    top: 25px;
+    left: 22px;
+  }
+  .percent-container {
+    display: flex;
+    align-items: center;
+  }
+  .btn-mobile {
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  .progress-wrap {
+    width: 64px;
+    height: 64px;
+  }
+  .btn-progress-container {
+    @extend .based-flex-row;
+  }
+  .progress-mobile {
+      width: 100%;
+      margin-top: 12px;
+  }
+}
