@@ -9,6 +9,7 @@ interface SelectFieldPropsInterface {
 }
 const SelectField = (props: SelectFieldPropsInterface) => {
   const { displayLabel, label, selectProps, children } = props;
+  console.log("selectProps", selectProps)
   return (
     <div className="select-field-container">
       <Row>
@@ -24,7 +25,7 @@ const SelectField = (props: SelectFieldPropsInterface) => {
             suffixIcon={selectProps?.value ? <SelectUp /> : <SelectDown />}
             {...selectProps}
             className={
-              selectProps?.value && !selectProps?.disabled ? " box-shadow " : ""
+              selectProps.className + (selectProps?.value && !selectProps?.disabled ? " box-shadow " : "")
             }
           >
             {children}

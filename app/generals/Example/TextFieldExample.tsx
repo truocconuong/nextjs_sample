@@ -1,9 +1,15 @@
 import { Col, Row, Select } from "antd";
 import SelectField from "generals/SelectField";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../InputField";
+import { createSelector } from "reselect";
+import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
+import { ProgressActions } from "../../../redux/actions";
+
 const { Option } = Select;
 const Example = () => {
+  const dispatch = useDispatch();
   const defaultValueSelect = "Select";
   const [inputValue, setInputValue] = useState<string>("");
   const [selectedValue, setSelectedValue] = useState<string>(
@@ -57,6 +63,7 @@ const Example = () => {
                   label="Input Field"
                   selectProps={{
                     placeholder: "Select",
+                    className: "full-width"
                   }}
                 ></SelectField>
               </div>

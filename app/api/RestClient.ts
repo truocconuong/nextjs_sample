@@ -1,35 +1,54 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { METHOD } from "@constant/index";
+import axios from "axios";
 
-axios.defaults.headers.common.Accept = 'application/json';
-axios.defaults.timeout = 12000;
-
-const getHttpHeaders = (isAuthenticated = false): AxiosRequestConfig => {
-  // Add your custom logic here, for example add a Token to the Headers
-  if (isAuthenticated) {
-    return {
-      headers: {
-        Authorization: 'Bearer YOUR_TOKEN',
-      },
-    };
+function Request() {
+  async function requestApi(
+    method: METHOD,
+    url: string,
+    options?: any,
+    dataRequest?: any,
+    token?: string
+  ) {
+    try {
+      const requestToken = `Bearer ${token}`;
+      let response = await axios({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: requestToken,
+        },
+        ...options,
+        data: dataRequest,
+        url,
+        method,
+      });
+      let { data } = response;
+      return [data, data?.message];
+    } catch (error) {
+      return [null, error, error?.message];
+    }
   }
 
-  return {};
-};
+  function get(url: string, options = {}, token?: string) {
+    return requestApi(METHOD.GET, url, options, null, token);
+  }
 
-const get = (path: string): Promise<AxiosResponse> => axios.get(path, getHttpHeaders());
+  async function post(url: string, data: any, token?: string) {
+    return requestApi(METHOD.POST, url, null, data, token);
+  }
 
-const del = (path: string): Promise<AxiosResponse> => axios.delete(path, getHttpHeaders());
+  function put(url: string, data: any, token?: string) {
+    return requestApi(METHOD.PUT, url, null, data, token);
+  }
 
-const post = (path: string, data: any): Promise<AxiosResponse> => axios.post(path, data, getHttpHeaders());
+  function remove(url: string, data = {}, token?: string) {
+    return requestApi(METHOD.DELETE, url, null, data, token);
+  }
 
-const put = (path: string, data: any): Promise<AxiosResponse> => axios.post(path, data, getHttpHeaders());
+  function patch(url: string, data: any, token?: string) {
+    return requestApi(METHOD.PATCH, url, null, data, token);
+  }
 
-const patch = (path: string, data: any): Promise<AxiosResponse> => axios.post(path, data, getHttpHeaders());
+  return { get, post, put, patch, delete: remove };
+}
 
-export default {
-  get,
-  del,
-  post,
-  put,
-  patch,
-};
+export default Request();
