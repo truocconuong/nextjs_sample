@@ -1,0 +1,169 @@
+$breakpoint-mobile: 576px;
+.home-landing-pgae {
+  .home-carousel {
+    .ant-carousel {
+      position: relative;
+      .slick-slider {
+        ul.slick-dots.slick-dots-bottom {
+          bottom: 180px;
+          left: 90px;
+          right: inherit;
+          li {
+            height: 6px;
+            width: 57px;
+            button {
+              height: 6px;
+              width: 57px;
+              background: rgba(0, 16, 100, 0.2);
+              opacity: 1;
+            }
+          }
+          .slick-active {
+            button {
+              background: #001064;
+              opacity: 1;
+            }
+          }
+        }
+        .slick-prev {
+          left: 230px;
+          top: 46%;
+          width: 58px;
+          height: 58px;
+          z-index: 999999;
+        }
+        .slick-next {
+          right: 230px;
+          top: 46%;
+          width: 58px;
+          height: 58px;
+          z-index: 999999;
+        }
+        .slick-list {
+          .ant-row {
+            padding: 75px 280px;
+            .content {
+              margin-top: 80px;
+              padding-right: 10px;
+              .under_minute {
+                position: relative;
+              }
+              .under_minute:before {
+                content: " ";
+                position: absolute;
+                width: 250px;
+                height: 17px;
+                background-image: url(/images/under_minute.svg);
+                bottom: -3px;
+                right: -3px;
+              }
+              @media (max-width: $breakpoint-mobile) {
+                margin-top: 60px;
+                padding: 0 15px;
+                .under_minute:before {
+                  width: 170px;
+                  height: 17px;
+                  background-image: url(/images/under_minute_mobile.svg);
+                  bottom: -10px;
+                  left: inherit;
+                  right: -10px;
+                }
+              }
+              .minute {
+                position: relative;
+                height: 134px;
+                margin-bottom: 40px;
+                @media (max-width: $breakpoint-mobile) {
+                  height: 117px;
+                  margin-bottom: 30px;
+                  h1 {
+                    font-size: 42px;
+                    line-height: 55px;
+                    letter-spacing: -0.01em;
+                  }
+                }
+                h1 {
+                  color: #001066;
+                }
+                svg {
+                  position: absolute;
+                  bottom: -25px;
+                  left: 240px;
+                }
+              }
+              h4 {
+                font-family: Graphik-Medium;
+                font-weight: 500;
+                font-size: 22px;
+                line-height: 155%;
+                letter-spacing: -0.5px;
+                color: #001064;
+              }
+              h5 {
+                font-family: Graphik;
+                font-style: normal;
+                font-size: 18px;
+                line-height: 155%;
+                letter-spacing: -0.5px;
+                color: #001064;
+                margin-right: 160px;
+                margin-right: 160px;
+                margin-bottom: 15px;
+              }
+            }
+            @media (max-width: $breakpoint-mobile) {
+              padding: 0;
+              padding-bottom: 110px;
+              .img_slick {
+                display: none;
+              }
+            }
+          }
+        }
+        @media (max-width: $breakpoint-mobile) {
+          .slick-prev,
+          .slick-next {
+            display: none !important;
+          }
+          ul.slick-dots.slick-dots-bottom {
+            bottom: 20px;
+            left: -45px;
+            right: inherit;
+          }
+        }
+      }
+    }
+    .ant-row.home-5167832 {
+      background: #e9f0ff;
+      border-radius: 10px;
+      margin: 0px 230px;
+      height: 152px;
+      justify-content: center;
+      align-items: center;
+      margin-top: -75px;
+      position: absolute;
+      button {
+        height: 50px;
+        width: 137px;
+        border-radius: 4px;
+        background: #e9f0ff;
+        border: 1px solid #72789f4d;
+        span {
+          font-family: "Graphik-Medium";
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 20px;
+          letter-spacing: -0.5px;
+          color: #001064;
+        }
+      }
+      @media (max-width: $breakpoint-mobile) {
+        border-radius: 0;
+        margin: 0;
+        height: 470px;
+        justify-content: flex-start;
+        padding: 28px 20px 22px 12px;
+      }
+    }
+  }
+}
