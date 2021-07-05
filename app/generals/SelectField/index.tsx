@@ -6,11 +6,12 @@ interface SelectFieldPropsInterface {
   displayLabel?: boolean;
   selectProps?: SelectProps<any>;
   children?: ReactElement[];
+  wrapperClassName?: string;
 }
 const SelectField = (props: SelectFieldPropsInterface) => {
-  const { displayLabel, label, selectProps, children } = props;
+  const { displayLabel, label, selectProps, children, wrapperClassName } = props;
   return (
-    <div className="select-field-container">
+    <div className={"select-field-container " + (wrapperClassName || "")}>
       <Row>
         <Col span={24}>
           {displayLabel && (

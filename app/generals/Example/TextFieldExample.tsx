@@ -38,6 +38,7 @@ const Example = () => {
                     onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                       setInputValue(e?.target?.value),
                   }}
+                  wrapperClassName="wrapper-class"
                 />
               </div>
             </Col>
@@ -66,6 +67,7 @@ const Example = () => {
                     placeholder: "Select",
                     className: "full-width"
                   }}
+                  wrapperClassName="wrapper-select"
                 ></SelectField>
               </div>
             </Col>
