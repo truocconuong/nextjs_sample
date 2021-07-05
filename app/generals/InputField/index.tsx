@@ -17,6 +17,7 @@ interface InputFieldPropsInterface {
   searchable?: boolean;
   onSearch?: () => void;
   searchText?: string;
+  wrapperClassName?: string;
 }
 const InputField = (props: InputFieldPropsInterface) => {
   const {
@@ -33,6 +34,7 @@ const InputField = (props: InputFieldPropsInterface) => {
     searchable,
     onSearch,
     searchText,
+    wrapperClassName
   } = props;
   const className =
     "input-field " +
@@ -45,7 +47,7 @@ const InputField = (props: InputFieldPropsInterface) => {
       : "") +
     (inputProps?.value ? " typing " : "");
   return (
-    <div className="input-field-container">
+    <div className={"input-field-container " + (wrapperClassName || "")}>
       {displayLabel && (
         <label htmlFor="input" className="paragraph-3 label-input-field">
           {label}

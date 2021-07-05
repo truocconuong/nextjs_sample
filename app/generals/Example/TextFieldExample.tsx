@@ -6,6 +6,7 @@ import { createSelector } from "reselect";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { ProgressActions } from "../../../redux/actions";
+import ProgressBar from "generals/Progress";
 
 const { Option } = Select;
 const Example = () => {
@@ -37,6 +38,7 @@ const Example = () => {
                     onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                       setInputValue(e?.target?.value),
                   }}
+                  wrapperClassName="wrapper-class"
                 />
               </div>
             </Col>
@@ -65,6 +67,7 @@ const Example = () => {
                     placeholder: "Select",
                     className: "full-width"
                   }}
+                  wrapperClassName="wrapper-select"
                 ></SelectField>
               </div>
             </Col>
