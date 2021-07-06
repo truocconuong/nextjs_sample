@@ -14,7 +14,7 @@ function* saveProgressExample(action: any) {
       )
     );
     callback && callback(res?.data);
-    yield put(ProgressActions.savePercent(res?.data));
+    yield put(ProgressActions.setPercent(res?.data));
   } catch (error) {
     callback && callback(error?.response?.data);
     console.log("userLogin._error: ", error?.response?.data);

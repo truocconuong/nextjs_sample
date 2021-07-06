@@ -1,15 +1,8 @@
 import { ProgressTypes } from "../types";
 
-export const saveProgress = (data: any, callback?: any) => {
+export const setPercent = (data: any, callback?: any) => {
   return {
-    type: ProgressTypes.SAVE_PROGRESS,
-    payload: { data, callback },
-  };
-};
-
-export const savePercent = (data: any, callback?: any) => {
-  return {
-    type: ProgressTypes.SAVE_PERCENT,
+    type: ProgressTypes.SET_PERCENT,
     payload: { data, callback },
   };
 };
@@ -24,6 +17,20 @@ export const setDisabled = (data: any, callback?: any) => {
 export const setIsShowProgressBar = (data: any, callback?: any) => {
   return {
     type: ProgressTypes.SET_IS_SHOW_PROGRESS_BAR,
+    payload: { data, callback },
+  };
+};
+
+export const setTextButtonProgress = (data: any, callback?: any) => {
+  return {
+    type: ProgressTypes.SET_TEXT_BUTTON_PROGRESS,
+    payload: { data, callback },
+  };
+};
+
+export const setAmountPercentIncreament = (data: any, callback?: any) => {
+  return {
+    type: ProgressTypes.SET_AMOUNT_PERCENT_INCREAMENT,
     payload: { data, callback },
   };
 };

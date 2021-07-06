@@ -10,18 +10,57 @@ import {
 import { isMobile } from "react-device-detect";
 import { useEffect } from "react";
 import ProgressBar from "generals/Progress";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
 
 const NavigationBar = () => {
   const [mobile, setMobile] = useState(false);
+  const disabledBtn = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.disabled
+    )
+  );
+  const isShowProgressBar = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.isShowProgressBar
+    )
+  );
+
+  const textButtonProgress = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.textButtonProgress
+    )
+  );
+
+  const percent = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.percent
+    )
+  );
+
+  const amountPercentIncreament = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.amountPercentIncreament
+    )
+  );
 
   useEffect(() => {
-    console.log("ismobile", isMobile);
     setMobile(isMobile);
   }, [isMobile]);
 
   return (
     <div className="navigation-bar-container">
-      <div className={"navigation-bar-wrapper border-bottom" + (mobile ? " flex-column pd-7" : " flex-row")}>
+      <div
+        className={
+          "navigation-bar-wrapper border-bottom" +
+          (mobile ? " flex-column pd-7" : " flex-row")
+        }
+      >
         {mobile ? (
           <>
             <Row className="row-wrapper">
@@ -46,7 +85,14 @@ const NavigationBar = () => {
                 </div>
               </Col>
             </Row>
-            <ProgressBar />
+            {isShowProgressBar && (
+              <ProgressBar
+                disabled={disabledBtn}
+                textButton={textButtonProgress}
+                percent={percent}
+                amountPercent={amountPercentIncreament}
+              />
+            )}
           </>
         ) : (
           <Row className="row-wrapper">
@@ -75,7 +121,14 @@ const NavigationBar = () => {
               xl={10}
               xxl={10}
             >
-              <ProgressBar />
+              {isShowProgressBar && (
+                <ProgressBar
+                  disabled={disabledBtn}
+                  textButton={textButtonProgress}
+                  percent={percent}
+                  amountPercent={amountPercentIncreament}
+                />
+              )}
             </Col>
             <Col span={3} offset={4} xs={5} md={4} xl={3} xxl={3}>
               <div className="back-container">

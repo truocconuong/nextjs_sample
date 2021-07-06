@@ -1,8 +1,7 @@
 import Button from "generals/Button";
 import React, { useEffect, useState } from "react";
 import { ProgressActions } from "../../../redux/actions";
-import { useDispatch, useSelector } from "react-redux";
-import { createSelector } from "reselect";
+import { useDispatch } from "react-redux";
 import { isMobile } from "react-device-detect";
 import "react-circular-progressbar/dist/styles.css";
 import {
@@ -14,37 +13,53 @@ import { Col, Row } from "antd";
 interface ProgressPropsInterface {
   textDescription?: string;
   textButton?: string;
+  disabled: boolean;
+  percent: number;
+  amountPercent: number;
 }
 const ProgressBar = (props: ProgressPropsInterface) => {
-  const { textDescription, textButton } = props;
+  const {
+    textDescription,
+    textButton,
+    disabled,
+    percent,
+    amountPercent,
+  } = props;
   const [mobile, setMobile] = useState(false);
+
   useEffect(() => {
-    console.log("ismobile", isMobile);
     setMobile(isMobile);
   }, [isMobile]);
-  const disabled = useSelector(
-    createSelector(
-      (state: any) => state?.ProgressBar,
-      (progress) => progress?.disabled
-    )
-  );
+
   const dispatch = useDispatch();
-  const percent = useSelector(
-    createSelector(
-      (state: any) => state?.progress,
-      (progress) => progress?.percent
-    )
-  );
+
   const increaPercent = () => {
     if (percent >= 100 || disabled) {
       return;
     }
+    let valuePercent = percent + amountPercent;
+    if(valuePercent > 100) {
+      valuePercent = 100;
+    }
     dispatch(
-      ProgressActions.saveProgress({
-        percent: percent + 10,
-      })
+      ProgressActions.setPercent(
+        {
+          percent: valuePercent,
+        },
+        () => {}
+      )
     );
   };
+
+  dispatch(
+    ProgressActions.setAmountPercentIncreament(
+      {
+        amountPercentIncreament: 7
+      },
+      () => {}
+    )
+  );
+
   return (
     <div className="progress-container">
       {mobile ? (
