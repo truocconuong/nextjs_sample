@@ -1,0 +1,31 @@
+.based-flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.based-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.personal-form-input-container {
+  .personal-form-input-wrapper {
+    .based-flex-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+.personal-form-input-container-desktop {
+    width: 480px;
+    height: 813px;
+}
+
+.personal-form-input-container-mobile {
+    width: 100%;
+    height: 822px !important;
+}

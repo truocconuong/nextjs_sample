@@ -1,0 +1,40 @@
+.personal-container {
+  display: flex;
+  height: 100%;
+  padding-top: 150px;
+  width: 100%;
+  .personal-wrapper-mobile {
+    @extend .based-flex-column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .personal-wrapper-desktop {
+    @extend .based-flex-row;
+    align-items: flex-start;
+  }
+}
+
+#__next {
+  width: 100%;
+  height: 100%;
+}
+
+.based-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.based-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-60 {
+  width: 60%;
+}

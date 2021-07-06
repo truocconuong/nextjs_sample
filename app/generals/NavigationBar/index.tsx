@@ -55,12 +55,7 @@ const NavigationBar = () => {
 
   return (
     <div className="navigation-bar-container">
-      <div
-        className={
-          "navigation-bar-wrapper border-bottom" +
-          (mobile ? " flex-column" : " flex-row")
-        }
-      >
+      <div className={"navigation-bar-wrapper border-bottom" + (mobile ? " flex-column pd-7 height-80" : " flex-row height-100")}>
         {mobile ? (
           <>
             <div className="row-wrapper">
