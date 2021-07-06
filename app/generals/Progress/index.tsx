@@ -51,15 +51,6 @@ const ProgressBar = (props: ProgressPropsInterface) => {
     );
   };
 
-  dispatch(
-    ProgressActions.setAmountPercentIncreament(
-      {
-        amountPercentIncreament: 7
-      },
-      () => {}
-    )
-  );
-
   return (
     <div className="progress-container">
       {mobile ? (

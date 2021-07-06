@@ -2,7 +2,7 @@ import { ProgressTypes } from "../types";
 
 const initState = {
   percent: 0,
-  disabled: false,
+  disabled: true,
   isShowProgressBar: true,
   textButtonProgress: "Continue",
   amountPercentIncreament: 10,
