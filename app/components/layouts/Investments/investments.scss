@@ -1,0 +1,193 @@
+.investments {
+  background-image: url("/images/bg.svg");
+  color: #001064;
+  margin-top: 80px;
+  $breakpoint-mobile: 576px;
+  $breakpoint-tablet: 768px;
+  $breakpoint-md: 992px;
+
+  @media (max-width: $breakpoint-md) {
+      margin-top: 145px;
+    }
+
+  .mr-8 {
+    margin-right: 8px;
+  }
+  .mb-32 {
+    margin-bottom: 32px;
+  }
+  .mb-40 {
+    margin-bottom: 40px;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .wp-48 {
+    width: 48%;
+    @media (max-width: $breakpoint-mobile) {
+      width: 100%;
+    }
+  }
+
+  .responsive-mb-32 {
+    @media (max-width: $breakpoint-mobile) {
+      margin-bottom: 32px;
+    }
+  }
+  .div-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .navigator-bar {
+    height: 100px;
+    background-color: white;
+    width: 100%;
+    margin-bottom: 50px;
+  }
+  .body-investment {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 40px;
+    @media (max-width: $breakpoint-md) {
+        margin-top: 0;
+      }
+    .main-investment {
+      @media (max-width: $breakpoint-md) {
+        width: 100%;
+        justify-content: center;
+      }
+      .info-investment {
+        background-color: #e9f0ff;
+        width: 480px;
+        height: 610px;
+        margin-right: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @media (max-width: $breakpoint-md) {
+          margin: 0;
+          width: 100%;
+        }
+
+        .info-investment_content {
+          flex-direction: column;
+          align-items: center;
+          margin: 0 24px;
+          .info-investment_investments {
+            align-items: center;
+            margin-bottom: 16px;
+            .info-investment_1 {
+              font-family: Recoleta;
+              font-size: 32px;
+              margin-right: 8px;
+              @media (max-width: $breakpoint-mobile) {
+                font-size: 24px;
+              }
+            }
+            .info-investment_icon {
+              margin-top: 7px;
+              svg {
+                width: 20px;
+                height: 20px;
+              }
+            }
+          }
+
+          .info-investment_2 {
+            font-family: Graphik-Regular;
+            font-size: 20px;
+            text-align: center;
+            width: 90%;
+            @media (max-width: $breakpoint-mobile) {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+      .input-investment {
+        width: 480px;
+        @media (max-width: $breakpoint-md) {
+          padding: 24px 0;
+          width: 70%;
+        }
+        @media (max-width: $breakpoint-tablet) {
+          padding: 24px 0;
+          width: 80%;
+        }
+        @media (max-width: $breakpoint-mobile) {
+          padding: 24px 16px;
+          width: 100%;
+        }
+        .form-investment {
+          background: #ffffff;
+          border: 2px solid #001064;
+          box-sizing: border-box;
+          box-shadow: 0px 15px 30px rgba(0, 16, 100, 0.1);
+          border-radius: 14px;
+          padding: 32px;
+          flex-direction: column;
+          font-family: Graphik-Regular;
+          font-size: 16px;
+          @media (max-width: $breakpoint-md) {
+            padding: 16px;
+          }
+          .type {
+            font-family: Recoleta;
+            font-size: 20px;
+            font-weight: 600;
+          }
+
+          .financial {
+            font-family: Graphik-Regular;
+            font-size: 16px;
+          }
+
+          .trash-icon {
+            border: 1px solid #c3c5d2;
+            box-sizing: border-box;
+            border-radius: 8px;
+            width: 46px;
+            height: 48px;
+            &:hover {
+              background-color: #fff;
+              border: 1px solid #6670a2;
+              color: #6670a2;
+            }
+          }
+
+          .number-1 {
+            width: 48px;
+            height: 48px;
+            background: #e9f0ff;
+            border-radius: 7px;
+            margin-right: 16px;
+            span {
+              font-size: 32px;
+              font-family: Recoleta;
+            }
+          }
+          .investment-details-text {
+            font-family: Recoleta;
+            font-size: 24px;
+          }
+        }
+
+        .add-investment {
+          background-color: #ebf8ff;
+          border-radius: 10px;
+          padding: 19px 16px;
+          span {
+            font-size: 18px;
+            margin-top: 2px;
+            font-weight: 700;
+          }
+          @media (max-width: $breakpoint-mobile) {
+            justify-content: center;
+            margin-bottom: 70px;
+          }
+        }
+      }
+    }
+  }
+}
