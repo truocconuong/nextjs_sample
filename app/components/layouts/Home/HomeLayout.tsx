@@ -2,7 +2,7 @@ import React from 'react';
 import { Carousel, Row, Col, Typography, Button } from 'antd';
 import ArrowCarousel from '@element/ArrowCarousel/ArrowCarousel';
 import CustomButton from 'generals/Button';
-import { PersonCarousel, Home_5167814 } from '@images/index'
+import { PersonCarousel, Home_5167814, Convenience, Secured, Simple, Affor } from '@images/index'
 
 function HomeLayout(props) {
   return (
@@ -56,6 +56,24 @@ function HomeLayout(props) {
             <Button>Learn More</Button>
           </Col>
         </Row>
+      </div>
+      <div className='home-5168517'>
+        <Typography.Title level={3}>Empowering you to manage your Will and legacy at your fingertips</Typography.Title>
+        <Row justify="space-between" className="list-benefit">
+          <Convenience />
+          <Secured />
+          <Simple />
+          <Affor />
+        </Row>
+      </div>
+      <div className='home-5168517-carousel'>
+        <Typography.Title level={3}>Empowering you to manage your Will and legacy at your fingertips</Typography.Title>
+        <Carousel >
+          <Convenience />
+          <Secured />
+          <Simple />
+          <Affor />
+        </Carousel>
       </div>
     </div>
   );

@@ -88,3 +88,7 @@ export { ReactComponent as UnderMinute } from './under_minute.svg';
 export { ReactComponent as UnderMinuteMB } from './under_minute_mobile.svg';
 export { ReactComponent as PersonCarousel } from './person_carousel.svg';
 export { ReactComponent as Home_5167814 } from './home_5167814.svg';
+export { ReactComponent as Convenience } from './convenience.svg';
+export { ReactComponent as Affor } from './affor.svg';
+export { ReactComponent as Secured } from './secured.svg';
+export { ReactComponent as Simple } from './simple.svg';
