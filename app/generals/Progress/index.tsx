@@ -38,7 +38,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
       return;
     }
     let valuePercent = percent + amountPercent;
-    if(valuePercent > 100) {
+    if (valuePercent > 100) {
       valuePercent = 100;
     }
     dispatch(
@@ -55,12 +55,12 @@ const ProgressBar = (props: ProgressPropsInterface) => {
     <div className="progress-container">
       {mobile ? (
         <Row className="progress-mobile">
-          <Col span={14} className="percent-container">
-            <div className="text-percent">
+          <div className="percent-container">
+            <div className="text-percent-mobile">
               <span className="percent-completed">{`${percent}% Completed`}</span>
             </div>
-          </Col>
-          <Col span={8} className="btn-progress-container">
+          </div>
+          <div className="btn-progress-container">
             <Button
               onClick={increaPercent}
               className={
@@ -72,7 +72,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
             >
               {textButton || "Continue"}
             </Button>
-          </Col>
+          </div>
         </Row>
       ) : (
         <React.Fragment>

@@ -21,39 +21,64 @@
     .row-wrapper {
       width: 100%;
       height: 100%;
-      .logo-will-container {
-        margin-left: 40px;
+      border-bottom: 1px solid #e5e7ef;
+      .row-child-wrapper {
+        margin: auto;
         height: 100%;
-        display: flex;
-        align-items: center;
-        .will-container {
+        width: 95%;
+        @extend .based-flex-row;
+        justify-content: space-between;
+        .logo-will-container {
+          width: 40%;
+          height: 80px;
+          height: 100%;
           display: flex;
           align-items: center;
-          min-height: 68px;
-          .will {
+          .will-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            margin-left: $spacing-16;
+            min-height: 68px;
+            .will {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              margin-left: $spacing-16;
+            }
+          }
+        }
+        .container-back-mobile {
+          width: 40%;
+          .container-back-wrap {
+            @extend .based-flex-row;
+            justify-content: space-between;
+          }
+        }
+
+        .ant-btn:hover,
+        .ant-btn:focus {
+          border: 1px solid #001064;
+        }
+        .back-container {
+          width: 30%;
+          display: flex;
+          align-items: flex-end;
+          height: 100%;
+          justify-content: space-between;
+          .back-wrapper {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            float: right;
+
+            margin-left: auto;
           }
         }
       }
-
-      .ant-btn:hover,
-      .ant-btn:focus {
-        border: 1px solid #001064;
-      }
     }
-    .back-container {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      float: right;
-      .back {
-        margin-right: $spacing-16;
-        color: #a0a5be;
-        cursor: pointer;
-      }
+    .back {
+      margin-right: $spacing-16;
+      color: #a0a5be;
+      cursor: pointer;
       margin-left: auto;
     }
   }
