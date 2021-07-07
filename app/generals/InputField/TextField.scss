@@ -135,4 +135,12 @@
       color: #a0a5be;
     }
   }
+  .searchable-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .input {
+      width: 70%;
+    }
+  }
 }

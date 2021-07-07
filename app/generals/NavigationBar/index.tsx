@@ -54,7 +54,8 @@ const NavigationBar = () => {
   }, [isMobile]);
 
   return (
-    <div className="navigation-bar-container">
+    <React.Fragment>
+    <nav className="navigation-bar-container">
       <div className={"navigation-bar-wrapper border-bottom" + (mobile ? " flex-column pd-7 height-80" : " flex-row height-100")}>
         {mobile ? (
           <>
@@ -128,7 +129,9 @@ const NavigationBar = () => {
           </div>
         )}
       </div>
-    </div>
+    </nav>
+    <div className={mobile ? "height-150" : "height-100"}></div>
+    </React.Fragment>
   );
 };
 

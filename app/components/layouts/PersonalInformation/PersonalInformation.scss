@@ -1,8 +1,8 @@
 .personal-container {
   display: flex;
   height: 100%;
-  padding-top: 150px;
   width: 100%;
+  min-height: 882px;
   .personal-wrapper-mobile {
     @extend .based-flex-column;
     align-items: center;
@@ -13,6 +13,10 @@
   .personal-wrapper-desktop {
     @extend .based-flex-row;
     align-items: flex-start;
+    width: fit-content;
+    margin: auto;
+    height: 100%;
+    margin-top: 60px;
   }
 }
 
