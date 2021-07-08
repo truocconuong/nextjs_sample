@@ -1,0 +1,31 @@
+.modal-info {
+  .ant-modal-header,
+  .ant-modal-footer {
+    border: 0;
+  }
+  .ant-modal-content {
+    border-radius: 14px;
+    padding: 16px 8px;
+  }
+  .ant-modal-close {
+    margin: 14px;
+  }
+
+  .ant-modal-body {
+    padding: 10px 24px;
+    span {
+      font-family: Graphik-Regular;
+      font-size: 16px;
+    }
+  }
+
+  .ant-modal-footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ant-modal-title {
+    font-family: Recoleta;
+    font-size: 24px;
+  }
+}
