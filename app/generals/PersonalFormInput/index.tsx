@@ -1,7 +1,13 @@
+import { isEmail } from "@util/index";
 import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import React, { useState } from "react";
-import { SaveIcon, UndoIcon } from "../../../public/images";
+import {
+  SaveIcon,
+  UndoIcon,
+  SaveIconEnabled,
+  UndoIconEnabled,
+} from "../../../public/images";
 interface PersonalFormPropsInterface {
   isMobile?: boolean;
 }
@@ -16,7 +22,7 @@ interface DataFormInput {
   unitNumber: string;
 }
 const PersonalFormInput = (props: PersonalFormPropsInterface) => {
-  const [dataForm, setDataForm] = useState<DataFormInput>({
+  const initialState = {
     legalName: "",
     email: "",
     passport: "",
@@ -24,12 +30,40 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
     addressLine1: "",
     addressLine2: "",
     unitNumber: "",
-  });
+  };
+  const [dataForm, setDataForm] = useState<DataFormInput>(initialState);
 
   const onValueChange = (key: string, value: string) => {
     const newDataForm = { ...dataForm };
     newDataForm[key] = value;
     setDataForm(newDataForm);
+  };
+
+  const onResetForm = () => {
+    setDataForm(initialState);
+  };
+
+  const isEnableForm = () => {
+    const dataFormCopy = { ...dataForm };
+    for (let key in dataFormCopy) {
+      if (dataFormCopy[key]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const isFullForm = () => {
+    const dataFormCopy = { ...dataForm };
+    if(!isEmail(dataFormCopy.email)){
+      return false;
+    }
+    for (let key in dataFormCopy) {
+      if (!dataFormCopy[key]) {
+        return false;
+      }
+    }
+    return true;
   };
 
   const onSearchAddress = () => {};
@@ -70,7 +104,9 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                   onValueChange("email", e?.target?.value),
               }}
-              wrapperClassName="wrapper-class"
+              isError={dataForm.email && !isEmail(dataForm.email)}
+              displayErrorText={dataForm.email && !isEmail(dataForm.email)}
+              errorTextStr="Email is invalid."
             />
           </div>
         </div>
@@ -136,16 +172,17 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
             }}
           />
         </div>
-        <div className={"btn-container " + (isMobile ? 'mgt-40' : 'mgt-32')}>
+        <div className={"btn-container " + (isMobile ? "mgt-40" : "mgt-32")}>
           <div className="btn-wrapper">
             <CustomButton
               size="large"
               icon={
                 <div className="btn-icon">
-                  <UndoIcon />
+                  {isEnableForm() ? <UndoIconEnabled /> : <UndoIcon />}
                 </div>
               }
-              disabled
+              onClick={onResetForm}
+              disabled={!isEnableForm()}
               className="btn-undo"
             >
               Reset
@@ -154,10 +191,11 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
               size="large"
               icon={
                 <div className="btn-save-icon">
-                  <SaveIcon />
+                  {isFullForm() ? <SaveIconEnabled /> : <SaveIcon />}
                 </div>
               }
-              disabled
+              disabled={!isFullForm()}
+              style={isFullForm() ? { border: "1px solid #6670A2" } : {}}
               className="btn-undo"
             >
               Save

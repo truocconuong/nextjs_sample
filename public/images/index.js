@@ -20,4 +20,6 @@ export { ReactComponent as PersonalIcon } from './icon-personal.svg';
 export { ReactComponent as PersonalMobileIcon } from './icon-personal-mobile.svg';
 export { ReactComponent as TipIcon } from './tip.svg';
 export { ReactComponent as UndoIcon } from './undo.svg';
+export { ReactComponent as UndoIconEnabled } from './undo-enabled.svg';
 export { ReactComponent as SaveIcon } from './save.svg';
+export { ReactComponent as SaveIconEnabled } from './save-enabled.svg';

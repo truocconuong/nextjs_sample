@@ -83,12 +83,18 @@
 
 .personal-form-input-container-desktop {
   width: 480px;
-  height: 835px;
+  min-height: 835px;
   margin-left: 24px;
+  height: fit-content;
 }
 
 .personal-form-input-container-mobile {
   width: 92%;
   height: 900px !important;
   margin-top: 24px;
+}
+
+.error-text {
+  color: #FB3640;
+  margin-top: 16px;
 }
