@@ -17,6 +17,7 @@ export {ReactComponent as CloudIcon} from "./icon-cloud.svg";
 export {ReactComponent as CloseIcon} from "./icon-close.svg";
 export {ReactComponent as TrashIcon} from "./icon-trash.svg";
 export { ReactComponent as PersonalIcon } from './icon-personal.svg';
+export { ReactComponent as PersonalMobileIcon } from './icon-personal-mobile.svg';
 export { ReactComponent as TipIcon } from './tip.svg';
 export { ReactComponent as UndoIcon } from './undo.svg';
 export { ReactComponent as SaveIcon } from './save.svg';

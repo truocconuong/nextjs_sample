@@ -136,10 +136,9 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
             }}
           />
         </div>
-        <div className="btn-container">
+        <div className={"btn-container " + (isMobile ? 'mgt-40' : 'mgt-32')}>
           <div className="btn-wrapper">
             <CustomButton
-              type="custom"
               size="large"
               icon={
                 <div className="btn-icon">
@@ -152,7 +151,6 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
               Reset
             </CustomButton>
             <CustomButton
-              type="custom"
               size="large"
               icon={
                 <div className="btn-save-icon">

@@ -113,10 +113,11 @@
     margin-right: 20px;
   }
   .btn-search {
+    width: 100%;
+    padding-left: 15px;
     background: #e5e7ef;
     border-radius: 8px;
     height: 46px;
-    width: 116px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -140,7 +141,12 @@
     display: flex;
     justify-content: space-between;
     .input {
-      width: 70%;
+      width: calc(100% - 130px);
+    }
+    .btn-search-wrap {
+      width: 116px;
+      min-width: 116px;
+      margin-left: auto;
     }
   }
 }
