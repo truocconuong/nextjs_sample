@@ -9,6 +9,11 @@
   width: 100%;
   height: 100%;
   @extend .based-flex-row;
+  .progress-container-wrap {
+    @extend .based-flex-row;
+    width: fit-content;
+    margin: auto;
+  }
   .text-percent {
     margin-right: $spacing-32;
     margin-left: $spacing-16;

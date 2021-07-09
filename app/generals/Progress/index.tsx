@@ -76,32 +76,36 @@ const ProgressBar = (props: ProgressPropsInterface) => {
         </Row>
       ) : (
         <React.Fragment>
-          <div className="progress-wrap">
-            <CircularProgressbarWithChildren
-              value={percent}
-              styles={buildStyles({
-                pathColor: "#00B67A",
-                trailColor: "#E0F6EF",
-                backgroundColor: "white",
-              })}
-              strokeWidth={percent < 100 ? 10 : 0}
+          <div className="progress-container-wrap">
+            <div className="progress-wrap">
+              <CircularProgressbarWithChildren
+                value={percent}
+                styles={buildStyles({
+                  pathColor: "#00B67A",
+                  trailColor: "#E0F6EF",
+                  backgroundColor: "white",
+                })}
+                strokeWidth={percent < 100 ? 10 : 0}
+              >
+                <ProgressIcon />
+              </CircularProgressbarWithChildren>
+            </div>
+            <div className="text-percent">
+              <span>{textDescription || "Your Will is"} </span>
+              <span className="percent-completed">{`${percent}% Completed`}</span>
+            </div>
+            <Button
+              onClick={increaPercent}
+              className={
+                !disabled
+                  ? "button-progress-active"
+                  : "button-progress-disabled"
+              }
+              disabled={percent >= 100 || disabled}
             >
-              <ProgressIcon />
-            </CircularProgressbarWithChildren>
+              {textButton || "Continue"}
+            </Button>
           </div>
-          <div className="text-percent">
-            <span>{textDescription || "Your Will is"} </span>
-            <span className="percent-completed">{`${percent}% Completed`}</span>
-          </div>
-          <Button
-            onClick={increaPercent}
-            className={
-              !disabled ? "button-progress-active" : "button-progress-disabled"
-            }
-            disabled={percent >= 100 || disabled}
-          >
-            {textButton || "Continue"}
-          </Button>
         </React.Fragment>
       )}
     </div>

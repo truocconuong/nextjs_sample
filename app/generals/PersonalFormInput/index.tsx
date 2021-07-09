@@ -10,6 +10,7 @@ import {
 } from "../../../public/images";
 interface PersonalFormPropsInterface {
   isMobile?: boolean;
+  onSaveData: (data: any) => void;
 }
 
 interface DataFormInput {
@@ -22,6 +23,7 @@ interface DataFormInput {
   unitNumber: string;
 }
 const PersonalFormInput = (props: PersonalFormPropsInterface) => {
+  const { isMobile, onSaveData } = props;
   const initialState = {
     legalName: "",
     email: "",
@@ -55,7 +57,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
 
   const isFullForm = () => {
     const dataFormCopy = { ...dataForm };
-    if(!isEmail(dataFormCopy.email)){
+    if (!isEmail(dataFormCopy.email)) {
       return false;
     }
     for (let key in dataFormCopy) {
@@ -66,8 +68,15 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
     return true;
   };
 
+  const onFormSave = () => {
+    if (!isFullForm()) {
+      return;
+    }
+    onSaveData(FormData);
+  };
+
   const onSearchAddress = () => {};
-  const { isMobile } = props;
+
   return (
     <div
       className={
@@ -197,6 +206,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
               disabled={!isFullForm()}
               style={isFullForm() ? { border: "1px solid #6670A2" } : {}}
               className="btn-undo"
+              onClick={onFormSave}
             >
               Save
             </CustomButton>

@@ -127,3 +127,11 @@
     }
   }
 }
+
+.responsive {
+  width: 69% !important;
+  margin: auto !important;
+  .personal-form-container, .personal-form-input-container {
+    width: 50% !important;
+  }
+}

@@ -1,18 +1,33 @@
+import CardInfo, { CardInfoDataPropsInterface } from "components/CardInfo";
 import CustomButton from "generals/Button";
 import Modal from "generals/Modal";
 import PersonalPreview from "generals/PersonalForm";
 import PersonalFormInput from "generals/PersonalFormInput";
 import React, { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { isMobile, isTablet } from "react-device-detect";
 const PersonalInformation = () => {
   const [mobile, setMobile] = useState(false);
+  const [tabled, setTabled] = useState(false);
   const [visibleModal, setVisibleModal] = useState(true);
-
+  const [visibleFormInput, setVisibleFormInput] = useState(true);
+  const initialDataCard: CardInfoDataPropsInterface = {
+    name: '',
+    passport: ''
+  }
+  const [dataCard, setDataCard] = useState<CardInfoDataPropsInterface>(initialDataCard)
   useEffect(() => {
     setMobile(isMobile);
   }, [isMobile]);
+
+  useEffect(() => {
+    setTabled(isTablet);
+  }, [isTablet]);
+  const onSaveDataFormInput =(data: any) => {
+    console.log("data",)
+    setVisibleFormInput(false);
+  }
   return (
-    <div className="personal-container">
+    <div className={"personal-container " + (!mobile ? "responsive" : "")}>
       <div
         className={
           "personal-wrapper" +
@@ -22,14 +37,15 @@ const PersonalInformation = () => {
         }
       >
         <PersonalPreview isMobile={mobile} />
-        <PersonalFormInput isMobile={mobile} />
+        <CardInfo data={dataCard}/>
+        {visibleFormInput && <PersonalFormInput isMobile={mobile} onSaveData={onSaveDataFormInput}/>}
         <Modal
-          centered={!mobile}
+          centered={!mobile || tabled}
           visible={visibleModal}
           footer={null}
           closable={false}
           className={" modal-information " + (isMobile ? "modal-mobile " : "modal-desktop ")}
-          style={mobile && {position: "fixed", bottom: "0"}}
+          style={mobile && ! tabled ? {position: "fixed", bottom: "0"} : {}}
         >
           <div className="modal-information-wrapper">
             <div className="title">Personal Information</div>
