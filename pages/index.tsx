@@ -2,6 +2,7 @@ import {Typography} from "antd";
 // import ExampleButton from "generals/Button/ExampleButton";
 import ExampleToggle from "generals/Toggle/ExampleToggle";
 import InvestmentsLayout from "@layout/Investments";
+import BusinessInterestsLayout from "@layout/BusinessInterests";
 
 const {Title} = Typography;
 const App = () => (
@@ -20,7 +21,7 @@ const App = () => (
     <Title level={5}>h5. Ant Design</Title> */}
 
     {/* <ExampleButton /> */}
-    <InvestmentsLayout />
+    <BusinessInterestsLayout />
     {/* <ExampleToggle /> */}
   </div>
 );

@@ -2,39 +2,40 @@ import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col} from "antd";
 import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
-import SelectField from "generals/SelectField";
 import CustomToggle from "generals/Toggle";
 import React, {useState} from "react";
 import ModalInfo from "generals/Modal/ModalInfo";
 import {
-  CloudIcon,
-  PotImage,
+  BusinessImage,
+  BusinessMobileImage,
+  CloudBusinessIcon,
   ResetIcon,
   SaveIcon,
   TrashIcon,
 } from "../../../../public/images";
+import {isMobile} from "react-device-detect";
 
-function InvestmentsLayout(props) {
+function BusinessInterestsLayout(props) {
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
-    investmentType: "",
-    financial: "",
-    accountNo: "",
-    capitalOutlay: null,
-    currentMarketValue: null,
+    companyName: "",
+    companyUEN: "",
+    position: "",
+    estimateCurrentMarketValue: "",
+    percentageShare: "",
   });
 
   const handleReset = () => {
     setData({
-      investmentType: "",
-      financial: "",
-      accountNo: "",
-      capitalOutlay: null,
-      currentMarketValue: null,
+      companyName: "",
+      companyUEN: "",
+      position: "",
+      estimateCurrentMarketValue: "",
+      percentageShare: "",
     });
   };
 
@@ -53,6 +54,7 @@ function InvestmentsLayout(props) {
     tempListData.push(data);
     setListData(tempListData);
     handleReset();
+    setNumberForm(tempListData.length + 1);
   };
 
   const handleEdit = item => {
@@ -60,6 +62,7 @@ function InvestmentsLayout(props) {
     let tempListData = listData;
     setListData(tempListData.filter(i => i !== item));
     setData(tempListData.find(data => data === item));
+    setNumberForm(tempListData.length);
   };
 
   const handleChangeInput = e => {
@@ -78,19 +81,23 @@ function InvestmentsLayout(props) {
           <Row className="main-investment">
             <Col className="info-investment">
               <Row className="info-investment_content">
-                <PotImage style={{marginBottom: "34px"}} />
+                {isMobile ? (
+                  <BusinessMobileImage style={{marginBottom: "34px"}} />
+                ) : (
+                  <BusinessImage style={{marginBottom: "34px"}} />
+                )}
                 <Row className="info-investment_investments">
-                  <span className="info-investment_1">Investments</span>
+                  <span className="info-investment_1">Business Interests</span>
                   <InfoCircleOutlined
                     onClick={handleShowModal}
                     className="info-investment_icon"
                   />
                 </Row>
                 <p className="info-investment_2">
-                  You may have done many investments in different banks,
-                  brokerages and trading platforms. It will be good to
-                  constantly list them down so that your loved ones will be
-                  aware.
+                  You may have owned or invested into multiple businesses. By
+                  listing down your respective holdings of your business
+                  interests, you will have a clearer picture to your overall
+                  estate.
                 </p>
               </Row>
               <Row></Row>
@@ -107,11 +114,11 @@ function InvestmentsLayout(props) {
                           </Col>
                           <Col>
                             <Row>
-                              <span className="type">{item?.financial}</span>
+                              <span className="type">{item?.companyName}</span>
                             </Row>
                             <Row>
                               <span className="financial">
-                                {item?.financial}
+                                {item?.companyUEN}
                               </span>
                             </Row>
                           </Col>
@@ -143,29 +150,32 @@ function InvestmentsLayout(props) {
                       </Col>
                       <Col>
                         <span className="investment-details-text">
-                          Investment Details
+                          Business Details
                         </span>
                       </Col>
                     </Col>
                   </Row>
                   <Col className="w-full">
                     <Row className="mb-32">
-                      <SelectField
+                      <InputField
                         displayLabel
-                        label="Investment Type"
-                        selectProps={{
-                          placeholder: "Select",
+                        label="Company Name"
+                        inputProps={{
+                          placeholder: "e.g. Sample Company Pte. Ltd.",
+                          name: "companyName",
+                          value: data?.companyName,
+                          onChange: e => handleChangeInput(e),
                         }}
-                      ></SelectField>
+                      ></InputField>
                     </Row>
                     <Row className="mb-32">
                       <InputField
                         displayLabel
-                        label="Financial Institutions"
+                        label="Company UEN"
                         inputProps={{
-                          placeholder: "e.g. Standard Chartered",
-                          name: "financial",
-                          value: data?.financial,
+                          placeholder: "e.g. 52812812D",
+                          name: "companyUEN",
+                          value: data?.companyUEN,
                           onChange: e => handleChangeInput(e),
                         }}
                       ></InputField>
@@ -175,46 +185,51 @@ function InvestmentsLayout(props) {
                         onChangeSwitch={() => setIsShowDetail(!isShowDetail)}
                       />
                     </Row>
-
                     {isShowDetail && (
                       <>
                         <Row className="mb-32">
                           <InputField
                             displayLabel
-                            label="Account No."
+                            label="Position"
                             inputProps={{
-                              placeholder: "e.g. 9342099896",
-                              value: data?.accountNo,
-                              name: "accountNo",
+                              placeholder:
+                                "e.g. Director / Shareholder / Secretary",
+                              value: data?.position,
+                              name: "position",
                               onChange: e => handleChangeInput(e),
                             }}
                           ></InputField>
                         </Row>
-                        <Row className="mb-40" justify="space-between">
-                          <div className="wp-48 responsive-mb-32">
-                            <InputField
-                              displayLabel
-                              label="Capital Outlay ($)"
-                              inputProps={{
-                                placeholder: "e.g. 20,000.00",
-                                value: data?.capitalOutlay,
-                                name: "capitalOutlay",
-                                onChange: e => handleChangeInput(e),
-                              }}
-                            ></InputField>
-                          </div>
-                          <div className="wp-48">
-                            <InputField
-                              displayLabel
-                              label="Current Market Value ($)"
-                              inputProps={{
-                                placeholder: "e.g. 90,000.00",
-                                value: data?.currentMarketValue,
-                                name: "currentMarketValue",
-                                onChange: e => handleChangeInput(e),
-                              }}
-                            ></InputField>
-                          </div>
+                        <Row className="mb-32 estimate">
+                          <InputField
+                            displayLabel
+                            label="Estimated Current Market Value ($)"
+                            inputProps={{
+                              placeholder: "0.00",
+                              value: data?.estimateCurrentMarketValue,
+                              name: "estimateCurrentMarketValue",
+                              onChange: e => handleChangeInput(e),
+                            }}
+                          ></InputField>
+                          <span className="estimate-text w-full mt-16">
+                            The Current Market Value that you inputted into the
+                            field will not be reflected in your Will itself. By
+                            entering the company market value, you will have a
+                            clearer picture of the size of your current estate,
+                            and helps you better distribute your assets.
+                          </span>
+                        </Row>
+                        <Row className="mb-32">
+                          <InputField
+                            displayLabel
+                            label="Percentage Share (%)"
+                            inputProps={{
+                              placeholder: "0.00",
+                              value: data?.percentageShare,
+                              name: "percentageShare",
+                              onChange: e => handleChangeInput(e),
+                            }}
+                          ></InputField>
                         </Row>
                       </>
                     )}
@@ -242,9 +257,9 @@ function InvestmentsLayout(props) {
                 </Row>
               )}
               <Row className="add-investment" justify="space-between">
-                <CloudIcon />
+                <CloudBusinessIcon />
                 <span onClick={handleAddInvestment} style={{cursor: "pointer"}}>
-                  Add Investment
+                  Add Entity
                 </span>
               </Row>
             </Col>
@@ -254,8 +269,8 @@ function InvestmentsLayout(props) {
       {isShowModal && (
         <ModalInfo
           show={isShowModal}
-          title="Investments"
-          content="Only investments accounts under your single name will become part of your estate when you pass on. Jointly owned accounts will only be considered as part of your estate and distributed to your beneficiaries if the joint account holder passes away before you do."
+          title="Business Interests"
+          content="Business Interests entail all the businesses that you own, including Corporate, Partnership, Limited Liability Company and Sole Proprietorship."
           handleOk={handleOk}
         />
       )}
@@ -263,4 +278,4 @@ function InvestmentsLayout(props) {
   );
 }
 
-export default InvestmentsLayout;
+export default BusinessInterestsLayout;

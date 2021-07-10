@@ -1,4 +1,5 @@
 .custom-button {
+  width: 100%;
   .ant-btn {
     display: flex;
     align-items: center;
@@ -9,12 +10,15 @@
     color: #2d3b80;
     background-color: #eef3ff;
     border: unset;
+    width: 100%;
     min-width: 104px;
     height: 46px;
     padding: 10px 24px 11px;
     font-size: 18px;
     font-family: Graphik-Regular;
     font-weight: 900;
+    display: flex;
+    justify-content: center;
     &:hover,
     &:focus {
       outline: unset;
