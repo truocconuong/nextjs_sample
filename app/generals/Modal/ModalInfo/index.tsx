@@ -1,10 +1,10 @@
 import React from "react";
 import {Modal} from "antd";
-import { CloseIcon } from "../../../../public/images";
+import {CloseIcon} from "../../../../public/images";
 import CustomButton from "generals/Button";
 
 function ModalInfo(props) {
-    const {show, handleOk, title, content} = props;
+  const {show, handleOk, title, content} = props;
   return (
     <div>
       <Modal
@@ -16,7 +16,11 @@ function ModalInfo(props) {
         className="modal-info"
         closeIcon={<CloseIcon />}
         footer={[
-            <CustomButton onClick={handleOk} type="ghost">Understood</CustomButton>
+          <div style={{width: "fit-content"}}>
+            <CustomButton onClick={handleOk} borderLarge fontWeightLarge>
+              Understood
+            </CustomButton>
+          </div>,
         ]}
       >
         <span>{content}</span>

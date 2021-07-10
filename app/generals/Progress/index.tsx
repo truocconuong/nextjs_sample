@@ -94,17 +94,19 @@ const ProgressBar = (props: ProgressPropsInterface) => {
               <span>{textDescription || "Your Will is"} </span>
               <span className="percent-completed">{`${percent}% Completed`}</span>
             </div>
-            <Button
-              onClick={increaPercent}
-              className={
-                !disabled
-                  ? "button-progress-active"
-                  : "button-progress-disabled"
-              }
-              disabled={percent >= 100 || disabled}
-            >
-              {textButton || "Continue"}
-            </Button>
+            <div style={{width: "fit-content"}}>
+              <Button
+                onClick={increaPercent}
+                className={
+                  !disabled
+                    ? "button-progress-active"
+                    : "button-progress-disabled"
+                }
+                disabled={percent >= 100 || disabled}
+              >
+                {textButton || "Continue"}
+              </Button>
+            </div>
           </div>
         </React.Fragment>
       )}

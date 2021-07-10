@@ -1,15 +1,14 @@
 .investments {
   background-image: url("/images/bg.svg");
   color: #001064;
-  margin-top: 80px;
+  $breakpoint-500: 500px;
   $breakpoint-mobile: 576px;
   $breakpoint-tablet: 768px;
   $breakpoint-md: 992px;
 
-  @media (max-width: $breakpoint-md) {
-      margin-top: 145px;
-    }
-
+  .mt-16 {
+    margin-top: 16px;
+  }
   .mr-8 {
     margin-right: 8px;
   }
@@ -50,8 +49,8 @@
     height: 100vh;
     margin-top: 40px;
     @media (max-width: $breakpoint-md) {
-        margin-top: 0;
-      }
+      margin-top: 0;
+    }
     .main-investment {
       @media (max-width: $breakpoint-md) {
         width: 100%;
@@ -119,6 +118,23 @@
           padding: 24px 16px;
           width: 100%;
         }
+        .list-data {
+          padding: 21px 32px !important;
+          @media (max-width: $breakpoint-md) {
+            padding: 24px 16px !important;
+          }
+        }
+        .responsive-list-data {
+          @media (max-width: $breakpoint-500) {
+            width: 100%;
+            margin: 10px 0 0 0;
+            display: flex;
+            justify-content: space-between;
+            .edit-button {
+              width: 85%;
+            }
+          }
+        }
         .form-investment {
           background: #ffffff;
           border: 2px solid #001064;
@@ -130,7 +146,7 @@
           font-family: Graphik-Regular;
           font-size: 16px;
           @media (max-width: $breakpoint-md) {
-            padding: 16px;
+            padding: 32px 16px;
           }
           .type {
             font-family: Recoleta;
@@ -171,6 +187,17 @@
             font-family: Recoleta;
             font-size: 24px;
           }
+          .estimate {
+            .estimate-text {
+              font-family: Graphik-Regular;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 155%;
+              letter-spacing: -0.5px;
+              color: #a0a5be;
+            }
+          }
         }
 
         .add-investment {
@@ -182,9 +209,13 @@
             margin-top: 2px;
             font-weight: 700;
           }
-          @media (max-width: $breakpoint-mobile) {
+          @media (max-width: $breakpoint-500) {
             justify-content: center;
             margin-bottom: 70px;
+            span {
+              width: 100%;
+              text-align: center;
+            }
           }
         }
       }
