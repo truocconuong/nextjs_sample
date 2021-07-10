@@ -1,8 +1,28 @@
+body {
+  background-image: url("/images/bg.svg");
+}
 .personal-container {
   display: flex;
   height: 100%;
   width: 100%;
   min-height: 882px;
+  .personal-wrapper {
+    .card-form {
+      margin-left: $spacing-24;
+      width: 100%;
+      .card-form-wrapper {
+        width: 100%;
+        @extend .based-flex-column;
+        height: 100%;
+        .card-item {
+          width: 100%;
+          height: fit-content;
+          margin-bottom: $spacing-32;
+        }
+      }
+    }
+    
+  }
   .personal-wrapper-mobile {
     @extend .based-flex-column;
     align-items: center;
@@ -95,14 +115,6 @@
 
 .modal-mobile {
   max-width: 100% !important;
-  .ant-modal-content {
-    // width: 100% !important;
-    // height: 100%;
-    // border-radius: 0;
-    // position: fixed;
-    // bottom: 0;
-    // max-height: 375px;
-  }
 }
 
 .modal-desktop {
@@ -131,7 +143,21 @@
 .responsive {
   width: 69% !important;
   margin: auto !important;
-  .personal-form-container, .personal-form-input-container {
+  .personal-form-container, .card-form {
     width: 50% !important;
   }
+}
+
+.card-form-desktop {
+  min-height: 835px;
+  height: fit-content;
+}
+
+.card-form-mobile {
+  width: 92% !important;
+  height: 900px !important;
+  margin-top: $spacing-24 !important;
+  margin: auto;
+  margin-right: $spacing-32;
+  padding-bottom: $spacing-32;
 }

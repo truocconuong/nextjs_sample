@@ -7,13 +7,14 @@ import {
   UndoIcon,
   SaveIconEnabled,
   UndoIconEnabled,
-} from "../../../public/images";
+} from "../../../../public/images";
 interface PersonalFormPropsInterface {
   isMobile?: boolean;
   onSaveData: (data: any) => void;
+  initialValue: DataFormInput;
 }
 
-interface DataFormInput {
+export interface DataFormInput {
   legalName: string;
   email: string;
   passport: string;
@@ -23,8 +24,8 @@ interface DataFormInput {
   unitNumber: string;
 }
 const PersonalFormInput = (props: PersonalFormPropsInterface) => {
-  const { isMobile, onSaveData } = props;
-  const initialState = {
+  const { isMobile, onSaveData, initialValue } = props;
+  const initialState: DataFormInput = {
     legalName: "",
     email: "",
     passport: "",
@@ -33,7 +34,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
     addressLine2: "",
     unitNumber: "",
   };
-  const [dataForm, setDataForm] = useState<DataFormInput>(initialState);
+  const [dataForm, setDataForm] = useState<DataFormInput>(initialValue);
 
   const onValueChange = (key: string, value: string) => {
     const newDataForm = { ...dataForm };
@@ -72,20 +73,13 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
     if (!isFullForm()) {
       return;
     }
-    onSaveData(FormData);
+    onSaveData(dataForm);
   };
 
   const onSearchAddress = () => {};
 
   return (
-    <div
-      className={
-        "personal-form-input-container" +
-        (isMobile
-          ? " personal-form-input-container-mobile"
-          : " personal-form-input-container-desktop")
-      }
-    >
+    <div className={"personal-form-input-container"}>
       <div className="personal-form-input-wrapper">
         <div className="legal-name">
           <div className="container-input">
@@ -128,6 +122,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
                 placeholder: "e.g. G1234567A",
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                   onValueChange("passport", e?.target?.value),
+                value: dataForm.passport
               }}
               limitLines={5}
               displaySupportText

@@ -1,20 +1,42 @@
-import CardInfo, { CardInfoDataPropsInterface } from "components/CardInfo";
+import CardInfo, { CardInfoDataPropsInterface } from "generals/CardInfo";
 import CustomButton from "generals/Button";
 import Modal from "generals/Modal";
 import PersonalPreview from "generals/PersonalForm";
-import PersonalFormInput from "generals/PersonalFormInput";
+import PersonalFormInput, { DataFormInput } from "@module/PersonalFormInput";
 import React, { useEffect, useState } from "react";
 import { isMobile, isTablet } from "react-device-detect";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import router from "next/dist/client/router";
+import { ProgressActions } from "../../../../redux/actions";
+import { useDispatch } from "react-redux";
+
 const PersonalInformation = () => {
+  const dispatch = useDispatch();
   const [mobile, setMobile] = useState(false);
   const [tabled, setTabled] = useState(false);
   const [visibleModal, setVisibleModal] = useState(true);
   const [visibleFormInput, setVisibleFormInput] = useState(true);
   const initialDataCard: CardInfoDataPropsInterface = {
-    name: '',
-    passport: ''
-  }
-  const [dataCard, setDataCard] = useState<CardInfoDataPropsInterface>(initialDataCard)
+    name: "",
+    description: "",
+    id: 0,
+  };
+
+  const initialDataForm: DataFormInput = {
+    legalName: "",
+    email: "",
+    passport: "",
+    address: "",
+    addressLine1: "",
+    addressLine2: "",
+    unitNumber: "",
+  };
+  const [dataForm, setDataForm] = useState<DataFormInput>(initialDataForm);
+
+  const [dataCard, setDataCard] = useState<CardInfoDataPropsInterface>(
+    initialDataCard
+  );
   useEffect(() => {
     setMobile(isMobile);
   }, [isMobile]);
@@ -22,10 +44,40 @@ const PersonalInformation = () => {
   useEffect(() => {
     setTabled(isTablet);
   }, [isTablet]);
-  const onSaveDataFormInput =(data: any) => {
-    console.log("data",)
+
+  const onSaveDataFormInput = (data: DataFormInput) => {
+    setDataForm(data);
     setVisibleFormInput(false);
-  }
+    const dataCardCopy = { ...dataCard };
+    dataCardCopy.name = data.legalName;
+    dataCardCopy.description = data.passport;
+    setDataCard(dataCardCopy);
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: false,
+        },
+        () => {}
+      )
+    );
+  };
+
+  const percent = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.percent
+    )
+  );
+
+  useEffect(() => {
+    if (percent > 0) {
+      router.push("/home");
+    }
+  }, [percent]);
+
+  const onEditCard = (id: number) => {
+    setVisibleFormInput(true);
+  };
   return (
     <div className={"personal-container " + (!mobile ? "responsive" : "")}>
       <div
@@ -37,15 +89,44 @@ const PersonalInformation = () => {
         }
       >
         <PersonalPreview isMobile={mobile} />
-        <CardInfo data={dataCard}/>
-        {visibleFormInput && <PersonalFormInput isMobile={mobile} onSaveData={onSaveDataFormInput}/>}
+        <div
+          className={
+            "card-form " + (mobile ? " card-form-mobile" : " card-form-desktop")
+          }
+        >
+          <div className="card-form-wrapper">
+            {dataCard.name && (
+              <div className="card-item">
+                <CardInfo
+                  name={dataCard.name}
+                  description={dataCard.description}
+                  isMobile={mobile}
+                  hightlightColor={"#FFF5F5"}
+                  onEditCard={onEditCard}
+                  id={dataCard.id}
+                  canDelete={false}
+                />
+              </div>
+            )}
+            {visibleFormInput && (
+              <PersonalFormInput
+                isMobile={mobile}
+                onSaveData={onSaveDataFormInput}
+                initialValue={dataForm}
+              />
+            )}
+          </div>
+        </div>
         <Modal
           centered={!mobile || tabled}
           visible={visibleModal}
           footer={null}
           closable={false}
-          className={" modal-information " + (isMobile ? "modal-mobile " : "modal-desktop ")}
-          style={mobile && ! tabled ? {position: "fixed", bottom: "0"} : {}}
+          className={
+            " modal-information " +
+            (isMobile ? "modal-mobile " : "modal-desktop ")
+          }
+          style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
         >
           <div className="modal-information-wrapper">
             <div className="title">Personal Information</div>

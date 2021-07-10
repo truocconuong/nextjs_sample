@@ -11,6 +11,8 @@
 }
 
 .personal-form-input-container {
+  width: 100%;
+  height: 100%;
   background: #ffffff;
   border: 2px solid #001064;
   box-sizing: border-box;
@@ -79,19 +81,6 @@
   }
 
 
-}
-
-.personal-form-input-container-desktop {
-  width: 480px;
-  min-height: 835px;
-  margin-left: 24px;
-  height: fit-content;
-}
-
-.personal-form-input-container-mobile {
-  width: 92%;
-  height: 900px !important;
-  margin-top: 24px;
 }
 
 .error-text {

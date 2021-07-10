@@ -1,0 +1,262 @@
+.based-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.based-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.container-mobile {
+  height: 160px !important;
+  border-radius: 8px;
+  display: flex;
+  padding: 24px 16px;
+  .card-info-wrapper {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    @extend .based-flex-column;
+    .card-base-info {
+      height: 48px;
+      width: 100%;
+      @extend .based-flex-row;
+      .highlight-text {
+        height: 100%;
+        width: 48px;
+        border-radius: 7px;
+        margin-right: $spacing-16;
+        display: flex;
+        align-items: center;
+        .text {
+          font-family: Recoleta-Medium;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 36px;
+          line-height: 125%;
+          text-align: center;
+          letter-spacing: -0.5px;
+          color: #001064;
+          margin: auto;
+        }
+      }
+      .base-info {
+        @extend .based-flex-column;
+        width: calc(100% - 64px);
+        align-items: flex-start;
+        height: 44px;
+        margin: auto;
+        .name {
+          height: 22px;
+          font-family: Recoleta-Medium;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 20px;
+          line-height: 150%;
+          letter-spacing: -0.5px;
+          color: #001064;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          max-width: 100%;
+          white-space: nowrap;
+        }
+        .description {
+          font-family: Graphik-Light;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 155%;
+          letter-spacing: -0.5px;
+          color: #6670a2;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          max-width: 100%;
+        }
+      }
+    }
+    .card-action {
+      width: 100%;
+      height: 48px;
+      margin-top: $spacing-16;
+      .action-wrapper {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        .action-edit {
+          .custom-button {
+            width: 100%;
+            height: 100%;
+          }
+          width: 100%;
+          margin-right: $spacing-8;
+          display: flex;
+          .btn-edit {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border: 1px solid #c3c5d2;
+            color: #c3c5d2;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 125%;
+            text-align: center;
+            letter-spacing: -0.5px;
+            box-sizing: border-box;
+            border-radius: 7px;
+            justify-content: center;
+            .edit-wrapper {
+              display: flex;
+              align-items: center;
+            }
+          }
+        }
+        .action-delete {
+          width: 48px;
+          .btn-delete {
+            border: 1px solid #c3c5d2;
+            box-sizing: border-box;
+            border-radius: 8px;
+            background-color: #FFFFFF;
+            min-width: unset;
+            display: flex;
+            justify-content: center;
+            .delete-wrapper {
+              margin-left: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.container-desktop {
+  min-width: 450px;
+  height: 90px !important;
+  border-radius: 14px;
+  display: flex;
+  padding: 21px 16px 21px 32px;
+  .card-info-wrapper {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    @extend .based-flex-row;
+    .card-base-info {
+      height: 48px;
+      width: 100%;
+      @extend .based-flex-row;
+      .highlight-text {
+        height: 100%;
+        width: 48px;
+        border-radius: 7px;
+        margin-right: $spacing-16;
+        display: flex;
+        align-items: center;
+        .text {
+          font-family: Recoleta-Medium;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 36px;
+          line-height: 125%;
+          text-align: center;
+          letter-spacing: -0.5px;
+          color: #001064;
+          margin: auto;
+        }
+      }
+      .base-info {
+        @extend .based-flex-column;
+        width: calc(100% - 64px);
+        align-items: flex-start;
+        height: 44px;
+        margin: auto;
+        .name {
+          height: 22px;
+          font-family: Recoleta-Medium;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 20px;
+          line-height: 150%;
+          letter-spacing: -0.5px;
+          color: #001064;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          max-width: 100%;
+          white-space: nowrap;
+        }
+        .description {
+          font-family: Graphik-Light;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 155%;
+          letter-spacing: -0.5px;
+          color: #6670a2;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          max-width: 100%;
+        }
+      }
+    }
+    .card-action {
+      width: 100%;
+      height: 48px;
+      .action-wrapper {
+        display: flex;
+        width: fit-content;
+        height: 100%;
+        margin-left: auto;
+        .action-edit {
+          width: 100%;
+          margin-right: $spacing-8;
+          display: flex;
+          .btn-edit {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border: 1px solid #c3c5d2;
+            color: #c3c5d2;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 125%;
+            text-align: center;
+            letter-spacing: -0.5px;
+            box-sizing: border-box;
+            border-radius: 7px;
+            justify-content: center;
+            .edit-wrapper {
+              display: flex;
+              align-items: center;
+            }
+          }
+        }
+        .action-delete {
+          width: 48px;
+          .btn-delete {
+            border: 1px solid #c3c5d2;
+            box-sizing: border-box;
+            border-radius: 8px;
+            background-color: #FFFFFF;
+            min-width: unset;
+            display: flex;
+            justify-content: center;
+            .delete-wrapper {
+              margin-left: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.card-info-container {
+  background: #ffffff;
+  border: 2px solid #e5e7ef;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 90px;
+}
