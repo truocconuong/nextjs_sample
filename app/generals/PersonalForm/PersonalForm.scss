@@ -1,0 +1,90 @@
+.based-flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.based-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.personal-form-container {
+  background: #ffede9;
+  border-radius: 14px;
+  .personal-form-wrapper {
+    @extend .based-flex-column;
+    width: 100%;
+    height: 100%;
+    .ps-title-wrap {
+      @extend .based-flex-row;
+      padding-top: $spacing-24;
+      .ps-title {
+        font-family: Recoleta-Medium;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 125%;
+        /* identical to box height, or 40px */
+
+        text-align: center;
+        letter-spacing: -0.5px;
+
+        color: #001064;
+      }
+      .ps-icon {
+        margin-left: 10px;
+      }
+    }
+    .description {
+      font-family: Graphik-Regular;
+      font-style: normal;
+      font-weight: normal;
+      line-height: 140%;
+      width: 90%;
+      text-align: center;
+      letter-spacing: -0.5px;
+      color: #001064;
+      margin-top: $spacing-16;
+    }
+    .btn-input-info-wrap {
+      font-family: Graphik-Medium;
+      margin-top: $spacing-32;
+      .btn-input-info {
+        height: 48px;
+        background: #f4333d;
+      }
+    }
+  }
+  .mgt-47 {
+    margin-top: 47px;
+  }
+
+  .mgt-40 {
+    margin-top: 40px;
+  }
+
+  .fs-24 {
+    font-size: 24px;
+  }
+  .fs-32 {
+    font-size: 32px;
+  }
+
+  .fs-16 {
+    font-size: 16px;
+  }
+  .fs-20 {
+    font-size: 20px;
+  }
+}
+
+.personal-form-desktop {
+  width: 480px;
+  height: 610px;
+}
+
+.personal-form-mobile {
+  width: 100%;
+  height: 458px;
+  min-height: 458px;
+}

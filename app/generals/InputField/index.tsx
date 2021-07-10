@@ -60,14 +60,14 @@ const InputField = (props: InputFieldPropsInterface) => {
           className={className}
         />
       ) : searchable ? (
-        <Row gutter={12}>
-          <Col span={16}>
+        <Row className="searchable-wrap">
+          <div className="input">
             <Input
               {...((inputProps as unknown) as InputProps)}
               className={className}
             />
-          </Col>
-          <Col span={4}>
+          </div>
+          <div className="btn-search-wrap">
             <Button
               icon={
                 <div className="icon-wrapper">
@@ -79,7 +79,7 @@ const InputField = (props: InputFieldPropsInterface) => {
             >
               {searchText || "Search"}
             </Button>
-          </Col>
+          </div>
         </Row>
       ) : (
         <Input

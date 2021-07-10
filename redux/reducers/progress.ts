@@ -31,8 +31,12 @@ const progressReducer = (state = initState, action) => {
       return { ...state, ...data };
     }
     case ProgressTypes.SET_AMOUNT_PERCENT_INCREAMENT: {
-      const data = action?.payload?.data;
-      return { ...state, ...data };
+      const {data, callback} = action?.payload;
+      const newState = { ...state, ...data };
+      if(callback){
+        callback(newState);
+      }
+      return newState;
     }
     default: {
       return state;

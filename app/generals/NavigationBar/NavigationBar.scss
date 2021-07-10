@@ -7,8 +7,6 @@
 .navigation-bar-container {
   font-family: "Graphik-Regular";
   background: #ffffff;
-  height: 80px;
-  min-height: 80px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -21,15 +19,15 @@
     .row-wrapper {
       width: 100%;
       height: 100%;
-      border-bottom: 1px solid #e5e7ef;
+      display: flex;
       .row-child-wrapper {
         margin: auto;
-        height: 100%;
+        height: 80px;
         width: 95%;
         @extend .based-flex-row;
         justify-content: space-between;
         .logo-will-container {
-          width: 40%;
+          width: 30%;
           height: 80px;
           height: 100%;
           display: flex;
@@ -45,6 +43,9 @@
               margin-left: $spacing-16;
             }
           }
+        }
+        .mobile {
+          width: 50% !important;
         }
         .container-back-mobile {
           width: 40%;
@@ -88,9 +89,6 @@
   .flex-row {
     flex-direction: row;
   }
-  .pd-7 {
-    padding-top: 7px;
-  }
 }
 
 .border-bottom {
@@ -100,3 +98,17 @@
 .container-mobile {
   height: 60px;
 }
+
+.height-80 {
+  height: 80px !important;
+}
+
+.height-150 {
+  height: 150px !important;
+}
+
+
+.height-100 {
+  height: 100px !important;
+}
+

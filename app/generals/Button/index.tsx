@@ -1,7 +1,7 @@
 import React from "react";
-import {Button} from "antd";
+import {Button, ButtonProps} from "antd";
 
-function CustomButton(props) {
+function CustomButton(props: ButtonProps) {
   return (
     <div className="custom-button">
       <Button {...props}>{props.children}</Button>
