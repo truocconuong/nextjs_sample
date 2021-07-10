@@ -1,10 +1,32 @@
 import React from "react";
 import {Button, ButtonProps} from "antd";
+import {useState} from "react";
+import {useEffect} from "react";
 
-function CustomButton(props: ButtonProps) {
+interface IProps extends ButtonProps {
+  borderLarge?: boolean;
+  fontWeightLarge?: boolean;
+}
+
+function CustomButton(props: IProps) {
+  const [classes, setClasses] = useState("");
+
+  useEffect(() => {
+    let tempClasses = "";
+    if (props.borderLarge) {
+      tempClasses += "border-large";
+    }
+    if (props.fontWeightLarge) {
+      tempClasses += " font-weight-large";
+    }
+    setClasses(tempClasses);
+  }, []);
+
   return (
     <div className="custom-button">
-      <Button {...props}>{props.children}</Button>
+      <Button className={classes} {...props}>
+        {props.children}
+      </Button>
     </div>
   );
 }

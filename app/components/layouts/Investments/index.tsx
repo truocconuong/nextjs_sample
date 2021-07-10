@@ -1,5 +1,5 @@
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
-import {Row, Col} from "antd";
+import {Row, Col, Select} from "antd";
 import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import SelectField from "generals/SelectField";
@@ -13,6 +13,16 @@ import {
   SaveIcon,
   TrashIcon,
 } from "../../../../public/images";
+
+const {Option} = Select;
+
+const options = [
+  {label: "TEST 11", value: "TEST 11"},
+  {label: "TEST 12", value: "TEST 12"},
+  {label: "TEST 13", value: "TEST 13"},
+  {label: "TEST 14", value: "TEST 14"},
+  {label: "TEST 15", value: "TEST 15"},
+];
 
 function InvestmentsLayout(props) {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -107,7 +117,9 @@ function InvestmentsLayout(props) {
                           </Col>
                           <Col>
                             <Row>
-                              <span className="type">{item?.financial}</span>
+                              <span className="type">
+                                {item?.investmentType}
+                              </span>
                             </Row>
                             <Row>
                               <span className="financial">
@@ -119,9 +131,9 @@ function InvestmentsLayout(props) {
                         <Col className="div-center responsive-list-data">
                           <Col className="mr-8 edit-button">
                             <CustomButton
-                              type="custom"
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
+                              disabled
                             >
                               Edit
                             </CustomButton>
@@ -155,8 +167,17 @@ function InvestmentsLayout(props) {
                         label="Investment Type"
                         selectProps={{
                           placeholder: "Select",
+                          // value: data?.investmentType,
+                          onChange: value =>
+                            setData(prev => ({...prev, investmentType: value})),
                         }}
-                      ></SelectField>
+                      >
+                        {options.map((item, index) => {
+                          return (
+                            <Option value={item.value}>{item.label}</Option>
+                          );
+                        })}
+                      </SelectField>
                     </Row>
                     <Row className="mb-32">
                       <InputField
@@ -221,7 +242,6 @@ function InvestmentsLayout(props) {
                     <Row justify="center">
                       <Col style={{marginRight: "24px"}}>
                         <CustomButton
-                          type="custom"
                           icon={<ResetIcon />}
                           onClick={handleReset}
                         >
@@ -229,11 +249,7 @@ function InvestmentsLayout(props) {
                         </CustomButton>
                       </Col>
                       <Col>
-                        <CustomButton
-                          type="custom"
-                          icon={<SaveIcon />}
-                          onClick={handleSave}
-                        >
+                        <CustomButton icon={<SaveIcon />} onClick={handleSave}>
                           Save
                         </CustomButton>
                       </Col>

@@ -126,7 +126,6 @@ function BusinessInterestsLayout(props) {
                         <Col className="div-center responsive-list-data">
                           <Col className="mr-8 edit-button">
                             <CustomButton
-                              type="custom"
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
                             >
@@ -236,7 +235,6 @@ function BusinessInterestsLayout(props) {
                     <Row justify="center">
                       <Col style={{marginRight: "24px"}}>
                         <CustomButton
-                          type="custom"
                           icon={<ResetIcon />}
                           onClick={handleReset}
                         >
@@ -244,11 +242,7 @@ function BusinessInterestsLayout(props) {
                         </CustomButton>
                       </Col>
                       <Col>
-                        <CustomButton
-                          type="custom"
-                          icon={<SaveIcon />}
-                          onClick={handleSave}
-                        >
+                        <CustomButton icon={<SaveIcon />} onClick={handleSave}>
                           Save
                         </CustomButton>
                       </Col>

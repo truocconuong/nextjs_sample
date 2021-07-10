@@ -1,41 +1,52 @@
 .custom-button {
   width: 100%;
+  .border-large {
+    border-width: 2px !important;
+  }
+  .font-weight-large {
+    font-weight: 900 !important;
+  }
   .ant-btn {
+    color: #6670a2;
+    border: 1px solid #6670a2;
+    background-color: #fff;
     display: flex;
     align-items: center;
-    min-width: 104px;
-    padding: 10px 24px 11px;
-    font-size: 18px;
+    justify-content: center;
     border-radius: 6px;
-    color: #2d3b80;
-    background-color: #eef3ff;
-    border: unset;
     width: 100%;
     min-width: 104px;
     height: 46px;
     padding: 10px 24px 11px;
-    font-size: 18px;
+    font-size: 20px;
     font-family: Graphik-Regular;
-    font-weight: 900;
-    display: flex;
-    justify-content: center;
+    font-weight: 400;
     &:hover,
     &:focus {
       outline: unset;
     }
+    &:hover {
+      color: #001064;
+      border-color: #001064;
+      box-shadow: 0px 8px 10px rgba(0, 22, 136, 0.16);
+    }
     &:active {
       color: #ffffff;
       background: #001064;
+      box-shadow: 0px 8px 10px rgba(0, 22, 136, 0.16);
     }
     &:disabled {
-      background-color: #eef3ff;
-      border: unset;
-      color: #a0a5be;
+      border-color: #c3c5d2;
+      color: #c3c5d2;
+      &:hover {
+        background-color: #fff;
+        box-shadow: none;
+      }
     }
     [ant-click-animating-without-extra-node="true"]::after,
-    .ant-click-animating-node {
-      --antd-wave-shadow-color: red;
-    }
+    // .ant-click-animating-node {
+    //   --antd-wave-shadow-color: red;
+    // }
     svg {
       margin-right: 8px;
     }
@@ -48,22 +59,29 @@
   }
 
   .ant-btn-primary {
-    color: #ffffff;
-    background-color: #00199e;
+    color: #001064;
+    background-color: #eef3ff;
+    border: none;
   }
 
   .ant-btn-dashed,
-  .ant-btn-ghost,
-  .ant-btn-primary {
+  .ant-btn-ghost {
     box-shadow: 0px 8px 10px rgba(0, 22, 136, 0.16);
   }
 
   .ant-btn-ghost {
-    color: #2d3b80;
-    background: #fff;
-    border: 2px solid #001064;
+    color: #fff;
+    background: #00199e;
+    border: none;
     &:hover {
-      border: 2px solid #001064;
+      color: #fff;
+      background: #00199e;
+      border: none;
+    }
+    &:active {
+      color: #ffffff;
+      background: #001064;
+      border-color: #001064;
     }
   }
 
@@ -71,8 +89,14 @@
     color: #ffffff;
     background: #17c67e;
     border-color: #17c67e;
-    padding: 15px 24px 16px;
+    &:hover {
+      color: #ffffff;
+      background: #17c67e;
+      border-color: #17c67e;
+    }
     &:active {
+      color: #ffffff;
+      background: #001064;
       border-color: #001064;
     }
   }
@@ -81,27 +105,13 @@
     color: #ff6868;
     background: #fff;
     border: 1px solid #ff6868;
-    box-shadow: unset;
-    &:hover {
-      border: 1px solid #ff6868;
-    }
+    // box-shadow: unset;
+    &:hover,
     &:active {
       color: #fb3640;
       border: 1px solid #fb3640;
       background: #fff;
-    }
-  }
-
-  .ant-btn-custom {
-    color: #c3c5d2;
-    border: 1px solid #c3c5d2;
-    background-color: #fff;
-    box-shadow: unset;
-    font-weight: 400;
-    &:hover {
-      background-color: #fff;
-      border: 1px solid #6670a2;
-      color: #6670a2;
+      box-shadow: none;
     }
   }
 }

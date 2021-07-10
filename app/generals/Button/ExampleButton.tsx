@@ -6,27 +6,28 @@ function ExampleButton(props) {
   return (
     <div>
       <div style={{margin: "20px"}}>
-        <CustomButton>Button</CustomButton>
+        <CustomButton borderLarge fontWeightLarge>
+          Button
+        </CustomButton>
       </div>
       <div style={{margin: "20px"}}>
         <CustomButton size="large">Button</CustomButton>
       </div>
-
       <div style={{margin: "20px"}}>
-        <CustomButton type="primary">Button</CustomButton>
+        <CustomButton type="primary">Primary</CustomButton>
       </div>
       <div style={{margin: "20px"}}>
         <CustomButton type="primary" size="large">
-          Button
+          Primary
         </CustomButton>
       </div>
 
       <div style={{margin: "20px"}}>
-        <CustomButton type="ghost">Button</CustomButton>
+        <CustomButton type="ghost">Ghost</CustomButton>
       </div>
       <div style={{margin: "20px"}}>
-        <CustomButton type="ghost" size="large">
-          Button
+        <CustomButton borderLarge type="ghost" size="large">
+          Ghost
         </CustomButton>
       </div>
 
@@ -46,31 +47,8 @@ function ExampleButton(props) {
       </div>
 
       <div style={{margin: "20px"}}>
-        <CustomButton danger>Fix Now</CustomButton>
-      </div>
-
-      <div style={{margin: "20px"}}>
-        <CustomButton disabled>Disabled</CustomButton>
-      </div>
-
-      <div style={{margin: "20px"}}>
-        <CustomButton type="custom" icon={<EditOutlined />}>
-          Edit
-        </CustomButton>
-      </div>
-      <div style={{margin: "20px"}}>
-        <CustomButton type="custom" size="large" icon={<EditOutlined />}>
-          Edit
-        </CustomButton>
-      </div>
-      <div style={{margin: "20px"}}>
-        <CustomButton
-          type="custom"
-          size="large"
-          icon={<EditOutlined />}
-          disabled
-        >
-          Edit
+        <CustomButton danger onClick={() => console.log("1")}>
+          Fix Now
         </CustomButton>
       </div>
     </div>
