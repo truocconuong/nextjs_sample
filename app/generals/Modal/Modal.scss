@@ -2,4 +2,10 @@
   .ant-modal-content {
     border-radius: 14px;
   }
+  .ant-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+  }
 }

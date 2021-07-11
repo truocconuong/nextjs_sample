@@ -10,6 +10,11 @@ import { createSelector } from "reselect";
 import router from "next/dist/client/router";
 import { ProgressActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
+import {
+  PersonalIcon,
+  PersonalMobileIcon,
+  TipIcon,
+} from "../../../../public/images";
 
 const PersonalInformation = () => {
   const dispatch = useDispatch();
@@ -71,7 +76,7 @@ const PersonalInformation = () => {
 
   useEffect(() => {
     if (percent > 0) {
-      router.push("/home");
+      router.push("/personal-executor");
     }
   }, [percent]);
 
@@ -88,7 +93,18 @@ const PersonalInformation = () => {
             : " personal-wrapper-desktop w-60")
         }
       >
-        <PersonalPreview isMobile={mobile} />
+        <PersonalPreview
+          isMobile={mobile}
+          mainIconDesktop={PersonalIcon}
+          mainIconMobile={PersonalMobileIcon}
+          infoIcon={TipIcon}
+          textDescription={
+            "In order to prevent possible challenges to your identity as the testator, please ensure that you state your Legal Name, NRIC Number and Address as per your NRIC."
+          }
+          title="Personal Information"
+          textButton="Retrieve Myinfo with Singpass"
+          backgroundColor="#ffede9"
+        />
         <div
           className={
             "card-form " + (mobile ? " card-form-mobile" : " card-form-desktop")
