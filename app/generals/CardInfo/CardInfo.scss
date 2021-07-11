@@ -19,6 +19,7 @@
     margin: auto;
     @extend .based-flex-column;
     .card-base-info {
+      min-width: 161px;
       height: 48px;
       width: 100%;
       @extend .based-flex-row;
@@ -118,7 +119,7 @@
             border: 1px solid #c3c5d2;
             box-sizing: border-box;
             border-radius: 8px;
-            background-color: #FFFFFF;
+            background-color: #ffffff;
             min-width: unset;
             display: flex;
             justify-content: center;
@@ -133,7 +134,6 @@
 }
 
 .container-desktop {
-  min-width: 450px;
   height: 90px !important;
   border-radius: 14px;
   display: flex;
@@ -144,6 +144,7 @@
     margin: auto;
     @extend .based-flex-row;
     .card-base-info {
+      min-width: 161px;
       height: 48px;
       width: 100%;
       @extend .based-flex-row;
@@ -173,7 +174,7 @@
         height: 44px;
         margin: auto;
         .name {
-          height: 22px;
+          height: 26px;
           font-family: Recoleta-Medium;
           font-style: normal;
           font-weight: normal;
@@ -185,6 +186,7 @@
           overflow: hidden;
           max-width: 100%;
           white-space: nowrap;
+          margin-top: -2px;
         }
         .description {
           font-family: Graphik-Light;
@@ -239,7 +241,7 @@
             border: 1px solid #c3c5d2;
             box-sizing: border-box;
             border-radius: 8px;
-            background-color: #FFFFFF;
+            background-color: #ffffff;
             min-width: unset;
             display: flex;
             justify-content: center;

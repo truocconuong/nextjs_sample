@@ -27,3 +27,5 @@ export {ReactComponent as UndoIconEnabled} from "./undo-enabled.svg";
 export {ReactComponent as SaveIconEnabled} from "./save-enabled.svg";
 export {ReactComponent as BusinessImage} from "./business.svg";
 export {ReactComponent as BusinessMobileImage} from "./business-mobile.svg";
+export { ReactComponent as ExecutorDesktopIcon } from './icon-executor-desktop.svg';
+export { ReactComponent as ExecutorMobileIcon } from './icon-executor-mobile.svg';

@@ -9,8 +9,9 @@ export interface CardInfoDataPropsInterface {
 export interface CardInfoPropsInterface extends CardInfoDataPropsInterface {
   isMobile: boolean;
   hightlightColor: string;
-  onEditCard: (e: any) => void;
+  onEditCard: (e: any, id: number) => void;
   canDelete?: boolean;
+  onDeleteCardItem: (key: number) => void;
 }
 const CardInfo = (props: CardInfoPropsInterface) => {
   const {
@@ -20,7 +21,8 @@ const CardInfo = (props: CardInfoPropsInterface) => {
     hightlightColor,
     onEditCard,
     id,
-    canDelete
+    canDelete,
+    onDeleteCardItem
   } = props;
   return (
     <div
@@ -47,7 +49,7 @@ const CardInfo = (props: CardInfoPropsInterface) => {
             <div className="action-edit">
               <CustomButton
                 className="btn-edit"
-                onClick={(e) => onEditCard(e)}
+                onClick={(e) => onEditCard(e, id)}
                 icon={
                   <div className="edit-wrapper">
                     <EditIcon />
@@ -61,7 +63,7 @@ const CardInfo = (props: CardInfoPropsInterface) => {
               <div className="action-delete">
               <CustomButton
                 className="btn-delete"
-                onClick={(e) => onEditCard(id)}
+                onClick={(e) => onDeleteCardItem(id)}
                 icon={
                   <div className="delete-wrapper">
                     <DeleteIcon />

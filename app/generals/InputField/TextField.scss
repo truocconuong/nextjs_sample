@@ -70,6 +70,7 @@
       color: #6670a2;
     }
   }
+
   .ant-select,
   .ant-select-single,
   .ant-select-show-arrow {
@@ -149,4 +150,25 @@
       margin-left: auto;
     }
   }
+}
+
+.ant-select-dropdown {
+  border: 1px solid #001064;
+  box-sizing: border-box;
+  border-radius: 7px;
+  background: #ffffff;
+  padding: 16px 8px;
+  font-family: Graphik-Regular;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 155%;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background: #eef3ff;
+  border-radius: 7px;
+}
+.ant-select-item-option-content {
+  margin-bottom: 8px;
 }
