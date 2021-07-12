@@ -29,3 +29,9 @@ export {ReactComponent as BusinessImage} from "./business.svg";
 export {ReactComponent as BusinessMobileImage} from "./business-mobile.svg";
 export { ReactComponent as ExecutorDesktopIcon } from './icon-executor-desktop.svg';
 export { ReactComponent as ExecutorMobileIcon } from './icon-executor-mobile.svg';
+export {ReactComponent as ValuablesImage} from "./valuables.svg";
+export {ReactComponent as CloudValuablesIcon} from "./icon-cloud-valuables.svg";
+export {ReactComponent as WatchIcon} from "./icon-watch.svg";
+
+
+
