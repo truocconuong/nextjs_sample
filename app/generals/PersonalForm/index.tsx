@@ -8,7 +8,7 @@ interface PersonalFormProps {
   infoIcon: string;
   textDescription: string;
   title: string;
-  textButton: string;
+  textButton?: string;
   backgroundColor: string;
   displayButton?: boolean;
 }
