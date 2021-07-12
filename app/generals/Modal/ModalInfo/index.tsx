@@ -3,22 +3,31 @@ import {Modal} from "antd";
 import {CloseIcon} from "../../../../public/images";
 import CustomButton from "generals/Button";
 
-function ModalInfo(props) {
-  const {show, handleOk, title, content} = props;
+interface IProps {
+  show?: boolean, 
+  handleOk?: () => void,  
+  handleCancel?: () => void,
+  title?: string, 
+  content?: string,
+  contentButton?: string
+}
+
+function ModalInfo(props: IProps) {
+  const {show, handleOk, handleCancel, title, content, contentButton} = props;
   return (
     <div>
       <Modal
         centered
         title={title}
         visible={show}
-        onCancel={handleOk}
+        onCancel={handleCancel}
         cancelButtonProps={{style: {display: "none"}}}
         className="modal-info"
         closeIcon={<CloseIcon />}
         footer={[
           <div style={{width: "fit-content"}}>
             <CustomButton onClick={handleOk} borderLarge fontWeightLarge>
-              Understood
+              {contentButton || "Understood"}
             </CustomButton>
           </div>,
         ]}

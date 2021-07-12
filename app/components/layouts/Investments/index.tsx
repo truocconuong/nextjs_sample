@@ -72,6 +72,12 @@ function InvestmentsLayout(props) {
     setData(tempListData.find(data => data === item));
   };
 
+  const handleDelete = (item) => {
+    const tempListData = listData.filter(i => i !== item);
+    setListData(tempListData);
+    setNumberForm(tempListData.length + 1);
+  }
+
   const handleChangeInput = e => {
     const {name, value} = e.target;
     setData(prev => ({...prev, [name]: value}));
@@ -139,7 +145,7 @@ function InvestmentsLayout(props) {
                             </CustomButton>
                           </Col>
                           <Col className="trash-icon div-center">
-                            <TrashIcon />
+                            <TrashIcon onClick={() => handleDelete(item)}/>
                           </Col>
                         </Col>
                       </Row>
@@ -273,6 +279,7 @@ function InvestmentsLayout(props) {
           title="Investments"
           content="Only investments accounts under your single name will become part of your estate when you pass on. Jointly owned accounts will only be considered as part of your estate and distributed to your beneficiaries if the joint account holder passes away before you do."
           handleOk={handleOk}
+          handleCancel={handleOk}
         />
       )}
     </>
