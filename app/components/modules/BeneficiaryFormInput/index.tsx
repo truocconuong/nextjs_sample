@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import {
   SaveIcon,
   UndoIcon,
+  
   SaveIconEnabled,
   UndoIconEnabled,
 } from "../../../../public/images";
@@ -93,8 +94,8 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
     <div className={"beneficiary-form-input-container"}>
       <div className="beneficiary-form-input-wrapper">
         <div className="title-form">
-          <div className="step"><span>2</span></div>
-          <div className="title">Beneficiary Details</div>
+          <div className="step"><span>{initialValue.id}</span></div>
+          <div className="title">{initialValue.email ? "Update" : "Beneficiary Details"}</div>
         </div>
         <div className="legal-name">
           <div className="container-input">

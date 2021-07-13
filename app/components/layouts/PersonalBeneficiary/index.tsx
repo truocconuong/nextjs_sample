@@ -13,18 +13,22 @@ import { useDispatch } from "react-redux";
 import {
   TipIcon,
   BeneficiaryDesktopIcon,
-  BeneficiaryMobileIcon
+  BeneficiaryMobileIcon,
+  SuccessIcon,
+  DeleteIcon,
+  CloseIcon,
 } from "../../../../public/images";
 import BeneficiaryFormInput from "@module/BeneficiaryFormInput";
 
 const PersonalBeneficiary = () => {
+  let [id, setId] = useState(1);
   const initialDataForm: DataFormInput = {
     legalName: "",
     email: "",
     passport: "",
     relationship: "",
     type: "Main Beneficiary",
-    id: 0,
+    id: id,
   };
   const dispatch = useDispatch();
   const [mobile, setMobile] = useState(false);
@@ -74,7 +78,7 @@ const PersonalBeneficiary = () => {
 
   useEffect(() => {
     if (percent > 0) {
-      router.push("/personal-executor");
+      router.push("/personal-beneficiary");
     }
   }, [percent]);
 
@@ -91,8 +95,9 @@ const PersonalBeneficiary = () => {
     setEditingFormInput({
       ...initialDataForm,
       type: "Alternate Beneficiary",
-      id: ++initialDataForm.id,
+      id: id,
     });
+    setId(++id);
     setVisibleFormInput(true);
   };
 
@@ -134,9 +139,9 @@ const PersonalBeneficiary = () => {
                 <div className="card-item" key={item.id}>
                   <CardInfo
                     name={item.legalName}
-                    description={item.type}
+                    description={item.relationship}
                     isMobile={mobile}
-                    hightlightColor={"#E9FAF4"}
+                    hightlightColor={"#EFF5FF"}
                     onEditCard={onEditCard}
                     id={item.id}
                     canDelete={true}
@@ -148,7 +153,6 @@ const PersonalBeneficiary = () => {
                 </div>
               );
             })}
-
             {(visibleFormInput || dataForm.length === 0) && (
               <BeneficiaryFormInput
                 isMobile={mobile}
@@ -156,27 +160,29 @@ const PersonalBeneficiary = () => {
                 initialValue={editingFormInput}
               />
             )}
-            {dataForm.length < 2 ? (
-              <div className="alternative-executor-container">
-                <div className="alternative-executor-wrapper">
-                  <div className="title">💭 Require another beneficiary?</div>
-                  <div
-                    className="add-executor"
-                    onClick={onAddBeneficiaryAlterNative}
-                  >
-                    Add More
-                  </div>
+            <div className="alternative-beneficiary-container">
+              <div className="alternative-beneficiary-wrapper">
+                <div className="title">💭 Require another beneficiary?</div>
+                <div
+                  className="add-beneficiary"
+                  onClick={onAddBeneficiaryAlterNative}
+                >
+                  Add More
                 </div>
               </div>
-            ) : (
-              <div className="limit-executor-container">
-                <div className="limit-executor-wrapper">
-                  <div className="title">
-                    💭 You’ve reached the maximum number of executors
-                  </div>
+            </div>
+            <div className="update-beneficiary-success">
+              <div className="wrapper">
+                <div className="tick">
+                  <SuccessIcon />
                 </div>
+                <div className="title">
+                  <span style={{ fontWeight: "bold" }}>Done!</span>
+                  <span> Beneficiary has been successfully updated.</span>
+                </div>
+                <div className="exit"><CloseIcon /></div>
               </div>
-            )}
+            </div>
           </div>
         </div>
         {visibleModal && (
@@ -197,39 +203,23 @@ const PersonalBeneficiary = () => {
             closable={false}
             className={
               " modal-information " +
-              (isMobile ? "modal-mobile-executor " : "modal-desktop-executor ")
+              (isMobile
+                ? "modal-mobile-beneficiary "
+                : "modal-desktop-beneficiary ")
             }
             style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
           >
             <div className="modal-information-wrapper">
               <div className="title">Beneficiarys</div>
               <div className="content">
-                <p>1. The roles of an Beneficiary</p>
                 <p>
-                  (a) The Beneficiary will administer and distribute your estate*
-                  according to your wishes in your will upon your death
+                  The Beneficiary is someone that you have named to receive
+                  money or other benefits from your will.
                 </p>
                 <p>
-                  (b) The Beneficiary will also represent the estate in any probate
-                  proceedings
-                </p>
-                <p>
-                  (c) The Beneficiary will usually also be the “trustee” of your
-                  estate. A trustee has the power to hold your estate upon your
-                  death and will hold any assets, invest or use any money for
-                  the benefit of your beneficiaries who are minors (under the
-                  age of 21 years old).
-                </p>
-                <p>
-                  *Estate is essentially everything you own from bank accounts,
-                  CPF, stocks, shares, property, insurance policies and
-                  belongings, after gifts, taxes, debts and expenses have been
-                  taken out.
-                </p>
-                <p>
-                  2. Changing of Beneficiarys It is common to change Beneficiarys of
-                  wills. You may change your Beneficiary at any point in future by
-                  creating a new will.
+                  You will be able to change the beneficiaries and the
+                  percentage split of your estate in future by establishing a
+                  new will.
                 </p>
               </div>
             </div>
@@ -254,7 +244,9 @@ const PersonalBeneficiary = () => {
             closable={false}
             className={
               " modal-information " +
-              (isMobile ? "modal-mobile-executor " : "modal-desktop-executor ")
+              (isMobile
+                ? "modal-mobile-beneficiary "
+                : "modal-desktop-beneficiary ")
             }
             style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
           >

@@ -12,10 +12,11 @@ body {
       margin-left: $spacing-24;
       width: 100%;
       .card-form-wrapper {
+        height: fit-content !important;
         width: 100%;
         @extend .based-flex-column;
         height: 100%;
-        .executor-form-input-container {
+        .beneficiary-form-input-container {
           margin-bottom: $spacing-32;
         }
         .card-item {
@@ -23,12 +24,12 @@ body {
           height: fit-content;
           margin-bottom: $spacing-32;
         }
-        .alternative-executor-container {
+        .alternative-beneficiary-container {
           width: 100%;
           height: 68px;
           align-items: center;
           display: flex;
-          .alternative-executor-wrapper {
+          .alternative-beneficiary-wrapper {
             border-radius: 10px;
             padding: 0px 16px;
             height: 100%;
@@ -52,7 +53,7 @@ body {
 
               color: #001064;
             }
-            .add-executor {
+            .add-beneficiary {
               width: auto;
               font-family: Graphik-Medium;
               font-style: normal;
@@ -66,17 +67,17 @@ body {
               letter-spacing: -0.5px;
               cursor: pointer;
             }
-            .add-executor:hover {
+            .add-beneficiary:hover {
               color: #6670a2 !important;
             }
           }
         }
-        .limit-executor-container {
+        .limit-beneficiary-container {
           width: 100%;
           height: 68px;
           align-items: center;
           display: flex;
-          .limit-executor-wrapper {
+          .limit-beneficiary-wrapper {
             border-radius: 10px;
             padding: 0px 16px;
             height: 100%;
@@ -179,7 +180,7 @@ body {
   }
 }
 
-.modal-mobile-executor {
+.modal-mobile-beneficiary {
   // position: unset !important;
   max-width: 100% !important;
   .ant-modal-content {
@@ -195,7 +196,7 @@ body {
   }
 }
 
-.modal-desktop-executor {
+.modal-desktop-beneficiary {
   .ant-modal-content {
     .ant-modal-footer {
       padding-bottom: $spacing-32;
@@ -205,7 +206,7 @@ body {
 
 @media only screen and (max-width: 500px) {
   body {
-    .modal-mobile-executor {
+    .modal-mobile-beneficiary {
       max-width: 100% !important;
       .ant-modal-content {
         width: 100% !important;
@@ -220,7 +221,7 @@ body {
 }
 
 @media only screen and (max-width: 1270px) {
-  .alternative-executor-wrapper {
+  .alternative-beneficiary-wrapper {
     flex-direction: column !important;
     align-items: center;
     white-space: nowrap;
@@ -238,12 +239,12 @@ body {
       }
     }
   }
-  .limit-executor-container {
-      .limit-executor-wrapper {
-          .title {
-              font-size: 14px !important;
-          }
+  .limit-beneficiary-container {
+    .limit-beneficiary-wrapper {
+      .title {
+        font-size: 14px !important;
       }
+    }
   }
 }
 
@@ -270,5 +271,38 @@ body {
   padding-bottom: $spacing-32;
   .btn-container {
     margin-top: 40px;
+  }
+}
+
+.update-beneficiary-success {
+  width: 100%;
+  height: 71px;
+  padding: 20px 30px 21px 27px;
+  background: #e3f8f0;
+  border: 2px solid #001064;
+  box-sizing: border-box;
+  box-shadow: 0px 6px 12px rgba(19, 42, 151, 0.1);
+  border-radius: 8px;
+  margin-top: 32px;
+  .wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    font-family: Graphik-Regular;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 155%;
+    justify-content: space-evenly;
+    .tick {
+      margin-right: 19px;
+    }
+
+    .title {
+    }
+    .exit {
+    }
   }
 }
