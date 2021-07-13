@@ -32,6 +32,5 @@ export { ReactComponent as ExecutorMobileIcon } from './icon-executor-mobile.svg
 export {ReactComponent as ValuablesImage} from "./valuables.svg";
 export {ReactComponent as CloudValuablesIcon} from "./icon-cloud-valuables.svg";
 export {ReactComponent as WatchIcon} from "./icon-watch.svg";
-
-
-
+export { ReactComponent as BeneficiaryDesktopIcon } from './icon-beneficiary-desktop.svg';
+export { ReactComponent as BeneficiaryMobileIcon } from './icon-beneficiary-mobile.svg';
