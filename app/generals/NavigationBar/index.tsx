@@ -12,9 +12,11 @@ import { useEffect } from "react";
 import ProgressBar from "generals/Progress";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
+import SignInForm from "@layout/SignIn";
 
 const NavigationBar = () => {
   const [mobile, setMobile] = useState(false);
+  const [isShowSignIn, setIsShowSignIn] = useState(false);
   const disabledBtn = useSelector(
     createSelector(
       (state: any) => state?.progress,
@@ -118,6 +120,13 @@ const NavigationBar = () => {
                     amountPercent={amountPercentIncreament}
                   />
                 )}
+                 <div className="back-container">
+                  <div className="back-wrapper">
+                    <div className="back" onClick={() => setIsShowSignIn(true)}>
+                      Sign In
+                    </div>
+                  </div>
+                </div>
                 <div className="back-container">
                   <div className="back-wrapper">
                     <div className="back" onClick={() => {}}>
@@ -128,6 +137,7 @@ const NavigationBar = () => {
                     </div>
                   </div>
                 </div>
+                {isShowSignIn && <SignInForm />}
               </div>
             </div>
           )}

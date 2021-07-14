@@ -35,3 +35,4 @@ export {ReactComponent as WatchIcon} from "./icon-watch.svg";
 export { ReactComponent as BeneficiaryDesktopIcon } from './icon-beneficiary-desktop.svg';
 export { ReactComponent as BeneficiaryMobileIcon } from './icon-beneficiary-mobile.svg';
 export { ReactComponent as FightingIcon } from './icon-bantay.svg';
+export { ReactComponent as GetStartedIcon } from './icon-get-started.svg';
