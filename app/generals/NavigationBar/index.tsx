@@ -80,6 +80,14 @@ const NavigationBar = () => {
                   </div>
                   <div className="container-back-mobile">
                     <div className="container-back-wrap">
+                      <div className="back-wrapper">
+                        <div
+                          className="back"
+                          onClick={() => setIsShowSignIn(true)}
+                        >
+                          Sign In
+                        </div>
+                      </div>
                       <div className="back" onClick={() => {}}>
                         Dashboard
                       </div>
@@ -120,7 +128,7 @@ const NavigationBar = () => {
                     amountPercent={amountPercentIncreament}
                   />
                 )}
-                 <div className="back-container">
+                <div className="back-container">
                   <div className="back-wrapper">
                     <div className="back" onClick={() => setIsShowSignIn(true)}>
                       Sign In
@@ -137,10 +145,10 @@ const NavigationBar = () => {
                     </div>
                   </div>
                 </div>
-                {isShowSignIn && <SignInForm />}
               </div>
             </div>
-          )}
+          )}  
+           {isShowSignIn && <SignInForm isMobile={mobile}/>}
         </div>
       </nav>
       <div className={mobile ? "height-150" : "height-100"}></div>

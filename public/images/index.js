@@ -36,3 +36,6 @@ export { ReactComponent as BeneficiaryDesktopIcon } from './icon-beneficiary-des
 export { ReactComponent as BeneficiaryMobileIcon } from './icon-beneficiary-mobile.svg';
 export { ReactComponent as FightingIcon } from './icon-bantay.svg';
 export { ReactComponent as GetStartedIcon } from './icon-get-started.svg';
+export { ReactComponent as SmileIcon } from './icon-smile.svg';
+export { ReactComponent as InformationIcon } from './icon-information.svg';
+export { ReactComponent as SecurityIcon } from './icon-security.svg';

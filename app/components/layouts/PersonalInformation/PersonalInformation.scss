@@ -1,13 +1,11 @@
-body {
-    background-image: url("/images/bg.svg");
-}
-
 .personal-container {
+    background-image: url("/images/bg.svg");
     display: flex;
     height: 100%;
     width: 100%;
     min-height: 882px;
     .personal-wrapper {
+        width: 69% !important;
         .card-form {
             margin-left: $spacing-24;
             width: 100%;
@@ -24,9 +22,9 @@ body {
         }
     }
     .personal-wrapper-mobile {
+        width: 100% !important;
         @extend .based-flex-column;
         align-items: center;
-        width: 100%;
         height: 100%;
     }
     .personal-wrapper-desktop {
@@ -164,7 +162,7 @@ body {
 }
 
 .responsive {
-    width: 69% !important;
+    width: 100% !important;
     margin: auto !important;
     .personal-form-container,
     .card-form {
