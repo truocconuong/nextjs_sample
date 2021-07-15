@@ -22,8 +22,6 @@
 @import "/app/components/layouts/PersonalExecutor/PersonalExecutor.scss";
 @import "/app/components/layouts/Valuables/valuables.scss";
 @import "/app/components/layouts/BusinessInterests/business-interests.scss";
-@import "/app/components/layouts/PersonalBeneficiary/PersonalBeneficiary.scss";
-@import "/app/components/layouts/LearningCenter/LearningCenter.scss";
 @import "/app/components/layouts/SignIn/SignIn.scss";
 @import "/app/components/layouts/AboutUs/AboutUs.scss";
 @import "../app/components/StartYourWill/Modal/ModalStarYourWill.scss";
@@ -31,3 +29,17 @@
 //Screen
 @import "./Screen/StartYourWill.scss";
 @import "./Screen/PaymentSummary.scss";
+@import '/app/components/layouts/PersonalBeneficiary/PersonalBeneficiary.scss';
+@import '/app/components/layouts/LearningCenter/LearningCenter.scss';
+// @import "../app/generals/Button/button.scss";
+@import '/app/generals/NavigationBar/NavigationBar.scss';
+@import '/app/generals/Progress/ProgressBar.scss';
+@import "/app/generals/Button/button.scss";
+
+// arrow carousel
+@import '/app/components/elements/ArrowCarousel/ArrowCarousel.style.scss';
+
+// landing page
+@import '/app/components/layouts/Home/Home.style.scss';
+@import '/app/components/layouts/Faq/Faq.style.scss';
+@import "/app/components/modules/LandingPage/Landing.style.scss";

@@ -6,16 +6,19 @@ import { createSelector } from "reselect";
 import { ThreeFaceIcon, ThreeFaceMobileIcon } from "../../../../public/images";
 import InputField from "@generals/InputField";
 import { setNameStart } from "../../../../redux/actions/startYourWill";
+import { useRouter } from "next/router";
 
 function ModalContinueYourWill(props) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { showModal, setShowModal } = props;
   const [name, setName] = useState("");
 
-  const handleStart = () => {
+  const handleContinue = () => {
     dispatch(setNameStart(name));
     setShowModal(false);
+    router.push("/start-your-will");
   };
 
   const width = useSelector(
@@ -59,7 +62,7 @@ function ModalContinueYourWill(props) {
         <div className="item-center mt-24 mb-8">
           <Button
             className="continue-btn"
-            onClick={handleStart}
+            onClick={handleContinue}
             disabled={name ? false : true}
           >
             Continue

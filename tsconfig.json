@@ -11,7 +11,8 @@
       "@context/*": ["context/*"],
       "@hook/*": ["hooks/*"],
       "@util/*": ["utils/*"],
-      "@generals/*": ["generals/*"]
+      "@generals/*": ["generals/*"],
+      "@images*": ["../public/images/*"],
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

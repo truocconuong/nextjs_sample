@@ -6,6 +6,7 @@ import {useEffect} from "react";
 interface IProps extends ButtonProps {
   borderLarge?: boolean;
   fontWeightLarge?: boolean;
+  width?: string;
 }
 
 function CustomButton(props: IProps) {
@@ -24,7 +25,7 @@ function CustomButton(props: IProps) {
 
   return (
     <div className="custom-button">
-      <Button className={classes} {...props}>
+      <Button className={classes} {...props} style={{ width: `${props?.width}` }}>
         {props.children}
       </Button>
     </div>
