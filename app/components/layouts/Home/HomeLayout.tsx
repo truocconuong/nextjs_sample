@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Carousel, Row, Col, Typography, Button, Collapse } from 'antd';
 import ArrowCarousel from '@element/ArrowCarousel/ArrowCarousel';
 import CustomButton from 'generals/Button';
@@ -10,11 +10,30 @@ import {
 } from '@images/index'
 import Link from 'next/link'
 import FooterLanding from '@module/LandingPage/FooterLanding';
+import { useRouter } from 'next/router';
+import ModalBeforeStart from 'components/StartYourWill/Modal/ModalBeforeStart';
+import ModalContinueYourWill from 'components/StartYourWill/Modal/ModalContinueYourWill';
 const { Panel } = Collapse;
 
 function HomeLayout(props) {
+  const router = useRouter();
+
+  const [showModalBeforeStart, setShowModalBeforeStart] = useState(false);
+  const [showModalContinueYourWill, setShowModalContinueYourWill] = useState(false);
+
+  const handleCreateYourWill = () => {
+    setShowModalBeforeStart(true)
+  }
+
+  const handleStartModelBefore = () => {
+    setShowModalBeforeStart(false);
+    setShowModalContinueYourWill(true)
+  }
+
   return (
     <div className="home-landing-page">
+      {showModalBeforeStart && <ModalBeforeStart showModal={showModalBeforeStart} setShowModal={setShowModalBeforeStart} handleStart={handleStartModelBefore} />}
+      {showModalContinueYourWill && <ModalContinueYourWill showModal={showModalContinueYourWill} setShowModal={setShowModalContinueYourWill} />}
       <div className="home-carousel">
         <Carousel arrows prevArrow={<ArrowCarousel type="pre" />} nextArrow={<ArrowCarousel />}>
           <div>
@@ -25,7 +44,7 @@ function HomeLayout(props) {
                 </div>
                 <h4>Complete your Will anytime, anywhere</h4>
                 <h5>Will-writing made affordable and accessible to everyone with someone who matters</h5>
-                <CustomButton size='large' borderLarge fontWeightLarge>Create Your Will</CustomButton>
+                <CustomButton size='large' borderLarge fontWeightLarge onClick={handleCreateYourWill}>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
                 <PersonCarousel />
@@ -40,7 +59,7 @@ function HomeLayout(props) {
                 </div>
                 <h4>Complete your Will anytime, anywhere</h4>
                 <h5>Will-writing made affordable and accessible to everyone with someone who matters</h5>
-                <CustomButton borderLarge fontWeightLarge size='large'>Create Your Will</CustomButton>
+                <CustomButton borderLarge fontWeightLarge size='large' onClick={handleCreateYourWill}>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
                 <PersonCarousel />
@@ -55,7 +74,7 @@ function HomeLayout(props) {
                 </div>
                 <h4>Complete your Will anytime, anywhere</h4>
                 <h5>Will-writing made affordable and accessible to everyone with someone who matters</h5>
-                <CustomButton size='large' borderLarge fontWeightLarge>Create Your Will</CustomButton>
+                <CustomButton size='large' borderLarge fontWeightLarge onClick={handleCreateYourWill}>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
                 <PersonCarousel />
@@ -110,11 +129,11 @@ function HomeLayout(props) {
         <Col className='mask-left'>
           <Typography.Title level={3}><span className='simple'>Simple</span> Pricing Structure</Typography.Title>
           <p>All you need to do is simply to create, upload & manage.</p>
-          <CustomButton borderLarge fontWeightLarge size='large'>Create Your Will</CustomButton>
+          <CustomButton borderLarge fontWeightLarge size='large' onClick={handleCreateYourWill}>Create Your Will</CustomButton>
         </Col>
         <Col className='mask-right'>
           <Home_5168374 />
-          <p>The platform fees is to help us cover our cost incurred from maintaining a secured and safe environment for you to regularly review and create your Will and manage your legacy.</p>
+          <p>The platform fees is to help us cover our cost incurred from maintaining a secured and safe environment for you to regularly review and onClick={handleCreateYourWill} create your Will and manage your legacy.</p>
           <h6>Benefits Platform Services:</h6>
           <div className='klkl55T'>
             <span className='jsTK77'>Free regular updating</span>
@@ -124,7 +143,7 @@ function HomeLayout(props) {
           <div>
             <span>Access to Legacy Planner Dashboard to manage your legacy</span>
           </div>
-          <CustomButton borderLarge fontWeightLarge size='large'>Create Your Will</CustomButton>
+          <CustomButton borderLarge fontWeightLarge size='large' onClick={handleCreateYourWill}>Create Your Will</CustomButton>
         </Col>
       </Row>
       <div className='home_5167844'>
