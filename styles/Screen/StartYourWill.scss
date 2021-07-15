@@ -1,0 +1,283 @@
+.start-your-will-container {
+  padding: 0;
+
+  @media only screen and (max-width: 992px) {
+    .left-header {
+      order: 2;
+    }
+    .right-header {
+      justify-content: center !important;
+      order: 1;
+      margin-bottom: 16px;
+    }
+  }
+
+  @media only screen and (max-width: 860px) {
+    .create-acc {
+      padding: 0 24px !important;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .body {
+      padding: 0px 16px 40px !important ;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .keep-going {
+      padding: 24px !important;
+    }
+    .body {
+      padding: 0px 24px 40px;
+    }
+    .text-keep-going {
+      font-size: 40px !important;
+    }
+    .text-continue {
+      font-size: 20px !important;
+    }
+    .text {
+      font-size: 16px !important;
+    }
+    .continue-btn {
+      height: 46px;
+      font-size: 18px !important;
+    }
+    .remaining {
+      font-size: 16px !important;
+    }
+    .text-title {
+      font-size: 24px !important;
+    }
+    .text-note {
+      font-size: 14px !important;
+    }
+    .text-fix-now,
+    .optional-text {
+      font-size: 16px !important;
+    }
+    .text-note-per,
+    .text-file-support {
+      font-size: 14px !important;
+    }
+    .upload-btn {
+      width: 141px !important;
+      height: 46px !important;
+      font-size: 18px !important;
+    }
+  }
+
+  .center {
+    display: flex;
+    align-items: center;
+  }
+
+  .text,
+  .optional-text {
+    font-family: Graphik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 145%;
+    letter-spacing: -0.5px;
+    color: #001064;
+  }
+  .create-acc {
+    background: #ffd9d1;
+    height: 60px;
+    align-items: center;
+    padding: 0 12%;
+    .right {
+      float: right;
+    }
+  }
+  .text-continue,
+  .text-fix-now {
+    font-size: 24px;
+    font-family: Graphik;
+    color: #001064;
+  }
+  .keep-going {
+    background: #ffe9be;
+    padding: 5% 12% 4% 12%;
+    .right-header {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .text-keep-going {
+      font-size: 64px;
+      font-family: Recoleta;
+      color: #001064;
+    }
+    .remaining {
+      background: #ffba69;
+      padding: 2px 4px;
+      font-weight: 200;
+      font-size: 24px;
+    }
+  }
+  .text-note {
+    font-size: 20px;
+    font-family: Graphik;
+    color: #6a74a8;
+  }
+  .text-title {
+    margin-left: 8px;
+    font-size: 36px;
+    font-family: Recoleta;
+    color: #001064;
+  }
+  .text-note-per {
+    font-size: 20px;
+    font-family: Graphik;
+    color: #a0a5be;
+  }
+  .text-will-created {
+    font-size: 20px;
+    font-family: Graphik;
+    color: #6670a2;
+  }
+  .text-cloud {
+    font-size: 16px;
+    font-family: Graphik;
+    color: #001064;
+  }
+  .text-file-support {
+    font-family: Graphik;
+    font-size: 16px;
+    color: #6670a2;
+  }
+  .body {
+    background: url("/images/img-background.svg");
+    padding: 0.5% 12% 3% 12%;
+    .fix-issues {
+      background: linear-gradient(0deg, #ffffff, #ffffff), #fff4f4;
+      margin-top: 32px;
+      padding: 24px 24px;
+      border: 2px solid #fb3640;
+      border-radius: 14px;
+      .button-fix {
+        width: 112px;
+        height: 46px;
+        border: 1px solid #fb3640;
+        box-sizing: border-box;
+        border-radius: 7px;
+        color: #fb3640;
+        font-size: 18px;
+        font-family: Graphik;
+      }
+    }
+    .your-personal-will {
+      background: linear-gradient(0deg, #ffffff, #ffffff), #fff4f4;
+      margin-top: 32px;
+      padding: 24px 24px;
+      border-radius: 14px;
+      border: 2px solid #001064;
+      .edit-btn {
+        width: 105px;
+        height: 48px;
+        border: 1px solid #c4c5d2;
+        box-sizing: border-box;
+        border-radius: 7px;
+        color: #c4c5d2;
+        font-size: 18px;
+        font-family: Graphik;
+      }
+      .option {
+        margin: 16px 0;
+        height: 56px;
+        background: #e9f7ff;
+        border-radius: 8px;
+      }
+    }
+    .file-btn {
+      height: 60px;
+      background: #ffffff;
+      border: 2px solid #001064;
+      box-shadow: 0px 8px 10px rgba(0, 22, 136, 0.16);
+      border-radius: 6px;
+      font-family: Graphik;
+      font-size: 20px;
+      color: #001064;
+    }
+    .download {
+      background: #deeaff;
+      margin-top: 45px;
+      padding: 24px 24px;
+      border-radius: 14px;
+      border: 2px solid #001064;
+      .download-btn {
+        width: 179px;
+        @extend .file-btn;
+      }
+
+      .drag-drop-file {
+        background-color: #ffd9d1;
+        border-radius: 7px;
+        padding: 24px 0px;
+        .upload-btn {
+          width: 152px;
+          @extend .file-btn;
+        }
+      }
+    }
+    .upload {
+      position: relative;
+      .make-payment {
+        position: absolute;
+        top: 21%;
+        left: auto;
+        width: calc(100% + 10%);
+        right: auto;
+        left: -5%;
+        background: #ffe9be;
+        border: 2px solid #001064;
+        box-sizing: border-box;
+        box-shadow: 0px 15px 30px rgba(0, 16, 100, 0.1);
+        border-radius: 14px;
+        padding: 24px;
+        .text-title {
+          font-family: Recoleta;
+          font-size: 36px;
+          color: #001064;
+        }
+        .text-note {
+          font-family: Graphik;
+          font-size: 20px;
+          color: #6670a2;
+        }
+        .center {
+          display: flex;
+          align-items: center;
+        }
+        .col-btn-pay {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 40px;
+          .make-payment-btn {
+            width: 182px;
+            height: 60px;
+            background: #ffffff;
+            border: 2px solid #001064;
+            box-sizing: border-box;
+            box-shadow: 0px 8px 10px rgba(0, 22, 136, 0.16);
+            border-radius: 6px;
+            font-family: Graphik;
+            font-size: 20px;
+            color: #001064;
+          }
+        }
+      }
+    }
+  }
+
+  hr {
+    border: 1px solid #e5e7ef;
+  }
+}
+
+// .body-1 {
+//   background: url("/images/img-background.svg");
+//   padding: 0% 5% 3% 5%;
+
+// }

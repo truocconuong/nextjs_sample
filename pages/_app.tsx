@@ -6,6 +6,7 @@ import { useRouter } from "next/dist/client/router";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import NavigationBar from "generals/NavigationBar";
+import SizeBrowser from "generals/SizeBrowser";
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
   return (
@@ -13,6 +14,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       <React.Fragment>
         <NavigationBar />
         <Component {...pageProps} key={router?.route} />
+        <SizeBrowser />
       </React.Fragment>
     </Provider>
   );

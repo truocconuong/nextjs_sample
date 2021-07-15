@@ -1,0 +1,88 @@
+.payment-summary-container {
+  background: url("/images/img-background.svg");
+  margin: auto;
+  width: 90%;
+  padding-top: 40px;
+  .text-title {
+    font-family: Graphik;
+    font-size: 20px;
+    color: #001064;
+  }
+  .text-note {
+    font-family: Graphik;
+    font-size: 16px;
+    color: #6a74a8;
+  }
+  .text-name {
+    font-family: Graphik;
+    font-size: 16px;
+    color: #001064;
+  }
+  .center {
+    display: flex;
+    align-items: center;
+  }
+  .payment-promo {
+    background: #d3e1ff;
+    border-radius: 14px;
+    padding: 24px;
+    margin-right: 40px;
+    .apply-btn {
+      width: 97px;
+      height: 46px;
+      background: #ffffff;
+      border: 2px solid #001064;
+      box-sizing: border-box;
+      border-radius: 6px;
+      font-family: Graphik;
+      font-size: 18px;
+      color: #001064;
+    }
+    .promo-code {
+      background: #fef6e7;
+      border-radius: 8px;
+      height: 46px;
+      padding: 0 16px;
+      font-family: Graphik;
+      font-size: 16px;
+      color: #001064;
+    }
+    hr {
+      margin: 40px 0;
+      border: 1px solid #001064;
+    }
+  }
+  .payment-card {
+    // margin-left: 40px;
+    border: 2px solid #001064;
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    .card-number {
+      font-family: Graphik-Regular;
+      background: #ffffff;
+      border: 1px solid #c3c5d2;
+      border-radius: 8px;
+      font-size: 16px;
+      padding: 14px 20px;
+      color: #6670a2;
+      width: 100%;
+    }
+  }
+  .footer {
+    .pay-now-btn {
+      width: 131px;
+      height: 60px;
+      background: #17c67e;
+      box-shadow: 0px 8px 10px rgba(0, 22, 136, 0.16);
+      border-radius: 6px;
+      font-family: Graphik;
+      font-size: 20px;
+      color: #ffffff;
+    }
+    .ant-btn[disabled] {
+      background: #eef3ff;
+      color: #b3b7d1;
+    }
+  }
+}

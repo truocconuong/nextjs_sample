@@ -6,3 +6,12 @@ export const ProgressTypes = {
   SET_TEXT_BUTTON_PROGRESS: "SET_TEXT_BUTTON_PROGRESS",
   SET_AMOUNT_PERCENT_INCREAMENT: "SET_AMOUNT_PERCENT_INCREAMENT",
 };
+
+export const SizeBrowser = {
+  SET_SIZE_BROWSER: "SET_SIZE_BROWSER",
+};
+
+export const StartYourWill = {
+  SET_NAME: "SET_NAME",
+  SET_MAKE_PAYMENT: "SET_MAKE_PAYMENT",
+};
