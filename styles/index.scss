@@ -35,7 +35,11 @@
 @import '/app/generals/NavigationBar/NavigationBar.scss';
 @import '/app/generals/Progress/ProgressBar.scss';
 @import "/app/generals/Button/button.scss";
-@import '/app/components/layouts/Home/Home.style.scss';
 
 // arrow carousel
 @import '/app/components/elements/ArrowCarousel/ArrowCarousel.style.scss';
+
+// landing page
+@import '/app/components/layouts/Home/Home.style.scss';
+@import '/app/components/layouts/Faq/Faq.style.scss';
+@import "/app/components/modules/LandingPage/Landing.style.scss";
