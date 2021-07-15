@@ -11,7 +11,7 @@ export interface CardInfoPropsInterface extends CardInfoDataPropsInterface {
   hightlightColor: string;
   onEditCard: (e: any, id: number) => void;
   canDelete?: boolean;
-  onDeleteCardItem: (key: number) => void;
+  onDeleteCardItem?: (key: number) => void;
 }
 const CardInfo = (props: CardInfoPropsInterface) => {
   const {
