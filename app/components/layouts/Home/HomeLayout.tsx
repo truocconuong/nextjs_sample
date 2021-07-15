@@ -10,14 +10,11 @@ import {
 } from '@images/index'
 import Link from 'next/link'
 import FooterLanding from '@module/LandingPage/FooterLanding';
-import { useRouter } from 'next/router';
 import ModalBeforeStart from 'components/StartYourWill/Modal/ModalBeforeStart';
 import ModalContinueYourWill from 'components/StartYourWill/Modal/ModalContinueYourWill';
 const { Panel } = Collapse;
 
 function HomeLayout(props) {
-  const router = useRouter();
-
   const [showModalBeforeStart, setShowModalBeforeStart] = useState(false);
   const [showModalContinueYourWill, setShowModalContinueYourWill] = useState(false);
 
