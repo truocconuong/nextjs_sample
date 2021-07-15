@@ -1,0 +1,58 @@
+.about-us {
+  .au-header {
+    padding-top: 113px;
+    background-image: url("/images/lavangroi.svg");
+    text-align: center;
+    .header-title {
+      color: #001066;
+    }
+    .header-description {
+      margin-left: auto;
+      margin-right: auto;
+      color: #001064;
+    }
+  }
+  .au-content {
+    padding-top: 151px;
+    padding-left: 130px;
+    padding-right: 130px;
+    .au-content-section {
+      svg {
+        width: 100%;
+      }
+      padding-bottom: 150px;
+      .ant-row {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    .au-content__title {
+      font-family: "Recoleta";
+      color: #001064;
+      font-weight: 500;
+      font-size: 42px;
+    }
+    .au-content__sub-title {
+      color: #001064;
+      font-weight: 500;
+      font-size: 22px;
+    }
+    .au-content__sub-desc {
+      color: #001064;
+      font-weight: 500;
+      font-size: 16px;
+      padding-bottom: 17px;
+      font-family: "Graphik";
+    }
+  }
+  .maker-color {
+    background-color: #f5d8be;
+  }
+}
+
+@media only screen and (max-width: 780px) {
+  .about-us .au-content {
+    padding: 0px;
+    padding-left: 17px;
+  }
+}
