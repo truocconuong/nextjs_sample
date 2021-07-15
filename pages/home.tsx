@@ -5,7 +5,7 @@ import HomeLayout from '@layout/Home/HomeLayout';
 function Home(props) {
   return (
     <Layout>
-      <Header style={{height:'80px'}}></Header>
+      {/* <Header style={{height:'80px'}}></Header> */}
       <Content>
         <HomeLayout/>
       </Content>

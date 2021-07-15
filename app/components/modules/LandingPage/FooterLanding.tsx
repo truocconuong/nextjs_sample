@@ -11,7 +11,7 @@ function FooterLanding(props) {
         <div className="home-secure">
           <Typography.Title level={3}>Secure yourself, your loved ones & future now!</Typography.Title>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-          <CustomButton type="ghost" size='large'>Create Your Will</CustomButton>
+          <CustomButton borderLarge fontWeightLarge size='large'>Create Your Will</CustomButton>
         </div>
         <Row className="home-twitter">
           <Col offset={2}>

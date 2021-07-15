@@ -25,7 +25,7 @@ function HomeLayout(props) {
                 </div>
                 <h4>Complete your Will anytime, anywhere</h4>
                 <h5>Will-writing made affordable and accessible to everyone with someone who matters</h5>
-                <CustomButton type="ghost" size='large'>Create Your Will</CustomButton>
+                <CustomButton size='large' borderLarge fontWeightLarge>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
                 <PersonCarousel />
@@ -40,7 +40,7 @@ function HomeLayout(props) {
                 </div>
                 <h4>Complete your Will anytime, anywhere</h4>
                 <h5>Will-writing made affordable and accessible to everyone with someone who matters</h5>
-                <CustomButton type="ghost" size='large'>Create Your Will</CustomButton>
+                <CustomButton borderLarge fontWeightLarge size='large'>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
                 <PersonCarousel />
@@ -55,7 +55,7 @@ function HomeLayout(props) {
                 </div>
                 <h4>Complete your Will anytime, anywhere</h4>
                 <h5>Will-writing made affordable and accessible to everyone with someone who matters</h5>
-                <CustomButton type="ghost" size='large'>Create Your Will</CustomButton>
+                <CustomButton size='large' borderLarge fontWeightLarge>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
                 <PersonCarousel />
@@ -110,7 +110,7 @@ function HomeLayout(props) {
         <Col className='mask-left'>
           <Typography.Title level={3}><span className='simple'>Simple</span> Pricing Structure</Typography.Title>
           <p>All you need to do is simply to create, upload & manage.</p>
-          <CustomButton type="ghost" size='large'>Create Your Will</CustomButton>
+          <CustomButton borderLarge fontWeightLarge size='large'>Create Your Will</CustomButton>
         </Col>
         <Col className='mask-right'>
           <Home_5168374 />
@@ -124,7 +124,7 @@ function HomeLayout(props) {
           <div>
             <span>Access to Legacy Planner Dashboard to manage your legacy</span>
           </div>
-          <CustomButton type="ghost" size='large'>Create Your Will</CustomButton>
+          <CustomButton borderLarge fontWeightLarge size='large'>Create Your Will</CustomButton>
         </Col>
       </Row>
       <div className='home_5167844'>
@@ -188,7 +188,7 @@ function HomeLayout(props) {
         </Col>
         <Col md={10} className="home-frequently">
           <Typography.Title level={3}>Frequently Asked Questions</Typography.Title>
-          <CustomButton type="ghost" size='large'>View All FAQs</CustomButton>
+          <CustomButton borderLarge fontWeightLarge size='large'>View All FAQs</CustomButton>
         </Col>
         <Col md={12}>
           <Collapse
@@ -210,24 +210,8 @@ function HomeLayout(props) {
             </Panel>
           </Collapse>
         </Col>
-        <CustomButton type="ghost" size='large'>View All FAQs</CustomButton>
+        <CustomButton borderLarge fontWeightLarge size='large'>View All FAQs</CustomButton>
       </Row>
-      {/* <div className="home-secure">
-        <Typography.Title level={3}>Secure yourself, your loved ones & future now!</Typography.Title>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-        <CustomButton type="ghost" size='large'>Create Your Will</CustomButton>
-      </div> */}
-      {/* <Row className="home-twitter">
-        <Col offset={2}>
-          <HomeTwitter />
-        </Col>
-        <Col>
-          <Typography.Title level={3}>
-            Learn more with us @iwillstwitter
-          </Typography.Title>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-        </Col>
-      </Row> */}
       <FooterLanding />
     </div>
   );

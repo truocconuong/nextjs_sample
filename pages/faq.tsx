@@ -6,7 +6,7 @@ import FaqLayout from '@layout/Faq/FaqLayout';
 function Faq(props) {
   return (
     <Layout style-={{ backgroundColor: 'white' }}>
-      <Header style={{ height: '80px' }}></Header>
+      {/* <Header style={{ height: '80px' }}></Header> */}
       <Content>
         <FaqLayout />
       </Content>
