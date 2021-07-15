@@ -44,7 +44,7 @@ $breakpoint-xxl: 2400px;
           top: 46%;
           width: 58px;
           height: 58px;
-          z-index: 999999;
+          z-index: 4;
           @media (max-width: $breakpoint-lg) {
             display: none !important;
           }
@@ -55,7 +55,7 @@ $breakpoint-xxl: 2400px;
           top: 46%;
           width: 58px;
           height: 58px;
-          z-index: 999999;
+          z-index: 4;
           @media (max-width: $breakpoint-lg) {
             display: none !important;
           }
