@@ -91,11 +91,15 @@
       float: right;
     }
   }
-  .text-continue,
   .text-fix-now {
     font-size: 24px;
     font-family: Graphik;
     color: #001064;
+  }
+  .text-continue {
+    @extend.text-fix-now;
+    font-weight: bold;
+    
   }
   .keep-going {
     background: #ffe9be;
@@ -112,8 +116,8 @@
     .remaining {
       background: #ffba69;
       padding: 2px 4px;
-      font-weight: 200;
-      font-size: 24px;
+      font-weight: bold;
+      font-size: 20px;
     }
   }
   .text-note {
@@ -126,6 +130,7 @@
     font-size: 36px;
     font-family: Recoleta;
     color: #001064;
+    font-weight: bold;
   }
   .text-note-per {
     font-size: 20px;
@@ -208,6 +213,7 @@
       border: 2px solid #001064;
       .download-btn {
         width: 179px;
+        font-weight: bold;
         @extend .file-btn;
       }
 
@@ -217,13 +223,26 @@
         padding: 24px 0px;
         .upload-btn {
           width: 152px;
+          font-weight: bold;
           @extend .file-btn;
         }
       }
     }
     .upload {
       position: relative;
+      .make-overlay {
+        background-color: red;
+        background-color: rgba(255,255,255,0.6);
+        position: absolute;
+        top: -1%;
+        left: -1%;
+        // border-radius: 10px;
+        height: 102%;
+        width: 102%;
+        z-index: 1;
+      }
       .make-payment {
+        z-index: 2;
         position: absolute;
         top: 21%;
         left: auto;
@@ -265,6 +284,7 @@
             font-family: Graphik;
             font-size: 20px;
             color: #001064;
+            font-weight: bold;
           }
         }
       }

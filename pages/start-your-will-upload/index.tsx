@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "antd";
-import { useSelector } from "react-redux";
-import { createSelector } from "reselect";
+import React, {useEffect, useState} from "react";
+import {Button, Col, Row} from "antd";
+import {useSelector} from "react-redux";
+import {createSelector} from "reselect";
 
 import {
   CloudAWS,
@@ -22,7 +22,7 @@ import {
 import CustomButton from "generals/Button";
 import CustomCheckbox from "generals/CustomCheckbox";
 import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 
 function StartYourWill() {
   const [personalParticular, setPersonalParticular] = useState(true);
@@ -38,14 +38,14 @@ function StartYourWill() {
   const width = useSelector(
     createSelector(
       (state: any) => state?.sizeBrowser,
-      (sizeBrowser) => sizeBrowser?.width
+      sizeBrowser => sizeBrowser?.width
     )
   );
 
   const makePayment = useSelector(
     createSelector(
       (state: any) => state?.startYourWill,
-      (startYourWill) => startYourWill?.makePayment
+      startYourWill => startYourWill?.makePayment
     )
   );
 
@@ -77,7 +77,7 @@ function StartYourWill() {
         )}
         <Row
           className="keep-going"
-          style={{ background: !isUpload ? "#E9FAF4" : "#FFD9D1" }}
+          style={{background: !isUpload ? "#E9FAF4" : "#FFD9D1"}}
         >
           <Col
             xs={24}
@@ -111,7 +111,7 @@ function StartYourWill() {
             </div>
             {!isUpload && (
               <CustomButton
-                type="primary"
+                type="ghost"
                 size="large"
                 className="continue-btn"
                 onClick={handleDownloadWill}
@@ -426,25 +426,25 @@ function StartYourWill() {
                 )}
               </Col>
             </Row>
-            <Row className="optional-text mt-16" style={{ color: "#6670A2" }}>
+            <Row className="optional-text mt-16" style={{color: "#6670A2"}}>
               By writing a will, you will be able to take care of your loved
               ones when you are gone. Having a will allows you to distribute
               your assets according to your wishes, and also indicate your
               wishes you might have when you are gone.
             </Row>
-            <Row className="optional-text mt-24" style={{ color: "#6670A2" }}>
+            <Row className="optional-text mt-24" style={{color: "#6670A2"}}>
               Last Edited: Tuesday 17 May 2021, 7:04 PM
             </Row>
           </div>
 
-          <div className="download upload" style={{ background: "#fff" }}>
+          <div className="download upload" style={{background: "#fff"}}>
             <Col span={24} className="center">
               <span>
                 <UploadFile />
               </span>
               <span className="text-title">Upload Your Signed Will</span>
             </Col>
-            <Row className="optional-text mt-16" style={{ color: "#6670A2" }}>
+            <Row className="optional-text mt-16" style={{color: "#6670A2"}}>
               Once your Will has been signed, your Will is completed and you can
               upload your signed Will into the iWills platform for future
               reference. You should store the original Will in a safe location
@@ -467,48 +467,51 @@ function StartYourWill() {
             </div>
 
             {!makePayment && (
-              <div className="make-payment">
-                <Row>
-                  <Col
-                    xs={24}
-                    sm={24}
-                    md={18}
-                    lg={18}
-                    xl={18}
-                    xxl={18}
-                    className="center"
-                  >
-                    <Col style={{ paddingRight: 10 }}>
-                      {width > 768 ? <MakePayment /> : <MakePaymentMobile />}
-                    </Col>
-                    <Col>
-                      <div className="text-title">
-                        Pay to upload Your Signed Will
-                      </div>
-                      <div className="text-note">
-                        A secured interface with your data encrypted and your
-                        Will stored safely to protect your privacy.
-                      </div>
-                    </Col>
-                  </Col>
-                  <Col
-                    xs={24}
-                    sm={24}
-                    md={6}
-                    lg={6}
-                    xl={6}
-                    xxl={6}
-                    className="col-btn-pay"
-                  >
-                    <Button
-                      className="make-payment-btn"
-                      onClick={handleMakePayment}
+              <>
+              <div className="make-overlay"></div>
+                <div className="make-payment">
+                  <Row>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={18}
+                      lg={18}
+                      xl={18}
+                      xxl={18}
+                      className="center"
                     >
-                      Make Payment
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
+                      <Col style={{paddingRight: 10}}>
+                        {width > 768 ? <MakePayment /> : <MakePaymentMobile />}
+                      </Col>
+                      <Col>
+                        <div className="text-title">
+                          Pay to upload Your Signed Will
+                        </div>
+                        <div className="text-note">
+                          A secured interface with your data encrypted and your
+                          Will stored safely to protect your privacy.
+                        </div>
+                      </Col>
+                    </Col>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={6}
+                      lg={6}
+                      xl={6}
+                      xxl={6}
+                      className="col-btn-pay"
+                    >
+                      <Button
+                        className="make-payment-btn"
+                        onClick={handleMakePayment}
+                      >
+                        Make Payment
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
+              </>
             )}
           </div>
         </div>
