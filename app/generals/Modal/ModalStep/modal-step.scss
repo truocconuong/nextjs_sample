@@ -1,0 +1,65 @@
+.modal-step {
+  width: 600px !important;
+  .ant-modal-content {
+    border-radius: 14px;
+    .ant-modal-body {
+      padding: 40px 40px 0 40px;
+      .ant-carousel .slick-dots li {
+        width: 56px;
+        height: 6px;
+      }
+      .ant-carousel .slick-dots li button {
+        background: #e5e7ef;
+        width: 56px;
+        height: 6px;
+      }
+
+      .ant-carousel .slick-dots li.slick-active button {
+        background: #001064;
+        width: 56px;
+        height: 6px;
+      }
+      .ant-carousel .slick-dots-bottom {
+        bottom: -100px;
+      }
+
+      .carousel__child {
+        text-align: center;
+        .carousel__child--image {
+          padding-bottom: 25px;
+        }
+        .carousel__child--title {
+          font-family: Recoleta;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 36px;
+          line-height: 125%;
+          letter-spacing: -0.5px;
+          color: #001064;
+          padding-bottom: 32px;
+        }
+        .carousel__child--contents {
+          font-family: Graphik-Regular;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 20px;
+          line-height: 145%;
+          text-align: center;
+          letter-spacing: -0.5px;
+          color: #6670a2;
+          padding-bottom: 23px;
+          .carousel__child--subtitle {
+            color: #001064;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    .ant-modal-footer {
+      border-top: unset;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 70px;
+    }
+  }
+}

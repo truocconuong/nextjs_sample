@@ -12,6 +12,12 @@
   .mr-8 {
     margin-right: 8px;
   }
+  .mb-16 {
+    margin-bottom: 16px;
+  }
+  .mb-24 {
+    margin-bottom: 24px;
+  }
   .mb-32 {
     margin-bottom: 32px;
   }
@@ -204,6 +210,7 @@
           background-color: #ebf8ff;
           border-radius: 10px;
           padding: 19px 16px;
+          margin-bottom: 30px;
           span {
             font-size: 18px;
             margin-top: 2px;

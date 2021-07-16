@@ -1,0 +1,16 @@
+.custom-checkbox {
+    width: 100%;
+    font-family: Graphik-Regular;
+    .custom-checkbox__text {
+        margin-left: 12px;
+        .custom-checkbox__text--title {
+            font-size: 16px;
+            margin-bottom: 9px;
+            color: #001064;
+        }
+        .custom-checkbox__text--content {
+            font-size: 14px;
+            color: #6670A2;
+        }   
+    }
+}

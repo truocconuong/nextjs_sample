@@ -1,0 +1,23 @@
+.property {
+  $breakpoint-500: 500px;
+  $breakpoint-mobile: 576px;
+  $breakpoint-tablet: 768px;
+  $breakpoint-md: 992px;
+  .property__bg-common {
+    background-color: #fef6e7 !important;
+  }
+  .property-padding {
+    padding: 21px 16px 21px 32px !important;
+    @media (max-width: $breakpoint-md) {
+      padding: 24px 16px !important;
+    }
+  }
+  .property__country {
+    @media (min-width: $breakpoint-500) {
+      max-width: 170px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

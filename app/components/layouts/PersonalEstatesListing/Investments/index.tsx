@@ -11,8 +11,8 @@ import {
   PotImage,
   ResetIcon,
   SaveIcon,
-  TrashIcon,
-} from "../../../../public/images";
+  TrashDisabledIcon,
+} from "../../../../../public/images";
 
 const {Option} = Select;
 
@@ -137,6 +137,7 @@ function InvestmentsLayout(props) {
                         <Col className="div-center responsive-list-data">
                           <Col className="mr-8 edit-button">
                             <CustomButton
+                              width="100%"
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
                               disabled
@@ -145,7 +146,7 @@ function InvestmentsLayout(props) {
                             </CustomButton>
                           </Col>
                           <Col className="trash-icon div-center">
-                            <TrashIcon onClick={() => handleDelete(item)}/>
+                            <TrashDisabledIcon onClick={() => handleDelete(item)}/>
                           </Col>
                         </Col>
                       </Row>
