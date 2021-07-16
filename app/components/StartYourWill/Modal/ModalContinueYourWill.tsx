@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
-
-import { ThreeFaceIcon, ThreeFaceMobileIcon } from "../../../../public/images";
+import { ThreeFaceIcon, ThreeFaceMobileIcon } from '@images/index.js';
 import InputField from "@generals/InputField";
 import { setNameStart } from "../../../../redux/actions/startYourWill";
 import { useRouter } from "next/router";
