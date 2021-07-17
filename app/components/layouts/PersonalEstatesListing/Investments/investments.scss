@@ -86,6 +86,7 @@
               font-family: Recoleta;
               font-size: 32px;
               margin-right: 8px;
+              font-weight: bold;
               @media (max-width: $breakpoint-mobile) {
                 font-size: 24px;
               }
@@ -125,7 +126,7 @@
           width: 100%;
         }
         .list-data {
-          padding: 21px 32px !important;
+          padding: 21px 16px 21px 32px !important;
           @media (max-width: $breakpoint-md) {
             padding: 24px 16px !important;
           }
@@ -166,16 +167,17 @@
           }
 
           .trash-icon {
-            border: 1px solid #c3c5d2;
+            // border: 1px solid #c3c5d2;
+            border: 1px solid #6670a2;
             box-sizing: border-box;
             border-radius: 8px;
             width: 46px;
             height: 48px;
-            &:hover {
-              background-color: #fff;
-              border: 1px solid #6670a2;
-              color: #6670a2;
-            }
+            // &:hover {
+            //   background-color: #fff;
+            //   border: 1px solid #6670a2;
+            //   color: #6670a2;
+            // }
           }
 
           .number-1 {

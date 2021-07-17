@@ -76,9 +76,9 @@ function PropertyLayout(props) {
     address1: "",
     address2: "",
     unitNumber: "",
-    typeOfProperty: "",
+    typeOfProperty: null,
     tenure: "",
-    currentBankLoan: "",
+    currentBankLoan: null,
     loanStartTime: "",
     loanEndTime: "",
     yearLoanTaken: "",
@@ -107,9 +107,9 @@ function PropertyLayout(props) {
       address1: "",
       address2: "",
       unitNumber: "",
-      typeOfProperty: "",
+      typeOfProperty: null,
       tenure: "",
-      currentBankLoan: "",
+      currentBankLoan: null,
       loanStartTime: "",
       loanEndTime: "",
       yearLoanTaken: "",
@@ -255,7 +255,7 @@ function PropertyLayout(props) {
               {listData.length > 0 &&
                 listData.map((item, index) => {
                   return (
-                    <Row className="form-investment mb-32 property-padding">
+                    <Row className="form-investment mb-32 list-data">
                       <Row justify="space-between" align="middle">
                         <Col className="div-center">
                           <Col className="number-1 div-center property__bg-common">

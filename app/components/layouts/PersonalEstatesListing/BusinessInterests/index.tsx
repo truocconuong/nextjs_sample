@@ -1,17 +1,17 @@
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col} from "antd";
-import CustomButton from "generals/Button";
-import InputField from "generals/InputField";
-import CustomToggle from "generals/Toggle";
 import React, {useState} from "react";
-import ModalInfo from "generals/Modal/ModalInfo";
+import ModalInfo from "@generals/Modal/ModalInfo";
+import CustomButton from "@generals/Button";
+import InputField from "@generals/InputField";
+import CustomToggle from "@generals/Toggle";
 import {
   BusinessImage,
   BusinessMobileImage,
   CloudBusinessIcon,
   ResetIcon,
   SaveIcon,
-  TrashDisabledIcon,
+  TrashEnabledIcon,
 } from "../../../../../public/images";
 import {isMobile} from "react-device-detect";
 
@@ -20,6 +20,7 @@ function BusinessInterestsLayout(props) {
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
+  const [isDisabledEdit, setIsDisabledEdit] = useState(false);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
     companyName: "",
@@ -48,6 +49,7 @@ function BusinessInterestsLayout(props) {
   };
 
   const handleSave = () => {
+    setIsDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
     let tempListData = listData;
@@ -58,6 +60,7 @@ function BusinessInterestsLayout(props) {
   };
 
   const handleEdit = item => {
+    setIsDisabledEdit(true);
     setIsShowForm(true);
     let tempListData = listData;
     setListData(tempListData.filter(i => i !== item));
@@ -65,11 +68,11 @@ function BusinessInterestsLayout(props) {
     setNumberForm(tempListData.length);
   };
 
-  const handleDelete = (item) => {
+  const handleDelete = item => {
     const tempListData = listData.filter(i => i !== item);
     setListData(tempListData);
     setNumberForm(tempListData.length + 1);
-  }
+  };
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
@@ -77,7 +80,9 @@ function BusinessInterestsLayout(props) {
   };
 
   const handleAddInvestment = () => {
+    if (isShowForm) return;
     setIsShowForm(true);
+    setIsDisabledEdit(false);
   };
 
   return (
@@ -135,12 +140,15 @@ function BusinessInterestsLayout(props) {
                               width="100%"
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
+                              disabled={isDisabledEdit}
                             >
                               Edit
                             </CustomButton>
                           </Col>
                           <Col className="trash-icon div-center">
-                            <TrashDisabledIcon onClick={() => handleDelete(item)}/>
+                            <TrashEnabledIcon
+                              onClick={() => handleDelete(item)}
+                            />
                           </Col>
                         </Col>
                       </Row>

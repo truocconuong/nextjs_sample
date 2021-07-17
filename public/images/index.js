@@ -123,6 +123,9 @@ export {ReactComponent as PersonalEstatesListingImage} from "./image-property_pe
 export {ReactComponent as TypesOfOwnershipImage} from "./image-property_types-of-ownership.svg";
 export {ReactComponent as CloudPropertyIcon} from "./icon-cloud-property.svg";
 
+export {ReactComponent as BankAccountImage} from "./image-bank-account.svg";
+export {ReactComponent as CloudBankAccountIcon} from "./icon-cloud-bank-account.svg";
+
 export {ReactComponent as PotImage} from "./image-investment.svg";
 export {ReactComponent as CloudIcon} from "./icon-cloud-investment.svg";
 
