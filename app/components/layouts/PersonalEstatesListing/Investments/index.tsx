@@ -1,17 +1,17 @@
+import React, {useState} from "react";
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col, Select} from "antd";
-import CustomButton from "generals/Button";
-import InputField from "generals/InputField";
-import SelectField from "generals/SelectField";
-import CustomToggle from "generals/Toggle";
-import React, {useState} from "react";
-import ModalInfo from "generals/Modal/ModalInfo";
+import CustomButton from "@generals/Button";
+import InputField from "@generals/InputField";
+import SelectField from "@generals/SelectField";
+import CustomToggle from "@generals/Toggle";
+import ModalInfo from "@generals/Modal/ModalInfo";
 import {
   CloudIcon,
   PotImage,
   ResetIcon,
   SaveIcon,
-  TrashDisabledIcon,
+  TrashEnabledIcon,
 } from "../../../../../public/images";
 
 const {Option} = Select;
@@ -29,22 +29,23 @@ function InvestmentsLayout(props) {
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
+  const [isDisabledEdit, setIsDisabledEdit] = useState(false);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
-    investmentType: "",
+    investmentType: null,
     financial: "",
     accountNo: "",
-    capitalOutlay: null,
-    currentMarketValue: null,
+    capitalOutlay: "",
+    currentMarketValue: "",
   });
 
   const handleReset = () => {
     setData({
-      investmentType: "",
+      investmentType: null,
       financial: "",
       accountNo: "",
-      capitalOutlay: null,
-      currentMarketValue: null,
+      capitalOutlay: "",
+      currentMarketValue: "",
     });
   };
 
@@ -57,6 +58,7 @@ function InvestmentsLayout(props) {
   };
 
   const handleSave = () => {
+    setIsDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
     let tempListData = listData;
@@ -66,6 +68,7 @@ function InvestmentsLayout(props) {
   };
 
   const handleEdit = item => {
+    setIsDisabledEdit(true);
     setIsShowForm(true);
     let tempListData = listData;
     setListData(tempListData.filter(i => i !== item));
@@ -84,7 +87,9 @@ function InvestmentsLayout(props) {
   };
 
   const handleAddInvestment = () => {
+    if (isShowForm) return;
     setIsShowForm(true);
+    setIsDisabledEdit(false);
   };
 
   return (
@@ -140,13 +145,13 @@ function InvestmentsLayout(props) {
                               width="100%"
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
-                              disabled
+                              disabled={isDisabledEdit}
                             >
                               Edit
                             </CustomButton>
                           </Col>
                           <Col className="trash-icon div-center">
-                            <TrashDisabledIcon onClick={() => handleDelete(item)}/>
+                            <TrashEnabledIcon onClick={() => handleDelete(item)}/>
                           </Col>
                         </Col>
                       </Row>
@@ -174,7 +179,7 @@ function InvestmentsLayout(props) {
                         label="Investment Type"
                         selectProps={{
                           placeholder: "Select",
-                          // value: data?.investmentType,
+                          value: data?.investmentType,
                           onChange: value =>
                             setData(prev => ({...prev, investmentType: value})),
                         }}

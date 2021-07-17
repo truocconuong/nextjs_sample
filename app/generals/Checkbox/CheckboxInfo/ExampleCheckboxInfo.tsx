@@ -12,7 +12,7 @@ function ExampleCheckboxInfo(props) {
 
     return (
         <div>
-            <CustomCheckboxInfo checked={myCheck} title="Choose 1" content="Say something here..." onClick={handClickCheckbox} />
+            <CustomCheckboxInfo checked={myCheck} title="Choose 1" content="Say something here..." onChange={handClickCheckbox} />
         </div>
     );
 }

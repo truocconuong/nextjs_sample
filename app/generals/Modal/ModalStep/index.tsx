@@ -29,6 +29,7 @@ function ModalStep(props: IProps) {
 
   useEffect(() => {
     setTotalContent(options.length);
+    if (options.length === 1) setIsFinal(true);
   }, []);
 
   const handleNext = () => {
@@ -52,7 +53,7 @@ function ModalStep(props: IProps) {
       centered
       visible={show}
       footer={[
-        <div style={{width: "fit-content"}}>
+        <div style={{width: "fit-content", marginBottom: `${options.length === 1 && '-30px'}`}}>
           <CustomButton onClick={handleNext} borderLarge fontWeightLarge>
             {isFinal ? "Continue" : "Next"}
           </CustomButton>
@@ -71,7 +72,7 @@ function ModalStep(props: IProps) {
               <div className="carousel__child--title">{item.title}</div>
               {item.contents.map(subitem => {
                 return (
-                  <div className="carousel__child--contents" style={{textAlign: `${item?.alignContents ? 'start' : null}`}}>
+                  <div className="carousel__child--contents" style={item?.alignContents && {textAlign: 'start'}}>
                     {subitem?.subTitle && <div className="carousel__child--subtitle">{subitem?.subTitle}</div>}
                     <div className="carousel__child--content">{subitem?.content}</div>
                   </div>

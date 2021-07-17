@@ -16,7 +16,13 @@ const App = ({ Component, pageProps }: AppProps) => {
           router?.pathname === "/start-your-will-upload" ||
           router?.pathname === "/personal-information" ||
           router?.pathname === "/personal-executor" ||
-          router?.pathname === "/personal-beneficiary") && <NavigationBar />}
+          router?.pathname === "/personal-beneficiary" ||
+          router?.pathname === "/personal-estates-listing/property" ||
+          router?.pathname === "/personal-estates-listing/bank-account" ||
+          router?.pathname === "/personal-estates-listing/investment" ||
+          router?.pathname === "/personal-estates-listing/business-interest" ||
+          router?.pathname === "/personal-estates-listing/valuables"
+          ) && <NavigationBar />}
         <Component {...pageProps} key={router?.route} />
         <SizeBrowser />
       </React.Fragment>

@@ -1,16 +1,16 @@
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col, Select} from "antd";
-import CustomButton from "generals/Button";
-import InputField from "generals/InputField";
-import SelectField from "generals/SelectField";
 import React, {useState} from "react";
-import ModalInfo from "generals/Modal/ModalInfo";
+import CustomButton from "@generals/Button";
+import InputField from "@generals/InputField";
+import SelectField from "@generals/SelectField";
+import ModalInfo from "@generals/Modal/ModalInfo";
 import _ from "lodash";
 import {
   CloudValuablesIcon,
   ResetIcon,
   SaveIcon,
-  TrashDisabledIcon,
+  TrashEnabledIcon,
   ValuablesImage,
   WatchIcon,
 } from "../../../../../public/images";
@@ -30,18 +30,19 @@ function ValuablesLayout(props) {
   const [isShowModalRemove, setIsShowModalRemove] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
+  const [isDisabledEdit, setIsDisabledEdit] = useState(false);
   // const [numberForm, setNumberForm] = useState(1);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
-    valuablesType: "",
-      brand: "",
-      model: "",
-      serialNo: "",
+    valuablesType: null,
+    brand: "",
+    model: "",
+    serialNo: "",
   });
 
   const handleReset = () => {
     setData({
-      valuablesType: "",
+      valuablesType: null,
       brand: "",
       model: "",
       serialNo: "",
@@ -57,6 +58,7 @@ function ValuablesLayout(props) {
   };
 
   const handleSave = () => {
+    setIsDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
     let tempListData = listData;
@@ -67,6 +69,7 @@ function ValuablesLayout(props) {
   };
 
   const handleEdit = item => {
+    setIsDisabledEdit(true);
     setIsShowDetail(true);
     setIsShowForm(true);
     let tempListData = listData;
@@ -92,7 +95,9 @@ function ValuablesLayout(props) {
   };
 
   const handleAddInvestment = () => {
+    if (isShowForm) return;
     setIsShowForm(true);
+    setIsDisabledEdit(false);
   };
 
   const handleChangeValuablesType = value => {
@@ -140,9 +145,7 @@ function ValuablesLayout(props) {
                               </span>
                             </Row>
                             <Row>
-                              <span className="financial">
-                                {item?.brand}
-                              </span>
+                              <span className="financial">{item?.brand}</span>
                             </Row>
                           </Col>
                         </Col>
@@ -152,12 +155,13 @@ function ValuablesLayout(props) {
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
                               width="100%"
+                              disabled={isDisabledEdit}
                             >
                               Edit
                             </CustomButton>
                           </Col>
                           <Col className="trash-icon div-center">
-                            <TrashDisabledIcon onClick={handleDelete} />
+                            <TrashEnabledIcon onClick={handleDelete} />
                             {isShowModalRemove && (
                               <ModalInfo
                                 show={isShowModalRemove}
