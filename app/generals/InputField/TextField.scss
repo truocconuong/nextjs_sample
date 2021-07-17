@@ -15,6 +15,35 @@
   .label-input-field, .label-select-field {
     margin-bottom: 16px;
   }
+  .select-searchable {
+    position: relative;
+    border: 1px solid #c3c5d2;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px 4px 4px rgb(0 16 100 / 15%);
+    .search-icon {
+      position: absolute;
+      z-index: 5;
+      left: 20px;
+      bottom: 11px;
+    }
+    * {
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .ant-select-selection-search,
+    .ant-select-selection-item {
+      padding-left: 35px;
+    }
+    .ant-select-selection-placeholder {
+      padding-left: 30px;
+    }
+  }
+  .label-input-field {
+    margin-bottom: 16px;
+  }
   .input-field {
     font-family: Graphik-Regular;
     background: #ffffff;
@@ -87,7 +116,6 @@
   .ant-select-open:focus {
     border: none;
   }
-
   .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
     .ant-select-selector {
     border: none;
@@ -96,11 +124,13 @@
     border: 1px solid #001064;
     box-shadow: 0px 4px 4px rgba(0, 16, 100, 0.15);
   }
-  .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  .ant-select:not(.ant-select-disabled):hover .ant-select-selector,
+  .select-searchable:hover {
     border: none;
     box-shadow: 0px 4px 4px rgba(0, 16, 100, 0.15);
   }
-  .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  .ant-select:not(.ant-select-disabled):hover .ant-select-selector,
+  .select-searchable:hover {
     border: 1px solid #001064;
     border-radius: 8px;
     box-shadow: 0px 4px 4px rgba(0, 16, 100, 0.15);
@@ -112,6 +142,15 @@
     // padding: 20px 20px 20px 0px;
     margin-top: -7px;
     margin-right: 20px;
+  }
+
+  .ant-select-selector {
+    .ant-select-selection-search {
+      .ant-select-selection-search-input {
+        height: 100%;
+        width: 80%;
+      }
+    }
   }
   .btn-search {
     width: 100%;
@@ -148,6 +187,23 @@
       width: 116px;
       min-width: 116px;
       margin-left: auto;
+    }
+    .active {
+      button {
+        background: #eef3ff !important;
+        span {
+          color: #00199e !important;
+          font-family: Graphik;
+          font-family: Graphik;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 140%;
+          display: flex;
+          align-items: flex-end;
+          letter-spacing: -0.5px;
+        }
+      }
     }
   }
 }
