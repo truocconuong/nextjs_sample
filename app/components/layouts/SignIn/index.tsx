@@ -3,11 +3,13 @@ import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import React from "react";
 import { useState } from "react";
+import { isMobile } from "react-device-detect";
 import {
   GetStartedIcon,
   InformationIcon,
   SecurityIcon,
   SmileIcon,
+  SmileIconMobile,
 } from "../../../../public/images";
 export interface ISignInForm {
   address: string;
@@ -95,7 +97,7 @@ const SignInForm = (props: ISignInFormProps) => {
     {
       id: 2,
       isMobile: props.isMobile,
-      icon: <SmileIcon />,
+      icon: isMobile ? <SmileIconMobile /> : <SmileIcon />,
       header: "How would you like us to address you?",
       content: (
         <React.Fragment>

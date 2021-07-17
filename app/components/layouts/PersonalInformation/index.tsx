@@ -97,6 +97,7 @@ const PersonalInformation = () => {
           isMobile={mobile}
           mainIconDesktop={PersonalIcon}
           mainIconMobile={PersonalMobileIcon}
+          displayButton
           infoIcon={TipIcon}
           textDescription={
             "In order to prevent possible challenges to your identity as the testator, please ensure that you state your Legal Name, NRIC Number and Address as per your NRIC."

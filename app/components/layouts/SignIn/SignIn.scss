@@ -24,6 +24,234 @@
         }
       }
     }
+ }
+}
+
+.modal-mobile-sign-in {
+  // position: unset !important;
+  max-width: 100% !important;
+  .ant-modal-content {
+      .ant-modal-body {
+        overflow: scroll;
+        max-height: 330px;
+        padding: 20px;
+        padding-top: 16px !important;
+        .modal-wrapper {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          .icon {
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            margin: auto;
+          }
+          .header {
+            font-family: Recoleta-Medium;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 20px;
+            line-height: 125%;
+            text-align: center;
+            letter-spacing: -0.5px;
+            color: #001064;
+          }
+          .content {
+            margin-top: $spacing-8;
+            .content-title {
+              font-family: Graphik;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 16px;
+              line-height: 145%;
+              display: flex;
+              align-items: center;
+              letter-spacing: -0.5px;
+              color: #6670a2;
+            }
+            .content-body {
+                .input-address {
+                    margin-top: $spacing-16;
+                }
+            }
+            p {
+              font-family: Graphik;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 25px;
+              letter-spacing: -0.5px;
+              color: #6670a2;
+              margin-top: $spacing-16;
+            }
+            ul {
+              font-family: Graphik-Regular;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 155%;
+              color: #001064;
+              padding-left: 16px;
+              li {
+                background-color: #ffd9d1;
+                margin-top: 13px;
+              }
+            }
+          }
+          .footer {
+            .footer-container {
+              hr {
+                margin-bottom: 32px !important;
+              }
+              .footer-content {
+                font-family: Graphik;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 155%;
+                display: flex;
+                align-items: center;
+                letter-spacing: -0.5px;
+                color: #a0a5be;
+                text-align: center;
+                a {
+                  font-family: Graphik-Regular;
+                  color: #001064;
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
+          .btn-wrapper {
+            margin-top: 40px;
+          }
+        }
+      }
+      .ant-modal-footer {
+          margin-top: 40px;
+          padding: 0;
+          padding-bottom: 32px;
+      }
+  }
+}
+
+.modal-desktop-sign-in {
+  .ant-modal-content {
+    .ant-modal-body {
+      padding: 40px;
+      .modal-wrapper {
+        max-width: 100%;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        .icon {
+          display: flex;
+          align-items: center;
+          width: fit-content;
+          margin: auto;
+        }
+        .header {
+          font-family: Recoleta-Medium;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 36px;
+          line-height: 125%;
+          text-align: center;
+          letter-spacing: -0.5px;
+          color: #001064;
+        }
+        .content {
+          .content-title {
+            font-family: Graphik;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 20px;
+            line-height: 145%;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.5px;
+            color: #6670a2;
+          }
+          .content-body {
+              .input-address {
+                  margin-top: $spacing-32;
+              }
+          }
+          margin-top: $spacing-32;
+          p {
+            font-family: Graphik;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 25px;
+            letter-spacing: -0.5px;
+            color: #6670a2;
+            margin-top: $spacing-16;
+          }
+          ul {
+            font-family: Graphik-Regular;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 155%;
+            color: #001064;
+            padding-left: 16px;
+            li {
+              background-color: #ffd9d1;
+              margin-top: 13px;
+            }
+          }
+        }
+        .footer {
+          .footer-container {
+            hr {
+              margin-bottom: 32px !important;
+            }
+            .footer-content {
+              font-family: Graphik;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 16px;
+              line-height: 155%;
+              display: flex;
+              align-items: center;
+              letter-spacing: -0.5px;
+              color: #a0a5be;
+              text-align: center;
+              a {
+                font-family: Graphik-Regular;
+                color: #001064;
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+        .btn-wrapper {
+          margin-top: 40px;
+        }
+      }
+    }
+      .ant-modal-footer {
+          padding-bottom: $spacing-32;
+      }
+
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  body {
+      .modal-mobile-sign-in {
+          max-width: 100% !important;
+          .ant-modal-content {
+              width: 100% !important;
+              height: 100%;
+              border-radius: 0;
+              position: fixed;
+              bottom: 0;
+              max-height: 80%;
+          }
+      }
   }
 }
 
@@ -57,7 +285,7 @@
         }
         .content {
           .content-title {
-            font-family: Graphik-Light;
+            font-family: Graphik;
             font-style: normal;
             font-weight: normal;
             font-size: 20px;
@@ -74,7 +302,7 @@
           }
           margin-top: $spacing-32;
           p {
-            font-family: Graphik-Light;
+            font-family: Graphik;
             font-style: normal;
             font-weight: normal;
             font-size: 16px;
@@ -103,7 +331,7 @@
               margin-bottom: 32px !important;
             }
             .footer-content {
-              font-family: Graphik-Light;
+              font-family: Graphik;
               font-style: normal;
               font-weight: normal;
               font-size: 16px;
