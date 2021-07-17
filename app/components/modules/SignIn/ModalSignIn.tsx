@@ -28,7 +28,8 @@ const ModalSignIn = (props: IModalSignInProps) => {
       centered={!isMobile}
       visible={true}
       footer={<div className="btn-wrapper">{button}</div>}
-      closable={false}
+      closable={true}
+      onCancel={onCloseModal}
       className={
         " modal-information " +
         (isMobile ? "modal-mobile-sign-in " : "modal-desktop-sign-in ")
