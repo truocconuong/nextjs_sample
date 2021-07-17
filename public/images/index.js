@@ -37,6 +37,7 @@ export { ReactComponent as BeneficiaryMobileIcon } from "./icon-beneficiary-mobi
 export { ReactComponent as FightingIcon } from "./icon-bantay.svg";
 export { ReactComponent as GetStartedIcon } from "./icon-get-started.svg";
 export { ReactComponent as SmileIcon } from "./icon-smile.svg";
+export { ReactComponent as SmileIconMobile } from "./icon-smile-mobile.svg";
 export { ReactComponent as InformationIcon } from "./icon-information.svg";
 export { ReactComponent as SecurityIcon } from "./icon-security.svg";
 export { ReactComponent as SmileDocument } from "./mimcuoi.svg";

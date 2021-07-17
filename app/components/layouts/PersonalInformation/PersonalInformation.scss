@@ -29,7 +29,7 @@
     }
     .personal-wrapper-desktop {
         @extend .based-flex-row;
-        align-items: flex-start;
+        align-items: flex-start !important;
         width: fit-content;
         margin: auto;
         height: 100%;

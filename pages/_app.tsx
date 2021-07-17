@@ -10,9 +10,13 @@ import SizeBrowser from "generals/SizeBrowser";
 const App = ({ Component, pageProps }: AppProps) => {
   const router: NextRouter = useRouter();
   return (
-     <Provider store={store}>
+    <Provider store={store}>
       <React.Fragment>
-        {(router?.pathname === "/start-your-will" || router?.pathname === "/start-your-will-upload") && <NavigationBar />}
+        {(router?.pathname === "/start-your-will" ||
+          router?.pathname === "/start-your-will-upload" ||
+          router?.pathname === "/personal-information" ||
+          router?.pathname === "/personal-executor" ||
+          router?.pathname === "/personal-beneficiary") && <NavigationBar />}
         <Component {...pageProps} key={router?.route} />
         <SizeBrowser />
       </React.Fragment>

@@ -135,7 +135,7 @@ const NavigationBar = () => {
               </div>
             </div>
           )}  
-           {isShowSignIn && <SignInForm isMobile={mobile}/>}
+           {true && <SignInForm isMobile={mobile}/>}
         </div>
       </nav>
       <div className={mobile ? "height-150" : "height-100"}></div>
