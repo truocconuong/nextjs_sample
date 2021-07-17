@@ -1,6 +1,6 @@
 import { Button, Col, Input, InputProps, Row } from "antd";
 import TextArea, { TextAreaProps } from "antd/lib/input/TextArea";
-import { SearchIcon } from "../../../public/images";
+import { SearchIcon, SearchIconActive } from "../../../public/images";
 import React from "react";
 interface InputFieldPropsInterface {
   label?: string;
@@ -67,11 +67,12 @@ const InputField = (props: InputFieldPropsInterface) => {
               className={className}
             />
           </div>
-          <div className="btn-search-wrap">
+          <div className={"btn-search-wrap" + (inputProps.value ? " active" : "")}>
             <Button
+              disabled={!inputProps.value || isError}
               icon={
                 <div className="icon-wrapper">
-                  <SearchIcon />
+                  {inputProps.value && !isError ? <SearchIconActive /> : <SearchIcon />}
                 </div>
               }
               onClick={onSearch}

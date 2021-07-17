@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import InputField from "../InputField";
 import { createSelector } from "reselect";
 import { useSelector } from "react-redux";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { ProgressActions } from "../../../redux/actions";
 import ProgressBar from "generals/Progress";
 
@@ -65,10 +65,29 @@ const Example = () => {
                   label="Input Field"
                   selectProps={{
                     placeholder: "Select",
-                    className: "full-width"
+                    className: "full-width",
                   }}
                   wrapperClassName="wrapper-select"
                 ></SelectField>
+              </div>
+            </Col>
+
+            <Col span={24}>
+              <div className="container-input">
+                <div className="description">Selector / Searching</div>
+                <SelectField
+                  displayLabel
+                  label="Input Field"
+                  selectProps={{
+                    placeholder: "Select",
+                    className: "full-width",
+                  }}
+                  searchable
+                  wrapperClassName="wrapper-select"
+                >
+                  <Option value="Zhejiang">Zhejiang</Option>
+                  <Option value="Jiangsu">Jiangsu</Option>
+                </SelectField>
               </div>
             </Col>
             <Col span={24}>
@@ -116,7 +135,7 @@ const Example = () => {
                   }}
                   searchable
                   onSearch={onSearch}
-                />
+                ></InputField>
               </div>
             </Col>
             <Col span={24}>

@@ -13,7 +13,6 @@ export { ReactComponent as InfoIcon } from "./icon-info.svg";
 export { ReactComponent as ResetIcon } from "./icon-reset.svg";
 export { ReactComponent as SaveIcon } from "./icon-save.svg";
 export { ReactComponent as CloseIcon } from "./icon-close.svg";
-export { ReactComponent as TrashIcon } from "./icon-trash.svg";
 export { ReactComponent as PersonalIcon } from "./icon-personal.svg";
 export { ReactComponent as PersonalMobileIcon } from "./icon-personal-mobile.svg";
 export { ReactComponent as TipIcon } from "./tip.svg";
@@ -133,5 +132,7 @@ export {ReactComponent as CloudBusinessIcon} from "./icon-cloud-business.svg";
 
 export {ReactComponent as ValuablesImage} from "./image-valuables.svg";
 export {ReactComponent as CloudValuablesIcon} from "./icon-cloud-valuables.svg";
+export { ReactComponent as IconSearch } from './icon-search.svg';
+export { ReactComponent as SearchIconActive } from "./search-active.svg";
 
 
