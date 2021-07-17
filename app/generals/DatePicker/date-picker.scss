@@ -1,0 +1,144 @@
+.custom-date-picker {
+  .ant-picker {
+    width: 100%;
+    height: 46px;
+    background: #ffffff;
+    border: 1px solid #c3c5d2;
+    box-sizing: border-box;
+    border-radius: 8px;
+    &:hover,
+    &:focus,
+    &:active {
+      border: 1px solid #001064;
+      box-shadow: 0px 4px 4px rgba(0, 16, 100, 0.15);
+    }
+  }
+  .ant-picker-focused {
+    border: 1px solid #001064;
+    box-shadow: 0px 4px 4px rgba(0, 16, 100, 0.15);
+  }
+}
+
+.custom-date-picker__dropdown {
+  font-family: Graphik-Regular;
+  font-size: 16px;
+  .ant-picker-panel-container {
+    border: 1px solid #001064;
+    box-sizing: border-box;
+    border-radius: 7px;
+    .ant-picker-date-panel {
+      width: unset;
+      .ant-picker-header {
+        margin: 31px 28px 10px 28px;
+        border-bottom: unset;
+        .ant-picker-header-view {
+          font-style: normal;
+          font-weight: bold;
+          font-size: 20px;
+          line-height: 155%;
+          letter-spacing: -0.5px;
+          color: #001064;
+          order: -1;
+          text-align: start;
+        }
+        .ant-picker-header-super-prev-btn {
+          display: none;
+        }
+        .ant-picker-header-prev-btn {
+          .ant-picker-prev-icon {
+            width: 12px;
+            height: 12px;
+            &::before {
+              width: 12px;
+              height: 12px;
+              color: #001064;
+              border-width: 2px 0 0 2px;
+            }
+          }
+        }
+        .ant-picker-header-next-btn {
+          .ant-picker-next-icon {
+            width: 12px;
+            height: 12px;
+            &::before {
+              width: 12px;
+              height: 12px;
+              color: #001064;
+              border-width: 2px 0 0 2px;
+            }
+          }
+        }
+        .ant-picker-header-super-next-btn {
+          display: none;
+        }
+      }
+      .ant-picker-body {
+        padding: 8px 19px 32px 19px;
+        .ant-picker-content {
+          width: unset;
+          thead {
+            th {
+              font-style: normal;
+              font-weight: bold;
+              font-size: 16px;
+              line-height: 155%;
+              letter-spacing: -0.5px;
+              color: #6670a2;
+              width: 50px;
+              height: 44px;
+            }
+          }
+
+          .ant-picker-cell-in-view.ant-picker-cell-selected
+            .ant-picker-cell-inner,
+          .ant-picker-cell-in-view.ant-picker-cell-range-start
+            .ant-picker-cell-inner,
+          .ant-picker-cell-in-view.ant-picker-cell-range-end
+            .ant-picker-cell-inner {
+            color: #fff;
+            background: #6670a2;
+          }
+
+          td.ant-picker-cell-in-view {
+            color: #6a74a8 !important;
+          }
+
+          .ant-picker-cell-in-view.ant-picker-cell-today {
+            .ant-picker-cell-inner {
+              &::before {
+                border: 1px solid #6670a2;
+              }
+            }
+          }
+
+          td.ant-picker-cell {
+            padding: 2px;
+            color: #c3c5d2;
+            .ant-picker-cell-inner {
+              width: 50px;
+              height: 44px;
+              line-height: 44px;
+              font-size: 16px;
+              letter-spacing: -0.5px;
+            }
+          }
+        }
+      }
+    }
+    .ant-picker-year-panel {
+      .ant-picker-body {
+        .ant-picker-content {
+          .ant-picker-cell-in-view.ant-picker-cell-selected
+            .ant-picker-cell-inner,
+          .ant-picker-cell-in-view.ant-picker-cell-range-start
+            .ant-picker-cell-inner,
+          .ant-picker-cell-in-view.ant-picker-cell-range-end
+            .ant-picker-cell-inner {
+            color: #fff;
+            background: #6670a2;
+          }
+        }
+      }
+    }
+  }
+}

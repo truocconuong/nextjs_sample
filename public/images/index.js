@@ -10,11 +10,8 @@ export { ReactComponent as SearchIcon } from "./search.svg";
 export { ReactComponent as SuccessIcon } from "./icon-success.svg";
 export { ReactComponent as WarningIcon } from "./icon-warning.svg";
 export { ReactComponent as InfoIcon } from "./icon-info.svg";
-export { ReactComponent as PotImage } from "./pot.svg";
 export { ReactComponent as ResetIcon } from "./icon-reset.svg";
 export { ReactComponent as SaveIcon } from "./icon-save.svg";
-export { ReactComponent as CloudIcon } from "./icon-cloud.svg";
-export { ReactComponent as CloudBusinessIcon } from "./icon-cloud-business.svg";
 export { ReactComponent as CloseIcon } from "./icon-close.svg";
 export { ReactComponent as TrashIcon } from "./icon-trash.svg";
 export { ReactComponent as PersonalIcon } from "./icon-personal.svg";
@@ -25,12 +22,8 @@ export { ReactComponent as EditIcon } from "./icon-edit.svg";
 export { ReactComponent as DeleteIcon } from "./icon-delete.svg";
 export { ReactComponent as UndoIconEnabled } from "./undo-enabled.svg";
 export { ReactComponent as SaveIconEnabled } from "./save-enabled.svg";
-export { ReactComponent as BusinessImage } from "./business.svg";
-export { ReactComponent as BusinessMobileImage } from "./business-mobile.svg";
 export { ReactComponent as ExecutorDesktopIcon } from "./icon-executor-desktop.svg";
 export { ReactComponent as ExecutorMobileIcon } from "./icon-executor-mobile.svg";
-export { ReactComponent as ValuablesImage } from "./valuables.svg";
-export { ReactComponent as CloudValuablesIcon } from "./icon-cloud-valuables.svg";
 export { ReactComponent as WatchIcon } from "./icon-watch.svg";
 export { ReactComponent as BeneficiaryDesktopIcon } from "./icon-beneficiary-desktop.svg";
 export { ReactComponent as BeneficiaryMobileIcon } from "./icon-beneficiary-mobile.svg";
@@ -119,3 +112,26 @@ export { ReactComponent as FacebookFooter } from './facebook_footer.svg';
 export { ReactComponent as LinkedinFooter } from './linkedin_footer.svg';
 export { ReactComponent as Faq1 } from './faq-1.svg';
 export { ReactComponent as FaqMini1 } from './faq-mini-1.svg';
+export {ReactComponent as TrashEnabledIcon} from "./icon-trash-enabled.svg";
+export {ReactComponent as TrashDisabledIcon} from "./icon-trash-disabled.svg";
+export {ReactComponent as CheckboxUnselectedIcon} from "./icon-checkbox-unselected.svg";
+export {ReactComponent as CheckboxSelectedIcon} from "./icon-checkbox-selected.svg";
+
+
+// Personal Estates listing
+export {ReactComponent as PropertyImage} from "./image-property.svg";
+export {ReactComponent as PersonalEstatesListingImage} from "./image-property_personal-estates-listing.svg";
+export {ReactComponent as TypesOfOwnershipImage} from "./image-property_types-of-ownership.svg";
+export {ReactComponent as CloudPropertyIcon} from "./icon-cloud-property.svg";
+
+export {ReactComponent as PotImage} from "./image-investment.svg";
+export {ReactComponent as CloudIcon} from "./icon-cloud-investment.svg";
+
+export {ReactComponent as BusinessImage} from "./image-business.svg";
+export {ReactComponent as BusinessMobileImage} from "./image-business-mobile.svg";
+export {ReactComponent as CloudBusinessIcon} from "./icon-cloud-business.svg";
+
+export {ReactComponent as ValuablesImage} from "./image-valuables.svg";
+export {ReactComponent as CloudValuablesIcon} from "./icon-cloud-valuables.svg";
+
+

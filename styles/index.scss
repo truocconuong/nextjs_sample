@@ -10,7 +10,6 @@
 @import "/app/generals/Progress/ProgressBar.scss";
 @import "/app/generals/Button/button.scss";
 @import "/app/generals/Toggle/toggle.scss";
-@import "/app/components/layouts/Investments/investments.scss";
 @import "/app/generals/Modal/ModalInfo/ModalInfo.scss";
 @import "/app/generals/PersonalForm/PersonalForm.scss";
 @import "/app/components/modules/PersonalFormInput/PersonalFormInput.scss";
@@ -43,3 +42,13 @@
 @import '/app/components/layouts/Home/Home.style.scss';
 @import '/app/components/layouts/Faq/Faq.style.scss';
 @import "/app/components/modules/LandingPage/Landing.style.scss";
+@import '/app/generals/Checkbox/CheckboxInfo/checkbox-info.scss';
+@import '/app/generals/Modal/ModalStep/modal-step.scss';
+@import '/app/generals/SelectCountry/select-country.scss';
+@import '/app/generals/DatePicker/date-picker.scss';
+
+// Personal Estates Listing
+@import "/app/components/layouts/PersonalEstatesListing/Property/property.scss";
+@import "/app/components/layouts/PersonalEstatesListing/Investments/investments.scss";
+@import "/app/components/layouts/PersonalEstatesListing/BusinessInterests/business-interests.scss";
+@import "/app/components/layouts/PersonalEstatesListing/Valuables/valuables.scss";

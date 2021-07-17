@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {Modal} from "antd";
 import {CloseIcon} from "../../../../public/images";
 import CustomButton from "generals/Button";
@@ -8,7 +8,7 @@ interface IProps {
   handleOk?: () => void,  
   handleCancel?: () => void,
   title?: string, 
-  content?: string,
+  content?: ReactNode,
   contentButton?: string
 }
 

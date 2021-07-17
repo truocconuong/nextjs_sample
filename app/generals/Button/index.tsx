@@ -24,8 +24,8 @@ function CustomButton(props: IProps) {
   }, []);
 
   return (
-    <div className="custom-button">
-      <Button className={classes} {...props} style={{ width: `${props?.width}` }}>
+    <div className="custom-button" style={{width: `${props?.width}`}}>
+      <Button className={classes} {...props} style={{width: `${props?.width}`}}>
         {props.children}
       </Button>
     </div>
