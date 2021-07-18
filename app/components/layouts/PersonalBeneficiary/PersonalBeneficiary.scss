@@ -5,7 +5,7 @@
     width: 100%;
     min-height: 882px;
     .personal-wrapper {
-      width: 69% !important;
+        width: 69% !important;
         .card-form {
             margin-left: $spacing-24;
             width: 100%;
@@ -128,7 +128,7 @@
                 }
                 .content {
                     p {
-                        font-family: Graphik-Light;
+                        font-family: Graphik;
                         font-style: normal;
                         font-weight: normal;
                         font-size: 16px;
@@ -208,6 +208,8 @@
                 width: 100% !important;
                 height: 100%;
                 border-radius: 0;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
                 position: fixed;
                 bottom: 0;
                 max-height: 375px;

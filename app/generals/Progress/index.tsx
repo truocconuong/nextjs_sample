@@ -1,21 +1,21 @@
 import Button from "generals/Button";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ProgressActions } from "../../../redux/actions";
 import { useDispatch } from "react-redux";
-import { isMobile } from "react-device-detect";
 import "react-circular-progressbar/dist/styles.css";
 import {
   buildStyles,
   CircularProgressbarWithChildren,
 } from "react-circular-progressbar";
 import { ProgressIcon } from "../../../public/images";
-import { Col, Row } from "antd";
+import { Row } from "antd";
 interface ProgressPropsInterface {
   textDescription?: string;
   textButton?: string;
   disabled: boolean;
   percent: number;
   amountPercent: number;
+  isMobile?: boolean;
 }
 const ProgressBar = (props: ProgressPropsInterface) => {
   const {
@@ -24,12 +24,8 @@ const ProgressBar = (props: ProgressPropsInterface) => {
     disabled,
     percent,
     amountPercent,
+    isMobile
   } = props;
-  const [mobile, setMobile] = useState(false);
-
-  useEffect(() => {
-    setMobile(isMobile);
-  }, [isMobile]);
 
   const dispatch = useDispatch();
 
@@ -53,7 +49,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
 
   return (
     <div className="progress-container">
-      {mobile ? (
+      {isMobile ? (
         <Row className="progress-mobile">
           <div className="percent-container">
             <div className="text-percent-mobile">

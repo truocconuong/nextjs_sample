@@ -18,15 +18,26 @@ import {
 
 const PersonalInformation = () => {
   const dispatch = useDispatch();
-  const [mobile, setMobile] = useState(false);
-  const [tabled, setTabled] = useState(false);
   const [visibleModal, setVisibleModal] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const [visibleFormInput, setVisibleFormInput] = useState(true);
   const initialDataCard: CardInfoDataPropsInterface = {
     name: "",
     description: "",
     id: 0,
   };
+
+
+  const width = useSelector(
+    createSelector(
+      (state: any) => state?.sizeBrowser,
+      (sizeBrowser) => sizeBrowser?.width
+    )
+  );
+
+  useEffect(() => {
+    setIsMobile(width < 768)
+  }, [width])
 
   const initialDataForm: DataFormInput = {
     legalName: "",
@@ -42,13 +53,6 @@ const PersonalInformation = () => {
   const [dataCard, setDataCard] = useState<CardInfoDataPropsInterface>(
     initialDataCard
   );
-  useEffect(() => {
-    setMobile(isMobile);
-  }, [isMobile]);
-
-  useEffect(() => {
-    setTabled(isTablet);
-  }, [isTablet]);
 
   const onSaveDataFormInput = (data: DataFormInput) => {
     setDataForm(data);
@@ -83,18 +87,14 @@ const PersonalInformation = () => {
   const onEditCard = (id: number) => {
     setVisibleFormInput(true);
   };
+  const classNameWrapper = "personal-wrapper" + (isMobile ? " personal-wrapper-mobile w-100" : " personal-wrapper-desktop w-60");
   return (
-    <div className={"personal-container " + (!mobile ? "responsive" : "")}>
+    <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
       <div
-        className={
-          "personal-wrapper" +
-          (mobile
-            ? " personal-wrapper-mobile w-100"
-            : " personal-wrapper-desktop w-60")
-        }
+        className={classNameWrapper}
       >
         <PersonalPreview
-          isMobile={mobile}
+          isMobile={isMobile}
           mainIconDesktop={PersonalIcon}
           mainIconMobile={PersonalMobileIcon}
           displayButton
@@ -108,7 +108,7 @@ const PersonalInformation = () => {
         />
         <div
           className={
-            "card-form " + (mobile ? " card-form-mobile" : " card-form-desktop")
+            "card-form " + (isMobile ? " card-form-mobile" : " card-form-desktop")
           }
         >
           <div className="card-form-wrapper">
@@ -117,7 +117,7 @@ const PersonalInformation = () => {
                 <CardInfo
                   name={dataCard.name}
                   description={dataCard.description}
-                  isMobile={mobile}
+                  isMobile={isMobile}
                   hightlightColor={"#FFF5F5"}
                   onEditCard={onEditCard}
                   id={dataCard.id}
@@ -127,7 +127,7 @@ const PersonalInformation = () => {
             )}
             {visibleFormInput && (
               <PersonalFormInput
-                isMobile={mobile}
+                isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
                 initialValue={dataForm}
               />
@@ -135,7 +135,7 @@ const PersonalInformation = () => {
           </div>
         </div>
         <Modal
-          centered={!mobile || tabled}
+          centered={!isMobile}
           visible={visibleModal}
           footer={null}
           closable={false}
@@ -143,7 +143,7 @@ const PersonalInformation = () => {
             " modal-information " +
             (isMobile ? "modal-mobile " : "modal-desktop ")
           }
-          style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
+          style={isMobile ? { position: "fixed", bottom: "0" } : {}}
         >
           <div className="modal-information-wrapper">
             <div className="title">Personal Information</div>

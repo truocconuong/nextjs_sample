@@ -4,7 +4,6 @@ import Modal from "generals/Modal";
 import PersonalPreview from "generals/PersonalForm";
 import { DataFormInput } from "@module/BeneficiaryFormInput";
 import React, { useEffect, useState } from "react";
-import { isMobile, isTablet } from "react-device-detect";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import router from "next/dist/client/router";
@@ -15,7 +14,6 @@ import {
   BeneficiaryDesktopIcon,
   BeneficiaryMobileIcon,
   SuccessIcon,
-  DeleteIcon,
   CloseIcon,
 } from "../../../../public/images";
 import BeneficiaryFormInput from "@module/BeneficiaryFormInput";
@@ -31,22 +29,25 @@ const PersonalBeneficiary = () => {
     id: id,
   };
   const dispatch = useDispatch();
-  const [mobile, setMobile] = useState(false);
-  const [tabled, setTabled] = useState(false);
   const [visibleModal, setVisibleModal] = useState(true);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
   const [visibleFormInput, setVisibleFormInput] = useState(true);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
   const [deletingId, setDeletingId] = useState(null);
   const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
 
+  const width = useSelector(
+    createSelector(
+      (state: any) => state?.sizeBrowser,
+      (sizeBrowser) => sizeBrowser?.width
+    )
+  );
   useEffect(() => {
-    setMobile(isMobile);
-  }, [isMobile]);
-
-  useEffect(() => {
-    setTabled(isTablet);
-  }, [isTablet]);
+    setIsMobile(width < 876);
+    setIsTablet(width > 700 && width < 1366)
+  }, [width]);
 
   const onSaveDataFormInput = (data: DataFormInput) => {
     const dataFormCopy = [...dataForm];
@@ -109,17 +110,17 @@ const PersonalBeneficiary = () => {
   };
 
   return (
-    <div className={"personal-container " + (!mobile ? "responsive" : "")}>
+    <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
       <div
         className={
           "personal-wrapper" +
-          (mobile
+          (isMobile
             ? " personal-wrapper-mobile w-100"
             : " personal-wrapper-desktop w-60")
         }
       >
         <PersonalPreview
-          isMobile={mobile}
+          isMobile={isMobile}
           mainIconDesktop={BeneficiaryDesktopIcon}
           mainIconMobile={BeneficiaryMobileIcon}
           infoIcon={TipIcon}
@@ -130,7 +131,8 @@ const PersonalBeneficiary = () => {
         />
         <div
           className={
-            "card-form " + (mobile ? " card-form-mobile" : " card-form-desktop")
+            "card-form " +
+            (isMobile ? " card-form-mobile" : " card-form-desktop")
           }
         >
           <div className="card-form-wrapper">
@@ -140,7 +142,7 @@ const PersonalBeneficiary = () => {
                   <CardInfo
                     name={item.legalName}
                     description={item.relationship}
-                    isMobile={mobile}
+                    isMobile={isMobile}
                     hightlightColor={"#EFF5FF"}
                     onEditCard={onEditCard}
                     id={item.id}
@@ -155,7 +157,7 @@ const PersonalBeneficiary = () => {
             })}
             {(visibleFormInput || dataForm.length === 0) && (
               <BeneficiaryFormInput
-                isMobile={mobile}
+                isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
                 initialValue={editingFormInput}
               />
@@ -171,23 +173,27 @@ const PersonalBeneficiary = () => {
                 </div>
               </div>
             </div>
-            <div className="update-beneficiary-success">
-              <div className="wrapper">
-                <div className="tick">
-                  <SuccessIcon />
+            {!isMobile && (
+              <div className="update-beneficiary-success">
+                <div className="wrapper">
+                  <div className="tick">
+                    <SuccessIcon />
+                  </div>
+                  <div className="title">
+                    <span style={{ fontWeight: "bold" }}>Done!</span>
+                    <span> Beneficiary has been successfully updated.</span>
+                  </div>
+                  <div className="exit">
+                    <CloseIcon />
+                  </div>
                 </div>
-                <div className="title">
-                  <span style={{ fontWeight: "bold" }}>Done!</span>
-                  <span> Beneficiary has been successfully updated.</span>
-                </div>
-                <div className="exit"><CloseIcon /></div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         {visibleModal && (
           <Modal
-            centered={!mobile || tabled}
+            centered={true}
             visible={visibleModal}
             footer={
               <div className="btn-wrapper">
@@ -207,7 +213,7 @@ const PersonalBeneficiary = () => {
                 ? "modal-mobile-beneficiary "
                 : "modal-desktop-beneficiary ")
             }
-            style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
+            style={isMobile ? { position: "fixed", bottom: "0" } : {}}
           >
             <div className="modal-information-wrapper">
               <div className="title">Beneficiarys</div>
@@ -248,7 +254,7 @@ const PersonalBeneficiary = () => {
                 ? "modal-mobile-beneficiary "
                 : "modal-desktop-beneficiary ")
             }
-            style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
+            style={isMobile ? { position: "fixed", bottom: "0" } : {}}
           >
             <div className="modal-information-wrapper">
               <div className="title">Remove</div>
