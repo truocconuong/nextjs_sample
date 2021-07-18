@@ -6,6 +6,8 @@ const initState = {
   isShowProgressBar: true,
   textButtonProgress: "Continue",
   amountPercentIncreament: 10,
+  router: "",
+  pushable: false,
 };
 
 const progressReducer = (state = initState, action) => {
@@ -31,6 +33,22 @@ const progressReducer = (state = initState, action) => {
       return { ...state, ...data };
     }
     case ProgressTypes.SET_AMOUNT_PERCENT_INCREAMENT: {
+      const {data, callback} = action?.payload;
+      const newState = { ...state, ...data };
+      if(callback){
+        callback(newState);
+      }
+      return newState;
+    }
+    case ProgressTypes.SET_PUSHABLE: {
+      const {data, callback} = action?.payload;
+      const newState = { ...state, ...data };
+      if(callback){
+        callback(newState);
+      }
+      return newState;
+    }
+    case ProgressTypes.SET_ROUTER: {
       const {data, callback} = action?.payload;
       const newState = { ...state, ...data };
       if(callback){

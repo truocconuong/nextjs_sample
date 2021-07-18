@@ -4,7 +4,6 @@ import Modal from "generals/Modal";
 import PersonalPreview from "generals/PersonalForm";
 import PersonalFormInput, { DataFormInput } from "@module/PersonalFormInput";
 import React, { useEffect, useState } from "react";
-import { isMobile, isTablet } from "react-device-detect";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import router from "next/dist/client/router";
@@ -62,6 +61,22 @@ const PersonalInformation = () => {
     dataCardCopy.description = data.passport;
     setDataCard(dataCardCopy);
     dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: "/personal-executor",
+        },
+        () => {}
+      )
+    );
+    dispatch(
       ProgressActions.setDisabled(
         {
           disabled: false,
@@ -77,12 +92,6 @@ const PersonalInformation = () => {
       (progress) => progress?.percent
     )
   );
-
-  useEffect(() => {
-    if (percent > 0) {
-      router.push("/personal-executor");
-    }
-  }, [percent]);
 
   const onEditCard = (id: number) => {
     setVisibleFormInput(true);

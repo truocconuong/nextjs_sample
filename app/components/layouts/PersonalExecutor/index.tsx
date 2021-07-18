@@ -57,6 +57,30 @@ const PersonalExecutor = () => {
     setDataForm(dataFormCopy);
     setVisibleFormInput(false);
     dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 0,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: "/personal-beneficiary",
+        },
+        () => {}
+      )
+    );
+    dispatch(
       ProgressActions.setDisabled(
         {
           disabled: false,
@@ -72,12 +96,6 @@ const PersonalExecutor = () => {
       (progress) => progress?.percent
     )
   );
-
-  useEffect(() => {
-    if (percent > 0) {
-      router.push("/personal-executor");
-    }
-  }, [percent]);
 
   const onEditCard = (_e: any, id: number) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
