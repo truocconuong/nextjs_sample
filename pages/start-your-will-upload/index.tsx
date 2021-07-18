@@ -64,6 +64,10 @@ function StartYourWill() {
     router.push("/payment-summary");
   };
 
+  const onEditPersonalParticular = () => {
+    router.push('/personal-information');
+  }
+
   return (
     <>
       <div className="start-your-will-container">
@@ -202,7 +206,7 @@ function StartYourWill() {
                 className="item-end center"
               >
                 {width > 600 && (
-                  <Button className="edit-btn">
+                  <Button className="edit-btn" onClick={onEditPersonalParticular}>
                     <PenIcon /> <span className="ml-8">Edit</span>
                   </Button>
                 )}

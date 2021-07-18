@@ -90,13 +90,6 @@ const PersonalExecutor = () => {
     );
   };
 
-  const percent = useSelector(
-    createSelector(
-      (state: any) => state?.progress,
-      (progress) => progress?.percent
-    )
-  );
-
   const onEditCard = (_e: any, id: number) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
     setEditingFormInput(editingForm);
@@ -120,6 +113,16 @@ const PersonalExecutor = () => {
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
     setDataForm(newFormData);
     setVisibleModalDelete(false);
+    if(newFormData.length === 0){
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => {}
+        )
+      );
+    }
   };
 
   return (
