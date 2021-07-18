@@ -1,10 +1,9 @@
-import CardInfo, { CardInfoDataPropsInterface } from "generals/CardInfo";
+import CardInfo from "generals/CardInfo";
 import CustomButton from "generals/Button";
 import Modal from "generals/Modal";
 import PersonalPreview from "generals/PersonalForm";
 import { DataFormInput } from "@module/ExecutorFormInput";
 import React, { useEffect, useState } from "react";
-import { isMobile, isTablet } from "react-device-detect";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import router from "next/dist/client/router";
@@ -27,8 +26,7 @@ const PersonalExecutor = () => {
     id: 0,
   };
   const dispatch = useDispatch();
-  const [mobile, setMobile] = useState(false);
-  const [tabled, setTabled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [visibleModal, setVisibleModal] = useState(true);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
   const [visibleFormInput, setVisibleFormInput] = useState(true);
@@ -36,13 +34,16 @@ const PersonalExecutor = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
 
-  useEffect(() => {
-    setMobile(isMobile);
-  }, [isMobile]);
+  const width = useSelector(
+    createSelector(
+      (state: any) => state?.sizeBrowser,
+      (sizeBrowser) => sizeBrowser?.width
+    )
+  );
 
   useEffect(() => {
-    setTabled(isTablet);
-  }, [isTablet]);
+    setIsMobile(width < 876)
+  }, [width])
 
   const onSaveDataFormInput = (data: DataFormInput) => {
     const dataFormCopy = [...dataForm];
@@ -104,17 +105,17 @@ const PersonalExecutor = () => {
   };
 
   return (
-    <div className={"personal-container " + (!mobile ? "responsive" : "")}>
+    <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
       <div
         className={
           "personal-wrapper" +
-          (mobile
+          (isMobile
             ? " personal-wrapper-mobile w-100"
             : " personal-wrapper-desktop w-60")
         }
       >
         <PersonalPreview
-          isMobile={mobile}
+          isMobile={isMobile}
           mainIconDesktop={ExecutorDesktopIcon}
           mainIconMobile={ExecutorMobileIcon}
           infoIcon={TipIcon}
@@ -128,18 +129,17 @@ const PersonalExecutor = () => {
         />
         <div
           className={
-            "card-form " + (mobile ? " card-form-mobile" : " card-form-desktop")
+            "card-form " + (isMobile ? " card-form-mobile" : " card-form-desktop")
           }
         >
           <div className="card-form-wrapper">
             {dataForm.map((item: DataFormInput) => {
-              console.log("item");
               return (
                 <div className="card-item" key={item.id}>
                   <CardInfo
                     name={item.legalName}
                     description={item.type}
-                    isMobile={mobile}
+                    isMobile={isMobile}
                     hightlightColor={"#E9FAF4"}
                     onEditCard={onEditCard}
                     id={item.id}
@@ -155,7 +155,7 @@ const PersonalExecutor = () => {
 
             {(visibleFormInput || dataForm.length === 0) && (
               <ExecutorFormInput
-                isMobile={mobile}
+                isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
                 initialValue={editingFormInput}
               />
@@ -185,7 +185,7 @@ const PersonalExecutor = () => {
         </div>
         {visibleModal && (
           <Modal
-            centered={!mobile || tabled}
+            centered={!isMobile}
             visible={visibleModal}
             footer={
               <div className="btn-wrapper">
@@ -203,7 +203,7 @@ const PersonalExecutor = () => {
               " modal-information " +
               (isMobile ? "modal-mobile-executor " : "modal-desktop-executor ")
             }
-            style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
+            style={isMobile ? { position: "fixed", bottom: "0" } : {}}
           >
             <div className="modal-information-wrapper">
               <div className="title">Executors</div>
@@ -260,7 +260,7 @@ const PersonalExecutor = () => {
               " modal-information " +
               (isMobile ? "modal-mobile-executor " : "modal-desktop-executor ")
             }
-            style={mobile && !tabled ? { position: "fixed", bottom: "0" } : {}}
+            style={isMobile ? { position: "fixed", bottom: "0" } : {}}
           >
             <div className="modal-information-wrapper">
               <div className="title">Remove</div>

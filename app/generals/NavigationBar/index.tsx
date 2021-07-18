@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IWill,
   IWillMobile,
@@ -7,16 +7,27 @@ import {
   LogoMobile,
   MenuIcon,
 } from "../../../public/images";
-import { isMobile } from "react-device-detect";
-import { useEffect } from "react";
+
 import ProgressBar from "generals/Progress";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import SignInForm from "@layout/SignIn";
 
 const NavigationBar = () => {
-  const [mobile, setMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const width = useSelector(
+    createSelector(
+      (state: any) => state?.sizeBrowser,
+      (sizeBrowser) => sizeBrowser?.width
+    )
+  );
+  
   const [isShowSignIn, setIsShowSignIn] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(width < 884)
+  }, [width])
+  
   const disabledBtn = useSelector(
     createSelector(
       (state: any) => state?.progress,
@@ -51,20 +62,16 @@ const NavigationBar = () => {
     )
   );
 
-  useEffect(() => {
-    setMobile(isMobile);
-  }, [isMobile]);
-
   return (
     <React.Fragment>
       <nav className="navigation-bar-container">
         <div
           className={
             "navigation-bar-wrapper border-bottom" +
-            (mobile ? " flex-column pd-7 height-80" : " flex-row height-100")
+            (isMobile ? " flex-column pd-7 height-80" : " flex-row height-100")
           }
         >
-          {mobile ? (
+          {isMobile ? (
             <>
               <div className="row-wrapper">
                 <div className="row-child-wrapper">
@@ -98,6 +105,7 @@ const NavigationBar = () => {
                   textButton={textButtonProgress}
                   percent={percent}
                   amountPercent={amountPercentIncreament}
+                  isMobile={isMobile}
                 />
               )}
             </>
@@ -120,6 +128,7 @@ const NavigationBar = () => {
                     textButton={textButtonProgress}
                     percent={percent}
                     amountPercent={amountPercentIncreament}
+                    isMobile={isMobile}
                   />
                 )}
                 <div className="back-container">
@@ -135,10 +144,10 @@ const NavigationBar = () => {
               </div>
             </div>
           )}  
-           {true && <SignInForm isMobile={mobile}/>}
+           {isShowSignIn && <SignInForm isMobile={isMobile}/>}
         </div>
       </nav>
-      <div className={mobile ? "height-150" : "height-100"}></div>
+      <div className={isMobile ? "height-150" : "height-100"}></div>
     </React.Fragment>
   );
 };
