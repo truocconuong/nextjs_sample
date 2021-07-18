@@ -3,9 +3,10 @@ import * as antd from 'antd'
 const { Typography, Row, Col, List } = antd;
 const { Title } = Typography;
 
-import { CacDanChoi, FightingIcon, GroupSmile, LaYellow, SmileDocument } from '../../../../public/images';
+import { TwoPeopleAbout, Convenience, FightingIcon, GroupSmile, BackgroundAbout, Secured, Simple, SmileDocument, Affor } from '@images/index';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import { RightOutlined } from '@ant-design/icons';
+import FooterLanding from '@module/LandingPage/FooterLanding';
 
 function AboutUs(props) {
     return (
@@ -49,7 +50,7 @@ function AboutUs(props) {
                     </Row>
                 </div>
                 <div className="au-content-section">
-                    <Row gutter={16}>
+                    <Row justify="space-between" gutter={16}>
                         <Col sm={{ span: 16 }} md={{ span: 12 }}>
                             <div className="au-content__title">
                                 Our Team
@@ -63,11 +64,31 @@ function AboutUs(props) {
                             </div>
                         </Col>
                         <Col sm={{ span: 16 }} md={{ span: 12 }}>
-                            <CacDanChoi />
+                            <TwoPeopleAbout />
                         </Col>
                     </Row>
                 </div>
             </section>
+            <section className="section-action">
+                <div className='home-5168517'>
+                    <Typography.Title level={3}>Empowering you to manage your Will and legacy at your fingertips</Typography.Title>
+                    <Row justify="space-between" className="list-benefit">
+                        <Col xl={6} md={12}>
+                            <Convenience />
+                        </Col>
+                        <Col xl={6} md={12}>
+                            <Secured />
+                        </Col>
+                        <Col xl={6} md={12}>
+                            <Simple />
+                        </Col>
+                        <Col xl={6} md={12}>
+                            <Affor />
+                        </Col>
+                    </Row>
+                </div>
+            </section>
+            <FooterLanding />
         </div >
     );
 }
