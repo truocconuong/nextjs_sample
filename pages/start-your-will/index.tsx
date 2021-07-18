@@ -92,6 +92,14 @@ function StartYourWill() {
     router.push('/personal-information');
   }
 
+  const onEditExecutorDetail = () => {
+    router.push('/personal-executor');
+  }
+
+  const onEditBeneficiaryDetail = () => {
+    router.push('/personal-beneficiary');
+  }
+
   return (
     <div className="start-your-will-container">
       {/* <ModalBeforeStart showModal={showModal} setShowModal={setShowModal} /> */}
@@ -340,7 +348,7 @@ function StartYourWill() {
               className="item-end center"
             >
               {width > 600 && (
-                <Button className="edit-btn">
+                <Button className="edit-btn" onClick={onEditExecutorDetail}>
                   <PenIcon /> <span className="ml-8">Edit</span>
                 </Button>
               )}
@@ -385,7 +393,7 @@ function StartYourWill() {
               className="item-end center"
             >
               {width > 600 && (
-                <Button className="edit-btn">
+                <Button className="edit-btn" onClick={onEditBeneficiaryDetail}>
                   <PenIcon /> <span className="ml-8">Edit</span>
                 </Button>
               )}
