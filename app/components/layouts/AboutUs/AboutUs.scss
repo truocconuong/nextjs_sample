@@ -1,7 +1,10 @@
 .about-us {
+  .home-secure{
+    margin-top: 0px !important;
+  }
   .au-header {
     padding-top: 113px;
-    background-image: url("/images/lavangroi.svg");
+    background-image: url("/images/background-about.svg");
     text-align: center;
     .header-title {
       color: #001066;
@@ -18,7 +21,7 @@
     padding-right: 130px;
     .au-content-section {
       svg {
-        width: 100%;
+        max-width: 100%;
       }
       padding-bottom: 150px;
       .ant-row {
@@ -54,5 +57,39 @@
   .about-us .au-content {
     padding: 0px;
     padding-left: 17px;
+  }
+}
+.section-action {
+  background-color: #e9f7ff;
+}
+.home-5168517 {
+  padding-top: 130px;
+  h3 {
+    max-width: 860px;
+
+    display: block;
+    margin: auto;
+    font-weight: 500;
+    line-height: 125%;
+    letter-spacing: -0.5px;
+    color: #001064;
+    text-align: center;
+    margin-bottom: 70px;
+  }
+  .list-benefit {
+    // padding: 0 10%;
+    .ant-col.ant-col-md-12.ant-col-xl-6 {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 70px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .about-us {
+    .list-benefit {
+      justify-content: center;
+    }
   }
 }
