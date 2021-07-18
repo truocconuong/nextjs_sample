@@ -70,18 +70,33 @@ const PersonalBeneficiary = () => {
     );
   };
 
-  const percent = useSelector(
-    createSelector(
-      (state: any) => state?.progress,
-      (progress) => progress?.percent
-    )
-  );
-
   useEffect(() => {
-    if (percent > 0) {
-      router.push("/personal-beneficiary");
-    }
-  }, [percent]);
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 10,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: "/personal-estates-listing/property",
+        },
+        () => {}
+      )
+    );
+  }, [])
+  
 
   const onEditCard = (_e: any, id: number) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
@@ -107,6 +122,16 @@ const PersonalBeneficiary = () => {
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
     setDataForm(newFormData);
     setVisibleModalDelete(false);
+    if(newFormData.length === 0){
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => {}
+        )
+      );
+    }
   };
 
   return (
@@ -173,7 +198,7 @@ const PersonalBeneficiary = () => {
                 </div>
               </div>
             </div>
-            {!isMobile && (
+            {false && (
               <div className="update-beneficiary-success">
                 <div className="wrapper">
                   <div className="tick">

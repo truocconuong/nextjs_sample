@@ -38,6 +38,41 @@ const PersonalInformation = () => {
     setIsMobile(width < 768)
   }, [width])
 
+  useEffect(() => {
+    dispatch(
+      ProgressActions.setPercent(
+        {
+          percent: 20,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 0,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: "/personal-executor",
+        },
+        () => {}
+      )
+    );
+  }, [])
+
   const initialDataForm: DataFormInput = {
     legalName: "",
     email: "",
@@ -61,22 +96,6 @@ const PersonalInformation = () => {
     dataCardCopy.description = data.passport;
     setDataCard(dataCardCopy);
     dispatch(
-      ProgressActions.setPushable(
-        {
-          pushable: true,
-        },
-        () => {}
-      )
-    );
-    dispatch(
-      ProgressActions.setRouter(
-        {
-          router: "/personal-executor",
-        },
-        () => {}
-      )
-    );
-    dispatch(
       ProgressActions.setDisabled(
         {
           disabled: false,
@@ -85,13 +104,6 @@ const PersonalInformation = () => {
       )
     );
   };
-
-  const percent = useSelector(
-    createSelector(
-      (state: any) => state?.progress,
-      (progress) => progress?.percent
-    )
-  );
 
   const onEditCard = (id: number) => {
     setVisibleFormInput(true);
