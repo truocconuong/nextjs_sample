@@ -90,7 +90,7 @@ const PersonalBeneficiary = () => {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: "/personal-estates-listing/property",
+          router: "/start-your-will",
         },
         () => {}
       )

@@ -12,6 +12,7 @@ import ProgressBar from "generals/Progress";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import SignInForm from "@layout/SignIn";
+import router from "next/router";
 
 const NavigationBar = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -76,7 +77,9 @@ const NavigationBar = () => {
     )
   );
 
-
+  const returnToDashBoard = () => {
+    router.push('/start-your-will');
+  }
 
   return (
     <React.Fragment>
@@ -153,7 +156,7 @@ const NavigationBar = () => {
                 )}
                 <div className="back-container">
                   <div className="back-wrapper">
-                    <div className="back" onClick={() => {}}>
+                    <div className="back" onClick={returnToDashBoard}>
                       Return to Dashboard
                     </div>
                     <div className="icon-menu">
