@@ -126,6 +126,9 @@ export {ReactComponent as CloudPropertyIcon} from "./icon-cloud-property.svg";
 export {ReactComponent as BankAccountImage} from "./image-bank-account.svg";
 export {ReactComponent as CloudBankAccountIcon} from "./icon-cloud-bank-account.svg";
 
+export {ReactComponent as InsurancePoliciesImage} from "./image-insurance-policies.svg";
+export {ReactComponent as CloudInsurancePoliciesIcon} from "./icon-cloud-insurance-policies.svg";
+
 export {ReactComponent as PotImage} from "./image-investment.svg";
 export {ReactComponent as CloudIcon} from "./icon-cloud-investment.svg";
 

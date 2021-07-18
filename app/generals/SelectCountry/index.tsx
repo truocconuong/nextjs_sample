@@ -58,6 +58,7 @@ function SelectCountry(props: IProps) {
         onChange: value => onChange(value),
       }}
       wrapperClassName="wrapper-select"
+      searchable
     >
       {options.map(item => {
         return <Option value={item.value}>{item.label}</Option>;

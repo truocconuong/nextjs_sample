@@ -4,7 +4,7 @@ import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import SelectField from "generals/SelectField";
 import CustomToggle from "generals/Toggle";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ModalInfo from "generals/Modal/ModalInfo";
 import {
   CloudPropertyIcon,
@@ -20,6 +20,8 @@ import CustomCheckboxInfo from "generals/Checkbox/CheckboxInfo";
 import CustomDatePicker from "generals/DatePicker";
 import moment from "moment";
 import ModalStep from "generals/Modal/ModalStep";
+import {useDispatch} from "react-redux";
+import {ProgressActions} from "../../../../../redux/actions";
 
 const {Option} = Select;
 
@@ -62,6 +64,8 @@ const optionsSplash = [
 ];
 
 function PropertyLayout(props) {
+  const dispatch = useDispatch();
+
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowModalSplash, setIsShowModalSplash] = useState(true);
   const [isShowDetail, setIsShowDetail] = useState(false);
@@ -98,6 +102,47 @@ function PropertyLayout(props) {
   const [isCheckSolely, setIsCheckSolely] = useState(true);
   const [isCheckJoint, setIsCheckJoint] = useState(false);
   const [currentCountry, setCurrentCountry] = useState("");
+  const [isContinue, setIsContinue] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 0,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: "/personal-estates-listing/bank-account",
+        },
+        () => {}
+      )
+    );
+  }, []);
+
+  useEffect(() => {
+    if (listData.length > 0) {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => {}
+        )
+      );
+    }
+  }, [isContinue]);
 
   const handleReset = () => {
     setDataSolely({
@@ -137,7 +182,7 @@ function PropertyLayout(props) {
   };
 
   const handleSave = () => {
-    setDisabledEdit(false)
+    setDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
     let tempListData = listData;
@@ -153,10 +198,13 @@ function PropertyLayout(props) {
     setIsCheckSolely(true);
     setIsCheckJoint(false);
     setCurrentCountry("");
+    if (!isContinue) {
+      setIsContinue(true);
+    }
   };
 
   const handleEdit = item => {
-    setDisabledEdit(true)
+    setDisabledEdit(true);
     setIsShowForm(true);
     let tempListData = listData;
     setListData(tempListData.filter(i => i !== item));
@@ -194,7 +242,7 @@ function PropertyLayout(props) {
   const handleAddInvestment = () => {
     if (isShowForm) return;
     setIsShowForm(true);
-    setDisabledEdit(false)
+    setDisabledEdit(false);
   };
 
   const handleCheckSolely = () => {
@@ -265,7 +313,6 @@ function PropertyLayout(props) {
                             <Row>
                               <span className="type property__country">
                                 {item?.country}
-                                {/* <span className="tooltip">{item?.country}</span> */}
                               </span>
                             </Row>
                             <Row>
@@ -395,8 +442,11 @@ function PropertyLayout(props) {
                                   selectProps={{
                                     placeholder: "Select",
                                     value: dataSolely?.typeOfProperty,
-                                      onChange: value =>
-                                        setDataSolely(prev => ({...prev, typeOfProperty: value})),
+                                    onChange: value =>
+                                      setDataSolely(prev => ({
+                                        ...prev,
+                                        typeOfProperty: value,
+                                      })),
                                   }}
                                 >
                                   {testOptions.map(item => {
@@ -428,15 +478,20 @@ function PropertyLayout(props) {
                                 selectProps={{
                                   placeholder: "Select",
                                   value: dataSolely?.currentBankLoan,
-                                    onChange: value =>
-                                      setDataSolely(prev => ({...prev, currentBankLoan: value})),
+                                  onChange: value =>
+                                    setDataSolely(prev => ({
+                                      ...prev,
+                                      currentBankLoan: value,
+                                    })),
                                 }}
                               >
                                 {testOptions.map((item, index) => {
-                          return (
-                            <Option value={item.value}>{item.label}</Option>
-                          );
-                        })}
+                                  return (
+                                    <Option value={item.value}>
+                                      {item.label}
+                                    </Option>
+                                  );
+                                })}
                               </SelectField>
                             </Row>
                             <Row className="mb-32" justify="space-between">
@@ -528,7 +583,9 @@ function PropertyLayout(props) {
                             <Row className="mb-32">
                               <div className="mb-16">
                                 Property Management Details{" "}
-                                <span>(Optional)</span>
+                                <span className="text-info-input">
+                                  (Optional)
+                                </span>
                               </div>
                               <InputField
                                 inputProps={{

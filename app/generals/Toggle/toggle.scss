@@ -8,9 +8,9 @@
   border-radius: 8px;
 
   $breakpoint-mobile: 600px;
-  @media (max-width: $breakpoint-mobile) {
-    width: 311px;
-  }
+  // @media (max-width: $breakpoint-mobile) {
+  //   width: 311px;
+  // }
 
   .show-details {
     display: flex;
