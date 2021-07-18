@@ -48,6 +48,20 @@ const NavigationBar = () => {
     )
   );
 
+  const routerPush = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.router
+    )
+  );
+
+  const pushable = useSelector(
+    createSelector(
+      (state: any) => state?.progress,
+      (progress) => progress?.pushable
+    )
+  );
+
   const percent = useSelector(
     createSelector(
       (state: any) => state?.progress,
@@ -61,6 +75,8 @@ const NavigationBar = () => {
       (progress) => progress?.amountPercentIncreament
     )
   );
+
+
 
   return (
     <React.Fragment>
@@ -106,6 +122,8 @@ const NavigationBar = () => {
                   percent={percent}
                   amountPercent={amountPercentIncreament}
                   isMobile={isMobile}
+                  routerPush={routerPush}
+                  pushable={pushable}
                 />
               )}
             </>
@@ -129,6 +147,8 @@ const NavigationBar = () => {
                     percent={percent}
                     amountPercent={amountPercentIncreament}
                     isMobile={isMobile}
+                    routerPush={routerPush}
+                    pushable={pushable}
                   />
                 )}
                 <div className="back-container">

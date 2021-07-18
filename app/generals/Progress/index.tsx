@@ -9,6 +9,7 @@ import {
 } from "react-circular-progressbar";
 import { ProgressIcon } from "../../../public/images";
 import { Row } from "antd";
+import router from "next/router";
 interface ProgressPropsInterface {
   textDescription?: string;
   textButton?: string;
@@ -16,6 +17,8 @@ interface ProgressPropsInterface {
   percent: number;
   amountPercent: number;
   isMobile?: boolean;
+  routerPush?: string;
+  pushable?: boolean;
 }
 const ProgressBar = (props: ProgressPropsInterface) => {
   const {
@@ -24,7 +27,9 @@ const ProgressBar = (props: ProgressPropsInterface) => {
     disabled,
     percent,
     amountPercent,
-    isMobile
+    isMobile,
+    routerPush,
+    pushable
   } = props;
 
   const dispatch = useDispatch();
@@ -41,6 +46,15 @@ const ProgressBar = (props: ProgressPropsInterface) => {
       ProgressActions.setPercent(
         {
           percent: valuePercent,
+        },
+        () => {}
+      )
+    );
+    pushable &&  router.push(routerPush);
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: true,
         },
         () => {}
       )

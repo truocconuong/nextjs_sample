@@ -34,3 +34,17 @@ export const setAmountPercentIncreament = (data: any, callback?: any) => {
     payload: { data, callback },
   };
 };
+
+export const setPushable = (data: any, callback?: any) => {
+  return {
+    type: ProgressTypes.SET_PUSHABLE,
+    payload: { data, callback },
+  };
+};
+
+export const setRouter = (data: any, callback?: any) => {
+  return {
+    type: ProgressTypes.SET_ROUTER,
+    payload: { data, callback },
+  };
+};
