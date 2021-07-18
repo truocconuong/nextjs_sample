@@ -155,6 +155,20 @@
           @media (max-width: $breakpoint-md) {
             padding: 32px 16px;
           }
+          .text-info-input {
+            font-family: Graphik;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 155%;
+            /* or 22px */
+
+            letter-spacing: -0.5px;
+
+            /* Grey-03 */
+
+            color: #a0a5be;
+          }
           .type {
             font-family: Recoleta;
             font-size: 20px;

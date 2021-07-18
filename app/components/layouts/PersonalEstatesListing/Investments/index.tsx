@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col, Select} from "antd";
 import CustomButton from "@generals/Button";
@@ -13,6 +13,8 @@ import {
   SaveIcon,
   TrashEnabledIcon,
 } from "../../../../../public/images";
+import { ProgressActions } from "../../../../../redux/actions";
+import { useDispatch } from "react-redux";
 
 const {Option} = Select;
 
@@ -25,6 +27,8 @@ const options = [
 ];
 
 function InvestmentsLayout(props) {
+  const dispatch = useDispatch();
+
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
@@ -38,6 +42,47 @@ function InvestmentsLayout(props) {
     capitalOutlay: "",
     currentMarketValue: "",
   });
+  const [isContinue, setIsContinue] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 0,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: '/personal-estates-listing/business-interest'
+        },
+        () => {}
+      )
+    )
+  }, [])
+
+  useEffect(() => {
+    if (listData.length > 0) {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false
+          },
+          () => {}
+        )
+      )
+    }
+  }, [isContinue])
 
   const handleReset = () => {
     setData({
@@ -65,6 +110,9 @@ function InvestmentsLayout(props) {
     tempListData.push(data);
     setListData(tempListData);
     handleReset();
+    if (!isContinue) {
+      setIsContinue(true)
+    }
   };
 
   const handleEdit = item => {

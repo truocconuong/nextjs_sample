@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col, Select} from "antd";
 import CustomButton from "@generals/Button";
@@ -7,17 +7,17 @@ import SelectField from "@generals/SelectField";
 import CustomToggle from "@generals/Toggle";
 import ModalInfo from "@generals/Modal/ModalInfo";
 import {
-  BankAccountImage,
-  CloudBankAccountIcon,
+  CloudInsurancePoliciesIcon,
+  InsurancePoliciesImage,
   ResetIcon,
   SaveIcon,
   TrashEnabledIcon,
-  TypesOfOwnershipImage,
 } from "../../../../../public/images";
 import CustomCheckboxInfo from "@generals/Checkbox/CheckboxInfo";
-import ModalStep from "@generals/Modal/ModalStep";
+import {useDispatch} from 'react-redux';
 import { ProgressActions } from "../../../../../redux/actions";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import router from "next/router";
 
 const {Option} = Select;
 
@@ -29,45 +29,26 @@ const testOptions = [
   {label: "TEST 5", value: "TEST 5"},
 ];
 
-const optionsSplash = [
-  {
-    image: <TypesOfOwnershipImage />,
-    title: "Types of Ownership",
-    alignContents: "start",
-    contents: [
-      {
-        subTitle: "Solely Ownership",
-        content:
-          "Only bank accounts under your single name will become part of your estate when you pass on.",
-      },
-      {
-        subTitle: "Joint Ownership",
-        content:
-          "Jointly owned accounts will only be considered as part of your estate and distributed to your beneficiaries if the joint account holder passes away before you do.",
-      },
-    ],
-  },
-];
-
-function BankAccountLayout(props) {
+function InsurancePolicyLayout(props) {
   const dispatch = useDispatch();
 
   const [isShowModal, setIsShowModal] = useState(false);
-  const [isShowModalSplash, setIsShowModalSplash] = useState(true);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
   const [listData, setListData] = useState([]);
   const [disabledEdit, setDisabledEdit] = useState(true);
   const [data, setData] = useState({
-    bank: null,
-    accountNo: "",
+    insuranceCompany: "",
     type: "",
-    currentBalance: "",
-    accountHoverNames: "",
+    beneficiary: null,
+    policyName: "",
+    policyNo: "",
+    currentValue: "",
+    coverage: "",
   });
-  const [isCheckSolely, setIsCheckSolely] = useState(true);
-  const [isCheckJoint, setIsCheckJoint] = useState(false);
+  const [isCheckNonNominated, setIsCheckNonNominated] = useState(true);
+  const [isCheckNominated, setIsCheckNominated] = useState(false);
   const [isContinue, setIsContinue] = useState(false)
 
   useEffect(() => {
@@ -90,7 +71,7 @@ function BankAccountLayout(props) {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: '/personal-estates-listing/insurance-policy'
+          router: '/personal-estates-listing/investment'
         },
         () => {}
       )
@@ -100,11 +81,10 @@ function BankAccountLayout(props) {
   useEffect(() => {
     if (listData.length > 0) {
       dispatch(
-        ProgressActions.setDisabled(
-          {
-            disabled: false
-          },
-          () => {}
+        ProgressActions.setDisabled({
+          disabled: false
+        },
+        () => {}
         )
       )
     }
@@ -112,11 +92,13 @@ function BankAccountLayout(props) {
 
   const handleReset = () => {
     setData({
-      bank: null,
-      accountNo: "",
+      insuranceCompany: "",
       type: "",
-      currentBalance: "",
-      accountHoverNames: "",
+      beneficiary: null,
+      policyName: "",
+      policyNo: "",
+      currentValue: "",
+      coverage: "",
     });
   };
 
@@ -134,22 +116,21 @@ function BankAccountLayout(props) {
     setIsShowForm(false);
     let tempListData = listData;
     let tempData = data;
-    if (isCheckSolely) {
+    if (isCheckNonNominated) {
       delete tempData["accountHoverNames"];
       tempData["type"] = "Solely Ownership";
-    } else if (isCheckJoint) {
+    } else if (isCheckNominated) {
       tempData["type"] = "Joint Ownership";
     }
     tempListData.push(tempData);
     setListData(tempListData);
     setNumberForm(tempListData.length + 1);
     handleReset();
-    setIsCheckSolely(true);
-    setIsCheckJoint(false);
+    setIsCheckNonNominated(true);
+    setIsCheckNominated(false);
     if (!isContinue) {
       setIsContinue(true)
     }
-    
   };
 
   const handleEdit = item => {
@@ -160,12 +141,12 @@ function BankAccountLayout(props) {
     setNumberForm(tempListData.length);
     const findItem = tempListData.find(data => data === item);
     if (item?.type === "Solely Ownership") {
-      setIsCheckSolely(true);
-      setIsCheckJoint(false);
+      setIsCheckNonNominated(true);
+      setIsCheckNominated(false);
     }
     if (item?.type === "Joint Ownership") {
-      setIsCheckSolely(false);
-      setIsCheckJoint(true);
+      setIsCheckNonNominated(false);
+      setIsCheckNominated(true);
     }
     setData(findItem);
   };
@@ -188,43 +169,36 @@ function BankAccountLayout(props) {
   };
 
   const handleCheckSolely = () => {
-    setIsCheckJoint(false);
-    setIsCheckSolely(true);
+    setIsCheckNominated(false);
+    setIsCheckNonNominated(true);
     // handleReset();
   };
 
   const handleCheckJoint = () => {
-    setIsCheckJoint(true);
-    setIsCheckSolely(false);
+    setIsCheckNominated(true);
+    setIsCheckNonNominated(false);
     // handleReset();
   };
 
   return (
     <>
-      {isShowModalSplash && (
-        <ModalStep
-          show={isShowModalSplash}
-          setShow={setIsShowModalSplash}
-          options={optionsSplash}
-        />
-      )}
-      <Row className="investments bank-account">
+      <Row className="investments insurance-policy">
         <Row className="body-investment" justify="center">
           <Row className="main-investment">
-            <Col className="info-investment bank-account__bg-common">
+            <Col className="info-investment insurance-policy__bg-common">
               <Row className="info-investment_content">
-                <BankAccountImage style={{marginBottom: "48px"}} />
+                <InsurancePoliciesImage style={{marginBottom: "48px"}} />
                 <Row className="info-investment_investments">
-                  <span className="info-investment_1">Bank Account</span>
+                  <span className="info-investment_1">Insurance Policies</span>
                   <InfoCircleOutlined
                     onClick={handleShowModal}
-                    className="info-investment_icon info-bank-account_icon"
+                    className="info-investment_icon"
                   />
                 </Row>
                 <p className="info-investment_2">
-                  You can include your cash holdings by listing down your cash
-                  accounts in banks which include current accounts, savings
-                  accounts and time deposit accounts.
+                  You probably have many insurance policies from different
+                  insurers, it will be good to constantly list them down so that
+                  your loved ones will be aware.
                 </p>
               </Row>
               <Row></Row>
@@ -236,12 +210,14 @@ function BankAccountLayout(props) {
                     <Row className="form-investment mb-32 list-data">
                       <Row justify="space-between" align="middle">
                         <Col className="div-center">
-                          <Col className="number-1 div-center bank-account__bg-common">
+                          <Col className="number-1 div-center insurance-policy__bg-common">
                             <span>{index + 1}</span>
                           </Col>
                           <Col>
                             <Row>
-                              <span className="type">{item?.bank}</span>
+                              <span className="type">
+                                {item?.insuranceCompany}
+                              </span>
                             </Row>
                             <Row>
                               <span className="financial">{item?.type}</span>
@@ -273,66 +249,65 @@ function BankAccountLayout(props) {
                 <Row className="form-investment mb-32">
                   <Row justify="space-between" align="middle" className="mb-32">
                     <Col className="div-center">
-                      <Col className="number-1 div-center bank-account__bg-common">
+                      <Col className="number-1 div-center insurance-policy__bg-common">
                         <span>{numberForm}</span>
                       </Col>
                       <Col>
                         <span className="investment-details-text">
-                          Bank Details
+                          Policy Details
                         </span>
                       </Col>
                     </Col>
                   </Row>
                   <Col className="w-full">
                     <Row className="mb-32">
-                      <SelectField
-                        displayLabel
-                        label="Bank"
-                        selectProps={{
-                          placeholder: "Select",
-                          value: data?.bank,
-                          onChange: value =>
-                            setData(prev => ({
-                              ...prev,
-                              bank: value,
-                            })),
-                        }}
-                      >
-                        {testOptions.map(item => {
-                          return (
-                            <Option value={item.value}>{item.label}</Option>
-                          );
-                        })}
-                      </SelectField>
-                    </Row>
-                    <Row className="mb-32">
                       <InputField
                         displayLabel
-                        label="Account No."
+                        label="Insurance Company"
                         inputProps={{
-                          placeholder: "e.g. 0012345678",
-                          value: data?.accountNo,
-                          name: "accountNo",
+                          placeholder: "e.g. FWD Insurance",
+                          value: data?.insuranceCompany,
+                          name: "insuranceCompany",
                           onChange: e => handleChangeInput(e),
                         }}
                       ></InputField>
                     </Row>
                     <Row className="mb-24">
                       <CustomCheckboxInfo
-                        checked={isCheckSolely}
+                        checked={isCheckNonNominated}
                         onChange={handleCheckSolely}
-                        title="Solely Ownership"
-                        content="Only bank accounts under your single name will become part of your estate when you pass on."
+                        title="Non-Nominated"
+                        content="Insurance policies that have not been nominated can be included as part of your estate. The insurance proceeds will be added into your estate and distributed to your beneficiaries upon claims."
                       />
                     </Row>
                     <Row className="mb-32">
                       <CustomCheckboxInfo
-                        checked={isCheckJoint}
+                        checked={isCheckNominated}
                         onChange={handleCheckJoint}
-                        title="Joint Ownership"
-                        content="Jointly owned accounts will only be considered as part of your estate and distributed to your beneficiaries if the joint account holder passes away before you do."
+                        title="Nominated"
+                        content="Insurance policies that have been nominated with beneficiaries will not be reflected in your Will itself. By entering the nominated policy details, you will have a clearer picture of the size of your current estate, and helps you better distribute your assets."
                       />
                     </Row>
+                    {isCheckNominated && (
+                      <Row className="mb-32">
+                        <SelectField
+                          displayLabel
+                          label="Beneficiary"
+                          selectProps={{
+                            placeholder: "Select",
+                            value: data?.beneficiary,
+                            onChange: value =>
+                              setData(prev => ({...prev, beneficiary: value})),
+                          }}
+                        >
+                          {testOptions.map(item => {
+                            return (
+                              <Option value={item.value}>{item.label}</Option>
+                            );
+                          })}
+                        </SelectField>
+                      </Row>
+                    )}
                     <Row className={isShowDetail ? "mb-32" : "mb-40"}>
                       <CustomToggle
                         onChangeSwitch={() => setIsShowDetail(!isShowDetail)}
@@ -341,51 +316,67 @@ function BankAccountLayout(props) {
 
                     {isShowDetail && (
                       <>
-                        <Row className={isCheckJoint ? "mb-32" : "mb-40"}>
+                        <Row className="mb-32">
                           <InputField
                             displayLabel
-                            label="Current Balance ($)"
+                            label="Policy Name"
+                            inputProps={{
+                              placeholder: "Policy name",
+                              value: data?.policyName,
+                              name: "policyName",
+                              onChange: e => handleChangeInput(e),
+                            }}
+                          ></InputField>
+                        </Row>
+                        <Row className="mb-32" justify="space-between">
+                          <div className="wp-48 responsive-mb-32">
+                            <InputField
+                              displayLabel
+                              label="Policy No."
+                              inputProps={{
+                                placeholder: "0",
+                                value: data?.policyNo,
+                                name: "policyNo",
+                                onChange: e => handleChangeInput(e),
+                              }}
+                            ></InputField>
+                          </div>
+                          <div className="wp-48">
+                            <InputField
+                              displayLabel
+                              label="Current Value ($)"
+                              inputProps={{
+                                placeholder: "0.00",
+                                value: data?.currentValue,
+                                name: "currentValue",
+                                onChange: e => handleChangeInput(e),
+                              }}
+                            ></InputField>
+                          </div>
+                        </Row>
+                        <Row className="mb-40">
+                          <InputField
+                            displayLabel
+                            label="Coverage ($)"
                             inputProps={{
                               placeholder: "0.00",
-                              value: data?.currentBalance,
-                              name: "currentBalance",
+                              value: data?.coverage,
+                              name: "coverage",
                               onChange: e => handleChangeInput(e),
                               className: "mb-16",
                             }}
                           ></InputField>
                           <div>
                             <span className="text-info-input">
-                              The balances that you inputted into the field will
-                              not be reflected in your Will itself. By entering
-                              the account balances, you will have a clearer
-                              picture of the size of your current estate, and
-                              helps you better distribute your assets.
+                              The policy coverage that you inputted into the
+                              field will not be reflected in your Will itself.
+                              By entering the coverage amount, you will have a
+                              clearer picture of the size of your current
+                              estate, and helps you better distribute your
+                              assets.
                             </span>
                           </div>
                         </Row>
-
-                        {isCheckJoint && (
-                          <>
-                            <Row className="mb-40">
-                              <InputField
-                                displayLabel
-                                label="Account Holder Names"
-                                inputProps={{
-                                  placeholder: "Names",
-                                  className: "mb-16",
-                                  value: data?.accountHoverNames,
-                                  name: "accountHoverNames",
-                                  onChange: e => handleChangeInput(e),
-                                }}
-                              ></InputField>
-                              <div>
-                                <span className="text-info-input">
-                                  Accommodate multiple names including user's
-                                </span>
-                              </div>
-                            </Row>
-                          </>
-                        )}
                       </>
                     )}
                     <Row justify="center">
@@ -407,9 +398,9 @@ function BankAccountLayout(props) {
                 </Row>
               )}
               <Row className="add-investment" justify="space-between">
-                <CloudBankAccountIcon />
+                <CloudInsurancePoliciesIcon />
                 <span onClick={handleAddInvestment} style={{cursor: "pointer"}}>
-                  Add Account
+                  Add Policy
                 </span>
               </Row>
             </Col>
@@ -419,16 +410,14 @@ function BankAccountLayout(props) {
       {isShowModal && (
         <ModalInfo
           show={isShowModal}
-          title="Bank Account"
+          title="Insurance Policies"
           content={
             <span>
               Only bank accounts under your single name will become part of your
-              estate when you pass on.
-              <br />
-              <br />
-              Jointly owned accounts will only be considered as part of your
-              estate and distributed to your beneficiaries if the joint account
-              holder passes away before you do.
+              estate when you pass on. Jointly owned accounts will only be
+              considered as part of your estate and distributed to your
+              beneficiaries if the joint account holder passes away before you
+              do.
             </span>
           }
           handleOk={handleOk}
@@ -439,4 +428,4 @@ function BankAccountLayout(props) {
   );
 }
 
-export default BankAccountLayout;
+export default InsurancePolicyLayout;

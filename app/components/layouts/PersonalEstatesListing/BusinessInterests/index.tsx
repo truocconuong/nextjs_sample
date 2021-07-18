@@ -1,6 +1,6 @@
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ModalInfo from "@generals/Modal/ModalInfo";
 import CustomButton from "@generals/Button";
 import InputField from "@generals/InputField";
@@ -14,8 +14,12 @@ import {
   TrashEnabledIcon,
 } from "../../../../../public/images";
 import {isMobile} from "react-device-detect";
+import { ProgressActions } from "../../../../../redux/actions";
+import { useDispatch } from "react-redux";
 
 function BusinessInterestsLayout(props) {
+  const dispatch = useDispatch();
+  
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
@@ -29,6 +33,47 @@ function BusinessInterestsLayout(props) {
     estimateCurrentMarketValue: "",
     percentageShare: "",
   });
+  const [isContinue, setIsContinue] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 0,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: '/personal-estates-listing/valuables'
+        },
+        () => {}
+      )
+    )
+  }, [])
+
+  useEffect(() => {
+    if (listData.length > 0) {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false
+          },
+          () => {}
+        )
+      )
+    }
+  }, [isContinue])
 
   const handleReset = () => {
     setData({
@@ -57,6 +102,9 @@ function BusinessInterestsLayout(props) {
     setListData(tempListData);
     handleReset();
     setNumberForm(tempListData.length + 1);
+    if (!isContinue) {
+      setIsContinue(true)
+    }
   };
 
   const handleEdit = item => {
