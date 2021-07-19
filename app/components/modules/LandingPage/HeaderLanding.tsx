@@ -22,22 +22,22 @@ function HeaderLanding(props) {
         <Col>
           <Row justify='space-between' align='middle'>
             <Col>
-              <Link href="/">
+              <Link href="/learning-center">
                 <a>Learning Center</a>
               </Link>
             </Col>
             <Col>
-              <Link href="/">
+              <Link href="/about">
                 <a>About Us</a>
               </Link>
             </Col>
             <Col>
-              <Link href="/">
+              <Link href="/faq">
                 <a>FAQ</a>
               </Link>
             </Col>
             <Col>
-              <Link href="/">
+              <Link href="/contact">
                 <a>Contact</a>
               </Link>
             </Col>
@@ -70,22 +70,22 @@ function HeaderLanding(props) {
           >
             <Row className="drawer-content">
               <Col>
-                <Link href="/">
+                <Link href="/learning-center">
                   <a>Learning Center</a>
                 </Link>
               </Col>
               <Col>
-                <Link href="/">
+                <Link href="/about">
                   <a>About Us</a>
                 </Link>
               </Col>
               <Col>
-                <Link href="/">
+                <Link href="/faq">
                   <a>FAQ</a>
                 </Link>
               </Col>
               <Col>
-                <Link href="/">
+                <Link href="/contact">
                   <a>Contact</a>
                 </Link>
               </Col>
