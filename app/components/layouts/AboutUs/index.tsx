@@ -64,7 +64,7 @@ function AboutUs(props) {
                             </div>
                         </Col>
                         <Col sm={{ span: 16 }} md={{ span: 12 }}>
-                            <img src="/images/two-people.png" alt="" />
+                            <img className="img-about" src="/images/two-people.png" alt="" />
                         </Col>
                     </Row>
                 </div>
