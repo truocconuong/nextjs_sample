@@ -6,7 +6,7 @@ const isProd = process.env.NODE_ENV === "production";
 
 // fix: prevents error when .less files are required by node
 if (typeof require !== "undefined") {
-  require.extensions[".less"] = (file) => {};
+  require.extensions[".less"] = (file) => { };
 }
 
 module.exports = withCSS({
@@ -28,7 +28,12 @@ module.exports = {
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack", "url-loader"],
+      use: ["@svgr/webpack", {
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+        },
+      },],
     });
 
     return config;
