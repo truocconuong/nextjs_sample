@@ -3,7 +3,7 @@ import { Carousel, Row, Col, Typography, Button, Collapse } from 'antd';
 import ArrowCarousel from '@element/ArrowCarousel/ArrowCarousel';
 import CustomButton from 'generals/Button';
 import {
-  PersonCarousel, Home_5167814, Convenience, Secured, Simple,
+  Home_5167814, Convenience, Secured, Simple,
   Affor, Home_5168374, Home_5167844, Home_5168635, HomeStep1, HomeStep1Mini,
   HomeStep2, HomeStep2Mini, HomeStep3, HomeStep3Mini, DidYouKnow, DidYouKnowMini,
   HomeShield, HomeNote, DropdownCollapse, DropupCollapse, HomeTwitter,
@@ -44,7 +44,7 @@ function HomeLayout(props) {
                 <CustomButton size='large' borderLarge fontWeightLarge onClick={handleCreateYourWill}>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
-                <PersonCarousel />
+                <img src="/images/person_carousel.png" alt="" />
               </Col>
             </Row>
           </div>
@@ -59,7 +59,7 @@ function HomeLayout(props) {
                 <CustomButton borderLarge fontWeightLarge size='large' onClick={handleCreateYourWill}>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
-                <PersonCarousel />
+                <img src="/images/person_carousel.png" alt="" />
               </Col>
             </Row>
           </div>
@@ -74,7 +74,7 @@ function HomeLayout(props) {
                 <CustomButton size='large' borderLarge fontWeightLarge onClick={handleCreateYourWill}>Create Your Will</CustomButton>
               </Col>
               <Col className='img_slick'>
-                <PersonCarousel />
+                <img src="/images/person_carousel.png" alt="" />
               </Col>
             </Row>
           </div>

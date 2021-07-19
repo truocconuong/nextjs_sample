@@ -3,7 +3,7 @@ import * as antd from 'antd'
 const { Typography, Row, Col, List } = antd;
 const { Title } = Typography;
 
-import { TwoPeopleAbout, Convenience, FightingIcon, GroupSmile, BackgroundAbout, Secured, Simple, SmileDocument, Affor } from '@images/index';
+import { Convenience, FightingIcon, GroupSmile, BackgroundAbout, Secured, Simple, SmileDocument, Affor } from '@images/index';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import { RightOutlined } from '@ant-design/icons';
 import FooterLanding from '@module/LandingPage/FooterLanding';
@@ -64,7 +64,7 @@ function AboutUs(props) {
                             </div>
                         </Col>
                         <Col sm={{ span: 16 }} md={{ span: 12 }}>
-                            <TwoPeopleAbout />
+                            <img src="/images/two-people.png" alt="" />
                         </Col>
                     </Row>
                 </div>
