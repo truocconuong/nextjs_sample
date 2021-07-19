@@ -3,14 +3,15 @@ import {Typography} from "antd";
 import ExampleToggle from "generals/Toggle/ExampleToggle";
 import Layout, { Content } from "antd/lib/layout/layout";
 import HomeLayout from "@layout/Home/HomeLayout";
+import HeaderLanding from "@module/LandingPage/HeaderLanding";
 
 const {Title} = Typography;
 const App = () => (
-  <Layout>
-  {/* <Header style={{height:'80px'}}></Header> */}
-  <Content>
-    <HomeLayout/>
-  </Content>
-</Layout>
+  <Layout style-={{ backgroundColor: 'white' }}>
+    <HeaderLanding />
+    <Content>
+      <HomeLayout />
+    </Content>
+  </Layout>
 );
 export default App;

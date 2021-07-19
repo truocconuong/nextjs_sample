@@ -5,7 +5,7 @@ import ContactLayout from '@layout/Contact/ContactLayout';
 
 function Contact(props) {
   return (
-    <Layout style-={{ backgroundColor: 'white' }}>
+    <Layout style={{ backgroundColor: 'white' }}>
       <HeaderLanding />
       <Content>
         <ContactLayout />
