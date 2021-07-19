@@ -148,3 +148,4 @@ export { ReactComponent as HomeIconLogoHeader } from './logo-header-home.svg';
 export { ReactComponent as HomeIconLogoHeaderMini } from './logo-header-home-mini.svg';
 export { ReactComponent as PolicyDocument } from './policy-document.svg';
 export { ReactComponent as PolicyDocumentMini } from './policy-document-mini.svg';
+export { ReactComponent as PolicyDocumentMini } from './policy-document-mini.svg';
