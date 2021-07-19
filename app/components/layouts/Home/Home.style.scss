@@ -1,7 +1,7 @@
-$breakpoint-mobile: 576px;
-$breakpoint-xl: 1200px;
+$breakpoint-xs: 576px;
 $breakpoint-sm: 768px;
 $breakpoint-md: 992px;
+$breakpoint-xl: 1200px;
 $breakpoint-lg: 1200px;
 $breakpoint-xl: 1600px;
 $breakpoint-xxl: 2400px;
@@ -81,7 +81,7 @@ $breakpoint-xxl: 2400px;
                 bottom: -3px;
                 right: -13px;
               }
-              @media (max-width: $breakpoint-mobile) {
+              @media (max-width: $breakpoint-xs) {
                 margin-top: 60px;
                 padding: 0 15px;
                 .under_minute:before {
@@ -98,7 +98,7 @@ $breakpoint-xxl: 2400px;
                 min-height: 134px;
 
                 margin-bottom: 40px;
-                @media (max-width: $breakpoint-mobile) {
+                @media (max-width: $breakpoint-xs) {
                   height: 117px;
                   margin-bottom: 30px;
                   h1 {
@@ -136,7 +136,7 @@ $breakpoint-xxl: 2400px;
                 margin-bottom: 15px;
               }
             }
-            @media (max-width: $breakpoint-mobile) {
+            @media (max-width: $breakpoint-xs) {
               padding: 0;
               padding-bottom: 110px;
               .img_slick {
@@ -182,7 +182,7 @@ $breakpoint-xxl: 2400px;
           }
         }
 
-        @media (max-width: $breakpoint-mobile) {
+        @media (max-width: $breakpoint-xs) {
           .slick-prev,
           .slick-next {
             display: none !important;
@@ -222,7 +222,7 @@ $breakpoint-xxl: 2400px;
           color: #001064;
         }
       }
-      @media (max-width: $breakpoint-mobile) {
+      @media (max-width: $breakpoint-xs) {
         border-radius: 0;
         margin: 0;
         height: 470px;
@@ -236,7 +236,7 @@ $breakpoint-xxl: 2400px;
       }
     }
 
-    @media (max-width: $breakpoint-mobile) {
+    @media (max-width: $breakpoint-xs) {
       .home-5167832 {
         position: relative;
       }
@@ -268,7 +268,7 @@ $breakpoint-xxl: 2400px;
   .home-5168517-carousel {
     display: none;
   }
-  @media (max-width: $breakpoint-mobile) {
+  @media (max-width: $breakpoint-xs) {
     .home-5168517 {
       display: none;
     }

@@ -1,7 +1,7 @@
-$breakpoint-sm: 576px;
-$breakpoint-xl: 1200px;
+$breakpoint-xs: 576px;
 $breakpoint-sm: 768px;
 $breakpoint-md: 992px;
+$breakpoint-xl: 1200px;
 $breakpoint-lg: 1200px;
 $breakpoint-xl: 1600px;
 $breakpoint-xxl: 2400px;
@@ -88,6 +88,11 @@ $breakpoint-xxl: 2400px;
           }
         }
       }
+    }
+  }
+  @media (min-width: 576px) {
+    .ant-col-sm-order-2 {
+      text-align: center;
     }
   }
 }
