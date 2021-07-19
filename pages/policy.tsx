@@ -1,17 +1,17 @@
-import Layout, {Content, Header} from 'antd/lib/layout/layout';
+import Layout, { Content, Header } from 'antd/lib/layout/layout';
 import React from 'react';
-import HomeLayout from '@layout/Home/HomeLayout';
 import HeaderLanding from '@module/LandingPage/HeaderLanding';
+import PolicyLayout from '@layout/Policy/PolicyLayout';
 
-function Home(props) {
+function Faq(props) {
   return (
     <Layout style-={{ backgroundColor: 'white' }}>
       <HeaderLanding />
       <Content>
-        <HomeLayout />
+        <PolicyLayout />
       </Content>
     </Layout>
   );
 }
 
-export default Home;
+export default Faq;

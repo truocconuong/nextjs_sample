@@ -142,3 +142,9 @@ export { ReactComponent as IconSearch } from './icon-search.svg';
 export { ReactComponent as SearchIconActive } from "./search-active.svg";
 
 
+export { ReactComponent as MenuMobile } from './menu-mobile-icon.svg';
+export { ReactComponent as HomeIconClose } from './home-icon-close.svg';
+export { ReactComponent as HomeIconLogoHeader } from './logo-header-home.svg';
+export { ReactComponent as HomeIconLogoHeaderMini } from './logo-header-home-mini.svg';
+export { ReactComponent as PolicyDocument } from './policy-document.svg';
+export { ReactComponent as PolicyDocumentMini } from './policy-document-mini.svg';
