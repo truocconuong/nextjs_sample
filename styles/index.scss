@@ -22,6 +22,7 @@
 @import "/app/components/layouts/SignIn/SignIn.scss";
 @import "/app/components/layouts/AboutUs/AboutUs.scss";
 @import "../app/components/StartYourWill/Modal/ModalStarYourWill.scss";
+@import "../app/components/layouts/Allocation/Allocation.scss";
 
 //Screen
 @import "./Screen/StartYourWill.scss";
@@ -51,4 +52,4 @@
 @import "/app/components/layouts/PersonalEstatesListing/Investments/investments.scss";
 @import "/app/components/layouts/PersonalEstatesListing/BusinessInterests/business-interests.scss";
 @import "/app/components/layouts/PersonalEstatesListing/Valuables/valuables.scss";
-@import "/app/components/layouts/Contact/Contact.style.scss"
+@import "/app/components/layouts/Contact/Contact.style.scss";

@@ -5,3 +5,10 @@ export enum METHOD {
   DELETE = "delete",
   PATCH = "patch",
 }
+
+export enum PERSONAL_ALLOCATION {
+  FATHER = "Father",
+  MOTHER = "Mother",
+  SON = "Son",
+  DAUGHTER = "Daughter",
+}

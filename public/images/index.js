@@ -152,3 +152,7 @@ export { ReactComponent as PolicyDocumentMini } from './policy-document-mini.svg
 //landing-contact
 export { ReactComponent as ContactTwister } from './twiter-contact.svg';
 
+//Allocation
+export { ReactComponent as IconEstateDistributionDesktop } from './icon-estate-distribution.svg';
+export { ReactComponent as IconDistribute } from './icon-distribute.svg';
+export { ReactComponent as IconThunder } from './icon-thunder.svg';
