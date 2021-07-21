@@ -3,12 +3,16 @@ import CustomButton from "@generals/Button";
 import ModalStep from "@generals/Modal/ModalStep";
 import {
   IconDistribute,
+  IconDistributeMobile,
   IconEstateDistributionDesktop,
+  IconEstateDistributionMobile,
   IconThunder,
   TipIcon,
 } from "@images/index";
 import { Slider } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
 export interface AllocationPersonalInterface {
   id: number;
   type: PERSONAL_ALLOCATION;
@@ -18,6 +22,7 @@ export interface AllocationPersonalInterface {
   color: string;
 }
 const Allocation = () => {
+  const maxPercent = 100;
   const allocatePersonals: AllocationPersonalInterface[] = [
     {
       id: 1,
@@ -52,14 +57,19 @@ const Allocation = () => {
       color: "#D3EDFF",
     },
   ];
-  const [remainPercent, setRemainPercent] = useState(100);
+  const [isMobile, setIsMobile] = useState(false);
+  const [totalPercent, setTotalPercent] = useState(0);
   const [persons, setPersons] = useState<AllocationPersonalInterface[]>(
     allocatePersonals
   );
   const [isShowModalSplash, setIsShowModalSplash] = useState(true);
   const optionsSplash = [
     {
-      image: <IconEstateDistributionDesktop />,
+      image: isMobile ? (
+        <IconEstateDistributionMobile />
+      ) : (
+        <IconEstateDistributionDesktop />
+      ),
       title: "Estate Distribution",
       contents: [
         {
@@ -69,7 +79,7 @@ const Allocation = () => {
       ],
     },
     {
-      image: <IconDistribute />,
+      image: isMobile ? <IconDistributeMobile /> : <IconDistribute />,
       title: "Distribute Your Estate",
       alignContents: "start",
       contents: [
@@ -81,52 +91,105 @@ const Allocation = () => {
     },
   ];
 
+  const width = useSelector(
+    createSelector(
+      (state: any) => state?.sizeBrowser,
+      (sizeBrowser) => sizeBrowser?.width
+    )
+  );
+
+  useEffect(() => {
+    setIsMobile(width < 1192);
+  }, [width]);
+
   const formatter = (value: number) => {
     return `${value}%`;
   };
 
   const onRangeChange = (percent: any, id: number) => {
     const personsCopy = [...persons];
-    const remainPersons = [...persons].filter(person => person.id !== id);
-    const totalPercent = remainPersons.reduce(function (acc, obj) { return acc + obj.percent; }, 0);
-    if(percent > (100 - totalPercent)){
+    const remainPersons = [...persons].filter((person) => person.id !== id);
+    const total = remainPersons.reduce(function (acc, obj) {
+      return acc + obj.percent;
+    }, 0);
+    if (percent > maxPercent - total) {
       return;
     }
+    setTotalPercent(total + percent);
     const index = personsCopy.findIndex(
       (person: AllocationPersonalInterface) => person.id === id
     );
     personsCopy[index].percent = percent;
     setPersons(personsCopy);
-    console.log("remain", 100 - totalPercent)
-    setRemainPercent(100 - totalPercent)
   };
   return (
     <div className="allocation-container">
-      <div className="allocation-desktop">
-        <div className="allocation-ratio">
-          <div className="allocation-ratio-wrap">
-            <div className="ratio-wrap">
+      <div className="allocation-wrapper">
+        <div
+          className={
+            "allocation-ratio " +
+            (isMobile
+              ? "allocation-ratio-height-mobile"
+              : "allocation-ratio-height-desktop")
+          }
+        >
+          <div
+            className={
+              "allocation-ratio-wrap " +
+              (isMobile
+                ? "column-reverse allocation-ratio-wrap-mobile"
+                : "allocation-ratio-wrap-desktop")
+            }
+          >
+            {isMobile && (
+              <div className="title-mobile">{`${
+                100 - totalPercent
+              }% left to distribute`}</div>
+            )}
+            <div
+              className={
+                "ratio-wrap " +
+                (isMobile ? "ratio-wrap-mobile" : "ratio-wrap-desktop")
+              }
+            >
               <div className="ratio-back"></div>
-              <div className="ratio-front">
+              <div
+                className={
+                  "ratio-front " +
+                  (isMobile ? "ratio-front-mobile" : "ratio-front-desktop")
+                }
+              >
                 {persons.map((person: AllocationPersonalInterface) => {
-                  console.log(person.id === persons.length && remainPercent === 0)
                   return (
-                    person.percent > 0 &&
-                    <div
-                      className={"item " + (person.id === persons.length && remainPercent === 0 ? "border-right-none" : "")}
-                      key={person.id}
-                      style={{
-                        width: `${person.percent}%`,
-                        backgroundColor: person.color,
-                      }}
-                    >
-                      <div className="char-represent">{person.name[0]}</div>
-                    </div>
+                    person.percent > 0 && (
+                      <div
+                        className={
+                          "item " +
+                          (person.id === persons.length &&
+                          totalPercent === maxPercent
+                            ? "border-right-none"
+                            : "")
+                        }
+                        key={person.id}
+                        style={{
+                          width: `${person.percent}%`,
+                          backgroundColor: person.color,
+                        }}
+                      >
+                        <div className="char-represent">{person.name[0]}</div>
+                      </div>
+                    )
                   );
                 })}
               </div>
             </div>
-            <div className="description-wrap">
+            <div
+              className={
+                isMobile
+                  ? "description-wrap-mobile"
+                  : "description-wrap-desktop"
+              }
+            >
               <div className="description-left">
                 <div className="title">
                   <div className="text">Estate Distribution</div>
@@ -140,7 +203,11 @@ const Allocation = () => {
                 </div>
               </div>
               <div className="description-right">
-                <div className="title">100% left to distribute</div>
+                {!isMobile && (
+                  <div className="title-desktop">{`${
+                    100 - totalPercent
+                  }% left to distribute`}</div>
+                )}
                 <div className="button">
                   <CustomButton
                     type="ghost"
@@ -155,12 +222,25 @@ const Allocation = () => {
             </div>
           </div>
         </div>
-        <div className="allocation-distribute-ratio">
+        <div
+          className={
+            "allocation-distribute-ratio " +
+            (isMobile
+              ? "allocation-distribute-ratio-width-mobile"
+              : "allocation-distribute-ratio-width-desktop")
+          }
+        >
           {persons.map((person: AllocationPersonalInterface) => {
             return (
               <div className="item-container">
                 <div className="item-wrap">
-                  <div className="card-base-info">
+                  <div
+                    className={
+                      isMobile
+                        ? "card-base-info-mobile"
+                        : "card-base-info-desktop"
+                    }
+                  >
                     <div
                       className="highlight-text"
                       style={{ backgroundColor: person.color }}
@@ -171,15 +251,33 @@ const Allocation = () => {
                       <div className="name">{person.name}</div>
                       <div className="description">{person.type}</div>
                     </div>
-                    <div className="range">
+                    {!isMobile && (
+                      <div className="range">
+                        <Slider
+                          included={false}
+                          max={100}
+                          min={0}
+                          tipFormatter={formatter}
+                          onChange={(e: any) => onRangeChange(e, person.id)}
+                          value={person.percent}
+                        />
+                      </div>
+                    )}
+                    <div
+                      className={
+                        "percent " + (person.percent > 0 ? "bold" : "normal")
+                      }
+                    >{`${person.percent}%`}</div>
+                  </div>
+                  {isMobile && (
+                    <div className="range width-full">
                       <Slider
                         tipFormatter={formatter}
                         onChange={(e: any) => onRangeChange(e, person.id)}
                         value={person.percent}
                       />
                     </div>
-                    <div className="percent">{`${person.percent}%`}</div>
-                  </div>
+                  )}
                 </div>
               </div>
             );
