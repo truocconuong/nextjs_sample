@@ -33,7 +33,7 @@ function ContactLayout(props) {
         </Col>
         <Col xs={24} lg={12} className="contact-form">
           <Row >
-            <Col xs={24} lg={12} className='form-item'>
+            <Col xs={24} md={12} className='form-item'>
               <InputField
                 displayLabel
                 label="First Name"
@@ -46,7 +46,7 @@ function ContactLayout(props) {
                 wrapperClassName="wrapper-first-name"
               />
             </Col>
-            <Col xs={24} lg={12} className='form-item'>
+            <Col xs={24} md={12} className='form-item'>
               <InputField
                 displayLabel
                 label="Last Name"
