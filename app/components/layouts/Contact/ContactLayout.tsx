@@ -5,6 +5,7 @@ import Link from 'next/link'
 import FooterLanding from '@module/LandingPage/FooterLanding';
 import InputField from '@generals/InputField';
 import SelectField from '@generals/SelectField';
+import { ContactTwister } from '@images/index';
 
 const { Option } = Select;
 
@@ -15,7 +16,7 @@ function ContactLayout(props) {
   const [email, setEmail] = useState<string>("");
   const [yourMessage, setYourMessage] = useState<string>("")
   return (
-    <>
+    <div className='landing-page-contact'>
       <Row className="landing-contact">
         <Col xs={24} lg={12}>
           <div className='reach-us'>
@@ -25,6 +26,9 @@ function ContactLayout(props) {
           <div className='contact-learn-more'>
             <h6>Learn more with us @iwillstwitter</h6>
             <p>Find out the latest trends on how you can protect your legacy for tomorrow</p>
+            <div className='contact-twister'>
+              <ContactTwister/>
+            </div>
           </div>
         </Col>
         <Col xs={24} lg={12} className="contact-form">
@@ -100,7 +104,7 @@ function ContactLayout(props) {
         </Col>
       </Row>
       <FooterLanding />
-    </>
+    </div>
   );
 }
 
