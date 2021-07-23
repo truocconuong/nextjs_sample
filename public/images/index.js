@@ -111,33 +111,33 @@ export { ReactComponent as FacebookFooter } from './facebook_footer.svg';
 export { ReactComponent as LinkedinFooter } from './linkedin_footer.svg';
 export { ReactComponent as Faq1 } from './faq-1.svg';
 export { ReactComponent as FaqMini1 } from './faq-mini-1.svg';
-export {ReactComponent as TrashEnabledIcon} from "./icon-trash-enabled.svg";
-export {ReactComponent as TrashDisabledIcon} from "./icon-trash-disabled.svg";
-export {ReactComponent as CheckboxUnselectedIcon} from "./icon-checkbox-unselected.svg";
-export {ReactComponent as CheckboxSelectedIcon} from "./icon-checkbox-selected.svg";
+export { ReactComponent as TrashEnabledIcon } from "./icon-trash-enabled.svg";
+export { ReactComponent as TrashDisabledIcon } from "./icon-trash-disabled.svg";
+export { ReactComponent as CheckboxUnselectedIcon } from "./icon-checkbox-unselected.svg";
+export { ReactComponent as CheckboxSelectedIcon } from "./icon-checkbox-selected.svg";
 
 
 // Personal Estates listing
-export {ReactComponent as PropertyImage} from "./image-property.svg";
-export {ReactComponent as PersonalEstatesListingImage} from "./image-property_personal-estates-listing.svg";
-export {ReactComponent as TypesOfOwnershipImage} from "./image-property_types-of-ownership.svg";
-export {ReactComponent as CloudPropertyIcon} from "./icon-cloud-property.svg";
+export { ReactComponent as PropertyImage } from "./image-property.svg";
+export { ReactComponent as PersonalEstatesListingImage } from "./image-property_personal-estates-listing.svg";
+export { ReactComponent as TypesOfOwnershipImage } from "./image-property_types-of-ownership.svg";
+export { ReactComponent as CloudPropertyIcon } from "./icon-cloud-property.svg";
 
-export {ReactComponent as BankAccountImage} from "./image-bank-account.svg";
-export {ReactComponent as CloudBankAccountIcon} from "./icon-cloud-bank-account.svg";
+export { ReactComponent as BankAccountImage } from "./image-bank-account.svg";
+export { ReactComponent as CloudBankAccountIcon } from "./icon-cloud-bank-account.svg";
 
-export {ReactComponent as InsurancePoliciesImage} from "./image-insurance-policies.svg";
-export {ReactComponent as CloudInsurancePoliciesIcon} from "./icon-cloud-insurance-policies.svg";
+export { ReactComponent as InsurancePoliciesImage } from "./image-insurance-policies.svg";
+export { ReactComponent as CloudInsurancePoliciesIcon } from "./icon-cloud-insurance-policies.svg";
 
-export {ReactComponent as PotImage} from "./image-investment.svg";
-export {ReactComponent as CloudIcon} from "./icon-cloud-investment.svg";
+export { ReactComponent as PotImage } from "./image-investment.svg";
+export { ReactComponent as CloudIcon } from "./icon-cloud-investment.svg";
 
-export {ReactComponent as BusinessImage} from "./image-business.svg";
-export {ReactComponent as BusinessMobileImage} from "./image-business-mobile.svg";
-export {ReactComponent as CloudBusinessIcon} from "./icon-cloud-business.svg";
+export { ReactComponent as BusinessImage } from "./image-business.svg";
+export { ReactComponent as BusinessMobileImage } from "./image-business-mobile.svg";
+export { ReactComponent as CloudBusinessIcon } from "./icon-cloud-business.svg";
 
-export {ReactComponent as ValuablesImage} from "./image-valuables.svg";
-export {ReactComponent as CloudValuablesIcon} from "./icon-cloud-valuables.svg";
+export { ReactComponent as ValuablesImage } from "./image-valuables.svg";
+export { ReactComponent as CloudValuablesIcon } from "./icon-cloud-valuables.svg";
 export { ReactComponent as IconSearch } from './icon-search.svg';
 export { ReactComponent as SearchIconActive } from "./search-active.svg";
 
@@ -148,3 +148,7 @@ export { ReactComponent as HomeIconLogoHeader } from './logo-header-home.svg';
 export { ReactComponent as HomeIconLogoHeaderMini } from './logo-header-home-mini.svg';
 export { ReactComponent as PolicyDocument } from './policy-document.svg';
 export { ReactComponent as PolicyDocumentMini } from './policy-document-mini.svg';
+
+//landing-contact
+export { ReactComponent as ContactTwister } from './twiter-contact.svg';
+

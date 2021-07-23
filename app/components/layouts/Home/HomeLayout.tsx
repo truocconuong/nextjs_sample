@@ -153,7 +153,7 @@ function HomeLayout(props) {
           <h5>All you need to do is simply to create, upload & manage.</h5>
         </div>
       </div>
-      <Row className="jjRTz9U2">
+      <Row className="jjRTz9U2 qqF2J1H">
         <Col className="kZ7t2Rf2">
           <HomeStep1 />
           <HomeStep1Mini />
