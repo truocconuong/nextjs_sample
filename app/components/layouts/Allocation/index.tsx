@@ -156,27 +156,22 @@ const Allocation = () => {
               <div
                 className={
                   "ratio-front " +
-                  (isMobile ? "ratio-front-mobile" : "ratio-front-desktop")
+                  (isMobile ? "ratio-front-mobile" : "ratio-front-desktop") +
+                  (totalPercent === maxPercent ? " border-right-none" : "")
                 }
               >
                 {persons.map((person: AllocationPersonalInterface) => {
                   return (
                     person.percent > 0 && (
                       <div
-                        className={
-                          "item " +
-                          (person.id === persons.length &&
-                          totalPercent === maxPercent
-                            ? "border-right-none"
-                            : "")
-                        }
+                        className="item"
                         key={person.id}
                         style={{
                           width: `${person.percent}%`,
-                          backgroundColor: person.color,
+                          backgroundColor: person.percent === maxPercent ? "#FFEBEC" : person.color,
                         }}
                       >
-                        <div className="char-represent">{person.name[0]}</div>
+                        <div className={"char-represent"}>{person.percent === maxPercent ? "Error" : person.name[0]}</div>
                       </div>
                     )
                   );
@@ -232,54 +227,59 @@ const Allocation = () => {
         >
           {persons.map((person: AllocationPersonalInterface) => {
             return (
-              <div className="item-container">
-                <div className="item-wrap">
-                  <div
-                    className={
-                      isMobile
-                        ? "card-base-info-mobile"
-                        : "card-base-info-desktop"
-                    }
-                  >
+              <React.Fragment>
+                <div className={"item-container "  + (person.percent === maxPercent ? "error-ratio" : "")}>
+                  <div className="item-wrap">
                     <div
-                      className="highlight-text"
-                      style={{ backgroundColor: person.color }}
+                      className={
+                        isMobile
+                          ? "card-base-info-mobile"
+                          : "card-base-info-desktop"
+                      }
                     >
-                      <div className="text">{person.name[0]}</div>
+                      <div
+                        className="highlight-text"
+                        style={{ backgroundColor: person.color }}
+                      >
+                        <div className="text">{person.name[0]}</div>
+                      </div>
+                      <div className="base-info">
+                        <div className="name">{person.name}</div>
+                        <div className="description">{person.type}</div>
+                      </div>
+                      {!isMobile && (
+                        <div className="range">
+                          <Slider
+                            included={false}
+                            max={100}
+                            min={0}
+                            tipFormatter={formatter}
+                            onChange={(e: any) => onRangeChange(e, person.id)}
+                            value={person.percent}
+                            className={person.percent === maxPercent ? "slider-wrap-error" : ""}
+                          />
+                        </div>
+                      )}
+                      <div
+                        className={
+                          "percent " + (person.percent > 0 ? "bold" : "normal")
+                        }
+                      >{`${person.percent}%`}</div>
                     </div>
-                    <div className="base-info">
-                      <div className="name">{person.name}</div>
-                      <div className="description">{person.type}</div>
-                    </div>
-                    {!isMobile && (
-                      <div className="range">
+                    {isMobile && (
+                      <div className="range width-full">
                         <Slider
-                          included={false}
-                          max={100}
-                          min={0}
                           tipFormatter={formatter}
                           onChange={(e: any) => onRangeChange(e, person.id)}
                           value={person.percent}
+                          className={person.percent === maxPercent ? "slider-wrap-error" : ""}
                         />
                       </div>
                     )}
-                    <div
-                      className={
-                        "percent " + (person.percent > 0 ? "bold" : "normal")
-                      }
-                    >{`${person.percent}%`}</div>
                   </div>
-                  {isMobile && (
-                    <div className="range width-full">
-                      <Slider
-                        tipFormatter={formatter}
-                        onChange={(e: any) => onRangeChange(e, person.id)}
-                        value={person.percent}
-                      />
-                    </div>
-                  )}
                 </div>
-              </div>
+                { person.percent === maxPercent && <div className="error-text-ratio">Please adjust the percentage</div>}
+              </React.Fragment>
             );
           })}
         </div>

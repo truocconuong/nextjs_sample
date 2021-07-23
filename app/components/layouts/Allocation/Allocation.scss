@@ -34,6 +34,17 @@
   .width-full {
     width: 100%;
   }
+  .slider-wrap-error {
+    .ant-slider-rail {
+      background: #ffd9d1 !important;
+    }
+    .ant-slider-handle {
+      background: #fb3640 !important;
+    }
+    .ant-slider-track {
+      background: none !important;
+    }
+  }
   .range {
     display: flex;
     align-items: center;
@@ -459,6 +470,20 @@
             }
           }
         }
+      }
+      .error-text-ratio {
+        font-family: Graphik;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 155%;
+        letter-spacing: -0.5px;
+        color: #fb3640;
+        margin-bottom: 16px;
+      }
+      .error-ratio {
+        border: 2px solid #fb3640;
+        margin-bottom: 16px !important;
       }
     }
     .allocation-distribute-ratio-width-mobile {
