@@ -68,6 +68,10 @@ function StartYourWill() {
     router.push('/personal-information');
   }
 
+  const handleMovePersonalDetail = () => {
+    router.push("/personal-estates-listing/property")
+  }
+
   return (
     <>
       <div className="start-your-will-container">
@@ -391,7 +395,7 @@ function StartYourWill() {
                 className="item-end center"
               >
                 {width > 600 && (
-                  <Button className="edit-btn">
+                  <Button className="edit-btn" onClick={handleMovePersonalDetail}>
                     <PenIcon /> <span className="ml-8">Edit</span>
                   </Button>
                 )}
