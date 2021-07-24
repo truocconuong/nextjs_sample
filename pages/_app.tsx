@@ -22,7 +22,8 @@ const App = ({ Component, pageProps }: AppProps) => {
           router?.pathname === "/personal-estates-listing/investment" ||
           router?.pathname === "/personal-estates-listing/business-interest" ||
           router?.pathname === "/personal-estates-listing/valuables" ||
-          router?.pathname === "/personal-estates-listing/insurance-policy"
+          router?.pathname === "/personal-estates-listing/insurance-policy" ||
+          router?.pathname === "/allocation"
           ) && <NavigationBar />}
         <Component {...pageProps} key={router?.route} />
         <SizeBrowser />

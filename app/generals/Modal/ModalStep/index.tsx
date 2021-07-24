@@ -65,9 +65,9 @@ function ModalStep(props: IProps) {
         dotPosition="bottom"
         ref={slider}
       >
-        {options.map(item => {
+        {options.map((item, index) => {
           return (
-            <div className="carousel__child">
+            <div className="carousel__child" key={index}>
               <div className="carousel__child--image">{item.image}</div>
               <div className="carousel__child--title">{item.title}</div>
               {item.contents.map(subitem => {
