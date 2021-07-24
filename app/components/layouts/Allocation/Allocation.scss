@@ -9,7 +9,6 @@
   }
   height: 100%;
   width: 100%;
-  background-image: url("/images/bg.svg");
   .title {
     font-family: Recoleta;
     font-style: normal;
@@ -72,7 +71,7 @@
     }
   }
   .allocation-wrapper {
-    height: 100%;
+    background-image: url(/images/bg.svg);
     width: 100%;
     .allocation-ratio {
       width: 100%;
