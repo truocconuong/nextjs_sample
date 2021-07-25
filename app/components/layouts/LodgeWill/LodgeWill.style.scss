@@ -1,0 +1,85 @@
+$breakpoint-xs: 576px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1600px;
+$breakpoint-xxl: 2400px;
+
+.lodge-will-banner {
+    .lodge-banner {
+        background: #e9f7ff;
+        padding: 80px 0;
+        h1 {
+            font-family: 'Recoleta';
+            font-size: 64px;
+            line-height: 125%;
+            letter-spacing: -0.5px;
+            color: #001066;
+        }
+        h2 {
+            font-family: 'Graphik-Medium';
+            font-size: 24px;
+            line-height: 145%;
+            letter-spacing: -0.5px;
+            color: #001064;
+            margin-top: 40px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            font-family: 'Graphik-Regular';
+            font-size: 16px;
+            line-height: 155%;
+            letter-spacing: -0.5px;
+            color: #001064;
+            background: #ffe9be;
+            padding-left: 5px;
+            width: 72%;
+        }
+        p {
+            font-family: 'Graphik-Regular';
+            font-size: 20px;
+            line-height: 145%;
+            letter-spacing: -0.5px;
+            color: #001064;
+        }
+        .lodge-btn {
+            margin-top: 40px;
+            .btn-login {
+                margin-right: 16px;
+                margin-bottom: 16px;
+            }
+        }
+        .lodge-banner-svg {
+            svg:nth-child(2) {
+                display: none;
+            }
+        }
+        @media (max-width: $breakpoint-lg) {
+            padding: 80px 5%;
+        }
+        @media (max-width: $breakpoint-sm) {
+            padding: 80px 15px 50px;
+            h1 {
+                font-size: 42px;
+                line-height: 55px;
+                letter-spacing: -0.01em;
+                color: #001066;
+            }
+            p {
+                font-size: 18px;
+                line-height: 155%;
+                letter-spacing: -0.5px;
+                color: #001064;
+            }
+            .lodge-banner-svg {
+                svg:nth-child(1) {
+                    display: none;
+                }
+                svg:nth-child(2) {
+                    display: block;
+                }
+                margin-bottom: 40px;
+            }
+        }
+    }
+}

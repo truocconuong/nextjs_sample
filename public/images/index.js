@@ -158,3 +158,21 @@ export { ReactComponent as IconEstateDistributionMobile } from './icon-estate-di
 export { ReactComponent as IconDistribute } from './icon-distribute.svg';
 export { ReactComponent as IconDistributeMobile } from './icon-distribute-mobile.svg';
 export { ReactComponent as IconThunder } from './icon-thunder.svg';
+//lodge
+export { ReactComponent as LodgeKey } from './lodge-key.svg';
+export { ReactComponent as LodgeKeyMini } from './lodge-key-mini.svg';
+export { ReactComponent as FileLock } from './file-lock.svg';
+export { ReactComponent as LodgeForm } from './lodge-form.svg';
+
+//complete
+export { ReactComponent as SmileComplete } from './smile-complete.svg';
+
+//your-legacy
+export { ReactComponent as SmileLagacy } from './smile-lagacy.svg';
+export { ReactComponent as SmileLagacyMini } from './smile-lagacy-mini.svg';
+export { ReactComponent as LegacyLock } from './legacy-lock.svg';
+export { ReactComponent as IconInsurance } from './icon-insurance.svg';
+export { ReactComponent as IconProperty } from './icon-property.svg'
+export { ReactComponent as IconBank } from './icon-bank.svg'
+export { ReactComponent as IconEditMyAccount } from './icon-edit-myacount.svg'
+export { ReactComponent as IconSignOut } from './icon-sign-out.svg'
