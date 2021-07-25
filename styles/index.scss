@@ -1,38 +1,38 @@
 @use 'colors';
 @use 'spacing-scale.scss';
-@import "./custom-global.antd.scss";
-@import "./fonts.scss";
-@import "./globals.scss";
-@import "/app/generals/Example/InputFieldExample.scss";
-@import "/app/generals/InputField/TextField.scss";
-@import "/app/generals/notifications/notifications.scss";
-@import "/app/generals/NavigationBar/NavigationBar.scss";
-@import "/app/generals/Progress/ProgressBar.scss";
-@import "/app/generals/Button/button.scss";
-@import "/app/generals/Toggle/toggle.scss";
-@import "/app/generals/Modal/ModalInfo/ModalInfo.scss";
-@import "/app/generals/PersonalForm/PersonalForm.scss";
-@import "/app/components/modules/PersonalFormInput/PersonalFormInput.scss";
-@import "/app/components/modules/ExecutorFormInput/ExecutorFormInput.scss";
-@import "/app/components/modules/BeneficiaryFormInput/BeneficiaryFormInput.scss";
-@import "/app/generals/Modal/Modal.scss";
-@import "/app/generals/CardInfo/CardInfo.scss";
-@import "/app/components/layouts/PersonalInformation/PersonalInformation.scss";
-@import "/app/components/layouts/PersonalExecutor/PersonalExecutor.scss";
-@import "/app/components/layouts/SignIn/SignIn.scss";
-@import "/app/components/layouts/AboutUs/AboutUs.scss";
-@import "../app/components/StartYourWill/Modal/ModalStarYourWill.scss";
-@import "../app/components/layouts/Allocation/Allocation.scss";
+@import './custom-global.antd.scss';
+@import './fonts.scss';
+@import './globals.scss';
+@import '/app/generals/Example/InputFieldExample.scss';
+@import '/app/generals/InputField/TextField.scss';
+@import '/app/generals/notifications/notifications.scss';
+@import '/app/generals/NavigationBar/NavigationBar.scss';
+@import '/app/generals/Progress/ProgressBar.scss';
+@import '/app/generals/Button/button.scss';
+@import '/app/generals/Toggle/toggle.scss';
+@import '/app/generals/Modal/ModalInfo/ModalInfo.scss';
+@import '/app/generals/PersonalForm/PersonalForm.scss';
+@import '/app/components/modules/PersonalFormInput/PersonalFormInput.scss';
+@import '/app/components/modules/ExecutorFormInput/ExecutorFormInput.scss';
+@import '/app/components/modules/BeneficiaryFormInput/BeneficiaryFormInput.scss';
+@import '/app/generals/Modal/Modal.scss';
+@import '/app/generals/CardInfo/CardInfo.scss';
+@import '/app/components/layouts/PersonalInformation/PersonalInformation.scss';
+@import '/app/components/layouts/PersonalExecutor/PersonalExecutor.scss';
+@import '/app/components/layouts/SignIn/SignIn.scss';
+@import '/app/components/layouts/AboutUs/AboutUs.scss';
+@import '../app/components/StartYourWill/Modal/ModalStarYourWill.scss';
+@import '../app/components/layouts/Allocation/Allocation.scss';
 
 //Screen
-@import "./Screen/StartYourWill.scss";
-@import "./Screen/PaymentSummary.scss";
+@import './Screen/StartYourWill.scss';
+@import './Screen/PaymentSummary.scss';
 @import '/app/components/layouts/PersonalBeneficiary/PersonalBeneficiary.scss';
 @import '/app/components/layouts/LearningCenter/LearningCenter.scss';
 // @import "../app/generals/Button/button.scss";
 @import '/app/generals/NavigationBar/NavigationBar.scss';
 @import '/app/generals/Progress/ProgressBar.scss';
-@import "/app/generals/Button/button.scss";
+@import '/app/generals/Button/button.scss';
 
 // arrow carousel
 @import '/app/components/elements/ArrowCarousel/ArrowCarousel.style.scss';
@@ -40,16 +40,27 @@
 // landing page
 @import '/app/components/layouts/Home/Home.style.scss';
 @import '/app/components/layouts/Faq/Faq.style.scss';
-@import "/app/components/modules/LandingPage/Landing.style.scss";
+@import '/app/components/modules/LandingPage/Landing.style.scss';
 @import '/app/generals/Checkbox/CheckboxInfo/checkbox-info.scss';
 @import '/app/generals/Modal/ModalStep/modal-step.scss';
 @import '/app/generals/SelectCountry/select-country.scss';
 @import '/app/generals/DatePicker/date-picker.scss';
 
 // Personal Estates Listing
-@import "/app/components/layouts/PersonalEstatesListing/Property/property.scss";
-@import "/app/components/layouts/PersonalEstatesListing/BankAccount/bank-account.scss";
-@import "/app/components/layouts/PersonalEstatesListing/Investments/investments.scss";
-@import "/app/components/layouts/PersonalEstatesListing/BusinessInterests/business-interests.scss";
-@import "/app/components/layouts/PersonalEstatesListing/Valuables/valuables.scss";
-@import "/app/components/layouts/Contact/Contact.style.scss";
+@import '/app/components/layouts/PersonalEstatesListing/Property/property.scss';
+@import '/app/components/layouts/PersonalEstatesListing/BankAccount/bank-account.scss';
+@import '/app/components/layouts/PersonalEstatesListing/Investments/investments.scss';
+@import '/app/components/layouts/PersonalEstatesListing/BusinessInterests/business-interests.scss';
+@import '/app/components/layouts/PersonalEstatesListing/Valuables/valuables.scss';
+@import '/app/components/layouts/Contact/Contact.style.scss';
+
+//lodge
+@import '/app/components/layouts/LodgeWill/LodgeWill.style.scss';
+@import '/app/components/modules/PersonalWill/PersonalWill.style.scss';
+
+//complete
+@import './Screen/CompleteScreen.scss';
+
+//your-lagacy
+@import '/app/components/layouts/YourLagacy/YourLagacy.style.scss';
+@import '/app/components/layouts/MyAccount/MyAccount.style.scss';

@@ -1,0 +1,96 @@
+.my-account {
+    background-image: url('/images/bg-complete.svg');
+    min-height: 100vh;
+    padding-top: 10vh;
+    h1 {
+        font-family: Recoleta;
+        font-size: 64px;
+        @media (max-width: $breakpoint-sm) {
+            font-size: 40px;
+        }
+        line-height: 67px;
+        letter-spacing: -0.005em;
+        color: #001064;
+    }
+    .content {
+        background: #ffffff;
+        border: 2px solid #00199e;
+        box-sizing: border-box;
+        border-radius: 14px;
+        padding: 32px;
+    }
+    .jnsadj {
+        font-family: 'Recoleta-Medium';
+        font-size: 36px;
+        @media (max-width: $breakpoint-sm) {
+            font-size: 24px;
+        }
+        line-height: 125%;
+        letter-spacing: -0.5px;
+        color: #001064;
+        margin-left: 16px;
+    }
+    h3 {
+        font-family: Graphik;
+        font-size: 20px;
+        @media (max-width: $breakpoint-sm) {
+            font-size: 14px;
+        }
+        line-height: 145%;
+        letter-spacing: -0.5px;
+        color: #6670a2;
+        margin-bottom: 32px;
+    }
+    .infor-account {
+        padding: 24px 0;
+        @media (max-width: $breakpoint-sm) {
+            padding: 16px 0;
+        }
+        border-top: 1px solid #e5e7ef;
+        box-sizing: border-box;
+        h4 {
+            font-family: Graphik;
+            font-size: 24px;
+            @media (max-width: $breakpoint-sm) {
+                font-size: 16px;
+            }
+            line-height: 145%;
+            display: flex;
+            align-items: flex-end;
+            letter-spacing: -0.5px;
+            color: #001064;
+            margin-bottom: 4px;
+        }
+        h5 {
+            font-family: Graphik;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 20px;
+            @media (max-width: $breakpoint-sm) {
+                font-size: 14px;
+            }
+            line-height: 145%;
+            letter-spacing: -0.5px;
+            color: #6670a2;
+        }
+        button {
+            height: 48px;
+            border: 1px solid #c3c5d2;
+            box-sizing: border-box;
+            border-radius: 7px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            span {
+                font-family: Graphik;
+                font-size: 18px;
+                line-height: 125%;
+                text-align: center;
+                letter-spacing: -0.5px;
+                color: #c3c5d2;
+                margin-left: 8px;
+            }
+        }
+    }
+}

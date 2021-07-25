@@ -1,0 +1,177 @@
+$breakpoint-xs: 576px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1600px;
+$breakpoint-xxl: 2400px;
+
+.personal-will-cuong {
+    .file-lock {
+        @media (max-width: 850px) {
+            flex-direction: column;
+        }
+        background: #e9faf4;
+        border-radius: 7px;
+        padding: 40px 32px;
+        @media (max-width: $breakpoint-sm) {
+            padding: 40px 24px;
+        }
+        margin-top: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .ant-row-middle {
+            @media (max-width: 850px) {
+                flex-direction: column;
+            }
+        }
+        .icon-file-lock {
+            margin-right: 16px;
+            @media (max-width: 850px) {
+                margin-bottom: 16px;
+            }
+        }
+        .content {
+            @media (max-width: 850px) {
+                text-align: center;
+            }
+            h3 {
+                font-family: 'Graphik-Medium';
+                font-size: 20px;
+                line-height: 145%;
+                letter-spacing: -0.5px;
+                color: #001064;
+                margin-bottom: 2px;
+                @media (max-width: $breakpoint-sm) {
+                    font-size: 18px;
+                }
+            }
+            p {
+                font-size: 16px;
+                line-height: 155%;
+                letter-spacing: -0.5px;
+                color: #001064;
+                margin-bottom: 0;
+                @media (max-width: 850px) {
+                    margin-top: 8px;
+                    margin-bottom: 16px;
+                }
+                @media (max-width: $breakpoint-sm) {
+                    font-size: 16px;
+                }
+                @media (max-width: $breakpoint-xs) {
+                    font-size: 14px;
+                }
+            }
+        }
+        .btn-remove {
+            .ant-btn {
+                border: 1px solid #6670a2;
+                box-sizing: border-box;
+                border-radius: 7px;
+                padding: 11px 24px;
+                height: 46px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                span {
+                    font-family: 'Graphik';
+                    font-size: 18px;
+                    letter-spacing: -0.5px;
+                    color: #6670a2;
+                    margin: 0px 8px;
+                }
+            }
+        }
+    }
+    .lodge-form {
+        p {
+            font-family: Graphik;
+            font-size: 20px;
+            line-height: 145%;
+            letter-spacing: -0.5px;
+            color: #6670a2;
+            margin-bottom: 0;
+            @media (max-width: $breakpoint-sm) {
+                font-size: 16px;
+            }
+        }
+        .registry {
+            position: relative;
+            svg {
+                position: absolute;
+                top: 5px;
+                right: -35%;
+            }
+        }
+    }
+    .complete-this-form {
+        padding: 24px 0;
+        margin-top: 32px;
+        border-top: 1px solid #e5e7ef;
+        .complete-this {
+            border: 1px solid #c3c5d2;
+            box-sizing: border-box;
+            border-radius: 7px;
+            height: 46px;
+            padding-left: 24px;
+            padding-right: 24px;
+            @media (max-width: $breakpoint-sm) {
+                display: none;
+            }
+            span {
+                font-family: 'Graphik';
+                font-size: 18px;
+                line-height: 125%;
+                text-align: center;
+                letter-spacing: -0.5px;
+                color: #c3c5d2;
+            }
+        }
+    }
+    .paste-your {
+        background: #fef6e7;
+        border-radius: 7px;
+        padding: 25px 32px;
+        @media (max-width: $breakpoint-sm) {
+            padding: 16px;
+        }
+        h3 {
+            font-family: 'Graphik';
+            font-size: 16px;
+            line-height: 155%;
+            letter-spacing: -0.5px;
+            color: #001064;
+            margin-bottom: 16px;
+        }
+        input {
+            background: #ffffff;
+            border: 1px solid #c3c5d2;
+            box-sizing: border-box;
+            border-radius: 6px;
+            height: 46px;
+            padding-left: 20px;
+            font-family: 'Graphik';
+            font-size: 16px;
+            line-height: 155%;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.5px;
+            color: #001064;
+            margin-bottom: 16px;
+        }
+        .btn-lodge-confirm {
+            @media (max-width: $breakpoint-sm) {
+                width: 100%;
+            }
+            .custom-button {
+                @media (max-width: $breakpoint-sm) {
+                    width: 100% !important;
+                    button {
+                        width: 100% !important;
+                    }
+                }
+            }
+        }
+    }
+}
