@@ -68,11 +68,11 @@ const executorFormInput = (props: executorFormPropsInterface) => {
 
   const isFullForm = () => {
     const dataFormCopy = { ...dataForm };
-    if (!isEmail(dataFormCopy.email)) {
+    if (dataFormCopy.email && !isEmail(dataFormCopy.email)) {
       return false;
     }
     for (let key in dataFormCopy) {
-      if(key === 'id' || key === "type"){
+      if(key === 'id' || key === "type" || key === "email" || key === "passport"){
         continue;
       }
       if (!dataFormCopy[key]) {

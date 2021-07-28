@@ -145,6 +145,7 @@ const PersonalBeneficiary = () => {
         }
       >
         <PersonalPreview
+          onIconClick={() => setVisibleModal(true)}
           isMobile={isMobile}
           mainIconDesktop={BeneficiaryDesktopIcon}
           mainIconMobile={BeneficiaryMobileIcon}

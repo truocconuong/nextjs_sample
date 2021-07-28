@@ -27,7 +27,7 @@ const PersonalExecutor = () => {
   };
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState(false);
-  const [visibleModal, setVisibleModal] = useState(true);
+  const [visibleModal, setVisibleModal] = useState(false);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
   const [visibleFormInput, setVisibleFormInput] = useState(true);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
@@ -140,6 +140,7 @@ const PersonalExecutor = () => {
           mainIconDesktop={ExecutorDesktopIcon}
           mainIconMobile={ExecutorMobileIcon}
           infoIcon={TipIcon}
+          onIconClick={() => setVisibleModal(true)}
           textDescription={
             "The executor is someone above 21 years old that you have identified to legally carry out your will and the execution of your wishes in your will."
           }

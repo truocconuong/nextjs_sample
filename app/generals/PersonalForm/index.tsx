@@ -11,6 +11,7 @@ interface PersonalFormProps {
   textButton?: string;
   backgroundColor: string;
   displayButton?: boolean;
+  onIconClick: () => void;
 }
 const PersonalForm = (props: PersonalFormProps) => {
   const {
@@ -23,6 +24,7 @@ const PersonalForm = (props: PersonalFormProps) => {
     textButton,
     backgroundColor,
     displayButton,
+    onIconClick
   } = props;
   return (
     <div
@@ -40,7 +42,7 @@ const PersonalForm = (props: PersonalFormProps) => {
           <div className={"ps-title " + (isMobile ? "fs-24" : "fs-32")}>
             {title}
           </div>
-          <div className="ps-icon">
+          <div className="ps-icon" onClick={onIconClick}>
             <TipIcon />
           </div>
         </div>
