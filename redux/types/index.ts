@@ -17,3 +17,7 @@ export const StartYourWill = {
   SET_NAME: "SET_NAME",
   SET_MAKE_PAYMENT: "SET_MAKE_PAYMENT",
 };
+
+export const PersonalEstatesListingTypes = {
+  SET_PROPERTY: "SET_PROPERTY",
+}

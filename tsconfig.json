@@ -13,6 +13,7 @@
       "@util/*": ["utils/*"],
       "@generals/*": ["generals/*"],
       "@images*": ["../public/images/*"],
+      "@redux/*": ["../redux/*"],
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

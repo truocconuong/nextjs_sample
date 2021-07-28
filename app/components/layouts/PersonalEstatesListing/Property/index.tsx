@@ -14,14 +14,15 @@ import {
   SaveIcon,
   TrashEnabledIcon,
   TypesOfOwnershipImage,
-} from "../../../../../public/images";
+} from "@images/index";
 import SelectCountry from "generals/SelectCountry";
 import CustomCheckboxInfo from "generals/Checkbox/CheckboxInfo";
 import CustomDatePicker from "generals/DatePicker";
 import moment from "moment";
 import ModalStep from "generals/Modal/ModalStep";
-import {useDispatch} from "react-redux";
-import {ProgressActions} from "../../../../../redux/actions";
+import {useDispatch, useSelector} from "react-redux";
+import {ProgressActions, GlobalDataActions} from "@redux/actions";
+import {RootState} from "@redux/reducers";
 
 const {Option} = Select;
 
@@ -65,6 +66,9 @@ const optionsSplash = [
 
 function PropertyLayout(props) {
   const dispatch = useDispatch();
+  const PropertiesReducer = useSelector(
+    (state: RootState) => state?.data?.properties
+  );
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowModalSplash, setIsShowModalSplash] = useState(true);
@@ -129,6 +133,10 @@ function PropertyLayout(props) {
         () => {}
       )
     );
+    if (PropertiesReducer.length >= 1) {
+      setListData(PropertiesReducer);
+      setIsShowModalSplash(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -201,6 +209,7 @@ function PropertyLayout(props) {
     if (!isContinue) {
       setIsContinue(true);
     }
+    dispatch(GlobalDataActions.setProperty(tempListData, () => {}));
   };
 
   const handleEdit = item => {
