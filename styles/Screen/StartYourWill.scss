@@ -10,6 +10,13 @@
       order: 1;
       margin-bottom: 16px;
     }
+    .make-payment {
+      top: 18% !important;
+      .col-btn-pay {
+        margin-top: 16px !important;
+        justify-content: center !important;
+      }
+    }
   }
 
   @media only screen and (max-width: 860px) {
@@ -19,11 +26,16 @@
   }
   @media screen and (max-width: 600px) {
     .body {
-      padding: 0px 16px 40px !important ;
+      padding: 0px 5% 40px !important ;
     }
   }
 
   @media screen and (max-width: 768px) {
+    .make-payment-btn {
+      width: 168px !important;
+      height: 46px !important;
+      font-size: 18px !important;
+    }
     .keep-going {
       padding: 24px !important;
     }
@@ -99,7 +111,6 @@
   .text-continue {
     @extend.text-fix-now;
     font-weight: bold;
-    
   }
   .keep-going {
     background: #ffe9be;
@@ -154,7 +165,10 @@
   }
   .body {
     background: url("/images/img-background.svg");
-    padding: 0.5% 12% 3% 12%;
+    padding: 0.5% 16% 3% 16%;
+    @media screen and (max-width: 768px) {
+      padding: 0.5% 12% 3% 12%;
+    }
     .fix-issues {
       background: linear-gradient(0deg, #ffffff, #ffffff), #fff4f4;
       margin-top: 32px;
@@ -227,12 +241,16 @@
           @extend .file-btn;
         }
       }
+      .ant-upload.ant-upload-drag {
+        border: none;
+        background-color: transparent;
+      }
     }
     .upload {
       position: relative;
       .make-overlay {
         background-color: red;
-        background-color: rgba(255,255,255,0.6);
+        background-color: rgba(255, 255, 255, 0.6);
         position: absolute;
         top: -1%;
         left: -1%;
@@ -244,7 +262,7 @@
       .make-payment {
         z-index: 2;
         position: absolute;
-        top: 21%;
+        top: 19%;
         left: auto;
         width: calc(100% + 10%);
         right: auto;
@@ -295,9 +313,3 @@
     border: 1px solid #e5e7ef;
   }
 }
-
-// .body-1 {
-//   background: url("/images/img-background.svg");
-//   padding: 0% 5% 3% 5%;
-
-// }
