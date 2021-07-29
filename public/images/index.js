@@ -73,49 +73,50 @@ export { ReactComponent as PaymentSummaryIcon } from "./payment-summary.svg";
 export { ReactComponent as LockIcon } from "./lock.svg";
 export { ReactComponent as MakePayment } from "./make-payment.svg";
 export { ReactComponent as MakePaymentMobile } from "./make-payment-mobile.svg";
-export { ReactComponent as NextArrowActive } from './next_arrow_active.svg';
-export { ReactComponent as NextArrowDisable } from './next_arrow_disable.svg';
-export { ReactComponent as PreArrowActive } from './pre_arrow_active.svg';
-export { ReactComponent as PreArrowDisable } from './pre_arrow_disable.svg';
-export { ReactComponent as UnderMinute } from './under_minute.svg';
-export { ReactComponent as UnderMinuteMB } from './under_minute_mobile.svg';
+export { ReactComponent as NextArrowActive } from "./next_arrow_active.svg";
+export { ReactComponent as NextArrowDisable } from "./next_arrow_disable.svg";
+export { ReactComponent as PreArrowActive } from "./pre_arrow_active.svg";
+export { ReactComponent as PreArrowDisable } from "./pre_arrow_disable.svg";
+export { ReactComponent as UnderMinute } from "./under_minute.svg";
+export { ReactComponent as UnderMinuteMB } from "./under_minute_mobile.svg";
 // export { ReactComponent as PersonCarousel } from './person_carousel.svg';
-export { ReactComponent as Home_5167814 } from './home_5167814.svg';
-export { ReactComponent as Convenience } from './convenience.svg';
-export { ReactComponent as Affor } from './affor.svg';
-export { ReactComponent as Secured } from './secured.svg';
-export { ReactComponent as Simple } from './simple.svg';
-export { ReactComponent as Home_5168374 } from './home_5168374.svg';
-export { ReactComponent as SimpleText } from './simple_text.svg';
-export { ReactComponent as Home_5167844 } from './home_5167844.svg';
-export { ReactComponent as Home_5168876 } from './home_5168876.svg';
-export { ReactComponent as Home_Component_29 } from './home_component_29.svg';
-export { ReactComponent as Home_5167846 } from './home_5167846.svg';
-export { ReactComponent as Home_5168357 } from './home_5168357.svg';
-export { ReactComponent as Home_5168635 } from './home_5168635.svg';
-export { ReactComponent as HomeStep1 } from './home_step1.svg';
-export { ReactComponent as HomeStep1Mini } from './home_step1_mini.svg';
-export { ReactComponent as HomeStep2 } from './home_step2.svg';
-export { ReactComponent as HomeStep2Mini } from './home_step2_mini.svg';
-export { ReactComponent as HomeStep3 } from './home_step3.svg';
-export { ReactComponent as HomeStep3Mini } from './home_step3_mini.svg'
-export { ReactComponent as DidYouKnow } from './did_you_know.svg';
-export { ReactComponent as DidYouKnowMini } from './did_you_know_mini.svg';
-export { ReactComponent as HomeShield } from './home_shield.svg';
-export { ReactComponent as HomeNote } from './home_note.svg';
-export { ReactComponent as DropdownCollapse } from './dropdown_collapse.svg';
-export { ReactComponent as DropupCollapse } from './dropup_collapse.svg';
-export { ReactComponent as HomeTwitter } from './home-twitter.svg';
-export { ReactComponent as TwitterFooter } from './twitter_footer.svg';
-export { ReactComponent as FacebookFooter } from './facebook_footer.svg';
-export { ReactComponent as LinkedinFooter } from './linkedin_footer.svg';
-export { ReactComponent as Faq1 } from './faq-1.svg';
-export { ReactComponent as FaqMini1 } from './faq-mini-1.svg';
+export { ReactComponent as Home_5167814 } from "./home_5167814.svg";
+export { ReactComponent as Convenience } from "./convenience.svg";
+export { ReactComponent as Affor } from "./affor.svg";
+export { ReactComponent as Secured } from "./secured.svg";
+export { ReactComponent as Simple } from "./simple.svg";
+export { ReactComponent as Home_5168374 } from "./home_5168374.svg";
+export { ReactComponent as SimpleText } from "./simple_text.svg";
+export { ReactComponent as Home_5167844 } from "./home_5167844.svg";
+export { ReactComponent as Home_5168876 } from "./home_5168876.svg";
+export { ReactComponent as Home_Component_29 } from "./home_component_29.svg";
+export { ReactComponent as Home_5167846 } from "./home_5167846.svg";
+export { ReactComponent as Home_5168357 } from "./home_5168357.svg";
+export { ReactComponent as Home_5168635 } from "./home_5168635.svg";
+export { ReactComponent as HomeStep1 } from "./home_step1.svg";
+export { ReactComponent as HomeStep1Mini } from "./home_step1_mini.svg";
+export { ReactComponent as HomeStep2 } from "./home_step2.svg";
+export { ReactComponent as HomeStep2Mini } from "./home_step2_mini.svg";
+export { ReactComponent as HomeStep3 } from "./home_step3.svg";
+export { ReactComponent as HomeStep3Mini } from "./home_step3_mini.svg";
+export { ReactComponent as DidYouKnow } from "./did_you_know.svg";
+export { ReactComponent as DidYouKnowMini } from "./did_you_know_mini.svg";
+export { ReactComponent as HomeShield } from "./home_shield.svg";
+export { ReactComponent as HomeNote } from "./home_note.svg";
+export { ReactComponent as DropdownCollapse } from "./dropdown_collapse.svg";
+export { ReactComponent as DropupCollapse } from "./dropup_collapse.svg";
+export { ReactComponent as HomeTwitter } from "./home-twitter.svg";
+export { ReactComponent as TwitterFooter } from "./twitter_footer.svg";
+export { ReactComponent as FacebookFooter } from "./facebook_footer.svg";
+export { ReactComponent as LinkedinFooter } from "./linkedin_footer.svg";
+export { ReactComponent as Faq1 } from "./faq-1.svg";
+export { ReactComponent as FaqMini1 } from "./faq-mini-1.svg";
 export { ReactComponent as TrashEnabledIcon } from "./icon-trash-enabled.svg";
 export { ReactComponent as TrashDisabledIcon } from "./icon-trash-disabled.svg";
 export { ReactComponent as CheckboxUnselectedIcon } from "./icon-checkbox-unselected.svg";
 export { ReactComponent as CheckboxSelectedIcon } from "./icon-checkbox-selected.svg";
-
+export { ReactComponent as Arrow } from "./arrow.svg";
+export { ReactComponent as RemoveIcon } from "./remove-icon.svg";
 
 // Personal Estates listing
 export { ReactComponent as PropertyImage } from "./image-property.svg";
@@ -138,41 +139,40 @@ export { ReactComponent as CloudBusinessIcon } from "./icon-cloud-business.svg";
 
 export { ReactComponent as ValuablesImage } from "./image-valuables.svg";
 export { ReactComponent as CloudValuablesIcon } from "./icon-cloud-valuables.svg";
-export { ReactComponent as IconSearch } from './icon-search.svg';
+export { ReactComponent as IconSearch } from "./icon-search.svg";
 export { ReactComponent as SearchIconActive } from "./search-active.svg";
 
-
-export { ReactComponent as MenuMobile } from './menu-mobile-icon.svg';
-export { ReactComponent as HomeIconClose } from './home-icon-close.svg';
-export { ReactComponent as HomeIconLogoHeader } from './logo-header-home.svg';
-export { ReactComponent as HomeIconLogoHeaderMini } from './logo-header-home-mini.svg';
-export { ReactComponent as PolicyDocument } from './policy-document.svg';
-export { ReactComponent as PolicyDocumentMini } from './policy-document-mini.svg';
+export { ReactComponent as MenuMobile } from "./menu-mobile-icon.svg";
+export { ReactComponent as HomeIconClose } from "./home-icon-close.svg";
+export { ReactComponent as HomeIconLogoHeader } from "./logo-header-home.svg";
+export { ReactComponent as HomeIconLogoHeaderMini } from "./logo-header-home-mini.svg";
+export { ReactComponent as PolicyDocument } from "./policy-document.svg";
+export { ReactComponent as PolicyDocumentMini } from "./policy-document-mini.svg";
 
 //landing-contact
-export { ReactComponent as ContactTwister } from './twiter-contact.svg';
+export { ReactComponent as ContactTwister } from "./twiter-contact.svg";
 
 //Allocation
-export { ReactComponent as IconEstateDistributionDesktop } from './icon-estate-distribution.svg';
-export { ReactComponent as IconEstateDistributionMobile } from './icon-estate-distribution-mobile.svg';
-export { ReactComponent as IconDistribute } from './icon-distribute.svg';
-export { ReactComponent as IconDistributeMobile } from './icon-distribute-mobile.svg';
-export { ReactComponent as IconThunder } from './icon-thunder.svg';
+export { ReactComponent as IconEstateDistributionDesktop } from "./icon-estate-distribution.svg";
+export { ReactComponent as IconEstateDistributionMobile } from "./icon-estate-distribution-mobile.svg";
+export { ReactComponent as IconDistribute } from "./icon-distribute.svg";
+export { ReactComponent as IconDistributeMobile } from "./icon-distribute-mobile.svg";
+export { ReactComponent as IconThunder } from "./icon-thunder.svg";
 //lodge
-export { ReactComponent as LodgeKey } from './lodge-key.svg';
-export { ReactComponent as LodgeKeyMini } from './lodge-key-mini.svg';
-export { ReactComponent as FileLock } from './file-lock.svg';
-export { ReactComponent as LodgeForm } from './lodge-form.svg';
+export { ReactComponent as LodgeKey } from "./lodge-key.svg";
+export { ReactComponent as LodgeKeyMini } from "./lodge-key-mini.svg";
+export { ReactComponent as FileLock } from "./file-lock.svg";
+export { ReactComponent as LodgeForm } from "./lodge-form.svg";
 
 //complete
-export { ReactComponent as SmileComplete } from './smile-complete.svg';
+export { ReactComponent as SmileComplete } from "./smile-complete.svg";
 
 //your-legacy
-export { ReactComponent as SmileLagacy } from './smile-lagacy.svg';
-export { ReactComponent as SmileLagacyMini } from './smile-lagacy-mini.svg';
-export { ReactComponent as LegacyLock } from './legacy-lock.svg';
-export { ReactComponent as IconInsurance } from './icon-insurance.svg';
-export { ReactComponent as IconProperty } from './icon-property.svg'
-export { ReactComponent as IconBank } from './icon-bank.svg'
-export { ReactComponent as IconEditMyAccount } from './icon-edit-myacount.svg'
-export { ReactComponent as IconSignOut } from './icon-sign-out.svg'
+export { ReactComponent as SmileLagacy } from "./smile-lagacy.svg";
+export { ReactComponent as SmileLagacyMini } from "./smile-lagacy-mini.svg";
+export { ReactComponent as LegacyLock } from "./legacy-lock.svg";
+export { ReactComponent as IconInsurance } from "./icon-insurance.svg";
+export { ReactComponent as IconProperty } from "./icon-property.svg";
+export { ReactComponent as IconBank } from "./icon-bank.svg";
+export { ReactComponent as IconEditMyAccount } from "./icon-edit-myacount.svg";
+export { ReactComponent as IconSignOut } from "./icon-sign-out.svg";
