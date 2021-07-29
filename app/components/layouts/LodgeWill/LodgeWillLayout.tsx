@@ -2,9 +2,11 @@ import CustomButton from '@generals/Button';
 import { LodgeKeyMini, LodgeKey } from '@images/index';
 import PersonalWill from '@module/PersonalWill/PersonalWill';
 import { Col, Row } from 'antd';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 function LodgeWillLayout(props) {
+    const router = useRouter();
     return (
         <div>
             <div className='lodge-will-banner'>
@@ -40,6 +42,7 @@ function LodgeWillLayout(props) {
                                     borderLarge
                                     fontWeightLarge
                                     className='btn-skip'
+                                    onClick={() => router.push('/complete')}
                                 >
                                     Skip This Step
                                 </CustomButton>

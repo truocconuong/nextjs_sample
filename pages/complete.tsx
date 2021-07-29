@@ -1,9 +1,11 @@
 import CustomButton from '@generals/Button';
 import { SmileComplete } from '@images/index';
 import { Row, Typography } from 'antd';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 const CompleteScreen = () => {
+    const router = useRouter();
     return (
         <div className='complete-screen'>
             <div className='body'>
@@ -20,7 +22,7 @@ const CompleteScreen = () => {
                         borderLarge
                         fontWeightLarge
                         size='large'
-                        // onClick={handleCreateYourWill}
+                        onClick={() => router.push('/your-lagacy')}
                     >
                         Return to Dashboard
                     </CustomButton>

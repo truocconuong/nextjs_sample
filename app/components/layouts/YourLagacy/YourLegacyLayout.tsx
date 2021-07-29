@@ -101,7 +101,7 @@ function YourLegacyLayout(props) {
                                     type='ghost'
                                     className='btn-login'
                                 >
-                                    Download Your Will
+                                    Download Will
                                 </CustomButton>
                             </Col>
                             <Col
