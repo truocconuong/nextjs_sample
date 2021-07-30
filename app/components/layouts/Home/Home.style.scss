@@ -12,12 +12,37 @@ $breakpoint-xxl: 2400px;
             position: relative;
             .slick-slider {
                 ul.slick-dots.slick-dots-bottom {
-                    bottom: 180px;
-                    left: 90px;
+                    margin: 0;
+                    bottom: 5%;
+                    left: 10%;
                     right: inherit;
+                    @media (max-width: $breakpoint-xxl) {
+                        bottom: 22%;
+                        left: calc(16% + 0.5vw);
+                    }
+                    @media only screen and (min-width: 1400px) and (max-width: 1670px) {
+                        bottom: 13%;
+                        left: calc(14% + 5px);
+                    }
+                    @media only screen and (min-width: 1330px) and (max-width: 1400px) {
+                        bottom: 12%;
+                        left: 13%;
+                    }
+                    @media only screen and (min-width: 1200px) and (max-width: 1330px) {
+                        bottom: 12%;
+                        left: 13%;
+                    }
                     @media (max-width: $breakpoint-lg) {
-                        bottom: 2%;
-                        left: -4%;
+                        bottom: 5%;
+                        left: 12%;
+                    }
+                    @media (max-width: $breakpoint-md) {
+                        bottom: 5%;
+                        left: 10%;
+                    }
+                    @media (max-width: $breakpoint-xs) {
+                        bottom: 8%;
+                        left: 15px;
                     }
 
                     li {
@@ -50,7 +75,6 @@ $breakpoint-xxl: 2400px;
                 }
                 .slick-next {
                     right: 5%;
-
                     top: 46%;
                     width: 58px;
                     height: 58px;
@@ -131,7 +155,9 @@ $breakpoint-xxl: 2400px;
                                 letter-spacing: -0.5px;
                                 color: #001064;
                                 margin-right: 30%;
-
+                                @media only screen and (min-width: 1200px) and (max-width: 1400px) {
+                                    margin-right: 0;
+                                }
                                 margin-bottom: 15px;
                             }
                         }
@@ -144,53 +170,10 @@ $breakpoint-xxl: 2400px;
                         }
                     }
                 }
-                @media (max-width: $breakpoint-xxl) {
-                    ul.slick-dots.slick-dots-bottom {
-                        bottom: 20%;
-                        left: 1.5%;
-                        right: inherit;
-                    }
-                }
-                @media (max-width: $breakpoint-xl) {
-                    ul.slick-dots.slick-dots-bottom {
-                        bottom: 10%;
-                        left: -0.5%;
-                        right: inherit;
-                    }
-                }
-                @media (max-width: $breakpoint-lg) {
-                    ul.slick-dots.slick-dots-bottom {
-                        bottom: 5%;
-                        left: -3%;
-                        right: inherit;
-                    }
-                }
-
-                @media (max-width: $breakpoint-md) {
-                    ul.slick-dots.slick-dots-bottom {
-                        bottom: 20px;
-                        left: -45px;
-                        right: inherit;
-                    }
-                }
-                @media (max-width: $breakpoint-sm) {
-                    ul.slick-dots.slick-dots-bottom {
-                        bottom: 3%;
-                        left: -5%;
-                        right: inherit;
-                    }
-                }
-
                 @media (max-width: $breakpoint-xs) {
                     .slick-prev,
                     .slick-next {
                         display: none !important;
-                    }
-                    ul.slick-dots.slick-dots-bottom {
-                        bottom: 5%;
-                        left: -11%;
-
-                        right: inherit;
                     }
                 }
             }
@@ -242,10 +225,12 @@ $breakpoint-xxl: 2400px;
         }
     }
     .home-5168517 {
-        margin-top: 130px;
+        padding-top: 130px;
+        @media (max-width: $breakpoint-lg) {
+            padding-top: 60px;
+        }
         h3 {
             max-width: 860px;
-
             display: block;
             margin: auto;
             font-weight: 500;
@@ -257,6 +242,9 @@ $breakpoint-xxl: 2400px;
         }
         .list-benefit {
             padding: 0 10%;
+            @media (max-width: $breakpoint-sm) {
+                padding: 0 20px;
+            }
             .ant-col.ant-col-md-12.ant-col-xl-6 {
                 display: flex;
                 justify-content: center;
@@ -350,7 +338,6 @@ $breakpoint-xxl: 2400px;
                 padding-right: 50px;
                 .jsTK77 {
                     font-family: 'Graphik-Medium';
-                    padding-top: 0px;
                 }
             }
             h6 {
@@ -404,11 +391,23 @@ $breakpoint-xxl: 2400px;
         margin-top: 200px;
         align-items: center;
         padding: 0 10%;
+        @media only screen and (min-width: 1200px) and (max-width: 1600px) {
+            padding: 0 2%;
+            .ant-col-xl-offset-2 {
+                margin-left: 0;
+            }
+        }
         .kZ7t2Rf2 {
             svg:nth-child(1) {
                 display: block;
             }
             svg:nth-child(2) {
+                display: none;
+            }
+            img:nth-child(1) {
+                display: block;
+            }
+            img:nth-child(2) {
                 display: none;
             }
         }
@@ -459,15 +458,7 @@ $breakpoint-xxl: 2400px;
             }
         }
     }
-    .jjRTz9U2.qqF2J1H {
-        @media only screen and (min-width: 1200px) and (max-width: 1600px) {
-            justify-content: space-between;
-            padding: 0 2%;
-            .ant-col-xl-offset-2 {
-                margin-left: 0;
-            }
-        }
-    }
+
     .did-you-know {
         height: 571px;
         background: rgba(0, 182, 122, 0.12);
@@ -485,10 +476,12 @@ $breakpoint-xxl: 2400px;
                 display: none;
             }
         }
-        @media (max-width: $breakpoint-xl) {
+        @media (max-width: $breakpoint-md) {
+            margin: 0;
+            margin-top: 100px;
+        }
+        @media (max-width: $breakpoint-sm) {
             min-height: 500px;
-            background: rgba(0, 182, 122, 0.12);
-            border-radius: 6px;
             margin: 0;
             margin-top: 100px;
             padding-top: 55px;
@@ -519,6 +512,9 @@ $breakpoint-xxl: 2400px;
         .home-frequently {
             h3 {
                 color: #001064;
+                @media only screen and (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm) {
+                    margin-top: 160px;
+                }
             }
             .custom-button {
                 display: block;
@@ -595,6 +591,12 @@ $breakpoint-xxl: 2400px;
             letter-spacing: -0.5px;
             color: #001064;
             margin-bottom: 30px;
+        }
+        svg {
+            margin-top: -100px;
+            @media (max-width: $breakpoint-sm) {
+                margin-top: 0;
+            }
         }
     }
 
@@ -703,14 +705,6 @@ $breakpoint-xxl: 2400px;
             justify-content: center;
             padding: 0;
             margin-top: 100px;
-            .kZ7t2Rf2 {
-                // svg:nth-child(1) {
-                //   display: none;
-                // }
-                // svg:nth-child(2) {
-                //   display: block;
-                // }
-            }
             .home-kz12 {
                 margin-top: 50px;
                 padding: 0 8%;
@@ -721,28 +715,28 @@ $breakpoint-xxl: 2400px;
             }
         }
 
-        .did-you-know {
-            min-height: 500px;
-            background: rgba(0, 182, 122, 0.12);
-            border-radius: 6px;
-            margin: 0;
-            margin-top: 100px;
-            padding-top: 0;
-            justify-content: center;
-            .kj2klk3 {
-                svg:nth-child(1) {
-                    display: none;
-                }
-                svg:nth-child(2) {
-                    display: block;
-                }
-            }
-            .lkk4KUz {
-                margin-bottom: 40px;
-                display: flex;
-                justify-content: center;
-            }
-        }
+        // .did-you-know {
+        //     min-height: 500px;
+        //     background: rgba(0, 182, 122, 0.12);
+        //     border-radius: 6px;
+        //     margin: 0;
+        //     margin-top: 100px;
+        //     padding-top: 0;
+        //     justify-content: center;
+        //     .kj2klk3 {
+        //         svg:nth-child(1) {
+        //             display: none;
+        //         }
+        //         svg:nth-child(2) {
+        //             display: block;
+        //         }
+        //     }
+        //     .lkk4KUz {
+        //         margin-bottom: 40px;
+        //         display: flex;
+        //         justify-content: center;
+        //     }
+        // }
 
         .home-kzmd2LD {
             margin: 0 5%;
@@ -872,6 +866,12 @@ $breakpoint-xxl: 2400px;
                     display: none;
                 }
                 svg:nth-child(2) {
+                    display: block;
+                }
+                img:nth-child(1) {
+                    display: none;
+                }
+                img:nth-child(2) {
                     display: block;
                 }
             }

@@ -11,9 +11,11 @@ import { Header } from 'antd/lib/layout/layout';
 import ModalBeforeStart from 'components/StartYourWill/Modal/ModalBeforeStart';
 import ModalContinueYourWill from 'components/StartYourWill/Modal/ModalContinueYourWill';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 import ModalLogout from './ModalLogOut';
 function HeaderDashboard(props) {
+    const router = useRouter();
     const [isShowModal, setIsShowModal] = useState(false);
     const [showModalLogout, setShowModalLogout] = useState(false);
     const refDrawer = useRef();
@@ -43,17 +45,27 @@ function HeaderDashboard(props) {
                 align='middle'
                 className='header-large'
             >
-                <Col>
+                <Col onClick={() => router.push('/')}>
                     <HomeIconLogoHeader />
                 </Col>
                 <Col>
                     <Row justify='space-between' align='middle'>
-                        <Col>
+                        <Col
+                            className={
+                                router.pathname == '/your-lagacy'
+                                    ? 'active'
+                                    : ''
+                            }
+                        >
                             <Link href='/your-lagacy'>
                                 <a>Dashboard</a>
                             </Link>
                         </Col>
-                        <Col>
+                        <Col
+                            className={
+                                router.pathname == '/my-account' ? 'active' : ''
+                            }
+                        >
                             <Link href='/my-account'>
                                 <a>Account</a>
                             </Link>
@@ -80,7 +92,7 @@ function HeaderDashboard(props) {
                 className='header-small'
                 ref={refDrawer}
             >
-                <Col>
+                <Col onClick={() => router.push('/')}>
                     <HomeIconLogoHeaderMini />
                 </Col>
                 <Col>
@@ -97,12 +109,24 @@ function HeaderDashboard(props) {
                             getContainer={refDrawer?.current}
                         >
                             <Row className='drawer-content'>
-                                <Col>
+                                <Col
+                                    className={
+                                        router.pathname == '/your-lagacy'
+                                            ? 'active'
+                                            : ''
+                                    }
+                                >
                                     <Link href='/your-lagacy'>
                                         <a>Dashboard</a>
                                     </Link>
                                 </Col>
-                                <Col>
+                                <Col
+                                    className={
+                                        router.pathname == '/my-account'
+                                            ? 'active'
+                                            : ''
+                                    }
+                                >
                                     <Link href='/my-account'>
                                         <a>Account</a>
                                     </Link>
