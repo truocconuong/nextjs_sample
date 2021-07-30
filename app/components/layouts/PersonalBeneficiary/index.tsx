@@ -29,7 +29,7 @@ const PersonalBeneficiary = () => {
     id: id,
   };
   const dispatch = useDispatch();
-  const [visibleModal, setVisibleModal] = useState(true);
+  const [visibleModal, setVisibleModal] = useState(false);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
   const [visibleFormInput, setVisibleFormInput] = useState(true);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
@@ -90,7 +90,7 @@ const PersonalBeneficiary = () => {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: "/start-your-will",
+          router: "/personal-estates-listing/property",
         },
         () => {}
       )
