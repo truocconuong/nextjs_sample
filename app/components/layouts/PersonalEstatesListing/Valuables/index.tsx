@@ -1,6 +1,6 @@
 import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col, Select} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import CustomButton from "@generals/Button";
 import InputField from "@generals/InputField";
 import SelectField from "@generals/SelectField";
@@ -14,6 +14,8 @@ import {
   ValuablesImage,
   WatchIcon,
 } from "../../../../../public/images";
+import {useDispatch} from "react-redux";
+import {ProgressActions} from "@redux/actions";
 
 const {Option} = Select;
 
@@ -26,6 +28,7 @@ const options = [
 ];
 
 function ValuablesLayout(props) {
+  const dispatch = useDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowModalRemove, setIsShowModalRemove] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
@@ -39,6 +42,47 @@ function ValuablesLayout(props) {
     model: "",
     serialNo: "",
   });
+  const [isContinue, setIsContinue] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 0,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true,
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: "/lodge-will",
+        },
+        () => {}
+      )
+    );
+  }, []);
+
+  useEffect(() => {
+    if (listData.length > 0) {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => {}
+        )
+      );
+    }
+  }, [isContinue]);
 
   const handleReset = () => {
     setData({
@@ -66,6 +110,9 @@ function ValuablesLayout(props) {
     setListData(tempListData);
     // setNumberForm(tempListData.length + 1);
     handleReset();
+    if (!isContinue) {
+      setIsContinue(true);
+    }
   };
 
   const handleEdit = item => {
