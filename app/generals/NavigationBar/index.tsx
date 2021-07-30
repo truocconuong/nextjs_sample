@@ -154,12 +154,12 @@ const NavigationBar = () => {
                     pushable={pushable}
                   />
                 )}
-                <div className="back-container">
+                <div className="back-container" onClick={returnToDashBoard}>
                   <div className="back-wrapper">
-                    <div className="back" onClick={returnToDashBoard}>
+                    <div className="back">
                       Return to Dashboard
                     </div>
-                    <div className="icon-menu">
+                    <div className="icon-menu" >
                       <MenuIcon />
                     </div>
                   </div>
