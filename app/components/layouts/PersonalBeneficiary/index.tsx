@@ -17,6 +17,7 @@ import {
   CloseIcon,
 } from "../../../../public/images";
 import BeneficiaryFormInput from "@module/BeneficiaryFormInput";
+import { IBeneficiary } from "@constant/data.interface";
 
 const PersonalBeneficiary = () => {
   let [id, setId] = useState(1);
@@ -24,7 +25,8 @@ const PersonalBeneficiary = () => {
     legalName: "",
     email: "",
     passport: "",
-    relationship: "",
+    relationshipId: "",
+    relationshipName: "",
     type: "Main Beneficiary",
     id: id,
   };
@@ -36,7 +38,6 @@ const PersonalBeneficiary = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
   const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
 
   const width = useSelector(
     createSelector(
@@ -46,10 +47,22 @@ const PersonalBeneficiary = () => {
   );
   useEffect(() => {
     setIsMobile(width < 876);
-    setIsTablet(width > 700 && width < 1366)
   }, [width]);
 
+  const toApiDataForm = (dataForm: DataFormInput[]) => {
+    const dataRes: IBeneficiary[] = dataForm.map((dataForm: DataFormInput) => {
+      return {
+        full_legal_name: dataForm.legalName,
+        relationship_id: dataForm.relationshipId,
+        email: dataForm.email,
+        nric: dataForm.passport
+      }
+    })
+    return dataRes;
+  }
+
   const onSaveDataFormInput = (data: DataFormInput) => {
+    console.log("data", data)
     const dataFormCopy = [...dataForm];
     const index = dataFormCopy.findIndex((item) => item.id === data.id);
 
@@ -105,15 +118,16 @@ const PersonalBeneficiary = () => {
   };
 
   const onAddBeneficiaryAlterNative = () => {
+    const newId = ++id;
+    setId(newId)
     if (visibleFormInput) {
       return;
     }
     setEditingFormInput({
       ...initialDataForm,
       type: "Alternate Beneficiary",
-      id: id,
+      id: newId,
     });
-    setId(++id);
     setVisibleFormInput(true);
   };
 
@@ -167,7 +181,7 @@ const PersonalBeneficiary = () => {
                 <div className="card-item" key={item.id}>
                   <CardInfo
                     name={item.legalName}
-                    description={item.relationship}
+                    description={item.relationshipName}
                     isMobile={isMobile}
                     hightlightColor={"#EFF5FF"}
                     onEditCard={onEditCard}

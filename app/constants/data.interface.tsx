@@ -9,7 +9,8 @@ export interface IBeneficiary {
     full_legal_name: string;
     relationship_id: string;
     email: string;
-    percent: number;
+    percent?: number;
+    nric: string;
 }
 
 export interface IProperty {
@@ -90,4 +91,18 @@ export interface IData {
     investments: IInvestment[];
     business_interests: IBusinessInterest[];
     valuables: IValuable[];
+}
+
+export interface IMasterdata {
+    id: string;
+    name: string;
+    value: string;
+    is_enable: boolean;
+    updated_at: string;
+    created_at: string;
+}
+
+export interface RelationshipInterface {
+    id: number;
+    name: string;
 }

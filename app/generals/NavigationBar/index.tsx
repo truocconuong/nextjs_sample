@@ -9,12 +9,14 @@ import {
 } from "../../../public/images";
 
 import ProgressBar from "generals/Progress";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import SignInForm from "@layout/SignIn";
 import router from "next/router";
+import { MasterDataActions } from "@redux/actions";
 
 const NavigationBar = () => {
+  const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState(false);
   const width = useSelector(
     createSelector(
@@ -22,13 +24,13 @@ const NavigationBar = () => {
       (sizeBrowser) => sizeBrowser?.width
     )
   );
-  
+
   const [isShowSignIn, setIsShowSignIn] = useState(false);
 
   useEffect(() => {
     setIsMobile(width < 884)
   }, [width])
-  
+
   const disabledBtn = useSelector(
     createSelector(
       (state: any) => state?.progress,
@@ -108,7 +110,7 @@ const NavigationBar = () => {
                     <div className="container-back-wrap">
                       <div className="back-wrapper">
                       </div>
-                      <div className="back" onClick={() => {}}>
+                      <div className="back" onClick={() => { }}>
                         Dashboard
                       </div>
                       <div className="icon-menu">
@@ -166,8 +168,8 @@ const NavigationBar = () => {
                 </div>
               </div>
             </div>
-          )}  
-           {isShowSignIn && <SignInForm isMobile={isMobile}/>}
+          )}
+          {isShowSignIn && <SignInForm isMobile={isMobile} />}
         </div>
       </nav>
       <div className={isMobile ? "height-150" : "height-100"}></div>

@@ -6,14 +6,14 @@ import PersonalFormInput, { DataFormInput } from "@module/PersonalFormInput";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import router from "next/dist/client/router";
-import { ProgressActions } from "../../../../redux/actions";
+import { CategoryActions, GlobalDataActions, MasterDataActions, ProgressActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   PersonalIcon,
   PersonalMobileIcon,
   TipIcon,
 } from "../../../../public/images";
+import { IData } from "@constant/data.interface";
 
 const PersonalInformation = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,18 @@ const PersonalInformation = () => {
     description: "",
     id: 0,
   };
+
+  const categoryData= useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        console.log("category", category)
+        return category
+      }
+    )
+  );
+
+  console.log(categoryData)
 
 
   const width = useSelector(
@@ -73,14 +85,22 @@ const PersonalInformation = () => {
     );
   }, [])
 
+  useEffect(() => {
+    dispatch(MasterDataActions.getMasterData())
+    const token = localStorage.getItem("accessToken");
+    if(token){
+      dispatch(CategoryActions.getCategoriesData(token))
+    }
+  }, [])
+
   const initialDataForm: DataFormInput = {
-    legalName: "",
-    email: "",
-    passport: "",
-    address: "",
-    addressLine1: "",
-    addressLine2: "",
-    unitNumber: "",
+    legalName: categoryData?.full_legal_name,
+    email: categoryData?.email,
+    passport: categoryData?.nric,
+    address: categoryData?.postal_code,
+    addressLine1: categoryData?.address_line_1,
+    addressLine2: categoryData?.address_line_2,
+    unitNumber: categoryData?.unit_number,
   };
   const [dataForm, setDataForm] = useState<DataFormInput>(initialDataForm);
 
@@ -103,6 +123,7 @@ const PersonalInformation = () => {
         () => {}
       )
     );
+    dispatch(GlobalDataActions.setPersonalInformation(data, () => {}));
   };
 
   const onEditCard = (id: number) => {

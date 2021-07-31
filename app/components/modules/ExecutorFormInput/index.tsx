@@ -1,9 +1,13 @@
+import { MASTERDATA_TYPE } from "@constant/index";
+import { IMasterdata } from "@constant/data.interface";
 import { isEmail } from "@util/index";
 import { Select } from "antd";
 import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import SelectField from "generals/SelectField";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
 import {
   SaveIcon,
   UndoIcon,
@@ -11,7 +15,7 @@ import {
   UndoIconEnabled,
 } from "../../../../public/images";
 const { Option } = Select;
-interface executorFormPropsInterface {
+interface ExecutorFormPropsInterface {
   isMobile?: boolean;
   onSaveData: (data: any) => void;
   initialValue: DataFormInput;
@@ -25,7 +29,7 @@ export interface DataFormInput {
   type: string;
   id: number;
 }
-const executorFormInput = (props: executorFormPropsInterface) => {
+const executorFormInput = (props: ExecutorFormPropsInterface) => {
   const { isMobile, onSaveData, initialValue } = props;
   const initialState: DataFormInput = {
     legalName: "",
@@ -41,6 +45,24 @@ const executorFormInput = (props: executorFormPropsInterface) => {
   }, [initialValue])
 
   const [dataForm, setDataForm] = useState<DataFormInput>(initialValue);
+  const [relationships, setRelationShips] = useState<IMasterdata[]>([]);
+
+  
+  const masterdata = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => masterdata
+    )
+  );
+
+  useEffect(() => {
+    const relationships = masterdata.filter(item => item.value === MASTERDATA_TYPE.RELATIONSHIP);
+    setRelationShips(relationships);
+  }, [])
+
+  const onResetForm = () => {
+    setDataForm(initialState);
+  };
 
   const onValueChange = (key: string, value: string) => {
     const newDataForm = { ...dataForm };
@@ -48,16 +70,13 @@ const executorFormInput = (props: executorFormPropsInterface) => {
     setDataForm(newDataForm);
   };
 
-  const onResetForm = () => {
-    setDataForm(initialState);
-  };
 
   const isEnableForm = () => {
     const dataFormCopy = { ...dataForm };
     for (let key in dataFormCopy) {
-      if(key === "type" || key === "id"){
-        continue; 
-      }else{
+      if (key === "type" || key === "id") {
+        continue;
+      } else {
         if (dataFormCopy[key]) {
           return true;
         }
@@ -72,7 +91,7 @@ const executorFormInput = (props: executorFormPropsInterface) => {
       return false;
     }
     for (let key in dataFormCopy) {
-      if(key === 'id' || key === "type" || key === "email" || key === "passport"){
+      if (key === 'id' || key === "type" || key === "email" || key === "passport") {
         continue;
       }
       if (!dataFormCopy[key]) {
@@ -86,6 +105,7 @@ const executorFormInput = (props: executorFormPropsInterface) => {
     if (!isFullForm()) {
       return;
     }
+    console.log(dataForm)
     onSaveData(dataForm);
   };
 
@@ -118,8 +138,11 @@ const executorFormInput = (props: executorFormPropsInterface) => {
                 onChange: (value) => onValueChange("relationship", value),
               }}
             >
-              <Option value="Zhejiang">Zhejiang</Option>
-              <Option value="Jiangsu">Jiangsu</Option>
+              {
+                relationships.map((relationship) => <Option value={relationship.id}>{relationship.name}</Option>)
+              }
+             
+              
             </SelectField>
           </div>
         </div>

@@ -31,6 +31,35 @@ const globalDataReducer = (state = initialState, action): IData => {
         properties: data,
       };
     }
+    case PersonalEstatesListingTypes.SET_PERSONAL_INFORMATION: {
+      const {data, callback} = action?.payload;
+      const {legalName, address, addressLine1, addressLine2, email, passport, unitNumber} = data;
+      console.log("Data intergrated", data)
+      if (callback) {
+        callback(state);
+      }
+      return {
+        ...state,
+        email: email,
+        full_legal_name: legalName,
+        nric: passport,
+        postal_code: address,
+        address_line_1: addressLine1,
+        address_line_2: addressLine2,
+        unit_number: unitNumber
+      };
+    }
+    case PersonalEstatesListingTypes.SET_EXECUTOR: {
+      const {data, callback} = action?.payload;
+      console.log("Data intergrated", data)
+      if (callback) {
+        callback(state);
+      }
+      return {
+        ...state,
+        executors: data
+      };
+    }
     default: {
       return state;
     }

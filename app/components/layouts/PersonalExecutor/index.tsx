@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import router from "next/dist/client/router";
-import { ProgressActions } from "../../../../redux/actions";
+import { GlobalDataActions, ProgressActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   ExecutorMobileIcon,
@@ -15,6 +15,7 @@ import {
   TipIcon,
 } from "../../../../public/images";
 import ExecutorFormInput from "@module/ExecutorFormInput";
+import { IExecutor } from "@constant/data.interface";
 
 const PersonalExecutor = () => {
   const initialDataForm: DataFormInput = {
@@ -88,7 +89,20 @@ const PersonalExecutor = () => {
         () => {}
       )
     );
+    dispatch(GlobalDataActions.setExecutor(toApiDataForm(dataFormCopy), () => {}));
   };
+
+  const toApiDataForm = (dataForm: DataFormInput[]) => {
+    const dataRes: IExecutor[] = dataForm.map((dataForm: DataFormInput) => {
+      return {
+        full_legal_name: dataForm.legalName,
+        relationship_id: dataForm.relationship,
+        email: dataForm.email,
+        nric: dataForm.passport
+      }
+    })
+    return dataRes;
+  }
 
   const onEditCard = (_e: any, id: number) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
@@ -123,6 +137,7 @@ const PersonalExecutor = () => {
         )
       );
     }
+    dispatch(GlobalDataActions.setExecutor(toApiDataForm(newFormData), () => {}));
   };
 
   return (
