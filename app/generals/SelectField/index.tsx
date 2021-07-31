@@ -5,7 +5,7 @@ interface SelectFieldPropsInterface {
   label?: string;
   displayLabel?: boolean;
   selectProps?: SelectProps<any>;
-  children?: ReactElement[];
+  children?: any[];
   wrapperClassName?: string;
   searchable?: boolean;
 }

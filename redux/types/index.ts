@@ -20,4 +20,18 @@ export const StartYourWill = {
 
 export const PersonalEstatesListingTypes = {
   SET_PROPERTY: "SET_PROPERTY",
+  SET_PERSONAL_INFORMATION: "SET_PERSONAL_INFORMATION",
+  SET_EXECUTOR: "SET_EXECUTOR",
+  SET_BENEFICIARY: "SET_BENEFICIARY",
+}
+
+export const MasterDataTypes = {
+  GET_MASTER_DATA: "GET_MASTER_DATA",
+  SAVE_MASTER_DATA: "SAVE_MASTER_DATA",
+}
+
+
+export const CategoryTypes = {
+  GET_CATEGORY_DATA: "GET_CATEGORY_DATA",
+  SAVE_CATEGORY_DATA: "SAVE_CATEGORY_DATA",
 }

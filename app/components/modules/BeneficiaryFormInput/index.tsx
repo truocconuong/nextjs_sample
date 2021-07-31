@@ -1,13 +1,17 @@
+import { MASTERDATA_TYPE } from "@constant/index";
+import { IMasterdata } from "@constant/data.interface";
 import { isEmail } from "@util/index";
 import { Select } from "antd";
 import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import SelectField from "generals/SelectField";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
 import {
   SaveIcon,
   UndoIcon,
-  
+
   SaveIconEnabled,
   UndoIconEnabled,
 } from "../../../../public/images";
@@ -22,7 +26,8 @@ export interface DataFormInput {
   legalName: string;
   email: string;
   passport: string;
-  relationship: string;
+  relationshipId: string;
+  relationshipName: string;
   type: string;
   id: number;
 }
@@ -30,12 +35,28 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
   const { isMobile, onSaveData, initialValue } = props;
   const initialState: DataFormInput = {
     legalName: "",
-    relationship: "",
+    relationshipId: "",
+    relationshipName: "",
     passport: "",
     email: "",
     type: initialValue.type,
-    id: initialValue.id
+    id: initialValue.id,
   };
+
+  const [relationships, setRelationShips] = useState<IMasterdata[]>([]);
+
+
+  const masterdata = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => masterdata
+    )
+  );
+
+  useEffect(() => {
+    const relationships = masterdata.filter(item => item.value === MASTERDATA_TYPE.RELATIONSHIP);
+    setRelationShips(relationships);
+  }, [])
 
   useEffect(() => {
     setDataForm(initialValue)
@@ -56,9 +77,9 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
   const isEnableForm = () => {
     const dataFormCopy = { ...dataForm };
     for (let key in dataFormCopy) {
-      if(key === "type" || key === "id"){
-        continue; 
-      }else{
+      if (key === "type" || key === "id") {
+        continue;
+      } else {
         if (dataFormCopy[key]) {
           return true;
         }
@@ -73,7 +94,7 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
       return false;
     }
     for (let key in dataFormCopy) {
-      if(key === 'id' || key === "type" || key === "email" || key === "passport"){
+      if (key === 'id' || key === "type" || key === "email" || key === "passport") {
         continue;
       }
       if (!dataFormCopy[key]) {
@@ -89,6 +110,14 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
     }
     onSaveData(dataForm);
   };
+
+  const onChangeRelationShip = (id: string) => {
+    const relationship = masterdata.find(item => item.id === id);
+    const newDataForm = { ...dataForm };
+    newDataForm.relationshipId = relationship.id;
+    newDataForm.relationshipName = relationship.name;
+    setDataForm(newDataForm);
+  }
 
   return (
     <div className={"beneficiary-form-input-container"}>
@@ -118,13 +147,14 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
               displayLabel
               label="Relationship"
               selectProps={{
-                value: dataForm.relationship || undefined,
+                value: dataForm.relationshipId || undefined,
                 placeholder: "Select",
-                onChange: (value) => onValueChange("relationship", value),
+                onChange: (value) => onChangeRelationShip(value),
               }}
             >
-              <Option value="Zhejiang">Zhejiang</Option>
-              <Option value="Jiangsu">Jiangsu</Option>
+              {
+                relationships.map((relationship) => <Option value={relationship.id}>{relationship.name}</Option>)
+              }
             </SelectField>
           </div>
         </div>
