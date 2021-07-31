@@ -1,6 +1,6 @@
 import PersonalInformation from "@layout/PersonalInformation";
 import React from "react";
-import AuthHoc from "./AuthHOC";
+import AuthHoc from "./AuthHoc";
 
 const PersonalInformationScreen = () => {
   return <PersonalInformation />;
