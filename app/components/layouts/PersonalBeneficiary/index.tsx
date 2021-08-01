@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import router from "next/dist/client/router";
-import { ProgressActions } from "../../../../redux/actions";
+import { GlobalDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   TipIcon,
@@ -17,23 +17,48 @@ import {
   CloseIcon,
 } from "../../../../public/images";
 import BeneficiaryFormInput from "@module/BeneficiaryFormInput";
-import { IBeneficiary } from "@constant/data.interface";
+import { IBeneficiary, IData, IMasterdata } from "@constant/data.interface";
+import { v4 as uuidv4 } from 'uuid';
+import { MASTERDATA_TYPE } from "@constant/index";
 
 const PersonalBeneficiary = () => {
-  let [id, setId] = useState(1);
+  let [count, setCount] = useState(1);
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category
+      }
+    )
+  );
   const initialDataForm: DataFormInput = {
     legalName: "",
     email: "",
     passport: "",
-    relationshipId: "",
-    relationshipName: "",
-    type: "Main Beneficiary",
-    id: id,
+    relationship: "",
+    count: count,
+    id: uuidv4(),
   };
+
+  
+  const toDataFormInputBeneficiary = () => {
+    const dataForm: DataFormInput[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary, index) => {
+      return {
+        email: beneficiary.email || "",
+        legalName: beneficiary.full_legal_name || "",
+        id: beneficiary.id,
+        passport: beneficiary.nric || "",
+        relationship: beneficiary.relationship_id,
+        count: index + 1
+      }
+    })
+    return dataForm || [];
+  }
+  
   const dispatch = useDispatch();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
-  const [visibleFormInput, setVisibleFormInput] = useState(true);
+  const [visibleFormInput, setVisibleFormInput] = useState(false);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
   const [deletingId, setDeletingId] = useState(null);
   const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
@@ -45,15 +70,84 @@ const PersonalBeneficiary = () => {
       (sizeBrowser) => sizeBrowser?.width
     )
   );
+
   useEffect(() => {
     setIsMobile(width < 876);
   }, [width]);
+
+  useEffect(() => {
+    const dataForm = toDataFormInputBeneficiary();
+    setDataForm(dataForm);
+  }, [categoryData])
+
+  useEffect(() => {
+    if (dataForm.length === 1) {
+      setVisibleFormInput(false)
+      dispatch(
+        ProgressActions.setAmountPercentIncreament(
+          {
+            amountPercentIncreament: 0,
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setPushable(
+          {
+            pushable: true,
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setRouter(
+          {
+            router: "/personal-beneficiary",
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => { }
+        )
+      );
+    } else {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => { }
+        )
+      );
+    }
+    console.log(categoryData.beneficiaries)
+    if (dataForm.length === 0) {
+      setVisibleFormInput(true)
+    }
+    if (dataForm.length > 0) {
+      setVisibleFormInput(false)
+    }
+    setCount(dataForm.length)
+  }, [dataForm])
+
+  // useEffect(() => {
+  //   console.log("categor data", categoryData)
+  //   if (!localStorage.getItem("accessToken") || (!categoryData?.beneficiaries || categoryData?.beneficiaries?.length === 0)) {
+  //     console.log("nhay vao day")
+  //     setVisibleFormInput(true);
+  //   }
+  // }, [])
 
   const toApiDataForm = (dataForm: DataFormInput[]) => {
     const dataRes: IBeneficiary[] = dataForm.map((dataForm: DataFormInput) => {
       return {
         full_legal_name: dataForm.legalName,
-        relationship_id: dataForm.relationshipId,
+        relationship_id: dataForm.relationship,
         email: dataForm.email,
         nric: dataForm.passport
       }
@@ -62,26 +156,45 @@ const PersonalBeneficiary = () => {
   }
 
   const onSaveDataFormInput = (data: DataFormInput) => {
-    console.log("data", data)
     const dataFormCopy = [...dataForm];
     const index = dataFormCopy.findIndex((item) => item.id === data.id);
 
     if (index > -1) {
       dataFormCopy[index] = data;
+    }
+    
+    if (categoryData) {
+      const token = localStorage.getItem("accessToken");
+      const dataBeneficiary: IBeneficiary= toDataApiBeneficiary(data);
+      const found = categoryData?.beneficiaries?.find(item => item.id === data.id);
+
+      (found || index > -1) ? dispatch(UserActions.updateBeneficiary(dataBeneficiary, `${data.id}`, token, () => {
+        setDataForm(dataFormCopy);
+        setVisibleFormInput(false);
+       })) : 
+      dispatch(UserActions.createBeneficiary(dataBeneficiary, token, (dataBenefy: IBeneficiary) => {
+        data.id = dataBenefy.id;
+        dataFormCopy.push(data);
+        setDataForm(dataFormCopy);
+        setVisibleFormInput(false);
+      }));
     } else {
       dataFormCopy.push(data);
+      setDataForm(dataFormCopy);
+      setVisibleFormInput(false);
+      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(dataFormCopy), () => {}));
     }
-    setDataForm(dataFormCopy);
-    setVisibleFormInput(false);
-    dispatch(
-      ProgressActions.setDisabled(
-        {
-          disabled: false,
-        },
-        () => {}
-      )
-    );
   };
+
+  
+  const toDataApiBeneficiary = (dataForm: DataFormInput) => {
+    return {
+      full_legal_name: dataForm?.legalName || "",
+      relationship_id: dataForm?.relationship || "",
+      email: dataForm?.email || undefined,
+      nric: dataForm?.passport || undefined,
+    }
+  }
 
   useEffect(() => {
     dispatch(
@@ -89,7 +202,7 @@ const PersonalBeneficiary = () => {
         {
           pushable: true,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -97,7 +210,7 @@ const PersonalBeneficiary = () => {
         {
           amountPercentIncreament: 10,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -105,28 +218,27 @@ const PersonalBeneficiary = () => {
         {
           router: "/personal-estates-listing/property",
         },
-        () => {}
+        () => { }
       )
     );
   }, [])
-  
 
-  const onEditCard = (_e: any, id: number) => {
+
+  const onEditCard = (_e: any, id: string) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
     setEditingFormInput(editingForm);
     setVisibleFormInput(true);
   };
 
   const onAddBeneficiaryAlterNative = () => {
-    const newId = ++id;
-    setId(newId)
+    const newCount = ++count;
+    setCount(newCount);
     if (visibleFormInput) {
       return;
     }
     setEditingFormInput({
       ...initialDataForm,
-      type: "Alternate Beneficiary",
-      id: newId,
+      count: newCount
     });
     setVisibleFormInput(true);
   };
@@ -136,17 +248,42 @@ const PersonalBeneficiary = () => {
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
     setDataForm(newFormData);
     setVisibleModalDelete(false);
-    if(newFormData.length === 0){
+    if (newFormData.length === 0) {
       dispatch(
         ProgressActions.setDisabled(
           {
             disabled: true,
           },
-          () => {}
+          () => { }
         )
       );
+      setEditingFormInput({
+        ...initialDataForm,
+      });
+    }
+    if (categoryData) {
+      const token = localStorage.getItem("accessToken");
+      dispatch(UserActions.deleteBeneficiary({is_delete: true}, deletingId, token, () => { }));
+    } else {
+      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(newFormData), () => { }));
     }
   };
+
+  const masterdata = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => masterdata
+    )
+  );
+
+  const getRelationship = (id: string) => {
+    console.log("id", id)
+    console.log("master data", masterdata)
+    const found = masterdata.filter(item => item.value === MASTERDATA_TYPE.RELATIONSHIP).find(item => item.id === id);
+    return found?.name;
+  }
+
+  console.log("data form,,", dataForm)
 
   return (
     <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
@@ -181,13 +318,14 @@ const PersonalBeneficiary = () => {
                 <div className="card-item" key={item.id}>
                   <CardInfo
                     name={item.legalName}
-                    description={item.relationshipName}
+                    description={getRelationship(item.relationship)}
                     isMobile={isMobile}
                     hightlightColor={"#EFF5FF"}
                     onEditCard={onEditCard}
                     id={item.id}
                     canDelete={true}
-                    onDeleteCardItem={(id: number) => {
+                    hightlightText={item.count}
+                    onDeleteCardItem={(id: string) => {
                       setDeletingId(id);
                       setVisibleModalDelete(true);
                     }}
@@ -195,7 +333,7 @@ const PersonalBeneficiary = () => {
                 </div>
               );
             })}
-            {(visibleFormInput || dataForm.length === 0) && (
+            {visibleFormInput && (
               <BeneficiaryFormInput
                 isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}

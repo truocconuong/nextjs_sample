@@ -17,6 +17,7 @@ export interface IBeneficiary {
     email: string;
     percent?: number;
     nric: string;
+    id?: string;
 }
 
 export interface IProperty {

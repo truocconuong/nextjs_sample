@@ -2,7 +2,7 @@ import { DataFormInput as  DataPersonal} from "@module/PersonalFormInput";
 import { DataFormInput as DataBeneficiary } from "@module/BeneficiaryFormInput";
 import { DataFormInput as DataExecutor } from "@module/ExecutorFormInput";
 import { PersonalEstatesListingTypes } from "../types";
-import { IExecutor } from "@constant/data.interface";
+import { IBeneficiary, IExecutor } from "@constant/data.interface";
 
 export const setProperty = (data, callback) => {
     return { 
@@ -34,7 +34,7 @@ export const setExecutor = (data: IExecutor[], callback) => {
     }
 }
 
-export const setBeneficiary = (data: DataBeneficiary, callback) => {
+export const setBeneficiary = (data: IBeneficiary[], callback) => {
     return { 
         type: PersonalEstatesListingTypes.SET_BENEFICIARY,
         payload: {

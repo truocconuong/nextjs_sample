@@ -56,8 +56,7 @@ const PersonalExecutor = () => {
   );
 
   useEffect(() => {
-    const dataForm = toDataFormInnputExecutors();
-    console.log("category", categoryData)
+    const dataForm = toDataFormInputExecutors();
     setDataForm(dataForm);
   }, [categoryData])
 
@@ -115,12 +114,13 @@ const PersonalExecutor = () => {
 
   useEffect(() => {
     if(!localStorage.getItem("accessToken") || (!categoryData?.executors || categoryData?.executors?.length === 0)){
+      console.log("nhay vao")
       setVisibleFormInput(true);
     }
   }, [])
 
-  const toDataFormInnputExecutors = () => {
-    const dataForm: DataFormInput[] = categoryData?.executors?.map((executor: IExecutor, index) => {
+  const toDataFormInputExecutors = () => {
+    const dataForm: DataFormInput[] = categoryData?.executors?.map((executor: IExecutor) => {
       return {
         email: executor.email || "",
         legalName: executor.full_legal_name || "",
@@ -139,22 +139,32 @@ const PersonalExecutor = () => {
 
     if (index > -1) {
       dataFormCopy[index] = data;
-    } else {
-      dataFormCopy.push(data);
     }
-    setDataForm(dataFormCopy);
-    setVisibleFormInput(false);
     
     if (categoryData) {
       const token = localStorage.getItem("accessToken");
-      const dataUpdate: IExecutor = toApiUpdateExecutor(data);
-      dispatch(UserActions.updateExecutor(dataUpdate, `${data.id}`, token, () => { }));
+      const dataExecutorRequest: IExecutor= toDataApiExecutor(data);
+      const found = categoryData?.beneficiaries?.find(item => item.id === data.id);
+
+      (found || index > -1) ? dispatch(UserActions.updateExecutor(dataExecutorRequest, `${data.id}`, token, () => {
+        setDataForm(dataFormCopy);
+        setVisibleFormInput(false);
+       })) : 
+      dispatch(UserActions.createExecutor(dataExecutorRequest, token, (dataExecutor: IExecutor) => {
+        data.id = dataExecutor.id;
+        dataFormCopy.push(data);
+        setDataForm(dataFormCopy);
+        setVisibleFormInput(false);
+      }));
     } else {
+      dataFormCopy.push(data);
+      setDataForm(dataFormCopy);
+      setVisibleFormInput(false);
       dispatch(GlobalDataActions.setExecutor(toApiDataForm(dataFormCopy), () => {}));
     }
   };
 
-  const toApiUpdateExecutor = (dataForm: DataFormInput) => {
+  const toDataApiExecutor = (dataForm: DataFormInput) => {
     return {
       full_legal_name: dataForm?.legalName || "",
       relationship_id: dataForm?.relationship || "",
