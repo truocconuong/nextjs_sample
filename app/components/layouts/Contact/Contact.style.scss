@@ -84,14 +84,16 @@ $breakpoint-xxl: 2400px;
             padding: 32px;
             .form-item {
                 margin-bottom: 32px;
-                .wrapper-first-name {
-                    padding-right: 8px;
-                }
-                .wrapper-last-name {
-                    padding-left: 8px;
-                }
                 label {
                     margin-bottom: 12px;
+                }
+            }
+            .btn-cf {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                @media (max-width: $breakpoint-sm) {
+                    justify-content: center;
                 }
             }
         }
