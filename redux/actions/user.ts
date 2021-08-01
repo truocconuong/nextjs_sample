@@ -1,16 +1,23 @@
-import { IMasterdata } from "@constant/data.interface";
-import { MasterDataTypes } from "../types";
+import { IExecutor, IPersonalInformation } from "@constant/data.interface";
+import { UserTypes } from "../types";
 
-export const getMasterData = (data?: any, callback?: any) => {
+export const updatePersonalInformation = (data: IPersonalInformation, id: string,  token: string, callback?: any) => {
   return {
-    type: MasterDataTypes.GET_MASTER_DATA,
-    payload: { data, callback },
+    type: UserTypes.UPDATE_PERSONAL_INFORMATION,
+    payload: { data, id, callback, token },
   };
 };
 
-export const saveMasterData = (data: IMasterdata[]) => {
-    return {
-      type: MasterDataTypes.SAVE_MASTER_DATA,
-      payload: { data },
-    };
+export const updateExecutor = (data: IExecutor, id: string,  token: string, callback?: any) => {
+  return {
+    type: UserTypes.UPDATE_PERSONAL_EXECUTOR,
+    payload: { data, id, callback, token },
   };
+};
+
+export const deleteExecutor = (data: {is_delete: boolean}, id: string,  token: string, callback?: any) => {
+  return {
+    type: UserTypes.UPDATE_PERSONAL_EXECUTOR,
+    payload: { data, id, callback, token },
+  };
+};

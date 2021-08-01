@@ -4,14 +4,14 @@ import { EditIcon, DeleteIcon } from "../../../public/images";
 export interface CardInfoDataPropsInterface {
   name: string;
   description: string;
-  id: number;
+  id: string;
 }
 export interface CardInfoPropsInterface extends CardInfoDataPropsInterface {
   isMobile: boolean;
   hightlightColor: string;
-  onEditCard: (e: any, id: number) => void;
+  onEditCard: (e: any, id: string) => void;
   canDelete?: boolean;
-  onDeleteCardItem?: (key: number) => void;
+  onDeleteCardItem?: (key: string) => void;
 }
 const CardInfo = (props: CardInfoPropsInterface) => {
   const {

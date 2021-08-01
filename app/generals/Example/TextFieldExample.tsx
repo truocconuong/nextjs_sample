@@ -99,6 +99,7 @@ const Example = () => {
                   selectProps={{
                     placeholder: "Select",
                     className: "full-width",
+                    onChange: value => console.log("value", value)
                   }}
                   searchable
                   wrapperClassName="wrapper-select"

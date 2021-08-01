@@ -6,8 +6,7 @@ import { DataFormInput } from "@module/ExecutorFormInput";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import router from "next/dist/client/router";
-import { GlobalDataActions, ProgressActions } from "../../../../redux/actions";
+import { GlobalDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   ExecutorMobileIcon,
@@ -15,7 +14,8 @@ import {
   TipIcon,
 } from "../../../../public/images";
 import ExecutorFormInput from "@module/ExecutorFormInput";
-import { IExecutor } from "@constant/data.interface";
+import { IData, IExecutor } from "@constant/data.interface";
+import { v4 as uuidv4 } from 'uuid';
 
 const PersonalExecutor = () => {
   const initialDataForm: DataFormInput = {
@@ -24,13 +24,13 @@ const PersonalExecutor = () => {
     passport: "",
     relationship: "",
     type: "Main Executor",
-    id: 0,
+    id: uuidv4(),
   };
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
-  const [visibleFormInput, setVisibleFormInput] = useState(true);
+  const [visibleFormInput, setVisibleFormInput] = useState(false);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
   const [deletingId, setDeletingId] = useState(null);
   const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
@@ -46,6 +46,93 @@ const PersonalExecutor = () => {
     setIsMobile(width < 876)
   }, [width])
 
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category
+      }
+    )
+  );
+
+  useEffect(() => {
+    const dataForm = toDataFormInnputExecutors();
+    console.log("category", categoryData)
+    setDataForm(dataForm);
+  }, [categoryData])
+
+  useEffect(() => {
+    if(dataForm.length === 2){
+      dispatch(
+        ProgressActions.setAmountPercentIncreament(
+          {
+            amountPercentIncreament: 0,
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setPushable(
+          {
+            pushable: true,
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setRouter(
+          {
+            router: "/personal-beneficiary",
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => { }
+        )
+      );
+    }else {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => { }
+        )
+      );
+    }
+    if(dataForm.length === 0 && deletingId) {
+      setVisibleFormInput(true)
+    }
+    if(dataForm.length > 0) {
+      setVisibleFormInput(false)
+    }
+  }, [dataForm])
+
+  useEffect(() => {
+    if(!localStorage.getItem("accessToken") || (!categoryData?.executors || categoryData?.executors?.length === 0)){
+      setVisibleFormInput(true);
+    }
+  }, [])
+
+  const toDataFormInnputExecutors = () => {
+    const dataForm: DataFormInput[] = categoryData?.executors?.map((executor: IExecutor, index) => {
+      return {
+        email: executor.email || "",
+        legalName: executor.full_legal_name || "",
+        id: executor.id,
+        passport: executor.nric || "",
+        relationship: executor.relationship_id || "",
+        type: executor.type
+      }
+    })
+    return dataForm || [];
+  }
+
   const onSaveDataFormInput = (data: DataFormInput) => {
     const dataFormCopy = [...dataForm];
     const index = dataFormCopy.findIndex((item) => item.id === data.id);
@@ -57,54 +144,40 @@ const PersonalExecutor = () => {
     }
     setDataForm(dataFormCopy);
     setVisibleFormInput(false);
-    dispatch(
-      ProgressActions.setAmountPercentIncreament(
-        {
-          amountPercentIncreament: 0,
-        },
-        () => {}
-      )
-    );
-    dispatch(
-      ProgressActions.setPushable(
-        {
-          pushable: true,
-        },
-        () => {}
-      )
-    );
-    dispatch(
-      ProgressActions.setRouter(
-        {
-          router: "/personal-beneficiary",
-        },
-        () => {}
-      )
-    );
-    dispatch(
-      ProgressActions.setDisabled(
-        {
-          disabled: false,
-        },
-        () => {}
-      )
-    );
-    dispatch(GlobalDataActions.setExecutor(toApiDataForm(dataFormCopy), () => {}));
+    
+    if (categoryData) {
+      const token = localStorage.getItem("accessToken");
+      const dataUpdate: IExecutor = toApiUpdateExecutor(data);
+      dispatch(UserActions.updateExecutor(dataUpdate, `${data.id}`, token, () => { }));
+    } else {
+      dispatch(GlobalDataActions.setExecutor(toApiDataForm(dataFormCopy), () => {}));
+    }
   };
 
+  const toApiUpdateExecutor = (dataForm: DataFormInput) => {
+    return {
+      full_legal_name: dataForm?.legalName || "",
+      relationship_id: dataForm?.relationship || "",
+      email: dataForm?.email || undefined,
+      nric: dataForm?.passport || undefined,
+      type: dataForm?.type
+    }
+  }
+
   const toApiDataForm = (dataForm: DataFormInput[]) => {
-    const dataRes: IExecutor[] = dataForm.map((dataForm: DataFormInput) => {
+    const dataRes: IExecutor[] = dataForm?.map((dataForm: DataFormInput) => {
       return {
-        full_legal_name: dataForm.legalName,
-        relationship_id: dataForm.relationship,
-        email: dataForm.email,
-        nric: dataForm.passport
+        full_legal_name: dataForm.legalName || "",
+        relationship_id: dataForm.relationship || "",
+        email: dataForm.email || undefined,
+        nric: dataForm.passport || undefined,
+        type: dataForm?.type
       }
-    })
+    }).filter(item => item)
     return dataRes;
   }
 
-  const onEditCard = (_e: any, id: number) => {
+  const onEditCard = (_e: any, id: string) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
     setEditingFormInput(editingForm);
     setVisibleFormInput(true);
@@ -116,8 +189,7 @@ const PersonalExecutor = () => {
     }
     setEditingFormInput({
       ...initialDataForm,
-      type: "Alternate Executor",
-      id: ++initialDataForm.id,
+      type: "Alternate Executor"
     });
     setVisibleFormInput(true);
   };
@@ -127,18 +199,29 @@ const PersonalExecutor = () => {
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
     setDataForm(newFormData);
     setVisibleModalDelete(false);
-    if(newFormData.length === 0){
+    if (newFormData.length === 0) {
       dispatch(
         ProgressActions.setDisabled(
           {
             disabled: true,
           },
-          () => {}
+          () => { }
         )
       );
+      setEditingFormInput({
+        ...initialDataForm,
+        type: "Main Executor"
+      });
     }
-    dispatch(GlobalDataActions.setExecutor(toApiDataForm(newFormData), () => {}));
+    if (categoryData) {
+      const token = localStorage.getItem("accessToken");
+      dispatch(UserActions.deleteExecutor({is_delete: true}, deletingId, token, () => { }));
+    } else {
+      dispatch(GlobalDataActions.setExecutor(toApiDataForm(newFormData), () => { }));
+    }
   };
+
+  console.log("category data", !categoryData?.executors)
 
   return (
     <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
@@ -170,7 +253,7 @@ const PersonalExecutor = () => {
           }
         >
           <div className="card-form-wrapper">
-            {dataForm.map((item: DataFormInput) => {
+            {dataForm?.map((item: DataFormInput) => {
               return (
                 <div className="card-item" key={item.id}>
                   <CardInfo
@@ -181,7 +264,7 @@ const PersonalExecutor = () => {
                     onEditCard={onEditCard}
                     id={item.id}
                     canDelete={true}
-                    onDeleteCardItem={(id: number) => {
+                    onDeleteCardItem={(id: string) => {
                       setDeletingId(id);
                       setVisibleModalDelete(true);
                     }}
@@ -190,7 +273,7 @@ const PersonalExecutor = () => {
               );
             })}
 
-            {(visibleFormInput || dataForm.length === 0) && (
+            {(visibleFormInput) && (
               <ExecutorFormInput
                 isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
