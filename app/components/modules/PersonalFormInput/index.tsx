@@ -43,7 +43,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
   };
 
   const onResetForm = () => {
-    setDataForm(initialState);
+    setDataForm(initialValue);
   };
 
   const isEnableForm = () => {
@@ -140,6 +140,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
                 value: dataForm.address,
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                   onValueChange("address", e?.target?.value),
+                maxLength: 6
               }}
               searchable
               onSearch={onSearchAddress}

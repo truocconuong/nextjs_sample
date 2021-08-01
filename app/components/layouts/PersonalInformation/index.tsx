@@ -30,7 +30,6 @@ const PersonalInformation = () => {
     createSelector(
       (state: any) => state?.category,
       (category: IData) => {
-        console.log("category", category)
         return category
       }
     )
@@ -94,13 +93,13 @@ const PersonalInformation = () => {
   }, [])
 
   const initialDataForm: DataFormInput = {
-    legalName: categoryData?.full_legal_name,
-    email: categoryData?.email,
-    passport: categoryData?.nric,
-    address: categoryData?.postal_code,
-    addressLine1: categoryData?.address_line_1,
-    addressLine2: categoryData?.address_line_2,
-    unitNumber: categoryData?.unit_number,
+    legalName: categoryData?.full_legal_name || "",
+    email: categoryData?.email || "",
+    passport: categoryData?.nric || "",
+    address: categoryData?.postal_code || "",
+    addressLine1: categoryData?.address_line_1 || "",
+    addressLine2: categoryData?.address_line_2 || "",
+    unitNumber: categoryData?.unit_number || "",
   };
   const [dataForm, setDataForm] = useState<DataFormInput>(initialDataForm);
 
@@ -123,7 +122,11 @@ const PersonalInformation = () => {
         () => {}
       )
     );
-    dispatch(GlobalDataActions.setPersonalInformation(data, () => {}));
+    if(categoryData){
+      
+    }else{
+      dispatch(GlobalDataActions.setPersonalInformation(data, () => {}));
+    }
   };
 
   const onEditCard = (id: number) => {
