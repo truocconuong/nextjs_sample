@@ -12,7 +12,8 @@
     letter-spacing: -0.5px;
     color: #001064;
   }
-  .label-input-field, .label-select-field {
+  .label-input-field,
+  .label-select-field {
     margin-bottom: 16px;
   }
   .select-searchable {
@@ -208,6 +209,19 @@
   }
 }
 
+.error-selectable {
+  border: 1px solid #fb3640 !important;
+  color: #fb3640 !important;
+  .ant-select-selector {
+    border: none !important;
+  }
+
+  .ant-select,
+  .ant-select-single,
+  .ant-select-show-arrow {
+    border: none !important;
+  }
+}
 .ant-select-dropdown {
   border: 1px solid #001064;
   box-sizing: border-box;

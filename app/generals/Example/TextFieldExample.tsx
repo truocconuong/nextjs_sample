@@ -74,6 +74,24 @@ const Example = () => {
 
             <Col span={24}>
               <div className="container-input">
+                <div className="description">Selector / Error</div>
+                <SelectField
+                  displayLabel
+                  label="Input Field"
+                  selectProps={{
+                    placeholder: "Select",
+                    className: "full-width",
+                  }}
+                  isError
+                  errorTextStr="Error Text"
+                  displayErrorText
+                  wrapperClassName="wrapper-select"
+                ></SelectField>
+              </div>
+            </Col>
+
+            <Col span={24}>
+              <div className="container-input">
                 <div className="description">Selector / Searching</div>
                 <SelectField
                   displayLabel
@@ -83,6 +101,28 @@ const Example = () => {
                     className: "full-width",
                   }}
                   searchable
+                  wrapperClassName="wrapper-select"
+                >
+                  <Option value="Zhejiang">Zhejiang</Option>
+                  <Option value="Jiangsu">Jiangsu</Option>
+                </SelectField>
+              </div>
+            </Col>
+
+            <Col span={24}>
+              <div className="container-input">
+                <div className="description">Selector / Searchable Error</div>
+                <SelectField
+                  displayLabel
+                  label="Input Field"
+                  selectProps={{
+                    placeholder: "Select",
+                    className: "full-width",
+                  }}
+                  searchable
+                  isError
+                  errorTextStr="Error Text"
+                  displayErrorText
                   wrapperClassName="wrapper-select"
                 >
                   <Option value="Zhejiang">Zhejiang</Option>

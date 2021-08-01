@@ -8,6 +8,9 @@ interface SelectFieldPropsInterface {
   children?: any[];
   wrapperClassName?: string;
   searchable?: boolean;
+  isError?: boolean;
+  displayErrorText?: boolean;
+  errorTextStr?: string;
 }
 const SelectField = (props: SelectFieldPropsInterface) => {
   const {
@@ -17,6 +20,9 @@ const SelectField = (props: SelectFieldPropsInterface) => {
     children,
     wrapperClassName,
     searchable,
+    displayErrorText,
+    isError,
+    errorTextStr
   } = props;
   return (
     <div className={"select-field-container " + (wrapperClassName || "")}>
@@ -29,7 +35,8 @@ const SelectField = (props: SelectFieldPropsInterface) => {
           )}
         </Col>
         {searchable ? (
-          <Col span={24} className="select-searchable">
+          <Col span={24} className={"select-searchable " + (isError
+            ? " error-selectable" : "")}>
             <div className="search-icon">
               <IconSearch />
             </div>
@@ -58,12 +65,15 @@ const SelectField = (props: SelectFieldPropsInterface) => {
                 (selectProps?.value && !selectProps?.disabled
                   ? " box-shadow "
                   : "")
+                + (isError
+                  ? " error-selectable" : "")
               }
             >
               {children}
             </Select>
           </Col>
         )}
+        {displayErrorText && <div className="error-text">{errorTextStr}</div>}
       </Row>
     </div>
   );
