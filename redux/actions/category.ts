@@ -9,9 +9,8 @@ export const getCategoriesData = (token: string) => {
 };
 
 export const saveCategoriesData = (data: IData) => {
-  console.log("data nhan dc", data)
-    return {
-      type: CategoryTypes.SAVE_CATEGORY_DATA,
-      payload: { data },
-    };
+  return {
+    type: CategoryTypes.SAVE_CATEGORY_DATA,
+    payload: { data },
   };
+};

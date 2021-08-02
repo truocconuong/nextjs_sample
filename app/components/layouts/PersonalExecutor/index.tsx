@@ -18,12 +18,10 @@ import { IData, IExecutor } from "@constant/data.interface";
 import { v4 as uuidv4 } from 'uuid';
 interface IPersonalExecutorProps {
   data?: IData;
-  firstRender: boolean
+  firstRender: boolean;
 }
 const PersonalExecutor = (props: IPersonalExecutorProps) => {
   const { data: categoryData, firstRender } = props;
-  console.log("props thay doi", props)
-  console.log("props.data", props)
   const initialDataForm: DataFormInput = {
     legalName: "",
     email: "",
@@ -118,7 +116,6 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
   }, [dataForm])
 
   const onSaveDataFormInput = (data: DataFormInput) => {
-    console.log("onsave")
     const dataFormCopy = [...dataForm];
     const index = dataFormCopy.findIndex((item) => item.id === data.id);
     const token = localStorage.getItem("accessToken");
@@ -169,7 +166,6 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
         id: dataForm?.id
       }
     }).map(item => item)
-    console.log("data set store", dataRes)
     return dataRes;
   }
 
@@ -188,7 +184,6 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
   };
 
   const onDeleteCardItem = () => {
-    console.log("deleting")
     const dataFormCopy = [...dataForm];
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
     setDataForm(newFormData);
@@ -217,8 +212,6 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
       setIsEditing(false);
     }
   };
-
-  console.log("category data", !categoryData?.executors)
 
   return (
     <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
@@ -262,7 +255,6 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
                     id={item.id}
                     canDelete={true}
                     onDeleteCardItem={(id: string) => {
-                      console.log("id setting", id)
                       setDeletingId(id);
                       setVisibleModalDelete(true);
                     }}

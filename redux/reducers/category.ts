@@ -6,11 +6,10 @@ const categoryReducer = (state = initState, action: any) => {
   switch (action.type) {
     case CategoryTypes.SAVE_CATEGORY_DATA: {
       const { data, callback } = action?.payload;
-      const newState = {...data};
+      const newState = { ...data };
       if (callback) {
         callback(newState);
       }
-      console.log("new state", newState)
       return newState;
     }
     default: {
