@@ -34,7 +34,6 @@ const globalDataReducer = (state = initialState, action): IData => {
     case PersonalTypes.SET_PERSONAL_INFORMATION: {
       const {data, callback} = action?.payload;
       const {legalName, address, addressLine1, addressLine2, email, passport, unitNumber} = data;
-      console.log("Data intergrated", data)
       if (callback) {
         callback(state);
       }
@@ -51,13 +50,22 @@ const globalDataReducer = (state = initialState, action): IData => {
     }
     case PersonalTypes.SET_EXECUTOR: {
       const {data, callback} = action?.payload;
-      console.log("Data intergrated", data)
       if (callback) {
         callback(state);
       }
       return {
         ...state,
         executors: data
+      };
+    }
+    case PersonalTypes.SET_BENEFICIARY: {
+      const {data, callback} = action?.payload;
+      if (callback) {
+        callback(state);
+      }
+      return {
+        ...state,
+        beneficiaries: data
       };
     }
     default: {

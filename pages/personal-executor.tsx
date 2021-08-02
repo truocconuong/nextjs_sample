@@ -19,7 +19,6 @@ const PersonalExecutorScreen = () => {
   );
 
   useEffect(() => {
-    console.log("set data render", categoryData)
     if(categoryData?.executors){
       setFirstRender(false);
     }
@@ -33,8 +32,6 @@ const PersonalExecutorScreen = () => {
       }
     )
   );
-
-  console.log("guest", guestData)
 
   return localStorage.getItem("accessToken") ? <PersonalExecutor firstRender={firstRender} data={categoryData}/> : <PersonalExecutor firstRender={false} data={guestData}/>
 };

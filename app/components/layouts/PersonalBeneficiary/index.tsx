@@ -20,17 +20,14 @@ import BeneficiaryFormInput from "@module/BeneficiaryFormInput";
 import { IBeneficiary, IData, IMasterdata } from "@constant/data.interface";
 import { v4 as uuidv4 } from 'uuid';
 import { MASTERDATA_TYPE } from "@constant/index";
-
-const PersonalBeneficiary = () => {
+interface IPersonalBeneficiaryProps {
+  data?: IData;
+  firstRender: boolean;
+}
+const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
+  const { data: categoryData, firstRender } = props;
   let [count, setCount] = useState(1);
-  const categoryData = useSelector(
-    createSelector(
-      (state: any) => state?.category,
-      (category: IData) => {
-        return category
-      }
-    )
-  );
+
   const initialDataForm: DataFormInput = {
     legalName: "",
     email: "",
@@ -40,29 +37,14 @@ const PersonalBeneficiary = () => {
     id: uuidv4(),
   };
 
-  
-  const toDataFormInputBeneficiary = () => {
-    const dataForm: DataFormInput[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary, index) => {
-      return {
-        email: beneficiary.email || "",
-        legalName: beneficiary.full_legal_name || "",
-        id: beneficiary.id,
-        passport: beneficiary.nric || "",
-        relationship: beneficiary.relationship_id,
-        count: index + 1
-      }
-    })
-    return dataForm || [];
-  }
-  
   const dispatch = useDispatch();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
-  const [visibleFormInput, setVisibleFormInput] = useState(false);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
   const [deletingId, setDeletingId] = useState(null);
   const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const width = useSelector(
     createSelector(
@@ -72,17 +54,15 @@ const PersonalBeneficiary = () => {
   );
 
   useEffect(() => {
+    setDataForm(toDataFormInputBeneficiary())
+  }, [props])
+
+  useEffect(() => {
     setIsMobile(width < 876);
   }, [width]);
 
   useEffect(() => {
-    const dataForm = toDataFormInputBeneficiary();
-    setDataForm(dataForm);
-  }, [categoryData])
-
-  useEffect(() => {
     if (dataForm.length === 1) {
-      setVisibleFormInput(false)
       dispatch(
         ProgressActions.setAmountPercentIncreament(
           {
@@ -125,23 +105,22 @@ const PersonalBeneficiary = () => {
         )
       );
     }
-    console.log(categoryData.beneficiaries)
-    if (dataForm.length === 0) {
-      setVisibleFormInput(true)
-    }
-    if (dataForm.length > 0) {
-      setVisibleFormInput(false)
-    }
     setCount(dataForm.length)
   }, [dataForm])
 
-  // useEffect(() => {
-  //   console.log("categor data", categoryData)
-  //   if (!localStorage.getItem("accessToken") || (!categoryData?.beneficiaries || categoryData?.beneficiaries?.length === 0)) {
-  //     console.log("nhay vao day")
-  //     setVisibleFormInput(true);
-  //   }
-  // }, [])
+  const toDataFormInputBeneficiary = () => {
+    const dataForm: DataFormInput[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary, index) => {
+      return {
+        email: beneficiary.email || "",
+        legalName: beneficiary.full_legal_name || "",
+        id: beneficiary.id,
+        passport: beneficiary.nric || "",
+        relationship: beneficiary.relationship_id,
+        count: index + 1
+      }
+    })
+    return dataForm || [];
+  }
 
   const toApiDataForm = (dataForm: DataFormInput[]) => {
     const dataRes: IBeneficiary[] = dataForm.map((dataForm: DataFormInput) => {
@@ -149,7 +128,8 @@ const PersonalBeneficiary = () => {
         full_legal_name: dataForm.legalName,
         relationship_id: dataForm.relationship,
         email: dataForm.email,
-        nric: dataForm.passport
+        nric: dataForm.passport,
+        id: dataForm?.id
       }
     })
     return dataRes;
@@ -158,35 +138,34 @@ const PersonalBeneficiary = () => {
   const onSaveDataFormInput = (data: DataFormInput) => {
     const dataFormCopy = [...dataForm];
     const index = dataFormCopy.findIndex((item) => item.id === data.id);
-
-    if (index > -1) {
-      dataFormCopy[index] = data;
-    }
-    
-    if (categoryData) {
-      const token = localStorage.getItem("accessToken");
-      const dataBeneficiary: IBeneficiary= toDataApiBeneficiary(data);
-      const found = categoryData?.beneficiaries?.find(item => item.id === data.id);
-
-      (found || index > -1) ? dispatch(UserActions.updateBeneficiary(dataBeneficiary, `${data.id}`, token, () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const dataBeneficiaryRequest: IBeneficiary = toDataApiBeneficiary(data);
+      (index > -1) ? dispatch(UserActions.updateBeneficiary(dataBeneficiaryRequest, `${data.id}`, token, () => {
+        dataFormCopy[index] = data;
         setDataForm(dataFormCopy);
-        setVisibleFormInput(false);
-       })) : 
-      dispatch(UserActions.createBeneficiary(dataBeneficiary, token, (dataBenefy: IBeneficiary) => {
-        data.id = dataBenefy.id;
-        dataFormCopy.push(data);
-        setDataForm(dataFormCopy);
-        setVisibleFormInput(false);
-      }));
+      })) :
+        dispatch(UserActions.createBeneficiary(dataBeneficiaryRequest, token, (dataBeneficiary: IBeneficiary) => {
+          data.id = dataBeneficiary.id;
+          dataFormCopy.push(data);
+          setDataForm(dataFormCopy);
+        }));
     } else {
-      dataFormCopy.push(data);
+      if (index > -1) {
+        dataFormCopy[index] = data;
+      }else {
+        data.id = uuidv4();
+        dataFormCopy.push(data);
+      }
       setDataForm(dataFormCopy);
-      setVisibleFormInput(false);
-      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(dataFormCopy), () => {}));
+      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(dataFormCopy), () => {
+
+      }));
     }
+    setIsEditing(false)
   };
 
-  
+
   const toDataApiBeneficiary = (dataForm: DataFormInput) => {
     return {
       full_legal_name: dataForm?.legalName || "",
@@ -227,26 +206,23 @@ const PersonalBeneficiary = () => {
   const onEditCard = (_e: any, id: string) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
     setEditingFormInput(editingForm);
-    setVisibleFormInput(true);
+    setIsEditing(true)
   };
 
-  const onAddBeneficiaryAlterNative = () => {
+  const onAddBeneficiary = () => {
     const newCount = ++count;
     setCount(newCount);
-    if (visibleFormInput) {
-      return;
-    }
     setEditingFormInput({
       ...initialDataForm,
       count: newCount
     });
-    setVisibleFormInput(true);
+    setIsEditing(true)
   };
 
   const onDeleteCardItem = () => {
     const dataFormCopy = [...dataForm];
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
-    setDataForm(newFormData);
+    setNewDataItems(newFormData);
     setVisibleModalDelete(false);
     if (newFormData.length === 0) {
       dispatch(
@@ -261,13 +237,23 @@ const PersonalBeneficiary = () => {
         ...initialDataForm,
       });
     }
-    if (categoryData) {
-      const token = localStorage.getItem("accessToken");
-      dispatch(UserActions.deleteBeneficiary({is_delete: true}, deletingId, token, () => { }));
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      dispatch(UserActions.deleteBeneficiary({ is_delete: true }, deletingId, token, () => { }));
     } else {
       dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(newFormData), () => { }));
     }
+    if(editingFormInput?.id === deletingId){
+      setIsEditing(false);
+    }
   };
+
+  const setNewDataItems = (newFormData: DataFormInput[]) => {
+    newFormData.map((item, index) => {
+      item.count = index + 1;
+    })
+    setDataForm(newFormData)
+  }
 
   const masterdata = useSelector(
     createSelector(
@@ -277,13 +263,9 @@ const PersonalBeneficiary = () => {
   );
 
   const getRelationship = (id: string) => {
-    console.log("id", id)
-    console.log("master data", masterdata)
     const found = masterdata.filter(item => item.value === MASTERDATA_TYPE.RELATIONSHIP).find(item => item.id === id);
     return found?.name;
   }
-
-  console.log("data form,,", dataForm)
 
   return (
     <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
@@ -333,7 +315,7 @@ const PersonalBeneficiary = () => {
                 </div>
               );
             })}
-            {visibleFormInput && (
+            {((dataForm.length === 0 && !firstRender) || isEditing) && (
               <BeneficiaryFormInput
                 isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
@@ -345,7 +327,7 @@ const PersonalBeneficiary = () => {
                 <div className="title">💭 Require another beneficiary?</div>
                 <div
                   className="add-beneficiary"
-                  onClick={onAddBeneficiaryAlterNative}
+                  onClick={onAddBeneficiary}
                 >
                   Add More
                 </div>
