@@ -1,6 +1,23 @@
 import { CategoryTypes } from "../types";
 
-const initState = {};
+const initState = {
+    id: "",
+    email: "",
+    full_legal_name: "",
+    nric: "",
+    postal_code: "",
+    address_line_1: "",
+    address_line_2: "",
+    unit_number: "",
+    executors: [],
+    beneficiaries: [],
+    properties: [],
+    bank_accounts: [],
+    insurance_policies: [],
+    investments: [],
+    business_interests: [],
+    valuables: [],
+};
 
 const categoryReducer = (state = initState, action: any) => {
   switch (action.type) {
