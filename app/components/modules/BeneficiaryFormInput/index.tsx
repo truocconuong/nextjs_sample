@@ -18,7 +18,7 @@ import {
 const { Option } = Select;
 interface BeneficiaryPropsInterface {
   isMobile?: boolean;
-  onSaveData: (data: any) => void;
+  onSaveData: (data: any, relationshipName: string) => void;
   initialValue: DataFormInput;
 }
 
@@ -26,20 +26,17 @@ export interface DataFormInput {
   legalName: string;
   email: string;
   passport: string;
-  relationshipId: string;
-  relationshipName: string;
-  type: string;
-  id: number;
+  relationship: string;
+  id: string;
+  count?: number;
 }
 const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
   const { isMobile, onSaveData, initialValue } = props;
   const initialState: DataFormInput = {
     legalName: "",
-    relationshipId: "",
-    relationshipName: "",
+    relationship: "",
     passport: "",
     email: "",
-    type: initialValue.type,
     id: initialValue.id,
   };
 
@@ -108,22 +105,15 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
     if (!isFullForm()) {
       return;
     }
-    onSaveData(dataForm);
+    const relationshipName = relationships.find(item => item.id === dataForm.relationship);
+    onSaveData(dataForm, relationshipName?.name);
   };
-
-  const onChangeRelationShip = (id: string) => {
-    const relationship = masterdata.find(item => item.id === id);
-    const newDataForm = { ...dataForm };
-    newDataForm.relationshipId = relationship.id;
-    newDataForm.relationshipName = relationship.name;
-    setDataForm(newDataForm);
-  }
 
   return (
     <div className={"beneficiary-form-input-container"}>
       <div className="beneficiary-form-input-wrapper">
         <div className="title-form">
-          <div className="step"><span>{initialValue.id}</span></div>
+          <div className="step"><span>{initialValue.count}</span></div>
           <div className="title">{initialValue.email ? "Update" : "Beneficiary Details"}</div>
         </div>
         <div className="legal-name">
@@ -147,13 +137,13 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
               displayLabel
               label="Relationship"
               selectProps={{
-                value: dataForm.relationshipId || undefined,
+                value: dataForm.relationship || undefined,
                 placeholder: "Select",
-                onChange: (value) => onChangeRelationShip(value),
+                onChange: (value) => onValueChange("relationship", value),
               }}
             >
               {
-                relationships.map((relationship) => <Option value={relationship.id}>{relationship.name}</Option>)
+                relationships.map((relationship) => <Option key={relationship.id} value={relationship.id}>{relationship.name}</Option>)
               }
             </SelectField>
           </div>

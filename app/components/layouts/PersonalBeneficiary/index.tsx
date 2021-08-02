@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import router from "next/dist/client/router";
-import { ProgressActions } from "../../../../redux/actions";
+import { GlobalDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   TipIcon,
@@ -17,27 +17,34 @@ import {
   CloseIcon,
 } from "../../../../public/images";
 import BeneficiaryFormInput from "@module/BeneficiaryFormInput";
-import { IBeneficiary } from "@constant/data.interface";
+import { IBeneficiary, IData, IMasterdata } from "@constant/data.interface";
+import { v4 as uuidv4 } from 'uuid';
+import { MASTERDATA_TYPE } from "@constant/index";
+interface IPersonalBeneficiaryProps {
+  data?: IData;
+  firstRender: boolean;
+}
+const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
+  const { data: categoryData, firstRender } = props;
+  let [count, setCount] = useState(1);
 
-const PersonalBeneficiary = () => {
-  let [id, setId] = useState(1);
   const initialDataForm: DataFormInput = {
     legalName: "",
     email: "",
     passport: "",
-    relationshipId: "",
-    relationshipName: "",
-    type: "Main Beneficiary",
-    id: id,
+    relationship: "",
+    count: count,
+    id: uuidv4(),
   };
+
   const dispatch = useDispatch();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
-  const [visibleFormInput, setVisibleFormInput] = useState(true);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
   const [deletingId, setDeletingId] = useState(null);
   const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const width = useSelector(
     createSelector(
@@ -45,43 +52,128 @@ const PersonalBeneficiary = () => {
       (sizeBrowser) => sizeBrowser?.width
     )
   );
+
+  useEffect(() => {
+    setDataForm(toDataFormInputBeneficiary())
+  }, [props])
+
   useEffect(() => {
     setIsMobile(width < 876);
   }, [width]);
+
+  useEffect(() => {
+    if (dataForm.length === 1) {
+      dispatch(
+        ProgressActions.setAmountPercentIncreament(
+          {
+            amountPercentIncreament: 0,
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setPushable(
+          {
+            pushable: true,
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setRouter(
+          {
+            router: "/personal-beneficiary",
+          },
+          () => { }
+        )
+      );
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => { }
+        )
+      );
+    } else {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => { }
+        )
+      );
+    }
+    setCount(dataForm.length)
+  }, [dataForm])
+
+  const toDataFormInputBeneficiary = () => {
+    const dataForm: DataFormInput[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary, index) => {
+      return {
+        email: beneficiary.email || "",
+        legalName: beneficiary.full_legal_name || "",
+        id: beneficiary.id,
+        passport: beneficiary.nric || "",
+        relationship: beneficiary.relationship_id,
+        count: index + 1
+      }
+    })
+    return dataForm || [];
+  }
 
   const toApiDataForm = (dataForm: DataFormInput[]) => {
     const dataRes: IBeneficiary[] = dataForm.map((dataForm: DataFormInput) => {
       return {
         full_legal_name: dataForm.legalName,
-        relationship_id: dataForm.relationshipId,
+        relationship_id: dataForm.relationship,
         email: dataForm.email,
-        nric: dataForm.passport
+        nric: dataForm.passport,
+        id: dataForm?.id
       }
     })
     return dataRes;
   }
 
   const onSaveDataFormInput = (data: DataFormInput) => {
-    console.log("data", data)
     const dataFormCopy = [...dataForm];
     const index = dataFormCopy.findIndex((item) => item.id === data.id);
-
-    if (index > -1) {
-      dataFormCopy[index] = data;
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const dataBeneficiaryRequest: IBeneficiary = toDataApiBeneficiary(data);
+      (index > -1) ? dispatch(UserActions.updateBeneficiary(dataBeneficiaryRequest, `${data.id}`, token, () => {
+        dataFormCopy[index] = data;
+        setDataForm(dataFormCopy);
+      })) :
+        dispatch(UserActions.createBeneficiary(dataBeneficiaryRequest, token, (dataBeneficiary: IBeneficiary) => {
+          data.id = dataBeneficiary.id;
+          dataFormCopy.push(data);
+          setDataForm(dataFormCopy);
+        }));
     } else {
-      dataFormCopy.push(data);
+      if (index > -1) {
+        dataFormCopy[index] = data;
+      }else {
+        data.id = uuidv4();
+        dataFormCopy.push(data);
+      }
+      setDataForm(dataFormCopy);
+      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(dataFormCopy), () => {
+
+      }));
     }
-    setDataForm(dataFormCopy);
-    setVisibleFormInput(false);
-    dispatch(
-      ProgressActions.setDisabled(
-        {
-          disabled: false,
-        },
-        () => {}
-      )
-    );
+    setIsEditing(false)
   };
+
+
+  const toDataApiBeneficiary = (dataForm: DataFormInput) => {
+    return {
+      full_legal_name: dataForm?.legalName || "",
+      relationship_id: dataForm?.relationship || "",
+      email: dataForm?.email || undefined,
+      nric: dataForm?.passport || undefined,
+    }
+  }
 
   useEffect(() => {
     dispatch(
@@ -89,7 +181,7 @@ const PersonalBeneficiary = () => {
         {
           pushable: true,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -97,7 +189,7 @@ const PersonalBeneficiary = () => {
         {
           amountPercentIncreament: 10,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -105,48 +197,75 @@ const PersonalBeneficiary = () => {
         {
           router: "/personal-estates-listing/property",
         },
-        () => {}
+        () => { }
       )
     );
   }, [])
-  
 
-  const onEditCard = (_e: any, id: number) => {
+
+  const onEditCard = (_e: any, id: string) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
     setEditingFormInput(editingForm);
-    setVisibleFormInput(true);
+    setIsEditing(true)
   };
 
-  const onAddBeneficiaryAlterNative = () => {
-    const newId = ++id;
-    setId(newId)
-    if (visibleFormInput) {
-      return;
-    }
+  const onAddBeneficiary = () => {
+    const newCount = ++count;
+    setCount(newCount);
     setEditingFormInput({
       ...initialDataForm,
-      type: "Alternate Beneficiary",
-      id: newId,
+      count: newCount
     });
-    setVisibleFormInput(true);
+    setIsEditing(true)
   };
 
   const onDeleteCardItem = () => {
     const dataFormCopy = [...dataForm];
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
-    setDataForm(newFormData);
+    setNewDataItems(newFormData);
     setVisibleModalDelete(false);
-    if(newFormData.length === 0){
+    if (newFormData.length === 0) {
       dispatch(
         ProgressActions.setDisabled(
           {
             disabled: true,
           },
-          () => {}
+          () => { }
         )
       );
+      setEditingFormInput({
+        ...initialDataForm,
+      });
+    }
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      dispatch(UserActions.deleteBeneficiary({ is_delete: true }, deletingId, token, () => { }));
+    } else {
+      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(newFormData), () => { }));
+    }
+    if(editingFormInput?.id === deletingId){
+      setIsEditing(false);
     }
   };
+
+  const setNewDataItems = (newFormData: DataFormInput[]) => {
+    newFormData.map((item, index) => {
+      item.count = index + 1;
+    })
+    setDataForm(newFormData)
+  }
+
+  const masterdata = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => masterdata
+    )
+  );
+
+  const getRelationship = (id: string) => {
+    const found = masterdata.filter(item => item.value === MASTERDATA_TYPE.RELATIONSHIP).find(item => item.id === id);
+    return found?.name;
+  }
 
   return (
     <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
@@ -181,13 +300,14 @@ const PersonalBeneficiary = () => {
                 <div className="card-item" key={item.id}>
                   <CardInfo
                     name={item.legalName}
-                    description={item.relationshipName}
+                    description={getRelationship(item.relationship)}
                     isMobile={isMobile}
                     hightlightColor={"#EFF5FF"}
                     onEditCard={onEditCard}
                     id={item.id}
                     canDelete={true}
-                    onDeleteCardItem={(id: number) => {
+                    hightlightText={item.count}
+                    onDeleteCardItem={(id: string) => {
                       setDeletingId(id);
                       setVisibleModalDelete(true);
                     }}
@@ -195,7 +315,7 @@ const PersonalBeneficiary = () => {
                 </div>
               );
             })}
-            {(visibleFormInput || dataForm.length === 0) && (
+            {((dataForm.length === 0 && !firstRender) || isEditing) && (
               <BeneficiaryFormInput
                 isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
@@ -207,7 +327,7 @@ const PersonalBeneficiary = () => {
                 <div className="title">💭 Require another beneficiary?</div>
                 <div
                   className="add-beneficiary"
-                  onClick={onAddBeneficiaryAlterNative}
+                  onClick={onAddBeneficiary}
                 >
                   Add More
                 </div>

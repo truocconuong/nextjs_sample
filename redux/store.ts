@@ -8,7 +8,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['progress', 'sizeBrowser'] // if only show special reducers => use whitelist
+  blacklist: ['progress', 'sizeBrowser', "category"] // if only show special reducers => use whitelist
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

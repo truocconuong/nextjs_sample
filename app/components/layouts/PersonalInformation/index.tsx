@@ -6,15 +6,15 @@ import PersonalFormInput, { DataFormInput } from "@module/PersonalFormInput";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { CategoryActions, GlobalDataActions, MasterDataActions, ProgressActions } from "../../../../redux/actions";
+import { CategoryActions, GlobalDataActions, MasterDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   PersonalIcon,
   PersonalMobileIcon,
   TipIcon,
 } from "../../../../public/images";
-import { IData } from "@constant/data.interface";
-
+import { IData, IPersonalInformation } from "@constant/data.interface";
+import { v4 as uuidv4 } from 'uuid';
 const PersonalInformation = () => {
   const dispatch = useDispatch();
   const [visibleModal, setVisibleModal] = useState(false);
@@ -23,21 +23,17 @@ const PersonalInformation = () => {
   const initialDataCard: CardInfoDataPropsInterface = {
     name: "",
     description: "",
-    id: 0,
+    id: uuidv4(),
   };
-
-  const categoryData= useSelector(
-    createSelector(
-      (state: any) => state?.category,
-      (category: IData) => {
-        console.log("category", category)
-        return category
-      }
-    )
-  );
-
-  console.log(categoryData)
-
+  const [dataForm, setDataForm] = useState<DataFormInput>({
+    legalName: "",
+    email: "",
+    passport: "",
+    address: "",
+    addressLine1: "",
+    addressLine2: "",
+    unitNumber: "",
+  });
 
   const width = useSelector(
     createSelector(
@@ -56,7 +52,7 @@ const PersonalInformation = () => {
         {
           percent: 20,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -64,7 +60,7 @@ const PersonalInformation = () => {
         {
           pushable: true,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -72,7 +68,7 @@ const PersonalInformation = () => {
         {
           amountPercentIncreament: 0,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -80,29 +76,33 @@ const PersonalInformation = () => {
         {
           router: "/personal-executor",
         },
-        () => {}
+        () => { }
       )
     );
   }, [])
 
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category
+      }
+    )
+  );
+  
   useEffect(() => {
-    dispatch(MasterDataActions.getMasterData())
-    const token = localStorage.getItem("accessToken");
-    if(token){
-      dispatch(CategoryActions.getCategoriesData(token))
-    }
-  }, [])
-
-  const initialDataForm: DataFormInput = {
-    legalName: categoryData?.full_legal_name,
-    email: categoryData?.email,
-    passport: categoryData?.nric,
-    address: categoryData?.postal_code,
-    addressLine1: categoryData?.address_line_1,
-    addressLine2: categoryData?.address_line_2,
-    unitNumber: categoryData?.unit_number,
-  };
-  const [dataForm, setDataForm] = useState<DataFormInput>(initialDataForm);
+    const initialDataForm: DataFormInput = {
+      legalName: categoryData?.full_legal_name || "",
+      email: categoryData?.email || "",
+      passport: categoryData?.nric || "",
+      address: categoryData?.postal_code || "",
+      addressLine1: categoryData?.address_line_1 || "",
+      addressLine2: categoryData?.address_line_2 || "",
+      unitNumber: categoryData?.unit_number || "",
+    };
+    console.log(initialDataForm)
+    setDataForm({...initialDataForm})
+  }, [categoryData])
 
   const [dataCard, setDataCard] = useState<CardInfoDataPropsInterface>(
     initialDataCard
@@ -120,11 +120,29 @@ const PersonalInformation = () => {
         {
           disabled: false,
         },
-        () => {}
+        () => { }
       )
     );
-    dispatch(GlobalDataActions.setPersonalInformation(data, () => {}));
+    if (categoryData) {
+      const token = localStorage.getItem("accessToken");
+      const dataUpdate: IPersonalInformation = toDataApiUpdatePersonalInformation(data);
+      dispatch(UserActions.updatePersonalInformation(dataUpdate, categoryData.id, token, () => { }));
+    } else {
+      dispatch(GlobalDataActions.setPersonalInformation(data, () => { }));
+    }
   };
+
+  const toDataApiUpdatePersonalInformation = (data: DataFormInput) => {
+    return {
+      full_legal_name: data.legalName,
+      email: data.email,
+      postal_code: data.address,
+      address_line_1: data.addressLine1,
+      address_line_2: data.addressLine2,
+      nric: data.passport,
+      unit_number: data.unitNumber,
+    }
+  }
 
   const onEditCard = (id: number) => {
     setVisibleFormInput(true);

@@ -4,14 +4,15 @@ import { EditIcon, DeleteIcon } from "../../../public/images";
 export interface CardInfoDataPropsInterface {
   name: string;
   description: string;
-  id: number;
+  id: string;
 }
 export interface CardInfoPropsInterface extends CardInfoDataPropsInterface {
   isMobile: boolean;
   hightlightColor: string;
-  onEditCard: (e: any, id: number) => void;
+  onEditCard: (e: any, id: string) => void;
   canDelete?: boolean;
-  onDeleteCardItem?: (key: number) => void;
+  onDeleteCardItem?: (key: string) => void;
+  hightlightText?: string | number;
 }
 const CardInfo = (props: CardInfoPropsInterface) => {
   const {
@@ -22,7 +23,8 @@ const CardInfo = (props: CardInfoPropsInterface) => {
     onEditCard,
     id,
     canDelete,
-    onDeleteCardItem
+    onDeleteCardItem,
+    hightlightText
   } = props;
   return (
     <div
@@ -37,7 +39,7 @@ const CardInfo = (props: CardInfoPropsInterface) => {
             className="highlight-text"
             style={{ backgroundColor: hightlightColor }}
           >
-            <div className="text">{name[0]}</div>
+            <div className="text">{hightlightText || name[0]}</div>
           </div>
           <div className="base-info">
             <div className="name">{name}</div>

@@ -27,18 +27,10 @@ export interface DataFormInput {
   passport: string;
   relationship: string;
   type: string;
-  id: number;
+  id: string;
 }
 const executorFormInput = (props: ExecutorFormPropsInterface) => {
   const { isMobile, onSaveData, initialValue } = props;
-  const initialState: DataFormInput = {
-    legalName: "",
-    relationship: "",
-    passport: "",
-    email: "",
-    type: initialValue.type,
-    id: initialValue.id
-  };
 
   useEffect(() => {
     setDataForm(initialValue)
@@ -61,7 +53,7 @@ const executorFormInput = (props: ExecutorFormPropsInterface) => {
   }, [])
 
   const onResetForm = () => {
-    setDataForm(initialState);
+    setDataForm(initialValue);
   };
 
   const onValueChange = (key: string, value: string) => {
@@ -139,7 +131,7 @@ const executorFormInput = (props: ExecutorFormPropsInterface) => {
               }}
             >
               {
-                relationships.map((relationship) => <Option value={relationship.id}>{relationship.name}</Option>)
+                relationships.map((relationship) => <Option key={relationship.id} value={relationship.id}>{relationship.name}</Option>)
               }
              
               

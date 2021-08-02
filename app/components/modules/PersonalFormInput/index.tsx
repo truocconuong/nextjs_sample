@@ -2,6 +2,7 @@ import { isEmail } from "@util/index";
 import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import {
   SaveIcon,
   UndoIcon,
@@ -25,17 +26,10 @@ export interface DataFormInput {
 }
 const PersonalFormInput = (props: PersonalFormPropsInterface) => {
   const { isMobile, onSaveData, initialValue } = props;
-  const initialState: DataFormInput = {
-    legalName: "",
-    email: "",
-    passport: "",
-    address: "",
-    addressLine1: "",
-    addressLine2: "",
-    unitNumber: "",
-  };
   const [dataForm, setDataForm] = useState<DataFormInput>(initialValue);
-
+  useEffect(() => {
+    setDataForm(initialValue)
+  }, [initialValue])
   const onValueChange = (key: string, value: string) => {
     const newDataForm = { ...dataForm };
     newDataForm[key] = value;
@@ -43,7 +37,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
   };
 
   const onResetForm = () => {
-    setDataForm(initialState);
+    setDataForm(initialValue);
   };
 
   const isEnableForm = () => {
@@ -140,6 +134,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
                 value: dataForm.address,
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                   onValueChange("address", e?.target?.value),
+                maxLength: 6
               }}
               searchable
               onSearch={onSearchAddress}

@@ -9,13 +9,8 @@ function* getCategoryData(action: any) {
     const res = yield call(() =>
       Request.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/detail/categories`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+        null,
+        token
       )
     );
     callback && callback(res[0]?.data);

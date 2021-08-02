@@ -3,6 +3,12 @@ export interface IExecutor {
     relationship_id: string;
     email: string;
     nric: string;
+    id?: string;
+    created_at?: string;
+    updated_at?: string;
+    is_delete?: boolean;
+    user_id?: string;
+    type?: string;
 }
 
 export interface IBeneficiary {
@@ -11,6 +17,7 @@ export interface IBeneficiary {
     email: string;
     percent?: number;
     nric: string;
+    id?: string;
 }
 
 export interface IProperty {
@@ -75,7 +82,18 @@ export interface IValuable {
     serial_no: string;
 }
 
+export interface IPersonalInformation {
+    email: string;
+    full_legal_name: string;
+    nric: string;
+    postal_code: string;
+    address_line_1: string;
+    address_line_2: string;
+    unit_number: string;
+}
+
 export interface IData {
+    id?: string;
     email: string;
     full_legal_name: string;
     nric: string;
