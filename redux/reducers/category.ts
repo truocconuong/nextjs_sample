@@ -1,6 +1,7 @@
+import { IData } from "@constant/data.interface";
 import { CategoryTypes } from "../types";
 
-const initState = {
+const initState: IData = {
     id: "",
     email: "",
     full_legal_name: "",
