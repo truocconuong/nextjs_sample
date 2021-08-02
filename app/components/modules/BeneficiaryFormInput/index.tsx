@@ -143,7 +143,7 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
               }}
             >
               {
-                relationships.map((relationship) => <Option value={relationship.id}>{relationship.name}</Option>)
+                relationships.map((relationship) => <Option key={relationship.id} value={relationship.id}>{relationship.name}</Option>)
               }
             </SelectField>
           </div>

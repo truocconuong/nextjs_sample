@@ -93,7 +93,7 @@ export interface IPersonalInformation {
 }
 
 export interface IData {
-    id: string;
+    id?: string;
     email: string;
     full_legal_name: string;
     nric: string;

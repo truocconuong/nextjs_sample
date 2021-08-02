@@ -20,6 +20,9 @@ export const StartYourWill = {
 
 export const PersonalEstatesListingTypes = {
   SET_PROPERTY: "SET_PROPERTY",
+}
+
+export const PersonalTypes = {
   SET_PERSONAL_INFORMATION: "SET_PERSONAL_INFORMATION",
   SET_EXECUTOR: "SET_EXECUTOR",
   SET_BENEFICIARY: "SET_BENEFICIARY",

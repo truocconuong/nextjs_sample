@@ -1,3 +1,4 @@
+import { IBeneficiary, IData } from "@constant/data.interface";
 import { PERSONAL_ALLOCATION } from "@constant/index";
 import CustomButton from "@generals/Button";
 import ModalStep from "@generals/Modal/ModalStep";
@@ -18,8 +19,14 @@ export interface AllocationPersonalInterface {
   type: PERSONAL_ALLOCATION;
   name: string;
   percent: number;
-  className: string;
   color: string;
+}
+
+const colorsMap = {
+  [PERSONAL_ALLOCATION.FATHER]: "#FFE9BE",
+  [PERSONAL_ALLOCATION.MOTHER]: "#FFD9D1",
+  [PERSONAL_ALLOCATION.SON]: "#BAF0DF",
+  [PERSONAL_ALLOCATION.DAUGHTER]: "#D3EDFF",
 }
 const Allocation = () => {
   const maxPercent = 100;
@@ -29,7 +36,6 @@ const Allocation = () => {
       type: PERSONAL_ALLOCATION.FATHER,
       name: "Ryan Kwek",
       percent: 0,
-      className: "father",
       color: "#FFE9BE",
     },
     {
@@ -37,7 +43,6 @@ const Allocation = () => {
       type: PERSONAL_ALLOCATION.MOTHER,
       name: "Charlie Mok",
       percent: 0,
-      className: "mother",
       color: "#FFD9D1",
     },
     {
@@ -45,7 +50,6 @@ const Allocation = () => {
       type: PERSONAL_ALLOCATION.SON,
       name: "Gary Wu",
       percent: 0,
-      className: "son",
       color: "#BAF0DF",
     },
     {
@@ -53,16 +57,39 @@ const Allocation = () => {
       type: PERSONAL_ALLOCATION.DAUGHTER,
       name: "Stacy Kwek",
       percent: 0,
-      className: "daughter",
       color: "#D3EDFF",
     },
   ];
+
   const [isMobile, setIsMobile] = useState(false);
   const [totalPercent, setTotalPercent] = useState(0);
   const [persons, setPersons] = useState<AllocationPersonalInterface[]>(
     allocatePersonals
   );
   const [isShowModalSplash, setIsShowModalSplash] = useState(true);
+
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category
+      }
+    )
+  );
+  
+  useEffect(() => {
+    const persons = toPersonsData();
+    setPersons(persons);
+  }, [categoryData])
+
+  const toPersonsData = () => {
+    const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary) => {
+      return {
+        color
+      }
+    })
+  }
+
   const optionsSplash = [
     {
       image: isMobile ? (

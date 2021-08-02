@@ -1,5 +1,5 @@
 import {IData} from "@constant/data.interface";
-import {PersonalEstatesListingTypes} from "../types";
+import {PersonalEstatesListingTypes, PersonalTypes} from "../types";
 
 const initialState: IData = {
   email: "",
@@ -31,7 +31,7 @@ const globalDataReducer = (state = initialState, action): IData => {
         properties: data,
       };
     }
-    case PersonalEstatesListingTypes.SET_PERSONAL_INFORMATION: {
+    case PersonalTypes.SET_PERSONAL_INFORMATION: {
       const {data, callback} = action?.payload;
       const {legalName, address, addressLine1, addressLine2, email, passport, unitNumber} = data;
       console.log("Data intergrated", data)
@@ -49,7 +49,7 @@ const globalDataReducer = (state = initialState, action): IData => {
         unit_number: unitNumber
       };
     }
-    case PersonalEstatesListingTypes.SET_EXECUTOR: {
+    case PersonalTypes.SET_EXECUTOR: {
       const {data, callback} = action?.payload;
       console.log("Data intergrated", data)
       if (callback) {

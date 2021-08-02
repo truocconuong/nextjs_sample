@@ -14,7 +14,7 @@ import {
   TipIcon,
 } from "../../../../public/images";
 import { IData, IPersonalInformation } from "@constant/data.interface";
-
+import { v4 as uuidv4 } from 'uuid';
 const PersonalInformation = () => {
   const dispatch = useDispatch();
   const [visibleModal, setVisibleModal] = useState(false);
@@ -23,7 +23,7 @@ const PersonalInformation = () => {
   const initialDataCard: CardInfoDataPropsInterface = {
     name: "",
     description: "",
-    id: 0,
+    id: uuidv4(),
   };
   const [dataForm, setDataForm] = useState<DataFormInput>({
     legalName: "",

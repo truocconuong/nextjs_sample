@@ -3,7 +3,7 @@ import CustomButton from "generals/Button";
 import Modal from "generals/Modal";
 import PersonalPreview from "generals/PersonalForm";
 import { DataFormInput } from "@module/ExecutorFormInput";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { GlobalDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
@@ -16,8 +16,14 @@ import {
 import ExecutorFormInput from "@module/ExecutorFormInput";
 import { IData, IExecutor } from "@constant/data.interface";
 import { v4 as uuidv4 } from 'uuid';
-
-const PersonalExecutor = () => {
+interface IPersonalExecutorProps {
+  data?: IData;
+  firstRender: boolean
+}
+const PersonalExecutor = (props: IPersonalExecutorProps) => {
+  const { data: categoryData, firstRender } = props;
+  console.log("props thay doi", props)
+  console.log("props.data", props)
   const initialDataForm: DataFormInput = {
     legalName: "",
     email: "",
@@ -30,10 +36,29 @@ const PersonalExecutor = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
-  const [visibleFormInput, setVisibleFormInput] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [editingFormInput, setEditingFormInput] = useState(initialDataForm);
   const [deletingId, setDeletingId] = useState(null);
-  const [dataForm, setDataForm] = useState<DataFormInput[]>([]);
+
+  const toDataFormInputExecutors = () => {
+    const dataForm: DataFormInput[] = categoryData?.executors?.map((executor: IExecutor) => {
+      return {
+        email: executor.email || "",
+        legalName: executor.full_legal_name || "",
+        id: executor.id,
+        passport: executor.nric || "",
+        relationship: executor.relationship_id || "",
+        type: executor.type
+      }
+    })
+    return dataForm || [];
+  }
+
+  useEffect(() => {
+    setDataForm(toDataFormInputExecutors())
+  }, [props])
+
+  const [dataForm, setDataForm] = useState<DataFormInput[]>(toDataFormInputExecutors());
 
   const width = useSelector(
     createSelector(
@@ -46,22 +71,8 @@ const PersonalExecutor = () => {
     setIsMobile(width < 876)
   }, [width])
 
-  const categoryData = useSelector(
-    createSelector(
-      (state: any) => state?.category,
-      (category: IData) => {
-        return category
-      }
-    )
-  );
-
   useEffect(() => {
-    const dataForm = toDataFormInputExecutors();
-    setDataForm(dataForm);
-  }, [categoryData])
-
-  useEffect(() => {
-    if(dataForm.length === 2){
+    if (dataForm.length === 2) {
       dispatch(
         ProgressActions.setAmountPercentIncreament(
           {
@@ -94,7 +105,7 @@ const PersonalExecutor = () => {
           () => { }
         )
       );
-    }else {
+    } else {
       dispatch(
         ProgressActions.setDisabled(
           {
@@ -104,64 +115,37 @@ const PersonalExecutor = () => {
         )
       );
     }
-    if(dataForm.length === 0 && deletingId) {
-      setVisibleFormInput(true)
-    }
-    if(dataForm.length > 0) {
-      setVisibleFormInput(false)
-    }
   }, [dataForm])
 
-  useEffect(() => {
-    if(!localStorage.getItem("accessToken") || (!categoryData?.executors || categoryData?.executors?.length === 0)){
-      console.log("nhay vao")
-      setVisibleFormInput(true);
-    }
-  }, [])
-
-  const toDataFormInputExecutors = () => {
-    const dataForm: DataFormInput[] = categoryData?.executors?.map((executor: IExecutor) => {
-      return {
-        email: executor.email || "",
-        legalName: executor.full_legal_name || "",
-        id: executor.id,
-        passport: executor.nric || "",
-        relationship: executor.relationship_id || "",
-        type: executor.type
-      }
-    })
-    return dataForm || [];
-  }
-
   const onSaveDataFormInput = (data: DataFormInput) => {
+    console.log("onsave")
     const dataFormCopy = [...dataForm];
     const index = dataFormCopy.findIndex((item) => item.id === data.id);
-
-    if (index > -1) {
-      dataFormCopy[index] = data;
-    }
-    
-    if (categoryData) {
-      const token = localStorage.getItem("accessToken");
-      const dataExecutorRequest: IExecutor= toDataApiExecutor(data);
-      const found = categoryData?.beneficiaries?.find(item => item.id === data.id);
-
-      (found || index > -1) ? dispatch(UserActions.updateExecutor(dataExecutorRequest, `${data.id}`, token, () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const dataExecutorRequest: IExecutor = toDataApiExecutor(data);
+      (index > -1) ? dispatch(UserActions.updateExecutor(dataExecutorRequest, `${data.id}`, token, () => {
+        dataFormCopy[index] = data;
         setDataForm(dataFormCopy);
-        setVisibleFormInput(false);
-       })) : 
-      dispatch(UserActions.createExecutor(dataExecutorRequest, token, (dataExecutor: IExecutor) => {
-        data.id = dataExecutor.id;
-        dataFormCopy.push(data);
-        setDataForm(dataFormCopy);
-        setVisibleFormInput(false);
-      }));
+      })) :
+        dispatch(UserActions.createExecutor(dataExecutorRequest, token, (dataExecutor: IExecutor) => {
+          data.id = dataExecutor.id;
+          dataFormCopy.push(data);
+          setDataForm(dataFormCopy);
+        }));
     } else {
-      dataFormCopy.push(data);
+      if (index > -1) {
+        dataFormCopy[index] = data;
+      }else {
+        data.id = uuidv4();
+        dataFormCopy.push(data);
+      }
       setDataForm(dataFormCopy);
-      setVisibleFormInput(false);
-      dispatch(GlobalDataActions.setExecutor(toApiDataForm(dataFormCopy), () => {}));
+      dispatch(GlobalDataActions.setExecutor(toApiDataForm(dataFormCopy), () => {
+
+      }));
     }
+    setIsEditing(false)
   };
 
   const toDataApiExecutor = (dataForm: DataFormInput) => {
@@ -181,30 +165,30 @@ const PersonalExecutor = () => {
         relationship_id: dataForm.relationship || "",
         email: dataForm.email || undefined,
         nric: dataForm.passport || undefined,
-        type: dataForm?.type
+        type: dataForm?.type,
+        id: dataForm?.id
       }
-    }).filter(item => item)
+    }).map(item => item)
+    console.log("data set store", dataRes)
     return dataRes;
   }
 
   const onEditCard = (_e: any, id: string) => {
     const editingForm = [...dataForm].find((item) => item.id === id);
     setEditingFormInput(editingForm);
-    setVisibleFormInput(true);
+    setIsEditing(true)
   };
 
   const onAddExecutorAlterNative = () => {
-    if (visibleFormInput) {
-      return;
-    }
     setEditingFormInput({
       ...initialDataForm,
       type: "Alternate Executor"
     });
-    setVisibleFormInput(true);
+    setIsEditing(true)
   };
 
   const onDeleteCardItem = () => {
+    console.log("deleting")
     const dataFormCopy = [...dataForm];
     const newFormData = dataFormCopy.filter((item) => item.id != deletingId);
     setDataForm(newFormData);
@@ -223,11 +207,14 @@ const PersonalExecutor = () => {
         type: "Main Executor"
       });
     }
-    if (categoryData) {
-      const token = localStorage.getItem("accessToken");
-      dispatch(UserActions.deleteExecutor({is_delete: true}, deletingId, token, () => { }));
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      dispatch(UserActions.deleteExecutor({ is_delete: true }, deletingId, token, () => { }));
     } else {
       dispatch(GlobalDataActions.setExecutor(toApiDataForm(newFormData), () => { }));
+    }
+    if(editingFormInput?.id === deletingId){
+      setIsEditing(false);
     }
   };
 
@@ -275,6 +262,7 @@ const PersonalExecutor = () => {
                     id={item.id}
                     canDelete={true}
                     onDeleteCardItem={(id: string) => {
+                      console.log("id setting", id)
                       setDeletingId(id);
                       setVisibleModalDelete(true);
                     }}
@@ -283,7 +271,7 @@ const PersonalExecutor = () => {
               );
             })}
 
-            {(visibleFormInput) && (
+            {((dataForm.length === 0 && !firstRender) || isEditing) && (
               <ExecutorFormInput
                 isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
