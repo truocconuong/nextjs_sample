@@ -100,7 +100,6 @@ const PersonalInformation = () => {
       addressLine2: categoryData?.address_line_2 || "",
       unitNumber: categoryData?.unit_number || "",
     };
-    console.log(initialDataForm)
     setDataForm({...initialDataForm})
   }, [categoryData])
 

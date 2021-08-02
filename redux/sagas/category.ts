@@ -14,7 +14,6 @@ function* getCategoryData(action: any) {
       )
     );
     callback && callback(res[0]?.data);
-    console.log("res[0].data)", res[0].data);
     yield put(CategoryActions.saveCategoriesData(res[0]?.data));
   } catch (error) {
     callback && callback(error?.response?.data);

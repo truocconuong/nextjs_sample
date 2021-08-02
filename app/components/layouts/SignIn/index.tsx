@@ -17,7 +17,7 @@ export interface ISignInForm {
 }
 
 export interface ISignInFormProps {
-   isMobile: boolean;
+  isMobile: boolean;
 }
 const SignInForm = (props: ISignInFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -27,16 +27,14 @@ const SignInForm = (props: ISignInFormProps) => {
     address: "",
     email: "",
   });
-  console.log("rendered");
   const onGetStartedClick = () => {
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
-    console.log("clicked");
   };
 
   const onSignUpClick = () => {
-    if(!signInFormData.email){
-        return;
+    if (!signInFormData.email) {
+      return;
     }
     setIsSignUpSuccess(true);
   }
@@ -150,7 +148,7 @@ const SignInForm = (props: ISignInFormProps) => {
                   value: signInFormData.email,
                   onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                     onChangeSignInFormValue("email", e?.target?.value),
-                    disabled: isSignUpSuccess
+                  disabled: isSignUpSuccess
                 }}
               />
             </div>
