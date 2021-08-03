@@ -1,5 +1,5 @@
 import { IData } from "@constant/data.interface";
-import { CategoryTypes } from "../types";
+import { CategoryTypes, PersonalEstatesListingTypes, PersonalTypes } from "../types";
 
 const initState: IData = {
     id: "",
@@ -29,6 +29,54 @@ const categoryReducer = (state = initState, action: any) => {
         callback(newState);
       }
       return newState;
+    }
+    case PersonalEstatesListingTypes.SET_PROPERTY: {
+      const {data, callback} = action?.payload;
+      if (callback) {
+        callback(state);
+      }
+      return {
+        ...state,
+        properties: data,
+      };
+    }
+    case PersonalTypes.SET_PERSONAL_INFORMATION: {
+      console.log("chay vao day")
+      const {data, callback} = action?.payload;
+      const {legalName, address, addressLine1, addressLine2, email, passport, unitNumber} = data;
+      if (callback) {
+        callback(state);
+      }
+      return {
+        ...state,
+        email: email,
+        full_legal_name: legalName,
+        nric: passport,
+        postal_code: address,
+        address_line_1: addressLine1,
+        address_line_2: addressLine2,
+        unit_number: unitNumber
+      };
+    }
+    case PersonalTypes.SET_EXECUTOR: {
+      const {data, callback} = action?.payload;
+      if (callback) {
+        callback(state);
+      }
+      return {
+        ...state,
+        executors: data
+      };
+    }
+    case PersonalTypes.SET_BENEFICIARY: {
+      const {data, callback} = action?.payload;
+      if (callback) {
+        callback(state);
+      }
+      return {
+        ...state,
+        beneficiaries: data
+      };
     }
     default: {
       return state;

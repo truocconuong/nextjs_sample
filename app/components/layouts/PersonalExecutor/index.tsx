@@ -6,7 +6,7 @@ import { DataFormInput } from "@module/ExecutorFormInput";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { GlobalDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
+import { CategoryActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   ExecutorMobileIcon,
@@ -133,12 +133,12 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
     } else {
       if (index > -1) {
         dataFormCopy[index] = data;
-      }else {
+      } else {
         data.id = uuidv4();
         dataFormCopy.push(data);
       }
       setDataForm(dataFormCopy);
-      dispatch(GlobalDataActions.setExecutor(toApiDataForm(dataFormCopy), () => {
+      dispatch(CategoryActions.setExecutor(toApiDataForm(dataFormCopy), () => {
 
       }));
     }
@@ -206,9 +206,9 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
     if (token) {
       dispatch(UserActions.deleteExecutor({ is_delete: true }, deletingId, token, () => { }));
     } else {
-      dispatch(GlobalDataActions.setExecutor(toApiDataForm(newFormData), () => { }));
+      dispatch(CategoryActions.setExecutor(toApiDataForm(newFormData), () => { }));
     }
-    if(editingFormInput?.id === deletingId){
+    if (editingFormInput?.id === deletingId) {
       setIsEditing(false);
     }
   };

@@ -24,16 +24,7 @@ const PersonalExecutorScreen = () => {
     }
   }, [categoryData?.executors])
 
-  const guestData = useSelector(
-    createSelector(
-      (state: any) => state.data,
-      (globalData: any) => {
-        return globalData
-      }
-    )
-  );
-
-  return localStorage.getItem("accessToken") ? <PersonalExecutor firstRender={firstRender} data={categoryData}/> : <PersonalExecutor firstRender={false} data={guestData}/>
+  return localStorage.getItem("accessToken") ? <PersonalExecutor firstRender={firstRender} data={categoryData}/> : <PersonalExecutor firstRender={false} data={categoryData}/>
 };
 
 export default AuthHoc(PersonalExecutorScreen);
