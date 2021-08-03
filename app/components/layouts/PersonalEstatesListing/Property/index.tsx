@@ -21,7 +21,7 @@ import CustomDatePicker from "generals/DatePicker";
 import moment from "moment";
 import ModalStep from "generals/Modal/ModalStep";
 import {useDispatch, useSelector} from "react-redux";
-import {ProgressActions, GlobalDataActions} from "@redux/actions";
+import {CategoryActions, ProgressActions} from "@redux/actions";
 import {RootState} from "@redux/reducers";
 
 const {Option} = Select;
@@ -67,7 +67,7 @@ const optionsSplash = [
 function PropertyLayout(props) {
   const dispatch = useDispatch();
   const PropertiesReducer = useSelector(
-    (state: RootState) => state?.data?.properties
+    (state: RootState) => state?.category?.properties
   );
 
   const [isShowModal, setIsShowModal] = useState(false);
@@ -209,7 +209,7 @@ function PropertyLayout(props) {
     if (!isContinue) {
       setIsContinue(true);
     }
-    dispatch(GlobalDataActions.setProperty(tempListData, () => {}));
+    dispatch(CategoryActions.setProperty(tempListData, () => {}));
   };
 
   const handleEdit = item => {
