@@ -70,9 +70,9 @@ function ModalStep(props: IProps) {
             <div className="carousel__child" key={index}>
               <div className="carousel__child--image">{item.image}</div>
               <div className="carousel__child--title">{item.title}</div>
-              {item.contents.map(subitem => {
+              {item.contents.map((subitem, indexItem) => {
                 return (
-                  <div className="carousel__child--contents" style={item?.alignContents && {textAlign: 'start'}}>
+                  <div className="carousel__child--contents" style={item?.alignContents && {textAlign: 'start'}} key={indexItem}>
                     {subitem?.subTitle && <div className="carousel__child--subtitle">{subitem?.subTitle}</div>}
                     <div className="carousel__child--content">{subitem?.content}</div>
                   </div>

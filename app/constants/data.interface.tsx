@@ -12,12 +12,17 @@ export interface IExecutor {
 }
 
 export interface IBeneficiary {
-    full_legal_name: string;
-    relationship_id: string;
-    email: string;
+    full_legal_name?: string;
+    relationship_id?: string;
+    email?: string;
     percent?: number;
-    nric: string;
+    nric?: string;
     id?: string;
+}
+
+export interface ISetPercent {
+    id: string;
+    percent: number;
 }
 
 export interface IProperty {

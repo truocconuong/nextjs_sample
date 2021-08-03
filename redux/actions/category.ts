@@ -1,4 +1,4 @@
-import { IBeneficiary, IData, IExecutor } from "@constant/data.interface";
+import { IBeneficiary, IData, IExecutor, ISetPercent } from "@constant/data.interface";
 import {
   CategoryTypes,
   PersonalEstatesListingTypes,
@@ -30,7 +30,6 @@ export const setProperty = (data, callback) => {
 };
 
 export const setPersonalInformation = (data: DataPersonal, callback) => {
-  console.log("chay vao day")
   return {
     type: PersonalTypes.SET_PERSONAL_INFORMATION,
     payload: {
