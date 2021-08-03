@@ -122,8 +122,8 @@ const PersonalInformation = () => {
         () => { }
       )
     );
-    if (categoryData) {
-      const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
+    if (token) {
       const dataUpdate: IPersonalInformation = toDataApiUpdatePersonalInformation(data);
       dispatch(UserActions.updatePersonalInformation(dataUpdate, categoryData.id, token, () => { }));
     } else {

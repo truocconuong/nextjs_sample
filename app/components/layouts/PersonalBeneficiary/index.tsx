@@ -62,7 +62,7 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
   }, [width]);
 
   useEffect(() => {
-    if (dataForm.length === 1) {
+    if (dataForm.length > 0) {
       dispatch(
         ProgressActions.setAmountPercentIncreament(
           {
@@ -82,7 +82,7 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
       dispatch(
         ProgressActions.setRouter(
           {
-            router: "/personal-beneficiary",
+            router: "/personal-estates-listing/property",
           },
           () => { }
         )
@@ -162,6 +162,14 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
 
       }));
     }
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: false,
+        },
+        () => { }
+      )
+    );
     setIsEditing(false)
   };
 
@@ -225,14 +233,6 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
     setNewDataItems(newFormData);
     setVisibleModalDelete(false);
     if (newFormData.length === 0) {
-      dispatch(
-        ProgressActions.setDisabled(
-          {
-            disabled: true,
-          },
-          () => { }
-        )
-      );
       setEditingFormInput({
         ...initialDataForm,
       });
