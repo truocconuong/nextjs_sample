@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import router from "next/dist/client/router";
-import { GlobalDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
+import { CategoryActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   TipIcon,
@@ -153,12 +153,12 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
     } else {
       if (index > -1) {
         dataFormCopy[index] = data;
-      }else {
+      } else {
         data.id = uuidv4();
         dataFormCopy.push(data);
       }
       setDataForm(dataFormCopy);
-      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(dataFormCopy), () => {
+      dispatch(CategoryActions.setBeneficiary(toApiDataForm(dataFormCopy), () => {
 
       }));
     }
@@ -241,9 +241,9 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
     if (token) {
       dispatch(UserActions.deleteBeneficiary({ is_delete: true }, deletingId, token, () => { }));
     } else {
-      dispatch(GlobalDataActions.setBeneficiary(toApiDataForm(newFormData), () => { }));
+      dispatch(CategoryActions.setBeneficiary(toApiDataForm(newFormData), () => { }));
     }
-    if(editingFormInput?.id === deletingId){
+    if (editingFormInput?.id === deletingId) {
       setIsEditing(false);
     }
   };

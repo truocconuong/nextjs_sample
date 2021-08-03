@@ -24,16 +24,7 @@ const PersonalBeneficiaryScreen = () => {
     }
   }, [categoryData?.executors])
 
-  const guestData = useSelector(
-    createSelector(
-      (state: any) => state.data,
-      (globalData: any) => {
-        return globalData
-      }
-    )
-  );
-
-  return localStorage.getItem("accessToken") ? <PersonalBeneficiary firstRender={firstRender} data={categoryData} /> : <PersonalBeneficiary firstRender={false} data={guestData} />
+  return localStorage.getItem("accessToken") ? <PersonalBeneficiary firstRender={firstRender} data={categoryData} /> : <PersonalBeneficiary firstRender={false} data={categoryData} />
 };
 
 export default AuthHoc(PersonalBeneficiaryScreen);

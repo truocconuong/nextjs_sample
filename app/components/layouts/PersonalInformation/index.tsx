@@ -6,7 +6,7 @@ import PersonalFormInput, { DataFormInput } from "@module/PersonalFormInput";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { CategoryActions, GlobalDataActions, MasterDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
+import { CategoryActions, MasterDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
   PersonalIcon,
@@ -89,7 +89,7 @@ const PersonalInformation = () => {
       }
     )
   );
-  
+
   useEffect(() => {
     const initialDataForm: DataFormInput = {
       legalName: categoryData?.full_legal_name || "",
@@ -100,7 +100,7 @@ const PersonalInformation = () => {
       addressLine2: categoryData?.address_line_2 || "",
       unitNumber: categoryData?.unit_number || "",
     };
-    setDataForm({...initialDataForm})
+    setDataForm({ ...initialDataForm })
   }, [categoryData])
 
   const [dataCard, setDataCard] = useState<CardInfoDataPropsInterface>(
@@ -127,7 +127,7 @@ const PersonalInformation = () => {
       const dataUpdate: IPersonalInformation = toDataApiUpdatePersonalInformation(data);
       dispatch(UserActions.updatePersonalInformation(dataUpdate, categoryData.id, token, () => { }));
     } else {
-      dispatch(GlobalDataActions.setPersonalInformation(data, () => { }));
+      dispatch(CategoryActions.setPersonalInformation(data, () => { }));
     }
   };
 
