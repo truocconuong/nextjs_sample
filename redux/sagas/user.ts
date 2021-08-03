@@ -87,6 +87,23 @@ function* createPersonaBeneficiary(action: any) {
   }
 }
 
+function* updatePercentBeneficiaries(action: any) {
+  const { callback, data, token } = action?.payload;
+  try {
+    const res = yield call(() =>
+      Request.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/beneficiaries/percent`,
+        data,
+        token
+      )
+    );
+    callback && callback(res[0]?.data);
+  } catch (error) {
+    callback && callback(error?.response?.data);
+    console.log("user._error: ", error?.response?.data);
+  }
+}
+
 export default function* userSaga() {
   yield takeLatest(UserTypes.UPDATE_PERSONAL_INFORMATION, updatePersonalInformation);
   yield takeLatest(UserTypes.UPDATE_PERSONAL_EXECUTOR, updatePersonaExecutor);
@@ -95,4 +112,5 @@ export default function* userSaga() {
   yield takeLatest(UserTypes.UPDATE_PERSONAL_BENEFICIARY, updatePersonaBeneficiary);
   yield takeLatest(UserTypes.DELETE_PERSONAL_BENEFICIARY, updatePersonaBeneficiary);
   yield takeLatest(UserTypes.CREATE_PERSONAL_BENEFICIARY, createPersonaBeneficiary);
+  yield takeLatest(UserTypes.UPDATE_PERCENT_BENEFICIARIES, updatePercentBeneficiaries);
 }

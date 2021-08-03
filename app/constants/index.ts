@@ -11,6 +11,8 @@ export enum PERSONAL_ALLOCATION {
   MOTHER = "Mother",
   SON = "Son",
   DAUGHTER = "Daughter",
+  OTHER= "Other",
+  WIFE= "Wife"
 }
 
 export enum MASTERDATA_TYPE {

@@ -6,7 +6,6 @@ import { DataFormInput } from "@module/BeneficiaryFormInput";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import router from "next/dist/client/router";
 import { CategoryActions, ProgressActions, UserActions } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import {
@@ -129,7 +128,8 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
         relationship_id: dataForm.relationship,
         email: dataForm.email,
         nric: dataForm.passport,
-        id: dataForm?.id
+        id: dataForm?.id,
+        percent: 0
       }
     })
     return dataRes;

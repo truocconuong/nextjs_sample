@@ -1,5 +1,5 @@
-import { IBeneficiary, IExecutor, IPersonalInformation } from "@constant/data.interface";
-import { UserTypes } from "../types";
+import { IBeneficiary, IExecutor, IPersonalInformation, ISetPercent } from "@constant/data.interface";
+import { PersonalTypes, UserTypes } from "../types";
 
 export const updatePersonalInformation = (data: IPersonalInformation, id: string,  token: string, callback?: any) => {
   return {
@@ -47,5 +47,15 @@ export const deleteBeneficiary = (data: {is_delete: boolean}, id: string,  token
   return {
     type: UserTypes.UPDATE_PERSONAL_BENEFICIARY,
     payload: { data, id, callback, token },
+  };
+};
+
+export const setPercents = (data: ISetPercent[], callback) => {
+  return {
+    type: UserTypes.UPDATE_PERCENT_BENEFICIARIES,
+    payload: {
+      data,
+      callback,
+    },
   };
 };

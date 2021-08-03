@@ -1,5 +1,5 @@
-import { IBeneficiary, IData } from "@constant/data.interface";
-import { PERSONAL_ALLOCATION } from "@constant/index";
+import { IBeneficiary, IData, IMasterdata, ISetPercent } from "@constant/data.interface";
+import { MASTERDATA_TYPE, PERSONAL_ALLOCATION } from "@constant/index";
 import CustomButton from "@generals/Button";
 import ModalStep from "@generals/Modal/ModalStep";
 import {
@@ -10,16 +10,21 @@ import {
   IconThunder,
   TipIcon,
 } from "@images/index";
+import { CategoryActions, ProgressActions, UserActions } from "@redux/actions";
 import { Slider } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
+import { useDispatch } from "react-redux";
 export interface AllocationPersonalInterface {
-  id: number;
-  type: PERSONAL_ALLOCATION;
+  id: string;
+  type: string;
   name: string;
   percent: number;
   color: string;
+  email?: string;
+  nric?: string;
+  relationship_id?: string;
 }
 
 const colorsMap = {
@@ -27,46 +32,34 @@ const colorsMap = {
   [PERSONAL_ALLOCATION.MOTHER]: "#FFD9D1",
   [PERSONAL_ALLOCATION.SON]: "#BAF0DF",
   [PERSONAL_ALLOCATION.DAUGHTER]: "#D3EDFF",
+  [PERSONAL_ALLOCATION.OTHER]: "#BAF0DF",
+  [PERSONAL_ALLOCATION.WIFE]: "#D3EDFF",
 }
 const Allocation = () => {
+  const dispatch = useDispatch();
   const maxPercent = 100;
-  const allocatePersonals: AllocationPersonalInterface[] = [
-    {
-      id: 1,
-      type: PERSONAL_ALLOCATION.FATHER,
-      name: "Ryan Kwek",
-      percent: 0,
-      color: "#FFE9BE",
-    },
-    {
-      id: 2,
-      type: PERSONAL_ALLOCATION.MOTHER,
-      name: "Charlie Mok",
-      percent: 0,
-      color: "#FFD9D1",
-    },
-    {
-      id: 3,
-      type: PERSONAL_ALLOCATION.SON,
-      name: "Gary Wu",
-      percent: 0,
-      color: "#BAF0DF",
-    },
-    {
-      id: 4,
-      type: PERSONAL_ALLOCATION.DAUGHTER,
-      name: "Stacy Kwek",
-      percent: 0,
-      color: "#D3EDFF",
-    },
-  ];
-
   const [isMobile, setIsMobile] = useState(false);
   const [totalPercent, setTotalPercent] = useState(0);
+  const toPersonsData = () => {
+    const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary) => {
+      const relationshipName = masterdata.filter(item => item.value === MASTERDATA_TYPE.RELATIONSHIP).find(item => item.id === beneficiary.relationship_id)?.name;
+      return {
+        color: colorsMap[relationshipName],
+        id: beneficiary.id,
+        name: beneficiary.full_legal_name,
+        percent: beneficiary.percent,
+        type: relationshipName,
+        email: beneficiary.email,
+        nric: beneficiary.nric,
+        relationship_id: beneficiary.relationship_id
+      }
+    })
+    return persons || [];
+  }
   const [persons, setPersons] = useState<AllocationPersonalInterface[]>(
-    allocatePersonals
+    toPersonsData()
   );
-  const [isShowModalSplash, setIsShowModalSplash] = useState(true);
+  const [isShowModalSplash, setIsShowModalSplash] = useState(false);
 
   const categoryData = useSelector(
     createSelector(
@@ -76,19 +69,68 @@ const Allocation = () => {
       }
     )
   );
-  
+
   useEffect(() => {
     const persons = toPersonsData();
     setPersons(persons);
+    const total = persons.reduce(function (acc, obj) {
+      return acc + obj.percent;
+    }, 0);
+    const existedAllocationError = persons.find(item => item.percent === maxPercent);
+    if (total === maxPercent && !existedAllocationError) {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => { }
+        )
+      );
+    } else {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => { }
+        )
+      );
+    }
   }, [categoryData])
 
-  const toPersonsData = () => {
-    const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary) => {
-      return {
-        color
-      }
-    })
-  }
+  const masterdata = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => masterdata
+    )
+  );
+
+  useEffect(() => {
+    dispatch(
+      ProgressActions.setAmountPercentIncreament(
+        {
+          amountPercentIncreament: 0,
+        },
+        () => { }
+      )
+    );
+    dispatch(
+      ProgressActions.setPushable(
+        {
+          pushable: true,
+        },
+        () => { }
+      )
+    );
+    dispatch(
+      ProgressActions.setRouter(
+        {
+          router: "/start-your-will",
+        },
+        () => { }
+      )
+    );
+  }, [])
 
   const optionsSplash = [
     {
@@ -133,7 +175,7 @@ const Allocation = () => {
     return `${value}%`;
   };
 
-  const onRangeChange = (percent: any, id: number) => {
+  const onRangeChange = (percent: any, id: string) => {
     const personsCopy = [...persons];
     const remainPersons = [...persons].filter((person) => person.id !== id);
     const total = remainPersons.reduce(function (acc, obj) {
@@ -149,6 +191,66 @@ const Allocation = () => {
     personsCopy[index].percent = percent;
     setPersons(personsCopy);
   };
+
+  const saveAllocation = (value: number, id: string) => {
+    const dataForm = toApiDataForm(persons);
+    const token = localStorage.getItem("accessToken");
+    if(token){
+      dispatch(UserActions.updateBeneficiary({percent: value}, `${id}`, token, () => {
+      }))
+    }
+    dispatch(CategoryActions.setBeneficiary(dataForm, () => {
+    }));
+  }
+
+  const toApiDataForm = (dataForm: AllocationPersonalInterface[]) => {
+    const dataRes: IBeneficiary[] = dataForm.map((dataForm: AllocationPersonalInterface) => {
+      return {
+        full_legal_name: dataForm.name,
+        relationship_id: dataForm.relationship_id,
+        email: dataForm.email,
+        nric: dataForm.nric,
+        id: dataForm?.id,
+        percent: dataForm.percent,
+      }
+    })
+    return dataRes;
+  }
+
+  const onAutoDistribute = () => {
+    const personsCopy = [...persons];
+    let total = 0;
+    personsCopy.map(item => {
+      const value = Math.round(maxPercent / personsCopy.length);
+      item.percent = value;
+      total += value;
+    });
+    if(total !== maxPercent){
+      personsCopy[0].percent = (maxPercent - total + personsCopy[0].percent);
+    }
+    setTotalPercent(maxPercent)
+    setPersons(personsCopy)
+    const dataForm = toApiDataForm(personsCopy);
+    if(localStorage.getItem("accessToken")){
+      const dataSetPercents = toSetPercentApiData(personsCopy);
+      dispatch(UserActions.setPercents(dataSetPercents, () => {
+      }));
+    }else{
+      dispatch(CategoryActions.setBeneficiary(dataForm, () => {
+      }));
+    }
+  }
+
+  const toSetPercentApiData = (persons: AllocationPersonalInterface[]) => {
+    const res: ISetPercent[] = persons.map(item => {
+      return {
+        id: item.id,
+        percent: item.percent
+      }
+    })
+    return res;
+  }
+
   return (
     <div className="allocation-container">
       <div className="allocation-wrapper">
@@ -169,9 +271,8 @@ const Allocation = () => {
             }
           >
             {isMobile && (
-              <div className="title-mobile">{`${
-                100 - totalPercent
-              }% left to distribute`}</div>
+              <div className="title-mobile">{`${100 - totalPercent
+                }% left to distribute`}</div>
             )}
             <div
               className={
@@ -194,11 +295,11 @@ const Allocation = () => {
                         className="item"
                         key={person.id}
                         style={{
-                          width: `${person.percent}%`,
+                          width: `${person.percent || 0}%`,
                           backgroundColor: person.percent === maxPercent ? "#FFEBEC" : person.color,
                         }}
                       >
-                        <div className={"char-represent"}>{person.percent === maxPercent ? "Error" : person.name[0]}</div>
+                        <div className={"char-represent"}>{person.percent === maxPercent ? "Error" : person?.name && person.name[0]}</div>
                       </div>
                     )
                   );
@@ -215,7 +316,7 @@ const Allocation = () => {
               <div className="description-left">
                 <div className="title">
                   <div className="text">Estate Distribution</div>
-                  <div className="icon">
+                  <div className="icon" onClick={() => setIsShowModalSplash(true)}>
                     <TipIcon />
                   </div>
                 </div>
@@ -226,9 +327,8 @@ const Allocation = () => {
               </div>
               <div className="description-right">
                 {!isMobile && (
-                  <div className="title-desktop">{`${
-                    100 - totalPercent
-                  }% left to distribute`}</div>
+                  <div className="title-desktop">{`${100 - totalPercent
+                    }% left to distribute`}</div>
                 )}
                 <div className="button">
                   <CustomButton
@@ -236,6 +336,7 @@ const Allocation = () => {
                     size="large"
                     className="button-auto-distribute"
                     icon={<IconThunder />}
+                    onClick={onAutoDistribute}
                   >
                     Automatically Distribute
                   </CustomButton>
@@ -254,8 +355,8 @@ const Allocation = () => {
         >
           {persons.map((person: AllocationPersonalInterface) => {
             return (
-              <React.Fragment>
-                <div className={"item-container "  + (person.percent === maxPercent ? "error-ratio" : "")}>
+              <React.Fragment key={person.id}>
+                <div className={"item-container " + (person.percent === maxPercent ? "error-ratio" : "")}>
                   <div className="item-wrap">
                     <div
                       className={
@@ -284,6 +385,7 @@ const Allocation = () => {
                             onChange={(e: any) => onRangeChange(e, person.id)}
                             value={person.percent}
                             className={person.percent === maxPercent ? "slider-wrap-error" : ""}
+                            onAfterChange={(e: any) => saveAllocation(e, person.id)}
                           />
                         </div>
                       )}
@@ -291,21 +393,22 @@ const Allocation = () => {
                         className={
                           "percent " + (person.percent > 0 ? "bold" : "normal")
                         }
-                      >{`${person.percent}%`}</div>
+                      >{`${person.percent || 0}%`}</div>
                     </div>
                     {isMobile && (
                       <div className="range width-full">
                         <Slider
                           tipFormatter={formatter}
                           onChange={(e: any) => onRangeChange(e, person.id)}
-                          value={person.percent}
+                          value={person.percent || 0}
                           className={person.percent === maxPercent ? "slider-wrap-error" : ""}
+                          onAfterChange={(e: any) => saveAllocation(e, person.id)}
                         />
                       </div>
                     )}
                   </div>
                 </div>
-                { person.percent === maxPercent && <div className="error-text-ratio">Please adjust the percentage</div>}
+                {person.percent === maxPercent && <div className="error-text-ratio">Please adjust the percentage</div>}
               </React.Fragment>
             );
           })}
