@@ -231,9 +231,10 @@ const Allocation = () => {
     setTotalPercent(maxPercent)
     setPersons(personsCopy)
     const dataForm = toApiDataForm(personsCopy);
-    if(localStorage.getItem("accessToken")){
+    const token = localStorage.getItem("accessToken");
+    if(token){
       const dataSetPercents = toSetPercentApiData(personsCopy);
-      dispatch(UserActions.setPercents(dataSetPercents, () => {
+      dispatch(UserActions.setPercents(dataSetPercents, token, () => {
       }));
     }else{
       dispatch(CategoryActions.setBeneficiary(dataForm, () => {
