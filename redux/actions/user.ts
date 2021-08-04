@@ -50,11 +50,12 @@ export const deleteBeneficiary = (data: {is_delete: boolean}, id: string,  token
   };
 };
 
-export const setPercents = (data: ISetPercent[], callback) => {
+export const setPercents = (data: ISetPercent[], token: string, callback) => {
   return {
     type: UserTypes.UPDATE_PERCENT_BENEFICIARIES,
     payload: {
       data,
+      token,
       callback,
     },
   };

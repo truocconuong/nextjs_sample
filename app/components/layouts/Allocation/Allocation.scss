@@ -1,4 +1,5 @@
 .allocation-container {
+    background-image: url(/images/bg.svg);
     .row-reverse {
         display: flex;
         flex-direction: row-reverse !important;
@@ -71,7 +72,6 @@
         }
     }
     .allocation-wrapper {
-        background-image: url(/images/bg.svg);
         width: 100%;
         .allocation-ratio {
             width: 100%;

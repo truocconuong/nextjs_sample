@@ -91,8 +91,8 @@ function* updatePercentBeneficiaries(action: any) {
   const { callback, data, token } = action?.payload;
   try {
     const res = yield call(() =>
-      Request.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/beneficiaries/percent`,
+      Request.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/beneficiary/percent`,
         data,
         token
       )
