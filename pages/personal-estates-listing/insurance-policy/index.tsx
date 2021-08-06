@@ -1,10 +1,9 @@
-import InsurancePolicyLayout from '@layout/PersonalEstatesListing/InsurancePolicies';
-import React from 'react';
+import InsurancePolicyLayout from "@layout/PersonalEstatesListing/InsurancePolicies";
+import React from "react";
+import AuthHoc from "../../AuthHoc";
 
-function InsurancePolicyScreen(props) {
-    return (
-        <InsurancePolicyLayout />
-    );
+function InsurancePolicyScreen() {
+  return <InsurancePolicyLayout />;
 }
 
-export default InsurancePolicyScreen;
+export default AuthHoc(InsurancePolicyScreen);

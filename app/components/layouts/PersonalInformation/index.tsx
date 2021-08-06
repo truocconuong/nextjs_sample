@@ -1,20 +1,24 @@
-import CardInfo, { CardInfoDataPropsInterface } from "generals/CardInfo";
+import CardInfo, {CardInfoDataPropsInterface} from "generals/CardInfo";
 import CustomButton from "generals/Button";
 import Modal from "generals/Modal";
 import PersonalPreview from "generals/PersonalForm";
-import PersonalFormInput, { DataFormInput } from "@module/PersonalFormInput";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { createSelector } from "reselect";
-import { CategoryActions, MasterDataActions, ProgressActions, UserActions } from "../../../../redux/actions";
-import { useDispatch } from "react-redux";
+import PersonalFormInput, {DataFormInput} from "@module/PersonalFormInput";
+import React, {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {createSelector} from "reselect";
+import {
+  CategoryActions,
+  ProgressActions,
+  UserActions,
+} from "../../../../redux/actions";
+import {useDispatch} from "react-redux";
 import {
   PersonalIcon,
   PersonalMobileIcon,
   TipIcon,
 } from "../../../../public/images";
-import { IData, IPersonalInformation } from "@constant/data.interface";
-import { v4 as uuidv4 } from 'uuid';
+import {IData, IPersonalInformation} from "@constant/data.interface";
+import {v4 as uuidv4} from "uuid";
 const PersonalInformation = () => {
   const dispatch = useDispatch();
   const [visibleModal, setVisibleModal] = useState(false);
@@ -38,13 +42,13 @@ const PersonalInformation = () => {
   const width = useSelector(
     createSelector(
       (state: any) => state?.sizeBrowser,
-      (sizeBrowser) => sizeBrowser?.width
+      sizeBrowser => sizeBrowser?.width
     )
   );
 
   useEffect(() => {
-    setIsMobile(width < 768)
-  }, [width])
+    setIsMobile(width < 768);
+  }, [width]);
 
   useEffect(() => {
     dispatch(
@@ -52,7 +56,7 @@ const PersonalInformation = () => {
         {
           percent: 20,
         },
-        () => { }
+        () => {}
       )
     );
     dispatch(
@@ -60,7 +64,7 @@ const PersonalInformation = () => {
         {
           pushable: true,
         },
-        () => { }
+        () => {}
       )
     );
     dispatch(
@@ -68,7 +72,7 @@ const PersonalInformation = () => {
         {
           amountPercentIncreament: 0,
         },
-        () => { }
+        () => {}
       )
     );
     dispatch(
@@ -76,16 +80,16 @@ const PersonalInformation = () => {
         {
           router: "/personal-executor",
         },
-        () => { }
+        () => {}
       )
     );
-  }, [])
+  }, []);
 
   const categoryData = useSelector(
     createSelector(
       (state: any) => state?.category,
       (category: IData) => {
-        return category
+        return category;
       }
     )
   );
@@ -100,8 +104,8 @@ const PersonalInformation = () => {
       addressLine2: categoryData?.address_line_2 || "",
       unitNumber: categoryData?.unit_number || "",
     };
-    setDataForm({ ...initialDataForm })
-  }, [categoryData])
+    setDataForm({...initialDataForm});
+  }, [categoryData]);
 
   const [dataCard, setDataCard] = useState<CardInfoDataPropsInterface>(
     initialDataCard
@@ -110,7 +114,7 @@ const PersonalInformation = () => {
   const onSaveDataFormInput = (data: DataFormInput) => {
     setDataForm(data);
     setVisibleFormInput(false);
-    const dataCardCopy = { ...dataCard };
+    const dataCardCopy = {...dataCard};
     dataCardCopy.name = data.legalName;
     dataCardCopy.description = data.passport;
     setDataCard(dataCardCopy);
@@ -119,15 +123,24 @@ const PersonalInformation = () => {
         {
           disabled: false,
         },
-        () => { }
+        () => {}
       )
     );
     const token = localStorage.getItem("accessToken");
     if (token) {
-      const dataUpdate: IPersonalInformation = toDataApiUpdatePersonalInformation(data);
-      dispatch(UserActions.updatePersonalInformation(dataUpdate, categoryData.id, token, () => { }));
+      const dataUpdate: IPersonalInformation = toDataApiUpdatePersonalInformation(
+        data
+      );
+      dispatch(
+        UserActions.updatePersonalInformation(
+          dataUpdate,
+          categoryData.id,
+          token,
+          () => {}
+        )
+      );
     } else {
-      dispatch(CategoryActions.setPersonalInformation(data, () => { }));
+      dispatch(CategoryActions.setPersonalInformation(data, () => {}));
     }
   };
 
@@ -140,18 +153,20 @@ const PersonalInformation = () => {
       address_line_2: data.addressLine2,
       nric: data.passport,
       unit_number: data.unitNumber,
-    }
-  }
+    };
+  };
 
   const onEditCard = (id: number) => {
     setVisibleFormInput(true);
   };
-  const classNameWrapper = "personal-wrapper" + (isMobile ? " personal-wrapper-mobile w-100" : " personal-wrapper-desktop w-60");
+  const classNameWrapper =
+    "personal-wrapper" +
+    (isMobile
+      ? " personal-wrapper-mobile w-100"
+      : " personal-wrapper-desktop w-60");
   return (
     <div className={"personal-container " + (!isMobile ? "responsive" : "")}>
-      <div
-        className={classNameWrapper}
-      >
+      <div className={classNameWrapper}>
         <PersonalPreview
           isMobile={isMobile}
           mainIconDesktop={PersonalIcon}
@@ -168,7 +183,8 @@ const PersonalInformation = () => {
         />
         <div
           className={
-            "card-form " + (isMobile ? " card-form-mobile" : " card-form-desktop")
+            "card-form " +
+            (isMobile ? " card-form-mobile" : " card-form-desktop")
           }
         >
           <div className="card-form-wrapper">
@@ -203,7 +219,7 @@ const PersonalInformation = () => {
             " modal-information " +
             (isMobile ? "modal-mobile " : "modal-desktop ")
           }
-          style={isMobile ? { position: "fixed", bottom: "0" } : {}}
+          style={isMobile ? {position: "fixed", bottom: "0"} : {}}
         >
           <div className="modal-information-wrapper">
             <div className="title">Personal Information</div>

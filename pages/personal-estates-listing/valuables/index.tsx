@@ -1,10 +1,9 @@
-import ValuablesLayout from '@layout/PersonalEstatesListing/Valuables';
-import React from 'react';
+import ValuablesLayout from "@layout/PersonalEstatesListing/Valuables";
+import React from "react";
+import AuthHoc from "../../AuthHoc";
 
-function ValuablesScreen(props) {
-    return (
-        <ValuablesLayout />
-    );
+function ValuablesScreen() {
+  return <ValuablesLayout />;
 }
 
-export default ValuablesScreen;
+export default AuthHoc(ValuablesScreen);

@@ -1,4 +1,4 @@
-import { IData } from "@constant/data.interface";
+import {IData} from "@constant/data.interface";
 import {
   CategoryTypes,
   PersonalEstatesListingTypes,
@@ -27,25 +27,50 @@ const initState: IData = {
 const categoryReducer = (state = initState, action: any) => {
   switch (action.type) {
     case CategoryTypes.SAVE_CATEGORY_DATA: {
-      const { data, callback } = action?.payload;
-      const newState = { ...data };
+      const {data, callback} = action?.payload;
+      const newState = {...data};
       if (callback) {
         callback(newState);
       }
       return newState;
     }
     case PersonalEstatesListingTypes.SET_PROPERTY: {
-      const { data, callback } = action?.payload;
+      const {data, callback} = action?.payload;
       if (callback) {
         callback(state);
       }
       return {
         ...state,
-        properties: data,
+        properties: [...state.properties, data],
+      };
+    }
+    case PersonalEstatesListingTypes.UPDATE_PROPERTY_GUEST: {
+      const {id, data, callback} = action?.payload;
+      const tempProperties = state.properties.map(item => {
+        if (id !== "" && item.id === id) return data;
+        return item;
+      });
+      if (callback) {
+        callback(tempProperties);
+      }
+      return {
+        ...state,
+        properties: tempProperties,
+      };
+    }
+    case PersonalEstatesListingTypes.DELETE_PROPERTY_GUEST: {
+      const {id, callback} = action?.payload;
+      const tempProperties = state.properties.filter(item => item.id !== id);
+      if (callback) {
+        callback(tempProperties);
+      }
+      return {
+        ...state,
+        properties: tempProperties,
       };
     }
     case PersonalTypes.SET_PERSONAL_INFORMATION: {
-      const { data, callback } = action?.payload;
+      const {data, callback} = action?.payload;
       const {
         legalName,
         address,
@@ -70,7 +95,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalTypes.SET_EXECUTOR: {
-      const { data, callback } = action?.payload;
+      const {data, callback} = action?.payload;
       if (callback) {
         callback(state);
       }
@@ -80,7 +105,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalTypes.SET_BENEFICIARY: {
-      const { data, callback } = action?.payload;
+      const {data, callback} = action?.payload;
       if (callback) {
         callback(state);
       }

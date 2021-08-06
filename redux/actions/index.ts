@@ -4,6 +4,7 @@ import * as StartYourWill from "./startYourWill";
 import * as MasterDataActions from "./masterdata";
 import * as CategoryActions from "./category";
 import * as UserActions from "./user";
+import * as PersonalEstatesListingActions from "./personalEstatesListing";
 
 export {
   ProgressActions,
@@ -12,4 +13,5 @@ export {
   MasterDataActions,
   CategoryActions,
   UserActions,
+  PersonalEstatesListingActions,
 };

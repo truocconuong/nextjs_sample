@@ -1,10 +1,9 @@
-import BankAccountLayout from '@layout/PersonalEstatesListing/BankAccount';
-import React from 'react';
+import BankAccountLayout from "@layout/PersonalEstatesListing/BankAccount";
+import React from "react";
+import AuthHoc from "../../AuthHoc";
 
-function BankAccountScreen(props) {
-    return (
-        <BankAccountLayout />
-    );
+function BankAccountScreen() {
+  return <BankAccountLayout />;
 }
 
-export default BankAccountScreen;
+export default AuthHoc(BankAccountScreen);

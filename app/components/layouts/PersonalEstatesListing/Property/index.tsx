@@ -21,18 +21,14 @@ import CustomDatePicker from "generals/DatePicker";
 import moment from "moment";
 import ModalStep from "generals/Modal/ModalStep";
 import {useDispatch, useSelector} from "react-redux";
-import {CategoryActions, ProgressActions} from "@redux/actions";
-import {RootState} from "@redux/reducers";
+import {ProgressActions, PersonalEstatesListingActions} from "@redux/actions";
+import {getAddress} from "onemap-address-search-singapore";
+import {createSelector} from "reselect";
+import {IData, IMasterdata, IProperty} from "@constant/data.interface";
+import _ from "lodash";
+import {v4 as uuidv4} from "uuid";
 
 const {Option} = Select;
-
-const testOptions = [
-  {label: "TEST 1", value: "1"},
-  {label: "TEST 2", value: "2"},
-  {label: "TEST 3", value: "3"},
-  {label: "TEST 4", value: "4"},
-  {label: "TEST 5", value: "5"},
-];
 
 const optionsSplash = [
   {
@@ -64,10 +60,31 @@ const optionsSplash = [
   },
 ];
 
-function PropertyLayout(props) {
+interface IProps {
+  isLogin: boolean;
+  token?: string;
+}
+
+function PropertyLayout(props: IProps) {
+  const {isLogin, token} = props;
+
   const dispatch = useDispatch();
-  const PropertiesReducer = useSelector(
-    (state: RootState) => state?.category?.properties
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
+
+  const masterDataReducer = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => {
+        return masterdata;
+      }
+    )
   );
 
   const [isShowModal, setIsShowModal] = useState(false);
@@ -76,37 +93,83 @@ function PropertyLayout(props) {
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
   const [listData, setListData] = useState([]);
-  const [disabledEdit, setDisabledEdit] = useState(true);
-  const [dataSolely, setDataSolely] = useState({
+  const [disabledEdit, setDisabledEdit] = useState(false);
+  const [data, setData] = useState<IProperty>({
+    id: "",
     country: "",
-    type: "Solely Ownership",
-    code: "",
-    address1: "",
-    address2: "",
-    unitNumber: "",
-    typeOfProperty: null,
-    tenure: "",
-    currentBankLoan: null,
-    loanStartTime: "",
-    loanEndTime: "",
-    yearLoanTaken: "",
-    interestRate: "",
-    outstandingLoan: "",
-    remainingLoan: "",
+    is_solely: true,
+    is_joint: false,
+    postal_code: "",
+    address_line_1: "",
+    address_line_2: "",
+    unit_number: "",
+    tenure: 0,
+    current_bank_loan_id: "",
+    type_id: "",
+    remaining_loan_tenure: 0,
+    joint_name: "",
+    joint_contact: "",
+    loan_start_date: "",
+    loan_end_date: "",
+    year_loan_taken: 0,
+    interest_rate: 0,
+    outstanding_loan_amount: 0,
+    is_delete: false,
   });
-  const [dataJoint, setDataJoint] = useState({
-    country: "",
-    type: "Joint Ownership",
-    name: "",
-    contact: "",
-    address1: "",
-    address2: "",
-    unitNumber: "",
-  });
-  const [isCheckSolely, setIsCheckSolely] = useState(true);
-  const [isCheckJoint, setIsCheckJoint] = useState(false);
-  const [currentCountry, setCurrentCountry] = useState("");
   const [isContinue, setIsContinue] = useState(false);
+  const [errors, setErrors] = useState({
+    postal_code: false,
+    country: false,
+  });
+  const [optionTypes, setOptionTypes] = useState([]);
+  const [optionBanks, setOptionBanks] = useState([]);
+
+  useEffect(() => {
+    if (categoryData?.properties) {
+      const temp = categoryData?.properties.map(item => ({
+        ...item,
+        loan_start_date:
+          item?.loan_start_date !== null
+            ? moment(item?.loan_start_date).format("DD/MM/YYYY")
+            : "",
+        loan_end_date:
+          item?.loan_end_date !== null
+            ? moment(item?.loan_end_date || "").format("DD/MM/YYYY")
+            : "",
+      }));
+      console.log("temp", temp);
+      setListData(temp);
+      setNumberForm(temp.length + 1);
+      if (temp.length >= 1) {
+        setIsShowForm(false);
+        setIsShowModalSplash(false);
+      }
+    }
+  }, [categoryData?.properties]);
+
+  useEffect(() => {
+    if (masterDataReducer) {
+      const tempTypes = [];
+      const tempBanks = [];
+      masterDataReducer.map(item => {
+        if (item?.value === "TYPE_PROPERTY") {
+          tempTypes.push({
+            label: item?.name,
+            value: item?.id,
+          });
+          return;
+        }
+        if (item?.value === "BANK") {
+          tempBanks.push({
+            label: item?.name,
+            value: item?.id,
+          });
+        }
+      });
+      setOptionTypes(tempTypes);
+      setOptionBanks(tempBanks);
+    }
+  }, [masterDataReducer]);
 
   useEffect(() => {
     dispatch(
@@ -133,10 +196,6 @@ function PropertyLayout(props) {
         () => {}
       )
     );
-    if (PropertiesReducer.length >= 1) {
-      setListData(PropertiesReducer);
-      setIsShowModalSplash(false);
-    }
   }, []);
 
   useEffect(() => {
@@ -153,31 +212,27 @@ function PropertyLayout(props) {
   }, [isContinue]);
 
   const handleReset = () => {
-    setDataSolely({
+    setData({
+      id: "",
       country: "",
-      type: "Solely Ownership",
-      code: "",
-      address1: "",
-      address2: "",
-      unitNumber: "",
-      typeOfProperty: null,
-      tenure: "",
-      currentBankLoan: null,
-      loanStartTime: "",
-      loanEndTime: "",
-      yearLoanTaken: "",
-      interestRate: "",
-      outstandingLoan: "",
-      remainingLoan: "",
-    });
-    setDataJoint({
-      country: "",
-      type: "Joint Ownership",
-      name: "",
-      contact: "",
-      address1: "",
-      address2: "",
-      unitNumber: "",
+      is_solely: true,
+      is_joint: false,
+      postal_code: "",
+      address_line_1: "",
+      address_line_2: "",
+      unit_number: "",
+      tenure: 0,
+      current_bank_loan_id: "",
+      type_id: "",
+      remaining_loan_tenure: 0,
+      joint_name: "",
+      joint_contact: "",
+      loan_start_date: "",
+      loan_end_date: "",
+      year_loan_taken: 0,
+      interest_rate: 0,
+      outstanding_loan_amount: 0,
+      is_delete: false,
     });
   };
 
@@ -189,93 +244,165 @@ function PropertyLayout(props) {
     setIsShowModal(false);
   };
 
+  const handleValidate = () => {
+    let isError = false;
+    let error = errors;
+    if (!data?.country) {
+      error.country = true;
+      isError = true;
+    }
+    if (data?.is_solely && !data?.postal_code) {
+      error.postal_code = true;
+      isError = true;
+    }
+    setErrors(prev => ({...prev, error}));
+    return isError;
+  };
+
   const handleSave = () => {
-    setDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
-    let tempListData = listData;
-    if (isCheckSolely) {
-      tempListData.push({...dataSolely, country: currentCountry});
+    const checkValidation = handleValidate();
+    if (checkValidation) {
+      return;
     }
-    if (isCheckJoint) {
-      tempListData.push({...dataJoint, country: currentCountry});
+    const submitData = {
+      ...data,
+      tenure: Number(data.tenure),
+      remaining_loan_tenure: Number(data.remaining_loan_tenure),
+      year_loan_taken: Number(data.year_loan_taken),
+      interest_rate: Number(data.interest_rate),
+      outstanding_loan_amount: Number(data.outstanding_loan_amount),
+    };
+    if (disabledEdit) {
+      // edit
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.updateProperty(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      } else {
+        dispatch(
+          PersonalEstatesListingActions.updatePropertyGuest(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      }
+    } else {
+      // create
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.createProperty(submitData, property => {
+            submitData.id = property.id;
+            setListData([...listData, submitData]);
+          })
+        );
+      } else {
+        const tempSubmitData = {...submitData, id: uuidv4()};
+        dispatch(
+          PersonalEstatesListingActions.createPropertyGuest(
+            tempSubmitData,
+            () => {}
+          )
+        );
+      }
+      setNumberForm(numberForm + 1);
     }
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
     handleReset();
-    setIsCheckSolely(true);
-    setIsCheckJoint(false);
-    setCurrentCountry("");
     if (!isContinue) {
       setIsContinue(true);
     }
-    dispatch(CategoryActions.setProperty(tempListData, () => {}));
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleEdit = item => {
     setDisabledEdit(true);
     setIsShowForm(true);
-    let tempListData = listData;
-    setListData(tempListData.filter(i => i !== item));
-    setNumberForm(tempListData.length);
+    let tempListData = [...listData];
+    setNumberForm(tempListData.findIndex(i => i == item) + 1);
     const findItem = tempListData.find(data => data === item);
-    setCurrentCountry(findItem?.country);
-    if (item?.type === "Solely Ownership") {
-      setIsCheckSolely(true);
-      setIsCheckJoint(false);
-      setDataSolely(findItem);
-    }
-    if (item?.type === "Joint Ownership") {
-      setDataJoint(findItem);
-      setIsCheckSolely(false);
-      setIsCheckJoint(true);
-    }
+    setData(findItem);
   };
 
   const handleDelete = item => {
-    const tempListData = listData.filter(i => i !== item);
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
+    const tempItem = {...item, is_delete: true};
+    if (isLogin) {
+      dispatch(
+        PersonalEstatesListingActions.updateProperty(
+          tempItem?.id,
+          tempItem,
+          () => {}
+        )
+      );
+      return;
+    }
+    dispatch(
+      PersonalEstatesListingActions.deletePropertyGuest(tempItem?.id, () => {})
+    );
   };
 
-  const handleChangeInputSolely = e => {
+  const handleChangeInput = e => {
     const {name, value} = e.target;
-    setDataSolely(prev => ({...prev, [name]: value}));
+    if (data?.is_solely && name === "postal_code") {
+      setErrors(prev => ({...prev, postal_code: false}));
+    }
+    setData(prev => ({...prev, [name]: value}));
   };
 
-  const handleChangeInputJoint = e => {
-    const {name, value} = e.target;
-    setDataJoint(prev => ({...prev, [name]: value}));
-  };
-
-  const handleAddInvestment = () => {
+  const handleAddProperty = () => {
     if (isShowForm) return;
     setIsShowForm(true);
     setDisabledEdit(false);
   };
 
   const handleCheckSolely = () => {
-    setIsCheckJoint(false);
-    setIsCheckSolely(true);
-    // handleReset();
+    setData(prev => ({
+      ...prev,
+      is_solely: true,
+      is_joint: false,
+    }));
   };
 
   const handleCheckJoint = () => {
-    setIsCheckJoint(true);
-    setIsCheckSolely(false);
-    // handleReset();
+    setData(prev => ({
+      ...prev,
+      is_solely: false,
+      is_joint: true,
+    }));
   };
 
   const handleChangeStartTime = (value, dataString) => {
-    setDataSolely(prev => ({...prev, loanStartTime: dataString}));
+    setData(prev => ({
+      ...prev,
+      loan_start_date: dataString,
+    }));
   };
 
   const handleChangeEndTime = (value, dataString) => {
-    setDataSolely(prev => ({...prev, loanEndTime: dataString}));
+    setData(prev => ({...prev, loan_end_date: dataString}));
   };
 
   const handleChangeCountry = value => {
-    setCurrentCountry(value);
+    setErrors(prev => ({...prev, country: false}));
+    setData(prev => ({...prev, country: value}));
+  };
+
+  const handleSearchPostalCode = () => {
+    getAddress({
+      postalCode: data?.postal_code,
+    }).then(address => {
+      setData(prev => ({
+        ...prev,
+        unit_number: address?.blockNo,
+        address_line_1: address?.address[0] && address?.address[0].ADDRESS,
+        address_line_2: address?.address[1] && address?.address[1].ADDRESS,
+      }));
+    });
   };
 
   return (
@@ -325,7 +452,11 @@ function PropertyLayout(props) {
                               </span>
                             </Row>
                             <Row>
-                              <span className="financial">{item?.type}</span>
+                              <span className="financial">
+                                {item?.is_solely
+                                  ? "Solely Ownership"
+                                  : "Joint Ownership"}
+                              </span>
                             </Row>
                           </Col>
                         </Col>
@@ -367,13 +498,14 @@ function PropertyLayout(props) {
                   <Col className="w-full">
                     <Row className="mb-32">
                       <SelectCountry
-                        value={currentCountry}
+                        value={data?.country}
                         onChange={value => handleChangeCountry(value)}
+                        isError={errors?.country}
                       />
                     </Row>
                     <Row className="mb-24">
                       <CustomCheckboxInfo
-                        checked={isCheckSolely}
+                        checked={data?.is_solely}
                         onChange={handleCheckSolely}
                         title="Solely Ownership"
                         content="If you pass on with an outstanding mortgage and without life insurance, your family may be left without a roof if they are unable to service the loan."
@@ -381,52 +513,53 @@ function PropertyLayout(props) {
                     </Row>
                     <Row className="mb-32">
                       <CustomCheckboxInfo
-                        checked={isCheckJoint}
+                        checked={data?.is_joint}
                         onChange={handleCheckJoint}
                         title="Joint Ownership"
                         content="Only real estate that is solely under your name will become part of your estate when you pass on. Jointly-owned properties will go to the survivor by default and will not be part of your estate."
                       />
                     </Row>
-                    {isCheckSolely && (
+                    {data?.is_solely && (
                       <>
                         <Row className="mb-32">
                           <InputField
                             displayLabel
                             label="Registered Address"
                             inputProps={{
-                              placeholder: "6 digit postal code",
-                              name: "code",
-                              value: dataSolely?.code,
-                              onChange: e => handleChangeInputSolely(e),
+                              placeholder: "6 digit postal postal_code",
+                              name: "postal_code",
+                              value: data?.postal_code,
+                              onChange: e => handleChangeInput(e),
                               className: "mb-16",
                             }}
+                            isError={errors?.postal_code}
                             searchable
-                            onSearch={() => console.log("search input...")}
+                            onSearch={handleSearchPostalCode}
                           />
                           <InputField
                             inputProps={{
                               placeholder: "Address line 1",
-                              name: "address1",
-                              value: dataSolely?.address1,
-                              onChange: e => handleChangeInputSolely(e),
+                              name: "address_line_1",
+                              value: data?.address_line_1,
+                              onChange: e => handleChangeInput(e),
                               className: "mb-16",
                             }}
                           />
                           <InputField
                             inputProps={{
                               placeholder: "Address line 2",
-                              name: "address2",
-                              value: dataSolely?.address2,
-                              onChange: e => handleChangeInputSolely(e),
+                              name: "address_line_2",
+                              value: data?.address_line_2,
+                              onChange: e => handleChangeInput(e),
                               className: "mb-16",
                             }}
                           />
                           <InputField
                             inputProps={{
                               placeholder: "Unit number",
-                              name: "unitNumber",
-                              value: dataSolely?.unitNumber,
-                              onChange: e => handleChangeInputSolely(e),
+                              name: "unit_number",
+                              value: data?.unit_number,
+                              onChange: e => handleChangeInput(e),
                             }}
                           />
                         </Row>
@@ -441,7 +574,7 @@ function PropertyLayout(props) {
 
                     {isShowDetail && (
                       <>
-                        {isCheckSolely && (
+                        {data?.is_solely && (
                           <>
                             <Row className="mb-32" justify="space-between">
                               <div className="wp-48 responsive-mb-32">
@@ -450,15 +583,15 @@ function PropertyLayout(props) {
                                   label="Type of Property"
                                   selectProps={{
                                     placeholder: "Select",
-                                    value: dataSolely?.typeOfProperty,
+                                    value: data?.type_id,
                                     onChange: value =>
-                                      setDataSolely(prev => ({
+                                      setData(prev => ({
                                         ...prev,
-                                        typeOfProperty: value,
+                                        type_id: value,
                                       })),
                                   }}
                                 >
-                                  {testOptions.map(item => {
+                                  {optionTypes.map(item => {
                                     return (
                                       <Option value={item.value}>
                                         {item.label}
@@ -473,9 +606,10 @@ function PropertyLayout(props) {
                                   label="Tenure (in years)"
                                   inputProps={{
                                     placeholder: "0",
-                                    value: dataSolely?.tenure,
+                                    value: data?.tenure,
                                     name: "tenure",
-                                    onChange: e => handleChangeInputSolely(e),
+                                    onChange: e => handleChangeInput(e),
+                                    type: "number",
                                   }}
                                 ></InputField>
                               </div>
@@ -486,15 +620,15 @@ function PropertyLayout(props) {
                                 label="Current Bank Loan"
                                 selectProps={{
                                   placeholder: "Select",
-                                  value: dataSolely?.currentBankLoan,
+                                  value: data?.current_bank_loan_id,
                                   onChange: value =>
-                                    setDataSolely(prev => ({
+                                    setData(prev => ({
                                       ...prev,
-                                      currentBankLoan: value,
+                                      current_bank_loan_id: value,
                                     })),
                                 }}
                               >
-                                {testOptions.map((item, index) => {
+                                {optionBanks.map((item, index) => {
                                   return (
                                     <Option value={item.value}>
                                       {item.label}
@@ -511,11 +645,8 @@ function PropertyLayout(props) {
                                     handleChangeStartTime(value, dataString)
                                   }
                                   value={
-                                    dataSolely?.loanStartTime &&
-                                    moment(
-                                      dataSolely?.loanStartTime,
-                                      "DD/MM/YYYY"
-                                    )
+                                    data?.loan_start_date &&
+                                    moment(data?.loan_start_date, "DD/MM/YYYY")
                                   }
                                 />
                               </div>
@@ -526,11 +657,8 @@ function PropertyLayout(props) {
                                     handleChangeEndTime(value, dataString)
                                   }
                                   value={
-                                    dataSolely?.loanEndTime &&
-                                    moment(
-                                      dataSolely?.loanEndTime,
-                                      "DD/MM/YYYY"
-                                    )
+                                    data?.loan_end_date &&
+                                    moment(data?.loan_end_date, "DD/MM/YYYY")
                                   }
                                 />
                               </div>
@@ -542,9 +670,10 @@ function PropertyLayout(props) {
                                   label="Year Loan Taken"
                                   inputProps={{
                                     placeholder: "0",
-                                    value: dataSolely?.yearLoanTaken,
-                                    name: "yearLoanTaken",
-                                    onChange: e => handleChangeInputSolely(e),
+                                    value: data?.year_loan_taken,
+                                    name: "year_loan_taken",
+                                    onChange: e => handleChangeInput(e),
+                                    type: "number",
                                   }}
                                 ></InputField>
                               </div>
@@ -554,9 +683,10 @@ function PropertyLayout(props) {
                                   label="Interest Rate (%)"
                                   inputProps={{
                                     placeholder: "0",
-                                    value: dataSolely?.interestRate,
-                                    name: "interestRate",
-                                    onChange: e => handleChangeInputSolely(e),
+                                    value: data?.interest_rate,
+                                    name: "interest_rate",
+                                    onChange: e => handleChangeInput(e),
+                                    type: "number",
                                   }}
                                 ></InputField>
                               </div>
@@ -567,9 +697,10 @@ function PropertyLayout(props) {
                                 label="Outstanding Loan Amount ($)"
                                 inputProps={{
                                   placeholder: "0",
-                                  value: dataSolely?.outstandingLoan,
-                                  name: "outstandingLoan",
-                                  onChange: e => handleChangeInputSolely(e),
+                                  value: data?.outstanding_loan_amount,
+                                  name: "outstanding_loan_amount",
+                                  onChange: e => handleChangeInput(e),
+                                  type: "number",
                                 }}
                               ></InputField>
                             </Row>
@@ -579,15 +710,16 @@ function PropertyLayout(props) {
                                 label="Remaining Loan Tenure (in years)"
                                 inputProps={{
                                   placeholder: "0",
-                                  value: dataSolely?.remainingLoan,
-                                  name: "remainingLoan",
-                                  onChange: e => handleChangeInputSolely(e),
+                                  value: data?.remaining_loan_tenure,
+                                  name: "remaining_loan_tenure",
+                                  onChange: e => handleChangeInput(e),
+                                  type: "number",
                                 }}
                               ></InputField>
                             </Row>
                           </>
                         )}
-                        {isCheckJoint && (
+                        {data?.is_joint && (
                           <>
                             <Row className="mb-32">
                               <div className="mb-16">
@@ -600,17 +732,17 @@ function PropertyLayout(props) {
                                 inputProps={{
                                   placeholder: "Name",
                                   className: "mb-16",
-                                  value: dataJoint?.name,
-                                  name: "name",
-                                  onChange: e => handleChangeInputJoint(e),
+                                  value: data?.joint_name,
+                                  name: "joint_name",
+                                  onChange: e => handleChangeInput(e),
                                 }}
                               ></InputField>
                               <InputField
                                 inputProps={{
-                                  placeholder: "Contact",
-                                  value: dataJoint?.contact,
-                                  name: "contact",
-                                  onChange: e => handleChangeInputJoint(e),
+                                  placeholder: "joint_contact",
+                                  value: data?.joint_contact,
+                                  name: "joint_contact",
+                                  onChange: e => handleChangeInput(e),
                                 }}
                               ></InputField>
                             </Row>
@@ -621,26 +753,26 @@ function PropertyLayout(props) {
                                 inputProps={{
                                   placeholder: "Address line 1",
                                   className: "mb-16",
-                                  value: dataJoint?.address1,
-                                  name: "address1",
-                                  onChange: e => handleChangeInputJoint(e),
+                                  value: data?.address_line_1,
+                                  name: "address_line_1",
+                                  onChange: e => handleChangeInput(e),
                                 }}
                               ></InputField>
                               <InputField
                                 inputProps={{
                                   placeholder: "Address line 2",
                                   className: "mb-16",
-                                  value: dataJoint?.address2,
-                                  name: "address2",
-                                  onChange: e => handleChangeInputJoint(e),
+                                  value: data?.address_line_2,
+                                  name: "address_line_2",
+                                  onChange: e => handleChangeInput(e),
                                 }}
                               ></InputField>
                               <InputField
                                 inputProps={{
                                   placeholder: "Unit number",
-                                  value: dataJoint?.unitNumber,
-                                  name: "unitNumber",
-                                  onChange: e => handleChangeInputJoint(e),
+                                  value: data?.unit_number,
+                                  name: "unit_number",
+                                  onChange: e => handleChangeInput(e),
                                 }}
                               ></InputField>
                             </Row>
@@ -668,7 +800,7 @@ function PropertyLayout(props) {
               )}
               <Row className="add-investment" justify="space-between">
                 <CloudPropertyIcon />
-                <span onClick={handleAddInvestment} style={{cursor: "pointer"}}>
+                <span onClick={handleAddProperty} style={{cursor: "pointer"}}>
                   Add Property
                 </span>
               </Row>
@@ -700,4 +832,4 @@ function PropertyLayout(props) {
   );
 }
 
-export default PropertyLayout;
+export default React.memo(PropertyLayout);
