@@ -21,12 +21,14 @@ countries.map(item => {
 });
 
 interface IProps {
+  isError?: boolean;
+  errorTextStr?: string;
   value?: string;
   onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function SelectCountry(props: IProps) {
-  const {value, onChange} = props;
+  const {value, onChange, isError, errorTextStr} = props;
 
   const [current, setCurrent] = useState({
     label: null,
@@ -59,6 +61,8 @@ function SelectCountry(props: IProps) {
       }}
       wrapperClassName="wrapper-select"
       searchable
+      isError={isError}
+      errorTextStr={errorTextStr}
     >
       {options.map(item => {
         return <Option value={item.value}>{item.label}</Option>;

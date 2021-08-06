@@ -1,10 +1,9 @@
-import InvestmentsLayout from '@layout/PersonalEstatesListing/Investments';
-import React from 'react';
+import InvestmentsLayout from "@layout/PersonalEstatesListing/Investments";
+import React from "react";
+import AuthHoc from "../../AuthHoc";
 
 function InvestmentScreen(props) {
-    return (
-        <InvestmentsLayout />
-    );
+  return <InvestmentsLayout />;
 }
 
-export default InvestmentScreen;
+export default AuthHoc(InvestmentScreen);

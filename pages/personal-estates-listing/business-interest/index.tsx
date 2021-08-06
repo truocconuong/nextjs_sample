@@ -1,10 +1,9 @@
-import BusinessInterestsLayout from '@layout/PersonalEstatesListing/BusinessInterests';
-import React from 'react';
+import BusinessInterestsLayout from "@layout/PersonalEstatesListing/BusinessInterests";
+import React from "react";
+import AuthHoc from "../../AuthHoc";
 
-function BusinessInterestScreen(props) {
-    return (
-        <BusinessInterestsLayout />
-    );
+function BusinessInterestScreen() {
+  return <BusinessInterestsLayout />;
 }
 
-export default BusinessInterestScreen;
+export default AuthHoc(BusinessInterestScreen);

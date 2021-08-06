@@ -34,6 +34,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "next": "10.0.0",
+    "onemap-address-search-singapore": "^1.0.2",
     "react": "17.0.0",
     "react-chartjs-2": "^3.0.4",
     "react-circular-progressbar": "^2.0.4",
