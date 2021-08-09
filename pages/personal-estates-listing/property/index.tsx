@@ -6,7 +6,7 @@ function PropertyScreen() {
   return (
     <>
       {localStorage.getItem("accessToken") ? (
-        <PropertyLayout isLogin token={localStorage.getItem("accessToken")} />
+        <PropertyLayout isLogin />
       ) : (
         <PropertyLayout isLogin={false} />
       )}

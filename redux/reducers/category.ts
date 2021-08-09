@@ -34,7 +34,8 @@ const categoryReducer = (state = initState, action: any) => {
       }
       return newState;
     }
-    case PersonalEstatesListingTypes.SET_PROPERTY: {
+    // property
+    case PersonalEstatesListingTypes.CREATE_PROPERTY_GUEST: {
       const {data, callback} = action?.payload;
       if (callback) {
         callback(state);
@@ -67,6 +68,45 @@ const categoryReducer = (state = initState, action: any) => {
       return {
         ...state,
         properties: tempProperties,
+      };
+    }
+    // bank account
+    case PersonalEstatesListingTypes.CREATE_BANK_ACCOUNT_GUEST: {
+      const {data, callback} = action?.payload;
+      const tempBankAccounts = [...state.bank_accounts, data];
+      if (callback) {
+        callback(tempBankAccounts);
+      }
+      return {
+        ...state,
+        bank_accounts: tempBankAccounts,
+      };
+    }
+    case PersonalEstatesListingTypes.UPDATE_BANK_ACCOUNT_GUEST: {
+      const {id, data, callback} = action?.payload;
+      const tempBankAccounts = state.bank_accounts.map(item => {
+        if (id !== "" && item.id === id) return data;
+        return item;
+      });
+      if (callback) {
+        callback(tempBankAccounts);
+      }
+      return {
+        ...state,
+        bank_accounts: tempBankAccounts,
+      };
+    }
+    case PersonalEstatesListingTypes.DELETE_BANK_ACCOUNT_GUEST: {
+      const {id, callback} = action?.payload;
+      const tempBankAccounts = state.bank_accounts.filter(
+        item => item.id !== id
+      );
+      if (callback) {
+        callback(tempBankAccounts);
+      }
+      return {
+        ...state,
+        bank_accounts: tempBankAccounts,
       };
     }
     case PersonalTypes.SET_PERSONAL_INFORMATION: {

@@ -3,7 +3,15 @@ import React from "react";
 import AuthHoc from "../../AuthHoc";
 
 function BankAccountScreen() {
-  return <BankAccountLayout />;
+  return (
+    <>
+      {localStorage.getItem("accessToken") ? (
+        <BankAccountLayout isLogin />
+      ) : (
+        <BankAccountLayout isLogin={false} />
+      )}
+    </>
+  );
 }
 
 export default AuthHoc(BankAccountScreen);

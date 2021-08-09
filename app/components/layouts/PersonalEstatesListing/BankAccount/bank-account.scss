@@ -1,8 +1,21 @@
 .bank-account {
-    .bank-account__bg-common {
-        background-color: #FFEEDF !important;
+  .bank-account__bg-common {
+    background-color: #ffeedf !important;
+  }
+  .info-bank-account_icon {
+    margin-top: 3px !important;
+  }
+  .limit-width {
+    span {
+      width: 170px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &:hover {
+        text-overflow: clip;
+        white-space: normal;
+        word-break: break-all;
+      }
     }
-    .info-bank-account_icon {
-        margin-top: 3px !important;
-    }
+  }
 }

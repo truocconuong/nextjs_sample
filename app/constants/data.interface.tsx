@@ -49,10 +49,11 @@ export interface IProperty {
 }
 
 export interface IBankAccount {
-  id: string;
+  id?: string;
   bank_id: string;
   account_no: string;
   is_solely: boolean;
+  is_joint: boolean;
   current_balance: number;
   account_holder: string;
 }
