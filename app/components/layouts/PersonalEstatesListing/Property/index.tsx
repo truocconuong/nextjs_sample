@@ -62,11 +62,10 @@ const optionsSplash = [
 
 interface IProps {
   isLogin: boolean;
-  token?: string;
 }
 
 function PropertyLayout(props: IProps) {
-  const {isLogin, token} = props;
+  const {isLogin} = props;
 
   const dispatch = useDispatch();
   const categoryData = useSelector(

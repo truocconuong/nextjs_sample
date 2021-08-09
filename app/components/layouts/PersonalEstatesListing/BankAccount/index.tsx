@@ -16,18 +16,13 @@ import {
 } from "../../../../../public/images";
 import CustomCheckboxInfo from "@generals/Checkbox/CheckboxInfo";
 import ModalStep from "@generals/Modal/ModalStep";
-import { ProgressActions } from "../../../../../redux/actions";
-import { useDispatch } from "react-redux";
+import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
+import {useDispatch, useSelector} from "react-redux";
+import {createSelector} from "reselect";
+import {IData, IMasterdata} from "@constant/data.interface";
+import {v4 as uuidv4} from "uuid";
 
 const {Option} = Select;
-
-const testOptions = [
-  {label: "TEST 1", value: "TEST 1"},
-  {label: "TEST 2", value: "TEST 2"},
-  {label: "TEST 3", value: "TEST 3"},
-  {label: "TEST 4", value: "TEST 4"},
-  {label: "TEST 5", value: "TEST 5"},
-];
 
 const optionsSplash = [
   {
@@ -49,8 +44,32 @@ const optionsSplash = [
   },
 ];
 
-function BankAccountLayout(props) {
+interface IProps {
+  isLogin: boolean;
+}
+
+function BankAccountLayout(props: IProps) {
+  const {isLogin} = props;
   const dispatch = useDispatch();
+
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        console.log("category", category?.bank_accounts);
+        return category;
+      }
+    )
+  );
+
+  const masterDataReducer = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => {
+        return masterdata;
+      }
+    )
+  );
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowModalSplash, setIsShowModalSplash] = useState(true);
@@ -58,17 +77,33 @@ function BankAccountLayout(props) {
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
   const [listData, setListData] = useState([]);
-  const [disabledEdit, setDisabledEdit] = useState(true);
+  const [disabledEdit, setDisabledEdit] = useState(false);
   const [data, setData] = useState({
-    bank: null,
-    accountNo: "",
-    type: "",
-    currentBalance: "",
-    accountHoverNames: "",
+    id: "",
+    bank_id: null,
+    account_no: "",
+    is_solely: true,
+    is_joint: false,
+    current_balance: 0,
+    account_holder: "",
   });
-  const [isCheckSolely, setIsCheckSolely] = useState(true);
-  const [isCheckJoint, setIsCheckJoint] = useState(false);
-  const [isContinue, setIsContinue] = useState(false)
+  const [isContinue, setIsContinue] = useState(false);
+  const [errors, setErrors] = useState({
+    account_no: false,
+    bank_id: false,
+  });
+  const [optionBanks, setOptionBanks] = useState([]);
+
+  useEffect(() => {
+    if (categoryData?.bank_accounts) {
+      setListData(categoryData.bank_accounts);
+      setNumberForm(categoryData.bank_accounts.length + 1);
+      if (categoryData.bank_accounts.length >= 1) {
+        setIsShowForm(false);
+        setIsShowModalSplash(false);
+      }
+    }
+  }, [categoryData?.bank_accounts]);
 
   useEffect(() => {
     dispatch(
@@ -82,7 +117,7 @@ function BankAccountLayout(props) {
     dispatch(
       ProgressActions.setPushable(
         {
-          pushable: true
+          pushable: true,
         },
         () => {}
       )
@@ -90,33 +125,50 @@ function BankAccountLayout(props) {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: '/personal-estates-listing/insurance-policy'
+          router: "/personal-estates-listing/insurance-policy",
         },
         () => {}
       )
-    )
-  }, [])
+    );
+  }, []);
 
   useEffect(() => {
     if (listData.length > 0) {
       dispatch(
         ProgressActions.setDisabled(
           {
-            disabled: false
+            disabled: false,
           },
           () => {}
         )
-      )
+      );
     }
-  }, [isContinue])
+  }, [isContinue]);
+
+  useEffect(() => {
+    if (masterDataReducer) {
+      const tempBanks = [];
+      masterDataReducer.map(item => {
+        if (item?.value === "BANK") {
+          tempBanks.push({
+            label: item?.name,
+            value: item?.id,
+          });
+        }
+      });
+      setOptionBanks(tempBanks);
+    }
+  }, [masterDataReducer]);
 
   const handleReset = () => {
     setData({
-      bank: null,
-      accountNo: "",
-      type: "",
-      currentBalance: "",
-      accountHoverNames: "",
+      id: "",
+      bank_id: null,
+      account_no: "",
+      is_solely: true,
+      is_joint: false,
+      current_balance: 0,
+      account_holder: "",
     });
   };
 
@@ -128,75 +180,120 @@ function BankAccountLayout(props) {
     setIsShowModal(false);
   };
 
+  const handleValidate = () => {
+    let isError = false;
+    let error = errors;
+    if (!data?.bank_id) {
+      error.bank_id = true;
+      isError = true;
+    }
+    if (!data?.account_no) {
+      error.account_no = true;
+      isError = true;
+    }
+    setErrors(prev => ({...prev, error}));
+    return isError;
+  };
+
   const handleSave = () => {
+    const checkValidation = handleValidate();
+    if (checkValidation) {
+      return;
+    }
+    const submitData = {
+      ...data,
+      current_balance: Number(data.current_balance),
+    };
+    if (disabledEdit) {
+      // edit
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.updateBankAccount(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      } else {
+        dispatch(
+          PersonalEstatesListingActions.updateBankAccountGuest(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      }
+    } else {
+      // create
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.createBankAccount(
+            submitData,
+            property => {
+              submitData.id = property.id;
+              setListData([...listData, submitData]);
+            }
+          )
+        );
+      } else {
+        const tempSubmitData = {...submitData, id: uuidv4()};
+        dispatch(
+          PersonalEstatesListingActions.createBankAccountGuest(
+            tempSubmitData,
+            () => {}
+          )
+        );
+      }
+      setNumberForm(numberForm + 1);
+    }
+    handleReset();
+    if (!isContinue) {
+      setIsContinue(true);
+    }
     setDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
-    let tempListData = listData;
-    let tempData = data;
-    if (isCheckSolely) {
-      delete tempData["accountHoverNames"];
-      tempData["type"] = "Solely Ownership";
-    } else if (isCheckJoint) {
-      tempData["type"] = "Joint Ownership";
-    }
-    tempListData.push(tempData);
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
-    handleReset();
-    setIsCheckSolely(true);
-    setIsCheckJoint(false);
-    if (!isContinue) {
-      setIsContinue(true)
-    }
-    
   };
 
   const handleEdit = item => {
     setDisabledEdit(true);
     setIsShowForm(true);
-    let tempListData = listData;
-    setListData(tempListData.filter(i => i !== item));
-    setNumberForm(tempListData.length);
+    let tempListData = [...listData];
+    setNumberForm(tempListData.findIndex(i => i == item) + 1);
     const findItem = tempListData.find(data => data === item);
-    if (item?.type === "Solely Ownership") {
-      setIsCheckSolely(true);
-      setIsCheckJoint(false);
-    }
-    if (item?.type === "Joint Ownership") {
-      setIsCheckSolely(false);
-      setIsCheckJoint(true);
-    }
     setData(findItem);
   };
 
   const handleDelete = item => {
-    const tempListData = listData.filter(i => i !== item);
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
+    const tempItem = {...item, is_delete: true};
+    if (isLogin) {
+      dispatch(
+        PersonalEstatesListingActions.updateBankAccount(
+          tempItem?.id,
+          tempItem,
+          () => {}
+        )
+      );
+      return;
+    }
+    dispatch(
+      PersonalEstatesListingActions.deleteBankAccountGuest(
+        tempItem?.id,
+        () => {}
+      )
+    );
   };
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
+    setErrors(prev => ({...prev, [name]: false}));
     setData(prev => ({...prev, [name]: value}));
   };
 
-  const handleAddInvestment = () => {
+  const handleAddBankAccount = () => {
     if (isShowForm) return;
     setIsShowForm(true);
     setDisabledEdit(false);
-  };
-
-  const handleCheckSolely = () => {
-    setIsCheckJoint(false);
-    setIsCheckSolely(true);
-    // handleReset();
-  };
-
-  const handleCheckJoint = () => {
-    setIsCheckJoint(true);
-    setIsCheckSolely(false);
-    // handleReset();
   };
 
   return (
@@ -240,11 +337,22 @@ function BankAccountLayout(props) {
                             <span>{index + 1}</span>
                           </Col>
                           <Col>
-                            <Row>
-                              <span className="type">{item?.bank}</span>
+                            <Row className="limit-width">
+                              <span className="type">
+                                {
+                                  masterDataReducer.find(
+                                    masterData =>
+                                      masterData.id === item?.bank_id
+                                  ).name
+                                }
+                              </span>
                             </Row>
                             <Row>
-                              <span className="financial">{item?.type}</span>
+                              <span className="financial">
+                                {item?.is_solely
+                                  ? "Solely Ownership"
+                                  : "Joint Ownership"}
+                              </span>
                             </Row>
                           </Col>
                         </Col>
@@ -290,15 +398,15 @@ function BankAccountLayout(props) {
                         label="Bank"
                         selectProps={{
                           placeholder: "Select",
-                          value: data?.bank,
-                          onChange: value =>
-                            setData(prev => ({
-                              ...prev,
-                              bank: value,
-                            })),
+                          value: data?.bank_id,
+                          onChange: value => {
+                            setData(prev => ({...prev, bank_id: value}));
+                            setErrors(prev => ({...prev, bank_id: false}));
+                          },
                         }}
+                        isError={errors?.bank_id}
                       >
-                        {testOptions.map(item => {
+                        {optionBanks.map(item => {
                           return (
                             <Option value={item.value}>{item.label}</Option>
                           );
@@ -310,25 +418,38 @@ function BankAccountLayout(props) {
                         displayLabel
                         label="Account No."
                         inputProps={{
-                          placeholder: "e.g. 0012345678",
-                          value: data?.accountNo,
-                          name: "accountNo",
+                          placeholder: "e.g. 012345678",
+                          value: data?.account_no,
+                          name: "account_no",
                           onChange: e => handleChangeInput(e),
                         }}
+                        isError={errors?.account_no}
                       ></InputField>
                     </Row>
                     <Row className="mb-24">
                       <CustomCheckboxInfo
-                        checked={isCheckSolely}
-                        onChange={handleCheckSolely}
+                        checked={data?.is_solely}
+                        onChange={() =>
+                          setData(prev => ({
+                            ...prev,
+                            is_solely: true,
+                            is_joint: false,
+                          }))
+                        }
                         title="Solely Ownership"
                         content="Only bank accounts under your single name will become part of your estate when you pass on."
                       />
                     </Row>
                     <Row className="mb-32">
                       <CustomCheckboxInfo
-                        checked={isCheckJoint}
-                        onChange={handleCheckJoint}
+                        checked={data?.is_joint}
+                        onChange={() =>
+                          setData(prev => ({
+                            ...prev,
+                            is_solely: false,
+                            is_joint: true,
+                          }))
+                        }
                         title="Joint Ownership"
                         content="Jointly owned accounts will only be considered as part of your estate and distributed to your beneficiaries if the joint account holder passes away before you do."
                       />
@@ -341,14 +462,15 @@ function BankAccountLayout(props) {
 
                     {isShowDetail && (
                       <>
-                        <Row className={isCheckJoint ? "mb-32" : "mb-40"}>
+                        <Row className={data?.is_joint ? "mb-32" : "mb-40"}>
                           <InputField
                             displayLabel
                             label="Current Balance ($)"
                             inputProps={{
+                              type: "number",
                               placeholder: "0.00",
-                              value: data?.currentBalance,
-                              name: "currentBalance",
+                              value: data?.current_balance,
+                              name: "current_balance",
                               onChange: e => handleChangeInput(e),
                               className: "mb-16",
                             }}
@@ -364,7 +486,7 @@ function BankAccountLayout(props) {
                           </div>
                         </Row>
 
-                        {isCheckJoint && (
+                        {data?.is_joint && (
                           <>
                             <Row className="mb-40">
                               <InputField
@@ -373,8 +495,8 @@ function BankAccountLayout(props) {
                                 inputProps={{
                                   placeholder: "Names",
                                   className: "mb-16",
-                                  value: data?.accountHoverNames,
-                                  name: "accountHoverNames",
+                                  value: data?.account_holder,
+                                  name: "account_holder",
                                   onChange: e => handleChangeInput(e),
                                 }}
                               ></InputField>
@@ -408,7 +530,10 @@ function BankAccountLayout(props) {
               )}
               <Row className="add-investment" justify="space-between">
                 <CloudBankAccountIcon />
-                <span onClick={handleAddInvestment} style={{cursor: "pointer"}}>
+                <span
+                  onClick={handleAddBankAccount}
+                  style={{cursor: "pointer"}}
+                >
                   Add Account
                 </span>
               </Row>
