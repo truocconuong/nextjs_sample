@@ -36,7 +36,7 @@ export const updateBeneficiary = (data: IBeneficiary, id: string,  token: string
   };
 };
 
-export const createBeneficiary = (data: IExecutor, token: string, callback?: any) => {
+export const createBeneficiary = (data: IBeneficiary, token: string, callback?: any) => {
   return {
     type: UserTypes.CREATE_PERSONAL_BENEFICIARY,
     payload: { data, callback, token },
