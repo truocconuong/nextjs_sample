@@ -3,7 +3,15 @@ import React from "react";
 import AuthHoc from "../../AuthHoc";
 
 function InsurancePolicyScreen() {
-  return <InsurancePolicyLayout />;
+  return (
+    <>
+      {localStorage.getItem("accessToken") ? (
+        <InsurancePolicyLayout isLogin />
+      ) : (
+        <InsurancePolicyLayout isLogin={false} />
+      )}
+    </>
+  );
 }
 
 export default AuthHoc(InsurancePolicyScreen);

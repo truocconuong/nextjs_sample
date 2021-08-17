@@ -107,3 +107,57 @@ export const updateBankAccount = (id, data, callback) => {
     },
   };
 };
+
+// insurance policies
+
+export const createInsurancePolicyGuest = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_INSURANCE_POLICY_GUEST,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateInsurancePolicyGuest = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_INSURANCE_POLICY_GUEST,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};
+
+export const deleteInsurancePolicyGuest = (id, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.DELETE_INSURANCE_POLICY_GUEST,
+    payload: {
+      id,
+      callback,
+    },
+  };
+};
+
+export const createInsurancePolicy = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_INSURANCE_POLICY,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateInsurancePolicy = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_INSURANCE_POLICY,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};

@@ -109,6 +109,46 @@ const categoryReducer = (state = initState, action: any) => {
         bank_accounts: tempBankAccounts,
       };
     }
+    // insurance_policies
+    case PersonalEstatesListingTypes.CREATE_INSURANCE_POLICY_GUEST: {
+      const {data, callback} = action?.payload;
+      const tempInsurancePolicies = [...state.insurance_policies, data];
+      if (callback) {
+        callback(tempInsurancePolicies);
+      }
+      return {
+        ...state,
+        insurance_policies: tempInsurancePolicies,
+      };
+    }
+    case PersonalEstatesListingTypes.UPDATE_INSURANCE_POLICY_GUEST: {
+      const {id, data, callback} = action?.payload;
+      const tempInsurancePolicies = state.insurance_policies.map(item => {
+        if (id !== "" && item.id === id) return data;
+        return item;
+      });
+      if (callback) {
+        callback(tempInsurancePolicies);
+      }
+      return {
+        ...state,
+        insurance_policies: tempInsurancePolicies,
+      };
+    }
+    case PersonalEstatesListingTypes.DELETE_INSURANCE_POLICY_GUEST: {
+      const {id, callback} = action?.payload;
+      const tempInsurancePolicies = state.insurance_policies.filter(
+        item => item.id !== id
+      );
+      if (callback) {
+        callback(tempInsurancePolicies);
+      }
+      return {
+        ...state,
+        insurance_policies: tempInsurancePolicies,
+      };
+    }
+    // personal information
     case PersonalTypes.SET_PERSONAL_INFORMATION: {
       const {data, callback} = action?.payload;
       const {
