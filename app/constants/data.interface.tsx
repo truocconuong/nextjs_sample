@@ -67,7 +67,8 @@ export interface IInsurancePolicy {
   current_value: number;
   converage: number;
   beneficiary_name: string;
-  is_nominated?: boolean;
+  is_nominated: boolean;
+  is_delete: boolean;
 }
 
 export interface IInvestment {

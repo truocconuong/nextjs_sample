@@ -13,7 +13,7 @@ import {
   SaveIcon,
   TrashEnabledIcon,
   TypesOfOwnershipImage,
-} from "../../../../../public/images";
+} from "@images/index";
 import CustomCheckboxInfo from "@generals/Checkbox/CheckboxInfo";
 import ModalStep from "@generals/Modal/ModalStep";
 import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
@@ -56,7 +56,6 @@ function BankAccountLayout(props: IProps) {
     createSelector(
       (state: any) => state?.category,
       (category: IData) => {
-        console.log("category", category?.bank_accounts);
         return category;
       }
     )

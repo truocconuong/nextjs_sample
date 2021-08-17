@@ -12,44 +12,79 @@ import {
   ResetIcon,
   SaveIcon,
   TrashEnabledIcon,
-} from "../../../../../public/images";
+} from "@images/index";
 import CustomCheckboxInfo from "@generals/Checkbox/CheckboxInfo";
-import {useDispatch} from 'react-redux';
-import { ProgressActions } from "../../../../../redux/actions";
-import { useEffect } from "react";
-import router from "next/router";
+import {useDispatch, useSelector} from "react-redux";
+import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
+import {useEffect} from "react";
+import {v4 as uuidv4} from "uuid";
+import {IData} from "@constant/data.interface";
+import {createSelector} from "reselect";
 
 const {Option} = Select;
+interface IProps {
+  isLogin: boolean;
+}
 
-const testOptions = [
-  {label: "TEST 1", value: "TEST 1"},
-  {label: "TEST 2", value: "TEST 2"},
-  {label: "TEST 3", value: "TEST 3"},
-  {label: "TEST 4", value: "TEST 4"},
-  {label: "TEST 5", value: "TEST 5"},
-];
-
-function InsurancePolicyLayout(props) {
+function InsurancePolicyLayout(props: IProps) {
+  const {isLogin} = props;
   const dispatch = useDispatch();
+
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
   const [listData, setListData] = useState([]);
-  const [disabledEdit, setDisabledEdit] = useState(true);
+  const [disabledEdit, setDisabledEdit] = useState(false);
   const [data, setData] = useState({
-    insuranceCompany: "",
-    type: "",
-    beneficiary: null,
-    policyName: "",
-    policyNo: "",
-    currentValue: "",
-    coverage: "",
+    id: "",
+    insurance_company: "",
+    is_non_nomivated: true,
+    policy_name: "",
+    policy_no: "",
+    current_value: 0,
+    converage: 0,
+    beneficiary_name: null,
+    is_nominated: false,
   });
-  const [isCheckNonNominated, setIsCheckNonNominated] = useState(true);
-  const [isCheckNominated, setIsCheckNominated] = useState(false);
-  const [isContinue, setIsContinue] = useState(false)
+  const [isContinue, setIsContinue] = useState(false);
+  const [optionBeneficiaries, setOptionBeneficiaries] = useState([]);
+  const [errors, setErrors] = useState({
+    insurance_company: false,
+    beneficiary_name: false,
+  });
+
+  useEffect(() => {
+    if (categoryData?.insurance_policies) {
+      setListData(categoryData.insurance_policies);
+      setNumberForm(categoryData.insurance_policies.length + 1);
+      if (categoryData.insurance_policies.length >= 1) {
+        setIsShowForm(false);
+      }
+    }
+  }, [categoryData?.insurance_policies]);
+
+  useEffect(() => {
+    if (categoryData?.beneficiaries) {
+      const tempOptions = [];
+      categoryData?.beneficiaries.map(item => {
+        tempOptions.push({
+          label: item?.full_legal_name,
+          value: item?.full_legal_name,
+        });
+      });
+      setOptionBeneficiaries(tempOptions);
+    }
+  }, [categoryData?.beneficiaries]);
 
   useEffect(() => {
     dispatch(
@@ -63,7 +98,7 @@ function InsurancePolicyLayout(props) {
     dispatch(
       ProgressActions.setPushable(
         {
-          pushable: true
+          pushable: true,
         },
         () => {}
       )
@@ -71,34 +106,37 @@ function InsurancePolicyLayout(props) {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: '/personal-estates-listing/investment'
+          router: "/personal-estates-listing/investment",
         },
         () => {}
       )
-    )
-  }, [])
+    );
+  }, []);
 
   useEffect(() => {
     if (listData.length > 0) {
       dispatch(
-        ProgressActions.setDisabled({
-          disabled: false
-        },
-        () => {}
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => {}
         )
-      )
+      );
     }
-  }, [isContinue])
+  }, [isContinue]);
 
   const handleReset = () => {
     setData({
-      insuranceCompany: "",
-      type: "",
-      beneficiary: null,
-      policyName: "",
-      policyNo: "",
-      currentValue: "",
-      coverage: "",
+      id: "",
+      insurance_company: "",
+      is_non_nomivated: true,
+      policy_name: "",
+      policy_no: "",
+      current_value: 0,
+      converage: 0,
+      beneficiary_name: null,
+      is_nominated: false,
     });
   };
 
@@ -110,74 +148,121 @@ function InsurancePolicyLayout(props) {
     setIsShowModal(false);
   };
 
+  const handleValidate = () => {
+    let isError = false;
+    let error = errors;
+    if (!data?.insurance_company) {
+      error.insurance_company = true;
+      isError = true;
+    }
+    if (!data?.beneficiary_name && data?.is_nominated) {
+      error.beneficiary_name = true;
+      isError = true;
+    }
+    setErrors(prev => ({...prev, error}));
+    return isError;
+  };
+
   const handleSave = () => {
+    const checkValidation = handleValidate();
+    if (checkValidation) {
+      return;
+    }
+    const submitData = {
+      ...data,
+      current_value: Number(data?.current_value),
+      converage: Number(data?.converage),
+    };
+    if (disabledEdit) {
+      // Edit
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.updateInsurancePolicy(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      } else {
+        dispatch(
+          PersonalEstatesListingActions.updateInsurancePolicyGuest(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      }
+    } else {
+      // create
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.createInsurancePolicy(
+            submitData,
+            property => {
+              submitData.id = property.id;
+              setListData([...listData, submitData]);
+            }
+          )
+        );
+      } else {
+        const tempSubmitData = {...submitData, id: uuidv4()};
+        dispatch(
+          PersonalEstatesListingActions.createInsurancePolicyGuest(
+            tempSubmitData,
+            () => {}
+          )
+        );
+      }
+      setNumberForm(numberForm + 1);
+    }
+    handleReset();
+    if (!isContinue) {
+      setIsContinue(true);
+    }
     setDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
-    let tempListData = listData;
-    let tempData = data;
-    if (isCheckNonNominated) {
-      delete tempData["accountHoverNames"];
-      tempData["type"] = "Solely Ownership";
-    } else if (isCheckNominated) {
-      tempData["type"] = "Joint Ownership";
-    }
-    tempListData.push(tempData);
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
-    handleReset();
-    setIsCheckNonNominated(true);
-    setIsCheckNominated(false);
-    if (!isContinue) {
-      setIsContinue(true)
-    }
   };
 
   const handleEdit = item => {
     setDisabledEdit(true);
     setIsShowForm(true);
-    let tempListData = listData;
-    setListData(tempListData.filter(i => i !== item));
-    setNumberForm(tempListData.length);
+    let tempListData = [...listData];
+    setNumberForm(tempListData.findIndex(i => i == item) + 1);
     const findItem = tempListData.find(data => data === item);
-    if (item?.type === "Solely Ownership") {
-      setIsCheckNonNominated(true);
-      setIsCheckNominated(false);
-    }
-    if (item?.type === "Joint Ownership") {
-      setIsCheckNonNominated(false);
-      setIsCheckNominated(true);
-    }
     setData(findItem);
   };
 
   const handleDelete = item => {
-    const tempListData = listData.filter(i => i !== item);
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
+    const tempItem = {...item, is_delete: true};
+    if (isLogin) {
+      dispatch(
+        PersonalEstatesListingActions.updateInsurancePolicy(
+          tempItem?.id,
+          tempItem,
+          () => {}
+        )
+      );
+      return;
+    }
+    dispatch(
+      PersonalEstatesListingActions.deleteInsurancePolicyGuest(
+        tempItem?.id,
+        () => {}
+      )
+    );
   };
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
+    setErrors(prev => ({...prev, [name]: false}));
     setData(prev => ({...prev, [name]: value}));
   };
 
-  const handleAddInvestment = () => {
+  const handleAddInsurancePolicy = () => {
     if (isShowForm) return;
     setIsShowForm(true);
     setDisabledEdit(false);
-  };
-
-  const handleCheckSolely = () => {
-    setIsCheckNominated(false);
-    setIsCheckNonNominated(true);
-    // handleReset();
-  };
-
-  const handleCheckJoint = () => {
-    setIsCheckNominated(true);
-    setIsCheckNonNominated(false);
-    // handleReset();
   };
 
   return (
@@ -216,11 +301,15 @@ function InsurancePolicyLayout(props) {
                           <Col>
                             <Row>
                               <span className="type">
-                                {item?.insuranceCompany}
+                                {item?.insurance_company}
                               </span>
                             </Row>
                             <Row>
-                              <span className="financial">{item?.type}</span>
+                              <span className="financial">
+                                {item?.is_non_nomivated
+                                  ? "Non-Nominated"
+                                  : "Nominated"}
+                              </span>
                             </Row>
                           </Col>
                         </Col>
@@ -266,41 +355,58 @@ function InsurancePolicyLayout(props) {
                         label="Insurance Company"
                         inputProps={{
                           placeholder: "e.g. FWD Insurance",
-                          value: data?.insuranceCompany,
-                          name: "insuranceCompany",
+                          value: data?.insurance_company,
+                          name: "insurance_company",
                           onChange: e => handleChangeInput(e),
                         }}
+                        isError={errors?.insurance_company}
                       ></InputField>
                     </Row>
                     <Row className="mb-24">
                       <CustomCheckboxInfo
-                        checked={isCheckNonNominated}
-                        onChange={handleCheckSolely}
+                        checked={data?.is_non_nomivated}
+                        onChange={() =>
+                          setData(prev => ({
+                            ...prev,
+                            is_non_nomivated: true,
+                            is_nominated: false,
+                          }))
+                        }
                         title="Non-Nominated"
                         content="Insurance policies that have not been nominated can be included as part of your estate. The insurance proceeds will be added into your estate and distributed to your beneficiaries upon claims."
                       />
                     </Row>
                     <Row className="mb-32">
                       <CustomCheckboxInfo
-                        checked={isCheckNominated}
-                        onChange={handleCheckJoint}
+                        checked={data?.is_nominated}
+                        onChange={() =>
+                          setData(prev => ({
+                            ...prev,
+                            is_non_nomivated: false,
+                            is_nominated: true,
+                          }))
+                        }
                         title="Nominated"
                         content="Insurance policies that have been nominated with beneficiaries will not be reflected in your Will itself. By entering the nominated policy details, you will have a clearer picture of the size of your current estate, and helps you better distribute your assets."
                       />
                     </Row>
-                    {isCheckNominated && (
+                    {data?.is_nominated && (
                       <Row className="mb-32">
                         <SelectField
                           displayLabel
                           label="Beneficiary"
                           selectProps={{
                             placeholder: "Select",
-                            value: data?.beneficiary,
+                            value: data?.beneficiary_name,
                             onChange: value =>
-                              setData(prev => ({...prev, beneficiary: value})),
+                              setData(prev => ({
+                                ...prev,
+                                beneficiary_name: value,
+                              })),
                           }}
+                          isError={errors?.beneficiary_name}
                         >
-                          {testOptions.map(item => {
+                          {optionBeneficiaries.map(item => {
                             return (
                               <Option value={item.value}>{item.label}</Option>
                             );
@@ -322,8 +428,8 @@ function InsurancePolicyLayout(props) {
                             label="Policy Name"
                             inputProps={{
                               placeholder: "Policy name",
-                              value: data?.policyName,
-                              name: "policyName",
+                              value: data?.policy_name,
+                              name: "policy_name",
                               onChange: e => handleChangeInput(e),
                             }}
                           ></InputField>
@@ -335,8 +441,8 @@ function InsurancePolicyLayout(props) {
                               label="Policy No."
                               inputProps={{
                                 placeholder: "0",
-                                value: data?.policyNo,
-                                name: "policyNo",
+                                value: data?.policy_no,
+                                name: "policy_no",
                                 onChange: e => handleChangeInput(e),
                               }}
                             ></InputField>
@@ -346,9 +452,10 @@ function InsurancePolicyLayout(props) {
                               displayLabel
                               label="Current Value ($)"
                               inputProps={{
+                                type: "number",
                                 placeholder: "0.00",
-                                value: data?.currentValue,
-                                name: "currentValue",
+                                value: data?.current_value,
+                                name: "current_value",
                                 onChange: e => handleChangeInput(e),
                               }}
                             ></InputField>
@@ -359,9 +466,10 @@ function InsurancePolicyLayout(props) {
                             displayLabel
                             label="Coverage ($)"
                             inputProps={{
+                              type: "number",
                               placeholder: "0.00",
-                              value: data?.coverage,
-                              name: "coverage",
+                              value: data?.converage,
+                              name: "converage",
                               onChange: e => handleChangeInput(e),
                               className: "mb-16",
                             }}
@@ -399,7 +507,10 @@ function InsurancePolicyLayout(props) {
               )}
               <Row className="add-investment" justify="space-between">
                 <CloudInsurancePoliciesIcon />
-                <span onClick={handleAddInvestment} style={{cursor: "pointer"}}>
+                <span
+                  onClick={handleAddInsurancePolicy}
+                  style={{cursor: "pointer"}}
+                >
                   Add Policy
                 </span>
               </Row>
