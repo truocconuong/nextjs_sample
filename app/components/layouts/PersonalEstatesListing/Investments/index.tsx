@@ -13,8 +13,8 @@ import {
   SaveIcon,
   TrashEnabledIcon,
 } from "../../../../../public/images";
-import { ProgressActions } from "../../../../../redux/actions";
-import { useDispatch } from "react-redux";
+import {ProgressActions} from "../../../../../redux/actions";
+import {useDispatch} from "react-redux";
 
 const {Option} = Select;
 
@@ -42,7 +42,7 @@ function InvestmentsLayout(props) {
     capitalOutlay: "",
     currentMarketValue: "",
   });
-  const [isContinue, setIsContinue] = useState(false);
+  // const [isContinue, setIsContinue] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -56,7 +56,7 @@ function InvestmentsLayout(props) {
     dispatch(
       ProgressActions.setPushable(
         {
-          pushable: true
+          pushable: true,
         },
         () => {}
       )
@@ -64,25 +64,33 @@ function InvestmentsLayout(props) {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: '/personal-estates-listing/business-interest'
+          router: "/personal-estates-listing/business-interest",
         },
         () => {}
       )
-    )
-  }, [])
-
-  useEffect(() => {
-    if (listData.length > 0) {
-      dispatch(
-        ProgressActions.setDisabled(
-          {
-            disabled: false
-          },
-          () => {}
-        )
+    );
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: false,
+        },
+        () => {}
       )
-    }
-  }, [isContinue])
+    );
+  }, []);
+
+  // useEffect(() => {
+  //   if (listData.length > 0) {
+  //     dispatch(
+  //       ProgressActions.setDisabled(
+  //         {
+  //           disabled: false
+  //         },
+  //         () => {}
+  //       )
+  //     )
+  //   }
+  // }, [isContinue])
 
   const handleReset = () => {
     setData({
@@ -110,9 +118,9 @@ function InvestmentsLayout(props) {
     tempListData.push(data);
     setListData(tempListData);
     handleReset();
-    if (!isContinue) {
-      setIsContinue(true)
-    }
+    // if (!isContinue) {
+    //   setIsContinue(true)
+    // }
   };
 
   const handleEdit = item => {
@@ -123,11 +131,11 @@ function InvestmentsLayout(props) {
     setData(tempListData.find(data => data === item));
   };
 
-  const handleDelete = (item) => {
+  const handleDelete = item => {
     const tempListData = listData.filter(i => i !== item);
     setListData(tempListData);
     setNumberForm(tempListData.length + 1);
-  }
+  };
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
@@ -199,7 +207,9 @@ function InvestmentsLayout(props) {
                             </CustomButton>
                           </Col>
                           <Col className="trash-icon div-center">
-                            <TrashEnabledIcon onClick={() => handleDelete(item)}/>
+                            <TrashEnabledIcon
+                              onClick={() => handleDelete(item)}
+                            />
                           </Col>
                         </Col>
                       </Row>

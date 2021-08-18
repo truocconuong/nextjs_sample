@@ -14,12 +14,12 @@ import {
   TrashEnabledIcon,
 } from "../../../../../public/images";
 import {isMobile} from "react-device-detect";
-import { ProgressActions } from "../../../../../redux/actions";
-import { useDispatch } from "react-redux";
+import {ProgressActions} from "../../../../../redux/actions";
+import {useDispatch} from "react-redux";
 
 function BusinessInterestsLayout(props) {
   const dispatch = useDispatch();
-  
+
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
@@ -33,7 +33,7 @@ function BusinessInterestsLayout(props) {
     estimateCurrentMarketValue: "",
     percentageShare: "",
   });
-  const [isContinue, setIsContinue] = useState(false);
+  // const [isContinue, setIsContinue] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -47,7 +47,7 @@ function BusinessInterestsLayout(props) {
     dispatch(
       ProgressActions.setPushable(
         {
-          pushable: true
+          pushable: true,
         },
         () => {}
       )
@@ -55,25 +55,33 @@ function BusinessInterestsLayout(props) {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: '/personal-estates-listing/valuables'
+          router: "/personal-estates-listing/valuables",
         },
         () => {}
       )
-    )
-  }, [])
-
-  useEffect(() => {
-    if (listData.length > 0) {
-      dispatch(
-        ProgressActions.setDisabled(
-          {
-            disabled: false
-          },
-          () => {}
-        )
+    );
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: false,
+        },
+        () => {}
       )
-    }
-  }, [isContinue])
+    );
+  }, []);
+
+  // useEffect(() => {
+  //   if (listData.length > 0) {
+  //     dispatch(
+  //       ProgressActions.setDisabled(
+  //         {
+  //           disabled: false
+  //         },
+  //         () => {}
+  //       )
+  //     )
+  //   }
+  // }, [isContinue])
 
   const handleReset = () => {
     setData({
@@ -102,9 +110,9 @@ function BusinessInterestsLayout(props) {
     setListData(tempListData);
     handleReset();
     setNumberForm(tempListData.length + 1);
-    if (!isContinue) {
-      setIsContinue(true)
-    }
+    // if (!isContinue) {
+    //   setIsContinue(true)
+    // }
   };
 
   const handleEdit = item => {

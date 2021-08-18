@@ -42,7 +42,7 @@ function ValuablesLayout(props) {
     model: "",
     serialNo: "",
   });
-  const [isContinue, setIsContinue] = useState(false);
+  // const [isContinue, setIsContinue] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -64,25 +64,33 @@ function ValuablesLayout(props) {
     dispatch(
       ProgressActions.setRouter(
         {
-          router: "/lodge-will",
+          router: "/allocation",
+        },
+        () => {}
+      )
+    );
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: false,
         },
         () => {}
       )
     );
   }, []);
 
-  useEffect(() => {
-    if (listData.length > 0) {
-      dispatch(
-        ProgressActions.setDisabled(
-          {
-            disabled: false,
-          },
-          () => {}
-        )
-      );
-    }
-  }, [isContinue]);
+  // useEffect(() => {
+  //   if (listData.length > 0) {
+  //     dispatch(
+  //       ProgressActions.setDisabled(
+  //         {
+  //           disabled: false,
+  //         },
+  //         () => {}
+  //       )
+  //     );
+  //   }
+  // }, [isContinue]);
 
   const handleReset = () => {
     setData({
@@ -110,9 +118,9 @@ function ValuablesLayout(props) {
     setListData(tempListData);
     // setNumberForm(tempListData.length + 1);
     handleReset();
-    if (!isContinue) {
-      setIsContinue(true);
-    }
+    // if (!isContinue) {
+    //   setIsContinue(true);
+    // }
   };
 
   const handleEdit = item => {
