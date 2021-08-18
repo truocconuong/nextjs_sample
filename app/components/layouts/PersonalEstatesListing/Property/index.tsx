@@ -115,7 +115,7 @@ function PropertyLayout(props: IProps) {
     outstanding_loan_amount: 0,
     is_delete: false,
   });
-  const [isContinue, setIsContinue] = useState(false);
+  // const [isContinue, setIsContinue] = useState(true);
   const [errors, setErrors] = useState({
     postal_code: false,
     country: false,
@@ -195,20 +195,28 @@ function PropertyLayout(props: IProps) {
         () => {}
       )
     );
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: false,
+        },
+        () => {}
+      )
+    );
   }, []);
 
-  useEffect(() => {
-    if (listData.length > 0) {
-      dispatch(
-        ProgressActions.setDisabled(
-          {
-            disabled: false,
-          },
-          () => {}
-        )
-      );
-    }
-  }, [isContinue]);
+  // useEffect(() => {
+  //   if (listData.length > 0) {
+  //     dispatch(
+  //       ProgressActions.setDisabled(
+  //         {
+  //           disabled: false,
+  //         },
+  //         () => {}
+  //       )
+  //     );
+  //   }
+  // }, [isContinue]);
 
   const handleReset = () => {
     setData({
@@ -311,9 +319,9 @@ function PropertyLayout(props: IProps) {
       setNumberForm(numberForm + 1);
     }
     handleReset();
-    if (!isContinue) {
-      setIsContinue(true);
-    }
+    // if (!isContinue) {
+    //   setIsContinue(true);
+    // }
     setDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);

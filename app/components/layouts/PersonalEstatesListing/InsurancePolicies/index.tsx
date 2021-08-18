@@ -56,7 +56,7 @@ function InsurancePolicyLayout(props: IProps) {
     beneficiary_name: null,
     is_nominated: false,
   });
-  const [isContinue, setIsContinue] = useState(false);
+  // const [isContinue, setIsContinue] = useState(false);
   const [optionBeneficiaries, setOptionBeneficiaries] = useState([]);
   const [errors, setErrors] = useState({
     insurance_company: false,
@@ -111,20 +111,28 @@ function InsurancePolicyLayout(props: IProps) {
         () => {}
       )
     );
+    dispatch(
+      ProgressActions.setDisabled(
+        {
+          disabled: false,
+        },
+        () => {}
+      )
+    );
   }, []);
 
-  useEffect(() => {
-    if (listData.length > 0) {
-      dispatch(
-        ProgressActions.setDisabled(
-          {
-            disabled: false,
-          },
-          () => {}
-        )
-      );
-    }
-  }, [isContinue]);
+  // useEffect(() => {
+  //   if (listData.length > 0) {
+  //     dispatch(
+  //       ProgressActions.setDisabled(
+  //         {
+  //           disabled: false,
+  //         },
+  //         () => {}
+  //       )
+  //     );
+  //   }
+  // }, [isContinue]);
 
   const handleReset = () => {
     setData({
@@ -216,9 +224,9 @@ function InsurancePolicyLayout(props: IProps) {
       setNumberForm(numberForm + 1);
     }
     handleReset();
-    if (!isContinue) {
-      setIsContinue(true);
-    }
+    // if (!isContinue) {
+    //   setIsContinue(true);
+    // }
     setDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
