@@ -215,3 +215,57 @@ export const updateInvestment = (id, data, callback) => {
     },
   };
 };
+
+// business interest
+
+export const createBusinessInterestGuest = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_BUSINESS_INTEREST_GUEST,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateBusinessInterestGuest = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_BUSINESS_INTEREST_GUEST,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};
+
+export const deleteBusinessInterestGuest = (id, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.DELETE_BUSINESS_INTEREST_GUEST,
+    payload: {
+      id,
+      callback,
+    },
+  };
+};
+
+export const createBusinessInterest = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_BUSINESS_INTEREST,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateBusinessInterest = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_BUSINESS_INTEREST,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};
