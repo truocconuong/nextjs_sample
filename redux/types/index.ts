@@ -16,6 +16,9 @@ export const SizeBrowser = {
 export const StartYourWill = {
   SET_NAME: "SET_NAME",
   SET_MAKE_PAYMENT: "SET_MAKE_PAYMENT",
+  SIGN_UP_EMAIL: "SIGN_UP_EMAIL",
+  SEND_OTP: "SEND_OTP",
+  VERIFY_OTP: "VERIFY_OTP",
 };
 
 export const PersonalEstatesListingTypes = {
