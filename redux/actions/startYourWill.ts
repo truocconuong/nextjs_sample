@@ -13,3 +13,24 @@ export const setMakePayment = (makePayment: boolean) => {
     payload: { makePayment },
   };
 };
+
+export const signUpEmail = (data, callback) => {
+  return {
+    type: StartYourWill.SIGN_UP_EMAIL,
+    payload: { data, callback },
+  };
+};
+
+export const sendOTP = (data, callback) => {
+  return {
+    type: StartYourWill.SEND_OTP,
+    payload: { data, callback },
+  };
+};
+
+export const verifyOTP = (data, callback) => {
+  return {
+    type: StartYourWill.VERIFY_OTP,
+    payload: { data, callback },
+  };
+};

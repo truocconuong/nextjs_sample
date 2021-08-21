@@ -7,11 +7,11 @@ import { SignUpEmail, SignUpEmailMobile } from "../../../../public/images";
 import InputField from "@generals/InputField";
 
 function ModalSignUpEmail(props) {
-  const { showModal, setShowModal, onSignUpEmail, name } = props;
-  const [email, setEmail] = useState("");
+  const { showModal, setShowModal, onSignUpEmail, name, email } = props;
+  // const [email, setEmail] = useState("");
 
   const handleSignUp = () => {
-    onSignUpEmail(email);
+    onSignUpEmail();
     setShowModal(false);
   };
 
@@ -48,8 +48,9 @@ function ModalSignUpEmail(props) {
             inputProps={{
               placeholder: "Your preferred name",
               value: email,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value),
+              disabled: true,
+              // onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              //   setEmail(e.target.value),
             }}
           />
         </div>

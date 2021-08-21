@@ -1,41 +1,29 @@
 import React, { useState } from "react";
 import { Button, Col, Row } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
+import { useRouter } from "next/router";
 
-import {
-  HandIcon,
-  IssuesIcon,
-  KeepGoing,
-  KeepGoingMobile,
-  NoteIcon,
-  PenIcon,
-  SmallInfoIcon,
-  SmallInfoMobileIcon,
-} from "../../public/images";
+import { HandIcon, KeepGoing, KeepGoingMobile } from "../../public/images";
 import CustomButton from "generals/Button";
-import CustomCheckbox from "generals/CustomCheckbox";
-import ModalBeforeStart from "components/StartYourWill/Modal/ModalBeforeStart";
-import ModalContinueYourWill from "components/StartYourWill/Modal/ModalContinueYourWill";
 import ModalSignUpEmail from "components/StartYourWill/Modal/ModalSignUpEmail";
 import ModalOtp from "components/StartYourWill/Modal/ModalOtp";
 import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
-import { useRouter } from "next/router";
+import YourPersonalWill from "components/StartYourWill/YourPersonalWill";
+import AuthHoc from "../AuthHoc";
+import { sendOTP, signUpEmail, verifyOTP } from "@redux/actions/startYourWill";
 
 function StartYourWill() {
-  const [personalParticular, setPersonalParticular] = useState(true);
-  const [executor, setExecutor] = useState(true);
-  const [beneficiary, setBeneficiary] = useState(true);
-  const [estateDis, setEstateDis] = useState(false);
-  const [personalEstate, setPersonalEstate] = useState(true);
   const [start, setStart] = useState(true);
   const [asContinue, SetAsContinue] = useState(false);
   const [showModalSignUpEmail, setShowModalSignUpEmail] = useState(false);
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [showModalOtp, setShowModalOtp] = useState(false);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
 
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const width = useSelector(
     createSelector(
       (state: any) => state?.sizeBrowser,
@@ -49,6 +37,55 @@ function StartYourWill() {
       (startYourWill) => startYourWill?.name
     )
   );
+
+  const category = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category) => category
+    )
+  );
+
+  const checkDisplayCreate = (category) => {
+    const token = localStorage.getItem("accessToken");
+    let donePersonalParticulars = false;
+    let doneExecutor = false;
+    let doneBenefit = false;
+    let doneEstateDistribute = false;
+    if (
+      category?.email &&
+      category?.full_legal_name &&
+      category?.nric &&
+      category?.postal_code &&
+      category?.address_line_1 &&
+      category?.address_line_2 &&
+      category?.unit_number
+    ) {
+      donePersonalParticulars = true;
+    }
+    if (category?.executors.length >= 1) {
+      doneExecutor = true;
+    }
+    if (category?.beneficiaries.length >= 1) {
+      doneBenefit = true;
+    }
+
+    if (category?.beneficiaries?.length >= 2) {
+      let percent = 0;
+      category?.beneficiaries?.map((item) => {
+        if (item.percent !== 100) {
+          percent += item.percent;
+        }
+      });
+      if (percent === 100) doneEstateDistribute = true;
+    }
+    return (
+      !token &&
+      donePersonalParticulars &&
+      doneExecutor &&
+      doneBenefit &&
+      doneEstateDistribute
+    );
+  };
 
   const handleStart = () => {
     setStart(false);
@@ -69,17 +106,36 @@ function StartYourWill() {
     if (asContinue) return "Continue drafting your Will!";
   };
 
-  const onSignUpEmail = (email) => {
-    setEmail(email);
-    setShowModalSignUpEmail(false);
-    setShowModalOtp(true);
+  const onSignUpEmail = () => {
+    dispatch(
+      signUpEmail(category, (response) => {
+        if (response.success) {
+          setShowModalSignUpEmail(false);
+          dispatch(
+            sendOTP({ email: category?.email }, (responseOTP) => {
+              if (responseOTP.success) {
+                setShowModalOtp(true);
+              }
+            })
+          );
+        }
+      })
+    );
   };
 
   const changeOtp = (otp) => {
     if (otp.length === 4) {
       setTimeout(() => {
-        setShowModalOtp(false);
-        setShowModalSuccess(true);
+        dispatch(
+          verifyOTP({ email: category?.email, otp }, (response) => {
+            if (response.success) {
+              const token = response?.data?.access_token;
+              localStorage.setItem("accessToken", token);
+              setShowModalOtp(false);
+              setShowModalSuccess(true);
+            }
+          })
+        );
       }, 1000);
     }
   };
@@ -88,46 +144,22 @@ function StartYourWill() {
     router.push("/start-your-will-upload");
   };
 
-  const onEditPersonalParticular = () => {
-    router.push('/personal-information');
-  }
-
-  const onEditExecutorDetail = () => {
-    router.push('/personal-executor');
-  }
-
-  const onEditBeneficiaryDetail = () => {
-    router.push('/personal-beneficiary');
-  }
-
-  const handleMovePersonalDetail = () => {
-    router.push("/personal-estates-listing/property")
-  }
-
-  const onEditDistribution = () => {
-    router.push("/allocation");
-  }
-
   return (
     <div className="start-your-will-container">
-      {/* <ModalBeforeStart showModal={showModal} setShowModal={setShowModal} /> */}
-      {/* <ModalContinueYourWill
-        showModal={showModalA}
-        setShowModal={setShowModalA}
-      /> */}
       {showModalSignUpEmail && (
         <ModalSignUpEmail
           showModal={showModalSignUpEmail}
           setShowModal={setShowModalSignUpEmail}
           name={name}
           onSignUpEmail={onSignUpEmail}
+          email={category?.email || ""}
         />
       )}
       {showModalOtp && (
         <ModalOtp
           showModal={showModalOtp}
           setShowModal={setShowModalOtp}
-          email={email}
+          email={category?.email || ""}
           changeOtp={changeOtp}
         />
       )}
@@ -159,13 +191,15 @@ function StartYourWill() {
           </span>
         </Col>
         <Col xs={9} sm={9} md={6} lg={6} xl={6} xxl={6}>
-          <span
-            className="text right"
-            style={{ cursor: "pointer" }}
-            onClick={() => setShowModalSignUpEmail(true)}
-          >
-            Create Account
-          </span>
+          {checkDisplayCreate(category) && (
+            <span
+              className="text right"
+              style={{ cursor: "pointer" }}
+              onClick={() => setShowModalSignUpEmail(true)}
+            >
+              Create Account
+            </span>
+          )}
         </Col>
       </Row>
 
@@ -224,288 +258,10 @@ function StartYourWill() {
       </Row>
 
       <div className="body">
-        {!start && (
-          <div className="fix-issues">
-            <Row className="center">
-              <IssuesIcon />
-              <span className="text-title">Fix these issues</span>
-            </Row>
-            <Row className="text-note ">
-              You won’t be able to upload your will until you complete these
-              information
-            </Row>
-            <hr />
-            <Row>
-              <Col span={18} className="center text-fix-now">
-                Estate Distribution
-              </Col>
-              <Col span={6} className="item-end">
-                {width > 500 && <Button className="button-fix">Fix Now</Button>}
-              </Col>
-            </Row>
-            <hr />
-            <Row>
-              <Col span={18} className="center text-fix-now">
-                Create Your Account
-              </Col>
-              <Col span={6} className="item-end">
-                {width > 500 && (
-                  <Button
-                    className="button-fix"
-                    onClick={() => setShowModalSignUpEmail(true)}
-                  >
-                    Fix Now
-                  </Button>
-                )}
-              </Col>
-            </Row>
-          </div>
-        )}
-
-        <div className="your-personal-will">
-          <Row className="center">
-            <NoteIcon />
-            <span className="text-title">Your Personal Will</span>
-          </Row>
-          <Row className="text-note ">
-            By writing a will, you will be able to take care of your loved ones
-            when you are gone. Having a will allows you to distribute your
-            assets according to your wishes, and also indicate your wishes you
-            might have when you are gone.
-          </Row>
-          <hr />
-          <Row>
-            <Col
-              xs={24}
-              sm={18}
-              md={18}
-              lg={18}
-              xl={18}
-              xxl={18}
-              className="center"
-            >
-              <Col>
-                <CustomCheckbox
-                  disable
-                  checked={personalParticular}
-                  onChange={setPersonalParticular}
-                />
-              </Col>
-              <Col className="ml-16">
-                <div className="text-fix-now center">
-                  Personal Particulars &nbsp;
-                  {width > 768 ? <SmallInfoIcon /> : <SmallInfoMobileIcon />}
-                </div>
-                <div className="text-note-per">
-                  Estimation of 3-5 minutes to complete
-                </div>
-              </Col>
-            </Col>
-            <Col
-              xs={0}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={6}
-              xxl={6}
-              className="item-end center"
-            >
-              {width > 600 && (
-                <Button className="edit-btn" onClick={onEditPersonalParticular}>
-                  <PenIcon /> <span className="ml-8">Edit</span>
-                </Button>
-              )}
-            </Col>
-          </Row>
-
-          <hr />
-          <Row>
-            <Col
-              xs={24}
-              sm={18}
-              md={18}
-              lg={18}
-              xl={18}
-              xxl={18}
-              className="center"
-            >
-              <Col>
-                <CustomCheckbox
-                  disable
-                  checked={executor}
-                  onChange={setExecutor}
-                />
-              </Col>
-              <Col className="ml-16">
-                <div className="text-fix-now center">
-                  Executor Details &nbsp;
-                  {width > 768 ? <SmallInfoIcon /> : <SmallInfoMobileIcon />}
-                </div>
-                <div className="text-note-per">
-                  Estimation of 3-5 minutes to complete
-                </div>
-              </Col>
-            </Col>
-            <Col
-              xs={0}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={6}
-              xxl={6}
-              className="item-end center"
-            >
-              {width > 600 && (
-                <Button className="edit-btn" onClick={onEditExecutorDetail}>
-                  <PenIcon /> <span className="ml-8">Edit</span>
-                </Button>
-              )}
-            </Col>
-          </Row>
-
-          <hr />
-          <Row>
-            <Col
-              xs={24}
-              sm={18}
-              md={18}
-              lg={18}
-              xl={18}
-              xxl={18}
-              className="center"
-            >
-              <Col>
-                <CustomCheckbox
-                  disable
-                  checked={beneficiary}
-                  onChange={setBeneficiary}
-                />
-              </Col>
-              <Col className="ml-16">
-                <div className="text-fix-now center">
-                  Beneficiary Details &nbsp;
-                  {width > 768 ? <SmallInfoIcon /> : <SmallInfoMobileIcon />}
-                </div>
-                <div className="text-note-per">
-                  Estimation of 3-5 minutes to complete
-                </div>
-              </Col>
-            </Col>
-            <Col
-              xs={0}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={6}
-              xxl={6}
-              className="item-end center"
-            >
-              {width > 600 && (
-                <Button className="edit-btn" onClick={onEditBeneficiaryDetail}>
-                  <PenIcon /> <span className="ml-8">Edit</span>
-                </Button>
-              )}
-            </Col>
-          </Row>
-
-          <hr />
-          <Row>
-            <Col
-              xs={24}
-              sm={18}
-              md={18}
-              lg={18}
-              xl={18}
-              xxl={18}
-              className="center"
-            >
-              <Col>
-                <CustomCheckbox
-                  disable
-                  checked={estateDis}
-                  onChange={setEstateDis}
-                />
-              </Col>
-              <Col className="ml-16">
-                <div className="text-fix-now center">
-                  Estate Distribution &nbsp;
-                  {width > 768 ? <SmallInfoIcon /> : <SmallInfoMobileIcon />}
-                </div>
-                <div className="text-note-per">
-                  Estimation of 3-5 minutes to complete
-                </div>
-              </Col>
-            </Col>
-            <Col
-              xs={0}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={6}
-              xxl={6}
-              className="item-end center"
-            >
-              {width > 600 && (
-                <Button className="edit-btn" onClick={onEditDistribution}>
-                  <PenIcon /> <span className="ml-8">Edit</span>
-                </Button>
-              )}
-            </Col>
-          </Row>
-          <Row className="option center">
-            <span className="optional-text ml-16">
-              <span>Optional</span> — You can still complete your Will without
-              filling out this section out 😉
-            </span>
-          </Row>
-
-          <Row>
-            <Col
-              xs={24}
-              sm={18}
-              md={18}
-              lg={18}
-              xl={18}
-              xxl={18}
-              className="center"
-            >
-              <Col>
-                <CustomCheckbox
-                  disable
-                  checked={personalEstate}
-                  onChange={setPersonalEstate}
-                />
-              </Col>
-              <Col className="ml-16">
-                <div className="text-fix-now center">
-                  Personal Estates Listing &nbsp;
-                  {width > 768 ? <SmallInfoIcon /> : <SmallInfoMobileIcon />}
-                </div>
-                <div className="text-note-per">
-                  Estimation of 3-5 minutes to complete
-                </div>
-              </Col>
-            </Col>
-            <Col
-              xs={0}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={6}
-              xxl={6}
-              className="item-end center"
-            >
-              {width > 600 && (
-                <Button className="edit-btn" onClick={handleMovePersonalDetail}>
-                  <PenIcon /> <span className="ml-8">Edit</span>
-                </Button>
-              )}
-            </Col>
-          </Row>
-        </div>
+        <YourPersonalWill />
       </div>
     </div>
   );
 }
 
-export default StartYourWill;
+export default AuthHoc(StartYourWill);
