@@ -161,3 +161,57 @@ export const updateInsurancePolicy = (id, data, callback) => {
     },
   };
 };
+
+// investment
+
+export const createInvestmentGuest = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_INVESTMENT_GUEST,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateInvestmentGuest = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_INVESTMENT_GUEST,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};
+
+export const deleteInvestmentGuest = (id, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.DELETE_INVESTMENT_GUEST,
+    payload: {
+      id,
+      callback,
+    },
+  };
+};
+
+export const createInvestment = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_INVESTMENT,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateInvestment = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_INVESTMENT,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};

@@ -148,6 +148,43 @@ const categoryReducer = (state = initState, action: any) => {
         insurance_policies: tempInsurancePolicies,
       };
     }
+    // investment
+    case PersonalEstatesListingTypes.CREATE_INVESTMENT_GUEST: {
+      const {data, callback} = action?.payload;
+      const tempInvestments = [...state.investments, data];
+      if (callback) {
+        callback(tempInvestments);
+      }
+      return {
+        ...state,
+        investments: tempInvestments,
+      };
+    }
+    case PersonalEstatesListingTypes.UPDATE_INVESTMENT_GUEST: {
+      const {id, data, callback} = action?.payload;
+      const tempInvestments = state.investments.map(item => {
+        if (id !== "" && item.id === id) return data;
+        return item;
+      });
+      if (callback) {
+        callback(tempInvestments);
+      }
+      return {
+        ...state,
+        investments: tempInvestments,
+      };
+    }
+    case PersonalEstatesListingTypes.DELETE_INVESTMENT_GUEST: {
+      const {id, callback} = action?.payload;
+      const tempInvestments = state.investments.filter(item => item.id !== id);
+      if (callback) {
+        callback(tempInvestments);
+      }
+      return {
+        ...state,
+        investments: tempInvestments,
+      };
+    }
     // personal information
     case PersonalTypes.SET_PERSONAL_INFORMATION: {
       const {data, callback} = action?.payload;

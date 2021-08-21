@@ -123,6 +123,46 @@ function* updateInsurancePolicy(action: any) {
   }
 }
 
+function* createInvestment(action: any) {
+  const {data, callback} = action?.payload;
+  const token = localStorage.getItem("accessToken");
+  try {
+    const res = yield call(() =>
+      Request.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/investment`,
+        {...data},
+        token
+      )
+    );
+    if (res[0]?.data) {
+      yield put(CategoryActions.getCategoriesData(token));
+    }
+  } catch (error) {
+    callback && callback(error?.response?.data);
+    console.log("createInvestment._error: ", error?.response?.data);
+  }
+}
+
+function* updateInvestment(action: any) {
+  const {id, data, callback} = action?.payload;
+  const token = localStorage.getItem("accessToken");
+  try {
+    const res = yield call(() =>
+      Request.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/investment/${id}`,
+        {...data},
+        token
+      )
+    );
+    if (res[0]?.data) {
+      yield put(CategoryActions.getCategoriesData(token));
+    }
+  } catch (error) {
+    callback && callback(error?.response?.data);
+    console.log("updateInvestment._error: ", error?.response?.data);
+  }
+}
+
 export default function* personalEstatesListingSaga() {
   yield takeLatest(PersonalEstatesListingTypes.CREATE_PROPERTY, createProperty);
   yield takeLatest(PersonalEstatesListingTypes.UPDATE_PROPERTY, updateProperty);
@@ -141,5 +181,13 @@ export default function* personalEstatesListingSaga() {
   yield takeLatest(
     PersonalEstatesListingTypes.UPDATE_INSURANCE_POLICY,
     updateInsurancePolicy
+  );
+  yield takeLatest(
+    PersonalEstatesListingTypes.CREATE_INVESTMENT,
+    createInvestment
+  );
+  yield takeLatest(
+    PersonalEstatesListingTypes.UPDATE_INVESTMENT,
+    updateInvestment
   );
 }
