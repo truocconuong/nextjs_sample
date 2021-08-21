@@ -56,6 +56,7 @@ export interface IBankAccount {
   is_joint: boolean;
   current_balance: number;
   account_holder: string;
+  is_delete: boolean;
 }
 
 export interface IInsurancePolicy {
@@ -78,6 +79,7 @@ export interface IInvestment {
   account_no: string;
   capital_outlay: number;
   current_market_value: number;
+  is_delete: boolean;
 }
 
 export interface IBusinessInterest {
@@ -87,6 +89,7 @@ export interface IBusinessInterest {
   position: string;
   estimated_current_market_value: number;
   percentage_share: number;
+  is_delete: boolean;
 }
 
 export interface IValuable {
@@ -95,6 +98,7 @@ export interface IValuable {
   brand: string;
   model: string;
   serial_no: string;
+  is_delete: boolean;
 }
 
 export interface IPersonalInformation {

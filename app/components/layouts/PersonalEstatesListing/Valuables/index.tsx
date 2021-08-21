@@ -13,36 +13,83 @@ import {
   TrashEnabledIcon,
   ValuablesImage,
   WatchIcon,
-} from "../../../../../public/images";
-import {useDispatch} from "react-redux";
-import {ProgressActions} from "@redux/actions";
+} from "@images/index";
+import {useDispatch, useSelector} from "react-redux";
+import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
+import {v4 as uuidv4} from "uuid";
+import {createSelector} from "reselect";
+import {IData, IMasterdata} from "@constant/data.interface";
 
 const {Option} = Select;
 
-const options = [
-  {label: "TEST 11", value: "TEST 11"},
-  {label: "TEST 12", value: "TEST 12"},
-  {label: "TEST 13", value: "TEST 13"},
-  {label: "TEST 14", value: "TEST 14"},
-  {label: "TEST 15", value: "TEST 15"},
-];
+interface IProps {
+  isLogin: boolean;
+}
 
-function ValuablesLayout(props) {
+function ValuablesLayout(props: IProps) {
+  const {isLogin} = props;
   const dispatch = useDispatch();
+
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
+
+  const masterDataReducer = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => {
+        return masterdata;
+      }
+    )
+  );
+
   const [isShowModal, setIsShowModal] = useState(false);
-  const [isShowModalRemove, setIsShowModalRemove] = useState(false);
+  // const [isShowModalRemove, setIsShowModalRemove] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
-  const [isDisabledEdit, setIsDisabledEdit] = useState(false);
-  // const [numberForm, setNumberForm] = useState(1);
+  const [disabledEdit, setDisabledEdit] = useState(false);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
-    valuablesType: null,
+    id: "",
+    type_id: null,
     brand: "",
     model: "",
-    serialNo: "",
+    serial_no: "",
   });
   // const [isContinue, setIsContinue] = useState(false);
+  const [errors, setErrors] = useState({
+    type_id: false,
+  });
+  const [optionAssets, setOptionAssets] = useState([]);
+
+  useEffect(() => {
+    if (categoryData?.valuables) {
+      setListData(categoryData.valuables);
+      if (categoryData.valuables.length >= 1) {
+        setIsShowForm(false);
+      }
+    }
+  }, [categoryData?.valuables]);
+
+  useEffect(() => {
+    if (masterDataReducer) {
+      const tempAssets = [];
+      masterDataReducer.map(item => {
+        if (item?.value === "ASSET") {
+          tempAssets.push({
+            label: item?.name,
+            value: item?.id,
+          });
+        }
+      });
+      setOptionAssets(tempAssets);
+    }
+  }, [masterDataReducer]);
 
   useEffect(() => {
     dispatch(
@@ -94,10 +141,11 @@ function ValuablesLayout(props) {
 
   const handleReset = () => {
     setData({
-      valuablesType: null,
+      id: "",
+      type_id: null,
       brand: "",
       model: "",
-      serialNo: "",
+      serial_no: "",
     });
   };
 
@@ -109,54 +157,120 @@ function ValuablesLayout(props) {
     setIsShowModal(false);
   };
 
+  const handleValidate = () => {
+    let isError = false;
+    let error = errors;
+    if (!data?.type_id) {
+      error.type_id = true;
+      isError = true;
+    }
+    setErrors(prev => ({...prev, error}));
+    return isError;
+  };
+
   const handleSave = () => {
-    setIsDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
-    let tempListData = listData;
-    tempListData.push(data);
-    setListData(tempListData);
-    // setNumberForm(tempListData.length + 1);
+    const checkValidation = handleValidate();
+    if (checkValidation) {
+      return;
+    }
+    const submitData = {
+      ...data,
+    };
+    if (disabledEdit) {
+      // Edit
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.updateValuable(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      } else {
+        dispatch(
+          PersonalEstatesListingActions.updateValuableGuest(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      }
+    } else {
+      // create
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.createValuable(submitData, property => {
+            submitData.id = property.id;
+            setListData([...listData, submitData]);
+          })
+        );
+      } else {
+        const tempSubmitData = {...submitData, id: uuidv4()};
+        dispatch(
+          PersonalEstatesListingActions.createValuableGuest(
+            tempSubmitData,
+            () => {}
+          )
+        );
+      }
+    }
     handleReset();
     // if (!isContinue) {
     //   setIsContinue(true);
     // }
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleEdit = item => {
-    setIsDisabledEdit(true);
-    setIsShowDetail(true);
+    setDisabledEdit(true);
     setIsShowForm(true);
-    let tempListData = listData;
-    setListData(tempListData.filter(i => i !== item));
-    setData(tempListData.find(data => data === item));
-    // setNumberForm(tempListData.length);
+    setIsShowDetail(true);
+    let tempListData = [...listData];
+    const findItem = tempListData.find(data => data === item);
+    setData(findItem);
   };
 
-  const handleDelete = () => {
-    setIsShowModalRemove(true);
-  };
-
-  const handleConfirmDelete = item => {
-    let tempListData = listData.filter(i => i !== item);
-    setListData(tempListData);
-    // setNumberForm(tempListData.length + 1);
-    setIsShowModalRemove(false);
+  const handleDelete = item => {
+    const tempItem = {...item, is_delete: true};
+    if (isLogin) {
+      dispatch(
+        PersonalEstatesListingActions.updateValuable(
+          tempItem?.id,
+          tempItem,
+          () => {}
+        )
+      );
+      return;
+    }
+    dispatch(
+      PersonalEstatesListingActions.deleteValuableGuest(tempItem?.id, () => {})
+    );
   };
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
+    setErrors(prev => ({...prev, [name]: false}));
     setData(prev => ({...prev, [name]: value}));
   };
 
-  const handleAddInvestment = () => {
+  // const handleConfirmDelete = item => {
+  //   let tempListData = listData.filter(i => i !== item);
+  //   setListData(tempListData);
+  //   // setNumberForm(tempListData.length + 1);
+  //   setIsShowModalRemove(false);
+  // };
+
+  const handleAddValuable = () => {
     if (isShowForm) return;
     setIsShowForm(true);
-    setIsDisabledEdit(false);
+    setDisabledEdit(false);
   };
 
   const handleChangeValuablesType = value => {
-    setData(prev => ({...prev, valuablesType: value}));
+    setData(prev => ({...prev, type_id: value}));
+    setErrors(prev => ({...prev, type_id: false}));
     setIsShowDetail(true);
   };
 
@@ -196,7 +310,12 @@ function ValuablesLayout(props) {
                           <Col>
                             <Row>
                               <span className="type">
-                                {item?.valuablesType}
+                                {
+                                  masterDataReducer.find(
+                                    masterData =>
+                                      masterData.id === item?.type_id
+                                  ).name
+                                }
                               </span>
                             </Row>
                             <Row>
@@ -210,13 +329,16 @@ function ValuablesLayout(props) {
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
                               width="100%"
-                              disabled={isDisabledEdit}
+                              disabled={disabledEdit}
                             >
                               Edit
                             </CustomButton>
                           </Col>
                           <Col className="trash-icon div-center">
-                            <TrashEnabledIcon onClick={handleDelete} />
+                            <TrashEnabledIcon
+                              onClick={() => handleDelete(item)}
+                            />
+                            {/* <TrashEnabledIcon onClick={handleDelete} />
                             {isShowModalRemove && (
                               <ModalInfo
                                 show={isShowModalRemove}
@@ -226,7 +348,7 @@ function ValuablesLayout(props) {
                                 handleCancel={() => setIsShowModalRemove(false)}
                                 contentButton="Remove"
                               />
-                            )}
+                            )} */}
                           </Col>
                         </Col>
                       </Row>
@@ -254,11 +376,11 @@ function ValuablesLayout(props) {
                         label="Valuables Type"
                         selectProps={{
                           placeholder: "Select",
-                          value: data?.valuablesType || null,
+                          value: data?.type_id || null,
                           onChange: value => handleChangeValuablesType(value),
                         }}
                       >
-                        {options.map((item, index) => {
+                        {optionAssets.map(item => {
                           return (
                             <Option value={item.value}>{item.label}</Option>
                           );
@@ -297,8 +419,8 @@ function ValuablesLayout(props) {
                             label="Serial No."
                             inputProps={{
                               placeholder: "e.g. 110099",
-                              value: data?.serialNo,
-                              name: "serialNo",
+                              value: data?.serial_no,
+                              name: "serial_no",
                               onChange: e => handleChangeInput(e),
                             }}
                           ></InputField>
@@ -325,7 +447,7 @@ function ValuablesLayout(props) {
               )}
               <Row className="add-investment" justify="space-between">
                 <CloudValuablesIcon />
-                <span onClick={handleAddInvestment} style={{cursor: "pointer"}}>
+                <span onClick={handleAddValuable} style={{cursor: "pointer"}}>
                   Add Valuable
                 </span>
               </Row>

@@ -269,3 +269,57 @@ export const updateBusinessInterest = (id, data, callback) => {
     },
   };
 };
+
+// valuables
+
+export const createValuableGuest = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_VALUABLE_GUEST,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateValuableGuest = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_VALUABLE_GUEST,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};
+
+export const deleteValuableGuest = (id, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.DELETE_VALUABLE_GUEST,
+    payload: {
+      id,
+      callback,
+    },
+  };
+};
+
+export const createValuable = (data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.CREATE_VALUABLE,
+    payload: {
+      data,
+      callback,
+    },
+  };
+};
+
+export const updateValuable = (id, data, callback) => {
+  return {
+    type: PersonalEstatesListingTypes.UPDATE_VALUABLE,
+    payload: {
+      id,
+      data,
+      callback,
+    },
+  };
+};

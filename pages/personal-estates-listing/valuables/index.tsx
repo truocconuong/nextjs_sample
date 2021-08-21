@@ -3,7 +3,15 @@ import React from "react";
 import AuthHoc from "../../AuthHoc";
 
 function ValuablesScreen() {
-  return <ValuablesLayout />;
+  return (
+    <>
+      {localStorage.getItem("accessToken") ? (
+        <ValuablesLayout isLogin />
+      ) : (
+        <ValuablesLayout isLogin={false} />
+      )}
+    </>
+  );
 }
 
 export default AuthHoc(ValuablesScreen);
