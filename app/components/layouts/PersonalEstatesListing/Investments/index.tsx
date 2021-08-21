@@ -12,37 +12,86 @@ import {
   ResetIcon,
   SaveIcon,
   TrashEnabledIcon,
-} from "../../../../../public/images";
-import {ProgressActions} from "../../../../../redux/actions";
-import {useDispatch} from "react-redux";
+} from "@images/index";
+import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
+import {useDispatch, useSelector} from "react-redux";
+import {createSelector} from "reselect";
+import {IData, IMasterdata} from "@constant/data.interface";
+import {v4 as uuidv4} from "uuid";
 
 const {Option} = Select;
 
-const options = [
-  {label: "TEST 11", value: "TEST 11"},
-  {label: "TEST 12", value: "TEST 12"},
-  {label: "TEST 13", value: "TEST 13"},
-  {label: "TEST 14", value: "TEST 14"},
-  {label: "TEST 15", value: "TEST 15"},
-];
+interface IProps {
+  isLogin: boolean;
+}
 
-function InvestmentsLayout(props) {
+function InvestmentsLayout(props: IProps) {
+  const {isLogin} = props;
   const dispatch = useDispatch();
+
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
+
+  const masterDataReducer = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => {
+        return masterdata;
+      }
+    )
+  );
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
-  const [isDisabledEdit, setIsDisabledEdit] = useState(false);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
-    investmentType: null,
-    financial: "",
-    accountNo: "",
-    capitalOutlay: "",
-    currentMarketValue: "",
+    id: "",
+    type_id: null,
+    financial_institutions: "",
+    account_no: "",
+    capital_outlay: 0,
+    current_market_value: 0,
   });
   // const [isContinue, setIsContinue] = useState(false);
+  const [errors, setErrors] = useState({
+    type_id: false,
+    financial_institutions: false,
+  });
+  const [optionInvestments, setOptionInvestments] = useState([]);
+  const [disabledEdit, setDisabledEdit] = useState(false);
+
+  useEffect(() => {
+    if (categoryData?.investments) {
+      setListData(categoryData.investments);
+      setNumberForm(categoryData.investments.length + 1);
+      if (categoryData.investments.length >= 1) {
+        setIsShowForm(false);
+      }
+    }
+  }, [categoryData?.investments]);
+
+  useEffect(() => {
+    if (masterDataReducer) {
+      const tempInvestments = [];
+      masterDataReducer.map(item => {
+        if (item?.value === "INVESTMENT") {
+          tempInvestments.push({
+            label: item?.name,
+            value: item?.id,
+          });
+        }
+      });
+      setOptionInvestments(tempInvestments);
+    }
+  }, [masterDataReducer]);
 
   useEffect(() => {
     dispatch(
@@ -94,11 +143,12 @@ function InvestmentsLayout(props) {
 
   const handleReset = () => {
     setData({
-      investmentType: null,
-      financial: "",
-      accountNo: "",
-      capitalOutlay: "",
-      currentMarketValue: "",
+      id: "",
+      type_id: null,
+      financial_institutions: "",
+      account_no: "",
+      capital_outlay: 0,
+      current_market_value: 0,
     });
   };
 
@@ -110,42 +160,121 @@ function InvestmentsLayout(props) {
     setIsShowModal(false);
   };
 
+  const handleValidate = () => {
+    let isError = false;
+    let error = errors;
+    if (!data?.type_id) {
+      error.type_id = true;
+      isError = true;
+    }
+    if (!data?.financial_institutions) {
+      error.financial_institutions = true;
+      isError = true;
+    }
+    setErrors(prev => ({...prev, error}));
+    return isError;
+  };
+
   const handleSave = () => {
-    setIsDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
-    let tempListData = listData;
-    tempListData.push(data);
-    setListData(tempListData);
+    const checkValidation = handleValidate();
+    if (checkValidation) {
+      return;
+    }
+    const submitData = {
+      ...data,
+      capital_outlay: Number(data.capital_outlay),
+      current_market_value: Number(data.current_market_value),
+    };
+    if (disabledEdit) {
+      // edit
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.updateInvestment(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      } else {
+        dispatch(
+          PersonalEstatesListingActions.updateInvestmentGuest(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      }
+    } else {
+      // create
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.createInvestment(
+            submitData,
+            property => {
+              submitData.id = property.id;
+              setListData([...listData, submitData]);
+            }
+          )
+        );
+      } else {
+        const tempSubmitData = {...submitData, id: uuidv4()};
+        dispatch(
+          PersonalEstatesListingActions.createInvestmentGuest(
+            tempSubmitData,
+            () => {}
+          )
+        );
+      }
+      setNumberForm(numberForm + 1);
+    }
     handleReset();
     // if (!isContinue) {
-    //   setIsContinue(true)
+    //   setIsContinue(true);
     // }
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleEdit = item => {
-    setIsDisabledEdit(true);
+    setDisabledEdit(true);
     setIsShowForm(true);
-    let tempListData = listData;
-    setListData(tempListData.filter(i => i !== item));
-    setData(tempListData.find(data => data === item));
+    let tempListData = [...listData];
+    setNumberForm(tempListData.findIndex(i => i == item) + 1);
+    const findItem = tempListData.find(data => data === item);
+    setData(findItem);
   };
 
   const handleDelete = item => {
-    const tempListData = listData.filter(i => i !== item);
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
+    const tempItem = {...item, is_delete: true};
+    if (isLogin) {
+      dispatch(
+        PersonalEstatesListingActions.updateInvestment(
+          tempItem?.id,
+          tempItem,
+          () => {}
+        )
+      );
+      return;
+    }
+    dispatch(
+      PersonalEstatesListingActions.deleteInvestmentGuest(
+        tempItem?.id,
+        () => {}
+      )
+    );
   };
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
+    setErrors(prev => ({...prev, [name]: false}));
     setData(prev => ({...prev, [name]: value}));
   };
 
   const handleAddInvestment = () => {
     if (isShowForm) return;
     setIsShowForm(true);
-    setIsDisabledEdit(false);
+    setDisabledEdit(false);
   };
 
   return (
@@ -185,12 +314,17 @@ function InvestmentsLayout(props) {
                           <Col>
                             <Row>
                               <span className="type">
-                                {item?.investmentType}
+                                {
+                                  masterDataReducer.find(
+                                    masterData =>
+                                      masterData.id === item?.type_id
+                                  ).name
+                                }
                               </span>
                             </Row>
                             <Row>
                               <span className="financial">
-                                {item?.financial}
+                                {item?.financial_institutions}
                               </span>
                             </Row>
                           </Col>
@@ -201,7 +335,7 @@ function InvestmentsLayout(props) {
                               width="100%"
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
-                              disabled={isDisabledEdit}
+                              disabled={disabledEdit}
                             >
                               Edit
                             </CustomButton>
@@ -237,12 +371,15 @@ function InvestmentsLayout(props) {
                         label="Investment Type"
                         selectProps={{
                           placeholder: "Select",
-                          value: data?.investmentType,
-                          onChange: value =>
-                            setData(prev => ({...prev, investmentType: value})),
+                          value: data?.type_id,
+                          onChange: value => {
+                            setData(prev => ({...prev, type_id: value}));
+                            setErrors(prev => ({...prev, type_id: false}));
+                          },
                         }}
+                        isError={errors?.type_id}
                       >
-                        {options.map((item, index) => {
+                        {optionInvestments.map(item => {
                           return (
                             <Option value={item.value}>{item.label}</Option>
                           );
@@ -255,10 +392,11 @@ function InvestmentsLayout(props) {
                         label="Financial Institutions"
                         inputProps={{
                           placeholder: "e.g. Standard Chartered",
-                          name: "financial",
-                          value: data?.financial,
+                          name: "financial_institutions",
+                          value: data?.financial_institutions,
                           onChange: e => handleChangeInput(e),
                         }}
+                        isError={errors?.financial_institutions}
                       ></InputField>
                     </Row>
                     <Row className={isShowDetail ? "mb-32" : "mb-40"}>
@@ -275,8 +413,8 @@ function InvestmentsLayout(props) {
                             label="Account No."
                             inputProps={{
                               placeholder: "e.g. 9342099896",
-                              value: data?.accountNo,
-                              name: "accountNo",
+                              value: data?.account_no,
+                              name: "account_no",
                               onChange: e => handleChangeInput(e),
                             }}
                           ></InputField>
@@ -288,8 +426,8 @@ function InvestmentsLayout(props) {
                               label="Capital Outlay ($)"
                               inputProps={{
                                 placeholder: "e.g. 20,000.00",
-                                value: data?.capitalOutlay,
-                                name: "capitalOutlay",
+                                value: data?.capital_outlay,
+                                name: "capital_outlay",
                                 onChange: e => handleChangeInput(e),
                               }}
                             ></InputField>
@@ -300,8 +438,8 @@ function InvestmentsLayout(props) {
                               label="Current Market Value ($)"
                               inputProps={{
                                 placeholder: "e.g. 90,000.00",
-                                value: data?.currentMarketValue,
-                                name: "currentMarketValue",
+                                value: data?.current_market_value,
+                                name: "current_market_value",
                                 onChange: e => handleChangeInput(e),
                               }}
                             ></InputField>
