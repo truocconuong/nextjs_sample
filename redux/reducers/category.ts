@@ -224,6 +224,43 @@ const categoryReducer = (state = initState, action: any) => {
         business_interests: tempBusinessInterests,
       };
     }
+    // valuables
+    case PersonalEstatesListingTypes.CREATE_VALUABLE_GUEST: {
+      const {data, callback} = action?.payload;
+      const tempValuables = [...state.valuables, data];
+      if (callback) {
+        callback(tempValuables);
+      }
+      return {
+        ...state,
+        valuables: tempValuables,
+      };
+    }
+    case PersonalEstatesListingTypes.UPDATE_VALUABLE_GUEST: {
+      const {id, data, callback} = action?.payload;
+      const tempValuables = state.valuables.map(item => {
+        if (id !== "" && item.id === id) return data;
+        return item;
+      });
+      if (callback) {
+        callback(tempValuables);
+      }
+      return {
+        ...state,
+        valuables: tempValuables,
+      };
+    }
+    case PersonalEstatesListingTypes.DELETE_VALUABLE_GUEST: {
+      const {id, callback} = action?.payload;
+      const tempValuables = state.valuables.filter(item => item.id !== id);
+      if (callback) {
+        callback(tempValuables);
+      }
+      return {
+        ...state,
+        valuables: tempValuables,
+      };
+    }
     // personal information
     case PersonalTypes.SET_PERSONAL_INFORMATION: {
       const {data, callback} = action?.payload;
