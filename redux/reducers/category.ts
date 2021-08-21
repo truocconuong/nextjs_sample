@@ -185,6 +185,45 @@ const categoryReducer = (state = initState, action: any) => {
         investments: tempInvestments,
       };
     }
+    // business_interests
+    case PersonalEstatesListingTypes.CREATE_BUSINESS_INTEREST_GUEST: {
+      const {data, callback} = action?.payload;
+      const tempBusinessInterests = [...state.business_interests, data];
+      if (callback) {
+        callback(tempBusinessInterests);
+      }
+      return {
+        ...state,
+        business_interests: tempBusinessInterests,
+      };
+    }
+    case PersonalEstatesListingTypes.UPDATE_BUSINESS_INTEREST_GUEST: {
+      const {id, data, callback} = action?.payload;
+      const tempBusinessInterests = state.business_interests.map(item => {
+        if (id !== "" && item.id === id) return data;
+        return item;
+      });
+      if (callback) {
+        callback(tempBusinessInterests);
+      }
+      return {
+        ...state,
+        business_interests: tempBusinessInterests,
+      };
+    }
+    case PersonalEstatesListingTypes.DELETE_BUSINESS_INTEREST_GUEST: {
+      const {id, callback} = action?.payload;
+      const tempBusinessInterests = state.business_interests.filter(
+        item => item.id !== id
+      );
+      if (callback) {
+        callback(tempBusinessInterests);
+      }
+      return {
+        ...state,
+        business_interests: tempBusinessInterests,
+      };
+    }
     // personal information
     case PersonalTypes.SET_PERSONAL_INFORMATION: {
       const {data, callback} = action?.payload;

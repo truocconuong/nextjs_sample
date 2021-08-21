@@ -12,28 +12,60 @@ import {
   ResetIcon,
   SaveIcon,
   TrashEnabledIcon,
-} from "../../../../../public/images";
+} from "@images/index";
 import {isMobile} from "react-device-detect";
-import {ProgressActions} from "../../../../../redux/actions";
-import {useDispatch} from "react-redux";
+import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
+import {useDispatch, useSelector} from "react-redux";
+import {createSelector} from "reselect";
+import {IData} from "@constant/data.interface";
+import {v4 as uuidv4} from "uuid";
 
-function BusinessInterestsLayout(props) {
+interface IProps {
+  isLogin: boolean;
+}
+
+function BusinessInterestsLayout(props: IProps) {
+  const {isLogin} = props;
   const dispatch = useDispatch();
+
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
   const [numberForm, setNumberForm] = useState(1);
-  const [isDisabledEdit, setIsDisabledEdit] = useState(false);
+  const [disabledEdit, setDisabledEdit] = useState(false);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
-    companyName: "",
-    companyUEN: "",
+    id: "",
+    company_name: "",
+    company_uen: "",
     position: "",
-    estimateCurrentMarketValue: "",
-    percentageShare: "",
+    estimated_current_market_value: 0,
+    percentage_share: 0,
   });
   // const [isContinue, setIsContinue] = useState(false);
+  const [errors, setErrors] = useState({
+    company_name: false,
+    company_uen: false,
+  });
+
+  useEffect(() => {
+    if (categoryData?.business_interests) {
+      setListData(categoryData.business_interests);
+      setNumberForm(categoryData.business_interests.length + 1);
+      if (categoryData.business_interests.length >= 1) {
+        setIsShowForm(false);
+      }
+    }
+  }, [categoryData?.business_interests]);
 
   useEffect(() => {
     dispatch(
@@ -85,11 +117,12 @@ function BusinessInterestsLayout(props) {
 
   const handleReset = () => {
     setData({
-      companyName: "",
-      companyUEN: "",
+      id: "",
+      company_name: "",
+      company_uen: "",
       position: "",
-      estimateCurrentMarketValue: "",
-      percentageShare: "",
+      estimated_current_market_value: 0,
+      percentage_share: 0,
     });
   };
 
@@ -101,44 +134,123 @@ function BusinessInterestsLayout(props) {
     setIsShowModal(false);
   };
 
+  const handleValidate = () => {
+    let isError = false;
+    let error = errors;
+    if (!data?.company_name) {
+      error.company_name = true;
+      isError = true;
+    }
+    if (!data?.company_uen) {
+      error.company_uen = true;
+      isError = true;
+    }
+    setErrors(prev => ({...prev, error}));
+    return isError;
+  };
+
   const handleSave = () => {
-    setIsDisabledEdit(false);
+    const checkValidation = handleValidate();
+    if (checkValidation) {
+      return;
+    }
+    const submitData = {
+      ...data,
+      estimated_current_market_value: Number(
+        data?.estimated_current_market_value
+      ),
+      percentage_share: Number(data?.percentage_share),
+    };
+    if (disabledEdit) {
+      // Edit
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.updateBusinessInterest(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      } else {
+        dispatch(
+          PersonalEstatesListingActions.updateBusinessInterestGuest(
+            submitData.id,
+            submitData,
+            () => {}
+          )
+        );
+      }
+    } else {
+      // create
+      if (isLogin) {
+        dispatch(
+          PersonalEstatesListingActions.createBusinessInterest(
+            submitData,
+            property => {
+              submitData.id = property.id;
+              setListData([...listData, submitData]);
+            }
+          )
+        );
+      } else {
+        const tempSubmitData = {...submitData, id: uuidv4()};
+        dispatch(
+          PersonalEstatesListingActions.createBusinessInterestGuest(
+            tempSubmitData,
+            () => {}
+          )
+        );
+      }
+      setNumberForm(numberForm + 1);
+    }
+    handleReset();
+    // if (!isContinue) {
+    //   setIsContinue(true);
+    // }
+    setDisabledEdit(false);
     setIsShowDetail(false);
     setIsShowForm(false);
-    let tempListData = listData;
-    tempListData.push(data);
-    setListData(tempListData);
-    handleReset();
-    setNumberForm(tempListData.length + 1);
-    // if (!isContinue) {
-    //   setIsContinue(true)
-    // }
   };
 
   const handleEdit = item => {
-    setIsDisabledEdit(true);
+    setDisabledEdit(true);
     setIsShowForm(true);
-    let tempListData = listData;
-    setListData(tempListData.filter(i => i !== item));
-    setData(tempListData.find(data => data === item));
-    setNumberForm(tempListData.length);
+    let tempListData = [...listData];
+    setNumberForm(tempListData.findIndex(i => i == item) + 1);
+    const findItem = tempListData.find(data => data === item);
+    setData(findItem);
   };
 
   const handleDelete = item => {
-    const tempListData = listData.filter(i => i !== item);
-    setListData(tempListData);
-    setNumberForm(tempListData.length + 1);
+    const tempItem = {...item, is_delete: true};
+    if (isLogin) {
+      dispatch(
+        PersonalEstatesListingActions.updateBusinessInterest(
+          tempItem?.id,
+          tempItem,
+          () => {}
+        )
+      );
+      return;
+    }
+    dispatch(
+      PersonalEstatesListingActions.deleteBusinessInterestGuest(
+        tempItem?.id,
+        () => {}
+      )
+    );
   };
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
+    setErrors(prev => ({...prev, [name]: false}));
     setData(prev => ({...prev, [name]: value}));
   };
 
   const handleAddInvestment = () => {
     if (isShowForm) return;
     setIsShowForm(true);
-    setIsDisabledEdit(false);
+    setDisabledEdit(false);
   };
 
   return (
@@ -181,11 +293,11 @@ function BusinessInterestsLayout(props) {
                           </Col>
                           <Col>
                             <Row>
-                              <span className="type">{item?.companyName}</span>
+                              <span className="type">{item?.company_name}</span>
                             </Row>
                             <Row>
                               <span className="financial">
-                                {item?.companyUEN}
+                                {item?.company_uen}
                               </span>
                             </Row>
                           </Col>
@@ -196,7 +308,7 @@ function BusinessInterestsLayout(props) {
                               width="100%"
                               icon={<EditOutlined />}
                               onClick={() => handleEdit(item)}
-                              disabled={isDisabledEdit}
+                              disabled={disabledEdit}
                             >
                               Edit
                             </CustomButton>
@@ -232,10 +344,11 @@ function BusinessInterestsLayout(props) {
                         label="Company Name"
                         inputProps={{
                           placeholder: "e.g. Sample Company Pte. Ltd.",
-                          name: "companyName",
-                          value: data?.companyName,
+                          name: "company_name",
+                          value: data?.company_name,
                           onChange: e => handleChangeInput(e),
                         }}
+                        isError={errors?.company_name}
                       ></InputField>
                     </Row>
                     <Row className="mb-32">
@@ -244,10 +357,11 @@ function BusinessInterestsLayout(props) {
                         label="Company UEN"
                         inputProps={{
                           placeholder: "e.g. 52812812D",
-                          name: "companyUEN",
-                          value: data?.companyUEN,
+                          name: "company_uen",
+                          value: data?.company_uen,
                           onChange: e => handleChangeInput(e),
                         }}
+                        isError={errors?.company_uen}
                       ></InputField>
                     </Row>
                     <Row className={isShowDetail ? "mb-32" : "mb-40"}>
@@ -276,8 +390,8 @@ function BusinessInterestsLayout(props) {
                             label="Estimated Current Market Value ($)"
                             inputProps={{
                               placeholder: "0.00",
-                              value: data?.estimateCurrentMarketValue,
-                              name: "estimateCurrentMarketValue",
+                              value: data?.estimated_current_market_value,
+                              name: "estimated_current_market_value",
                               onChange: e => handleChangeInput(e),
                             }}
                           ></InputField>
@@ -295,8 +409,8 @@ function BusinessInterestsLayout(props) {
                             label="Percentage Share (%)"
                             inputProps={{
                               placeholder: "0.00",
-                              value: data?.percentageShare,
-                              name: "percentageShare",
+                              value: data?.percentage_share,
+                              name: "percentage_share",
                               onChange: e => handleChangeInput(e),
                             }}
                           ></InputField>
