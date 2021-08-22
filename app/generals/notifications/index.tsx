@@ -4,7 +4,7 @@ import { SuccessIcon, WarningIcon, InfoIcon } from "../../../public/images";
 // how to use
 // notificationInfo("Hooray!", "Payment has been successfully processed. Please upload your signed Will.");
 
-export const notificationSuccess = (messageBold?, message?) => {
+export const NotificationSuccess = (messageBold?, message?) => {
   notification.success({
     className: "notification-success",
     icon: <SuccessIcon />,
@@ -19,7 +19,7 @@ export const notificationSuccess = (messageBold?, message?) => {
   });
 };
 
-export const notificationWarning = (messageBold?, message?) => {
+export const NotificationWarning = (messageBold?, message?) => {
   notification.warning({
     className: "notification-warning",
     icon: <WarningIcon />,
@@ -34,7 +34,7 @@ export const notificationWarning = (messageBold?, message?) => {
   });
 };
 
-export const notificationInfo = (messageBold?, message?) => {
+export const NotificationInfo = (messageBold?, message?) => {
   notification.info({
     className: "notification-info",
     icon: <InfoIcon />,
