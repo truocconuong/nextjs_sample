@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import { StartYourWill } from "../types";
 import Request from "../../app/api/RestClient";
-import { notificationWarning } from "@generals/Notifications";
+import { NotificationWarning } from "@generals/Notifications";
 
 function* signUpEmail(action: any) {
   const { data, callback } = action?.payload;
@@ -15,7 +15,7 @@ function* signUpEmail(action: any) {
     callback && callback({ success: true, data: res?.data });
   } catch (error) {
     callback && callback({ success: false, data: error });
-    notificationWarning(error[2]);
+    NotificationWarning(error[2]);
     console.log("userSingUpError: ", error);
   }
 }
