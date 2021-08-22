@@ -5,6 +5,7 @@ import categorySaga from "./category";
 import personalEstatesListingSaga from "./personalEstatesListing";
 import userSaga from "./user";
 import starYourWillSaga from "./startYourWill";
+import postContactFormSaga from './contact';
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     personalEstatesListingSaga(),
     userSaga(),
     starYourWillSaga(),
+    postContactFormSaga()
   ]);
 }
