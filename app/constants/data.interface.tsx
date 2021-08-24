@@ -111,9 +111,18 @@ export interface IPersonalInformation {
   unit_number: string;
 }
 
+export interface IUserInformation {
+  full_legal_name?: string;
+  email?: string;
+  nric?: string;
+  will_pdf_link?: string;
+  phone?: string;
+}
+
 export interface IData {
   id?: string;
   email: string;
+  phone: string;
   full_legal_name: string;
   nric: string;
   postal_code: string;

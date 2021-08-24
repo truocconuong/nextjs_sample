@@ -19,6 +19,23 @@ function* updatePersonalInformation(action: any) {
   }
 }
 
+function* updateInforUser(action: any) {
+  const { callback, data, token } = action?.payload;
+  try {
+    const res = yield call(() =>
+      Request.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
+        data,
+        token
+      )
+    );
+    callback && callback(res[0]?.data);
+  } catch (error) {
+    callback && callback(error?.response?.data);
+    console.log("user._error: ", error?.response?.data);
+  }
+}
+
 function* updatePersonaExecutor(action: any) {
   const { callback, data, token, id } = action?.payload;
   try {
@@ -113,4 +130,7 @@ export default function* userSaga() {
   yield takeLatest(UserTypes.DELETE_PERSONAL_BENEFICIARY, updatePersonaBeneficiary);
   yield takeLatest(UserTypes.CREATE_PERSONAL_BENEFICIARY, createPersonaBeneficiary);
   yield takeLatest(UserTypes.UPDATE_PERCENT_BENEFICIARIES, updatePercentBeneficiaries);
+  yield takeLatest(UserTypes.UPDATE_INFOR_USER, updateInforUser);
+
 }
+
