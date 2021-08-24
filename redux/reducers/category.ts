@@ -1,4 +1,4 @@
-import {IData} from "@constant/data.interface";
+import { IData } from "@constant/data.interface";
 import {
   CategoryTypes,
   PersonalEstatesListingTypes,
@@ -8,6 +8,7 @@ import {
 const initState: IData = {
   id: "",
   email: "",
+  phone: "",
   full_legal_name: "",
   nric: "",
   postal_code: "",
@@ -27,8 +28,8 @@ const initState: IData = {
 const categoryReducer = (state = initState, action: any) => {
   switch (action.type) {
     case CategoryTypes.SAVE_CATEGORY_DATA: {
-      const {data, callback} = action?.payload;
-      const newState = {...data};
+      const { data, callback } = action?.payload;
+      const newState = { ...data };
       if (callback) {
         callback(newState);
       }
@@ -36,7 +37,7 @@ const categoryReducer = (state = initState, action: any) => {
     }
     // property
     case PersonalEstatesListingTypes.CREATE_PROPERTY_GUEST: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       if (callback) {
         callback(state);
       }
@@ -46,7 +47,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.UPDATE_PROPERTY_GUEST: {
-      const {id, data, callback} = action?.payload;
+      const { id, data, callback } = action?.payload;
       const tempProperties = state.properties.map(item => {
         if (id !== "" && item.id === id) return data;
         return item;
@@ -60,7 +61,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.DELETE_PROPERTY_GUEST: {
-      const {id, callback} = action?.payload;
+      const { id, callback } = action?.payload;
       const tempProperties = state.properties.filter(item => item.id !== id);
       if (callback) {
         callback(tempProperties);
@@ -72,7 +73,7 @@ const categoryReducer = (state = initState, action: any) => {
     }
     // bank account
     case PersonalEstatesListingTypes.CREATE_BANK_ACCOUNT_GUEST: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       const tempBankAccounts = [...state.bank_accounts, data];
       if (callback) {
         callback(tempBankAccounts);
@@ -83,7 +84,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.UPDATE_BANK_ACCOUNT_GUEST: {
-      const {id, data, callback} = action?.payload;
+      const { id, data, callback } = action?.payload;
       const tempBankAccounts = state.bank_accounts.map(item => {
         if (id !== "" && item.id === id) return data;
         return item;
@@ -97,7 +98,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.DELETE_BANK_ACCOUNT_GUEST: {
-      const {id, callback} = action?.payload;
+      const { id, callback } = action?.payload;
       const tempBankAccounts = state.bank_accounts.filter(
         item => item.id !== id
       );
@@ -111,7 +112,7 @@ const categoryReducer = (state = initState, action: any) => {
     }
     // insurance_policies
     case PersonalEstatesListingTypes.CREATE_INSURANCE_POLICY_GUEST: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       const tempInsurancePolicies = [...state.insurance_policies, data];
       if (callback) {
         callback(tempInsurancePolicies);
@@ -122,7 +123,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.UPDATE_INSURANCE_POLICY_GUEST: {
-      const {id, data, callback} = action?.payload;
+      const { id, data, callback } = action?.payload;
       const tempInsurancePolicies = state.insurance_policies.map(item => {
         if (id !== "" && item.id === id) return data;
         return item;
@@ -136,7 +137,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.DELETE_INSURANCE_POLICY_GUEST: {
-      const {id, callback} = action?.payload;
+      const { id, callback } = action?.payload;
       const tempInsurancePolicies = state.insurance_policies.filter(
         item => item.id !== id
       );
@@ -150,7 +151,7 @@ const categoryReducer = (state = initState, action: any) => {
     }
     // investment
     case PersonalEstatesListingTypes.CREATE_INVESTMENT_GUEST: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       const tempInvestments = [...state.investments, data];
       if (callback) {
         callback(tempInvestments);
@@ -161,7 +162,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.UPDATE_INVESTMENT_GUEST: {
-      const {id, data, callback} = action?.payload;
+      const { id, data, callback } = action?.payload;
       const tempInvestments = state.investments.map(item => {
         if (id !== "" && item.id === id) return data;
         return item;
@@ -175,7 +176,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.DELETE_INVESTMENT_GUEST: {
-      const {id, callback} = action?.payload;
+      const { id, callback } = action?.payload;
       const tempInvestments = state.investments.filter(item => item.id !== id);
       if (callback) {
         callback(tempInvestments);
@@ -187,7 +188,7 @@ const categoryReducer = (state = initState, action: any) => {
     }
     // business_interests
     case PersonalEstatesListingTypes.CREATE_BUSINESS_INTEREST_GUEST: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       const tempBusinessInterests = [...state.business_interests, data];
       if (callback) {
         callback(tempBusinessInterests);
@@ -198,7 +199,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.UPDATE_BUSINESS_INTEREST_GUEST: {
-      const {id, data, callback} = action?.payload;
+      const { id, data, callback } = action?.payload;
       const tempBusinessInterests = state.business_interests.map(item => {
         if (id !== "" && item.id === id) return data;
         return item;
@@ -212,7 +213,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.DELETE_BUSINESS_INTEREST_GUEST: {
-      const {id, callback} = action?.payload;
+      const { id, callback } = action?.payload;
       const tempBusinessInterests = state.business_interests.filter(
         item => item.id !== id
       );
@@ -226,7 +227,7 @@ const categoryReducer = (state = initState, action: any) => {
     }
     // valuables
     case PersonalEstatesListingTypes.CREATE_VALUABLE_GUEST: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       const tempValuables = [...state.valuables, data];
       if (callback) {
         callback(tempValuables);
@@ -237,7 +238,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.UPDATE_VALUABLE_GUEST: {
-      const {id, data, callback} = action?.payload;
+      const { id, data, callback } = action?.payload;
       const tempValuables = state.valuables.map(item => {
         if (id !== "" && item.id === id) return data;
         return item;
@@ -251,7 +252,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalEstatesListingTypes.DELETE_VALUABLE_GUEST: {
-      const {id, callback} = action?.payload;
+      const { id, callback } = action?.payload;
       const tempValuables = state.valuables.filter(item => item.id !== id);
       if (callback) {
         callback(tempValuables);
@@ -263,7 +264,7 @@ const categoryReducer = (state = initState, action: any) => {
     }
     // personal information
     case PersonalTypes.SET_PERSONAL_INFORMATION: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       const {
         legalName,
         address,
@@ -288,7 +289,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalTypes.SET_EXECUTOR: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       if (callback) {
         callback(state);
       }
@@ -298,7 +299,7 @@ const categoryReducer = (state = initState, action: any) => {
       };
     }
     case PersonalTypes.SET_BENEFICIARY: {
-      const {data, callback} = action?.payload;
+      const { data, callback } = action?.payload;
       if (callback) {
         callback(state);
       }
