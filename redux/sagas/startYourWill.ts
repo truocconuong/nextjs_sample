@@ -32,6 +32,7 @@ function* sendOTP(action: any) {
     callback && callback({ success: true, data: res?.data });
   } catch (error) {
     callback && callback({ success: false, data: error });
+    NotificationWarning(error[2]);
     console.log("sendOTPError: ", error);
   }
 }
@@ -49,6 +50,42 @@ function* verifyOTP(action: any) {
   } catch (error) {
     callback && callback({ success: false, data: error });
     console.log("verifyOTPError: ", error);
+    NotificationWarning(error[2]);
+  }
+}
+
+function* getPromoCode(action: any) {
+  const { data, callback } = action?.payload;
+  try {
+    const res = yield call(() =>
+      Request.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/promocodes?name=${data.promoCode}`
+      )
+    );
+    callback && callback({ success: true, data: res[0]?.data });
+  } catch (error) {
+    callback && callback({ success: false, data: error });
+    console.log("getPromo: ", error);
+    NotificationWarning(error[2]);
+  }
+}
+
+function* subscriptions(action: any) {
+  const { data, callback } = action?.payload;
+  const token = localStorage.getItem("accessToken");
+  try {
+    const res = yield call(() =>
+      Request.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/subscriptions`,
+        data,
+        token
+      )
+    );
+    callback && callback({ success: true, data: res[0]?.data });
+  } catch (error) {
+    callback && callback({ success: false, data: error });
+    console.log("subscriptionsError: ", error);
+    NotificationWarning(error[2]);
   }
 }
 
@@ -56,4 +93,6 @@ export default function* startYourWillSaga() {
   yield takeLatest(StartYourWill.SIGN_UP_EMAIL, signUpEmail);
   yield takeLatest(StartYourWill.SEND_OTP, sendOTP);
   yield takeLatest(StartYourWill.VERIFY_OTP, verifyOTP);
+  yield takeLatest(StartYourWill.GET_PROMO_CODE, getPromoCode);
+  yield takeLatest(StartYourWill.SUBSCRIPTIONS, subscriptions);
 }

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Button, Col, Row } from "antd";
 import {
   Elements,
   CardExpiryElement,
   CardNumberElement,
   CardCvcElement,
+  useStripe,
+  useElements,
 } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
@@ -20,7 +22,15 @@ import { loadStripe } from "@stripe/stripe-js";
 import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { setMakePayment } from "../../redux/actions/startYourWill";
+import {
+  getPromoCode,
+  setMakePayment,
+  subscriptions,
+} from "../../redux/actions/startYourWill";
+
+const stripePromise = loadStripe(
+  "pk_test_51JAn9sI5dgnlrNcIU23Yp4RczCcPO673EJFlUdzewVXZk1g0Fs5U54CWbnNE8CJxK1Os0SjU1CBtEIu9b2QlBAgy00EVpaX6c5"
+);
 
 function PaymentSummary() {
   const [promoCode, setPromoCode] = useState("");
@@ -32,14 +42,45 @@ function PaymentSummary() {
   const [CVVComplete, setCVVComplete] = useState(false);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [hide, setHide] = useState(true);
+  const [percent, setPercent] = useState(0);
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const useOptions = () => {
+    const options = useMemo(
+      () => ({
+        style: {
+          base: {
+            color: "#6670a2",
+            "::placeholder": {
+              color: "#c3c5d2",
+            },
+          },
+        },
+      }),
+      []
+    );
+
+    return options;
+  };
+
+  const options = useOptions();
 
   const handleApply = () => {
-    setApplySuccess(true);
+    dispatch(
+      getPromoCode({ promoCode }, (response) => {
+        if (response?.success) {
+          setPercent(response?.data?.percent);
+          setApplySuccess(true);
+        }
+      })
+    );
   };
   const handleDeletePromo = () => {
+    setPercent(0);
     setApplySuccess(false);
     setPromoCode("");
   };
@@ -50,12 +91,6 @@ function PaymentSummary() {
       (sizeBrowser) => sizeBrowser?.width
     )
   );
-
-  const stripePromise = loadStripe(
-    "pk_test_51JAn9sI5dgnlrNcIU23Yp4RczCcPO673EJFlUdzewVXZk1g0Fs5U54CWbnNE8CJxK1Os0SjU1CBtEIu9b2QlBAgy00EVpaX6c5"
-  );
-  //   const stripe = useStripe();
-  //   const elements = useElements();
   const handleChangeFieldStripe = (data) => {
     const complete = data.complete;
     const type = data.elementType;
@@ -79,8 +114,30 @@ function PaymentSummary() {
     router.push("/start-your-will-upload");
   };
 
-  const handlePay = () => {
-    setShowModalSuccess(true);
+  const handlePay = async (event) => {
+    event.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+
+    const payload = await stripe.createToken(
+      elements.getElement(CardNumberElement)
+    );
+
+    const param = {
+      ...payload,
+      promocode: promoCode,
+      cardName: cardHolderName,
+      postalCode,
+    };
+
+    dispatch(
+      subscriptions(param, (response) => {
+        if (response.success) {
+          setShowModalSuccess(true);
+        }
+      })
+    );
   };
 
   return (
@@ -145,6 +202,7 @@ function PaymentSummary() {
               </Col>
             </Row>
           )}
+
           {!applySuccess
             ? (width > 576 || !hide) && (
                 <Row className="mt-24 ">
@@ -169,7 +227,11 @@ function PaymentSummary() {
                     className="item-end"
                     style={{ paddingLeft: 16 }}
                   >
-                    <Button className="apply-btn" onClick={handleApply}>
+                    <Button
+                      className="apply-btn"
+                      onClick={handleApply}
+                      disabled={promoCode === ""}
+                    >
                       Apply
                     </Button>
                   </Col>
@@ -196,7 +258,7 @@ function PaymentSummary() {
               </Col>
               <Col span={10} className="item-end">
                 <span className="money" style={{ color: "#6670A2" }}>
-                  -$ 89.00
+                  -$&nbsp;{((89 * percent) / 100).toFixed(2)}
                 </span>
               </Col>
             </Row>
@@ -206,7 +268,9 @@ function PaymentSummary() {
               <span className="text-title">Subtotal</span>
             </Col>
             <Col span={10} className="item-end">
-              <span className="text-title">$ 0.00</span>
+              <span className="text-title">
+                $&nbsp;{(89 - (89 * percent) / 100).toFixed(2)}
+              </span>
             </Col>
           </Row>
           <Row>
@@ -235,65 +299,66 @@ function PaymentSummary() {
               }}
             />
           </Row>
-          <Elements stripe={stripePromise}>
-            <br />
-            <Row>
-              <Col xs={24} sm={17} md={17} lg={15} xl={16} xxl={17}>
-                <div className="text-name">Card Number</div>
-                <div className="card-number mt-16">
-                  <CardNumberElement
-                    onChange={(e) => handleChangeFieldStripe(e)}
-                  />
-                </div>
-              </Col>
+          <br />
+          <Row>
+            <Col xs={24} sm={17} md={17} lg={15} xl={16} xxl={17}>
+              <div className="text-name">Card Number</div>
+              <div className="card-number mt-16">
+                <CardNumberElement
+                  options={options}
+                  onChange={(e) => handleChangeFieldStripe(e)}
+                />
+              </div>
+            </Col>
 
-              <Col
-                xs={12}
-                sm={7}
-                md={7}
-                lg={9}
-                xl={8}
-                xxl={7}
-                className="expiration"
-              >
-                <div className="text-name">Expiration</div>
-                <div className="card-number mt-16">
-                  <CardExpiryElement
-                    onChange={(e) => handleChangeFieldStripe(e)}
-                  />
-                </div>
-              </Col>
-              <Col xs={12} className="cvv">
-                <div className="text-name">CVV / CVV2</div>
-                <div className="card-number mt-16">
-                  <CardCvcElement
-                    onChange={(e) => handleChangeFieldStripe(e)}
-                  />
-                </div>
-              </Col>
-              <Col
-                xs={24}
-                sm={12}
-                md={12}
-                lg={12}
-                xl={12}
-                xxl={12}
-                className="postal-code"
-              >
-                <div className="text-name">Postal Code</div>
-                <div className=" mt-16">
-                  <InputField
-                    inputProps={{
-                      placeholder: "6 digit postal code",
-                      value: postalCode,
-                      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                        setPostalCode(e.target.value),
-                    }}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </Elements>
+            <Col
+              xs={12}
+              sm={7}
+              md={7}
+              lg={9}
+              xl={8}
+              xxl={7}
+              className="expiration"
+            >
+              <div className="text-name">Expiration</div>
+              <div className="card-number mt-16">
+                <CardExpiryElement
+                  options={options}
+                  onChange={(e) => handleChangeFieldStripe(e)}
+                />
+              </div>
+            </Col>
+            <Col xs={12} className="cvv">
+              <div className="text-name">CVV / CVV2</div>
+              <div className="card-number mt-16">
+                <CardCvcElement
+                  options={options}
+                  onChange={(e) => handleChangeFieldStripe(e)}
+                />
+              </div>
+            </Col>
+            <Col
+              xs={24}
+              sm={12}
+              md={12}
+              lg={12}
+              xl={12}
+              xxl={12}
+              className="postal-code"
+            >
+              <div className="text-name">Postal Code</div>
+              <div className=" mt-16">
+                <InputField
+                  inputProps={{
+                    placeholder: "6 digit postal code",
+                    value: postalCode,
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                      setPostalCode(e.target.value),
+                  }}
+                />
+              </div>
+            </Col>
+          </Row>
           <Row className="footer mt-40">
             <Col
               xs={24}
@@ -343,4 +408,10 @@ function PaymentSummary() {
   );
 }
 
-export default PaymentSummary;
+const WrapperPaymentSummary = () => (
+  <Elements stripe={stripePromise}>
+    <PaymentSummary />
+  </Elements>
+);
+
+export default WrapperPaymentSummary;

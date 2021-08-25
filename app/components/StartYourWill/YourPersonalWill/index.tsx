@@ -202,9 +202,10 @@ function YourPersonalWill() {
             You won’t be able to upload your will until you complete these
             information
           </Row>
-          <hr />
+
           {!donePersonalParticulars && (
             <>
+              <hr />
               <Row>
                 <Col span={18} className="center text-fix-now">
                   Personal Particulars

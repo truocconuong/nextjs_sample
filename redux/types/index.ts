@@ -19,6 +19,8 @@ export const StartYourWill = {
   SIGN_UP_EMAIL: "SIGN_UP_EMAIL",
   SEND_OTP: "SEND_OTP",
   VERIFY_OTP: "VERIFY_OTP",
+  GET_PROMO_CODE: "GET_PROMO_CODE",
+  SUBSCRIPTIONS: "SUBSCRIPTIONS",
 };
 
 export const PersonalEstatesListingTypes = {
