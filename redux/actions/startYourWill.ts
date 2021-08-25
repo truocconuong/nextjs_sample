@@ -34,3 +34,17 @@ export const verifyOTP = (data, callback) => {
     payload: { data, callback },
   };
 };
+
+export const getPromoCode = (data, callback) => {
+  return {
+    type: StartYourWill.GET_PROMO_CODE,
+    payload: { data, callback },
+  };
+};
+
+export const subscriptions = (data, callback) => {
+  return {
+    type: StartYourWill.SUBSCRIPTIONS,
+    payload: { data, callback },
+  };
+};
