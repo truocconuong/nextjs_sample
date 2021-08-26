@@ -9,6 +9,7 @@ import {
   LodgeForm,
   IconInvestment,
   IconBusinessInterest,
+  WatchIcon,
 } from '@images/index';
 import { Col, Row } from 'antd';
 import React from 'react';
@@ -23,6 +24,7 @@ import { IMasterdata, IResponseGetProfile } from '@constant/data.interface';
 import { useState } from 'react';
 import { createSelector } from 'reselect';
 import { find } from 'lodash';
+import YourPersonalWill from 'components/StartYourWill/YourPersonalWill';
 
 function YourLegacyLayout(props) {
   const dispatch = useDispatch();
@@ -598,7 +600,7 @@ function YourLegacyLayout(props) {
                       <Col
                         className='person-percent'
                         style={{
-                          backgroundColor: '#D3EDFF',
+                          backgroundColor: '#DED3FF',
                           width: '48px',
                           height: '48px',
                         }}
@@ -651,7 +653,7 @@ function YourLegacyLayout(props) {
                       <Col
                         className='person-percent'
                         style={{
-                          backgroundColor: '#D3EDFF',
+                          backgroundColor: '#BAF0DF',
                           width: '48px',
                           height: '48px',
                         }}
@@ -687,7 +689,7 @@ function YourLegacyLayout(props) {
                 </div>
               </div>
 
-              {/* <div>
+              <div>
                 <div
                   className='item-carousel'
                   style={{ backgroundColor: '#FEF6E7' }}
@@ -696,18 +698,18 @@ function YourLegacyLayout(props) {
                     <IconBusinessInterest />
                   </Row>
                   <div className='title-pro'>My Valuables</div>
-                  <div className='sub-money'>$ 1000000</div>
+                  {/* <div className='sub-money'>$ 1000000</div> */}
                   {dataProfile?.valuables?.data?.map((e, index) => (
                     <Row className='sub-person' align='middle' key={index}>
                       <Col
                         className='person-percent'
                         style={{
-                          backgroundColor: '#D3EDFF',
+                          backgroundColor: '#FFE9BE',
                           width: '48px',
                           height: '48px',
                         }}
                       >
-                        {index + 1}
+                        <WatchIcon />
                       </Col>
                       <Col>
                         <Row
@@ -721,7 +723,7 @@ function YourLegacyLayout(props) {
                               fontSize: '20px',
                             }}
                           >
-                            {e?.company_name}
+                            {find(masterdata, { id: e?.type_id })?.name}
                           </div>
                           <div
                             className='pos-son'
@@ -729,14 +731,14 @@ function YourLegacyLayout(props) {
                               fontSize: '16px',
                             }}
                           >
-                            {e?.company_uen}
+                            {e?.brand}
                           </div>
                         </Row>
                       </Col>
                     </Row>
                   ))}
                 </div>
-              </div> */}
+              </div>
             </Slider>
           </div>
           <div className='legacy-amend'>
