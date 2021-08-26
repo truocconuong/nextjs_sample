@@ -57,6 +57,7 @@ export interface IBankAccount {
   current_balance: number;
   account_holder: string;
   is_delete: boolean;
+  user_id?: string;
 }
 
 export interface IInsurancePolicy {
@@ -151,4 +152,42 @@ export interface IMasterdata {
 export interface RelationshipInterface {
   id: number;
   name: string;
+}
+
+// interface profile
+
+export interface IResponseGetProfile {
+  bank_accounts: {
+    data: IBankAccount[];
+    total: number;
+  };
+  beneficiaries: {
+    data: IBeneficiary[];
+  };
+  business_interests: {
+    data: IBusinessInterest[];
+    total: number;
+  };
+  executors: {
+    data: IExecutor[];
+  };
+  insurance_policies: {
+    data: IInsurancePolicy[];
+    total: number;
+  };
+  investments: {
+    data: IInvestment[];
+    total: number;
+  };
+  properties: {
+    data: IProperty[];
+    total: number;
+  };
+  valuables: {
+    data: IValuable[];
+  };
+  totalAssets: number;
+  will_pdf_link: string;
+  full_legal_name: string;
+  email: string;
 }

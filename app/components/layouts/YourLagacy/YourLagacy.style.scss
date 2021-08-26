@@ -3,6 +3,7 @@ $breakpoint-sm: 768px;
 $breakpoint-md: 992px;
 $breakpoint-lg: 1200px;
 $breakpoint-xl: 1600px;
+$breakpoint-xsl: 1800px;
 $breakpoint-xxl: 2400px;
 
 .your-lagacy {
@@ -79,7 +80,7 @@ $breakpoint-xxl: 2400px;
           padding: 20px 100px;
           margin-bottom: 30px;
         }
-        @media (max-width: $breakpoint-xl) {
+        @media (max-width: $breakpoint-xsl) {
           padding: 20px 50px;
           margin-bottom: 30px;
         }
@@ -211,9 +212,9 @@ $breakpoint-xxl: 2400px;
     }
     .legacy-carousel {
       margin-top: 50px;
-      padding: 0 10%;
+      padding: 0 5%;
       .item-carousel {
-        padding: 48px 32px 100px;
+        padding: 48px 32px;
         margin-right: 15px;
         margin-left: 15px;
         display: flex;

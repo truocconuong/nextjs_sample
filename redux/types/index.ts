@@ -94,3 +94,6 @@ export const UserTypes = {
 export const ContactTypes = {
   POST_CONTACT_FORM: "POST_CONTACT_FORM"
 }
+export const ProfileTypes = {
+  GET_PROFILE: "GET_PROFILE"
+}

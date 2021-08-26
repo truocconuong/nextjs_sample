@@ -176,3 +176,6 @@ export { ReactComponent as IconProperty } from "./icon-property.svg";
 export { ReactComponent as IconBank } from "./icon-bank.svg";
 export { ReactComponent as IconEditMyAccount } from "./icon-edit-myacount.svg";
 export { ReactComponent as IconSignOut } from "./icon-sign-out.svg";
+export { ReactComponent as IconInvestment } from "./icon-invesment.svg";
+export { ReactComponent as IconBusinessInterest } from "./icon-business-interest.svg";
+export { ReactComponent as IconValuable } from "./icon-valuable.svg";
