@@ -33,6 +33,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                             '/personal-estates-listing/insurance-policy' ||
                         router?.pathname === '/allocation' ||
                         router?.pathname === '/complete' ||
+                        router?.pathname === '/payment-summary' ||
                         router?.pathname === '/lodge-will') && (
                         <NavigationBar />
                     )}
