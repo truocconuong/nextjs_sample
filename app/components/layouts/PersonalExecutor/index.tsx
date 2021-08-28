@@ -353,8 +353,10 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
         {visibleModalDelete && (
           <Modal
             centered={true}
+            closable={true}
             visible={visibleModalDelete}
             wrapClassName="modal-delete"
+            onClose={() => setVisibleModalDelete(false)}
             footer={
               <div className="btn-wrapper">
                 <CustomButton
@@ -366,7 +368,6 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
                 </CustomButton>
               </div>
             }
-            closable={false}
             className={
               " modal-information " +
               (isMobile ? "modal-mobile-executor " : "modal-desktop-executor ")
