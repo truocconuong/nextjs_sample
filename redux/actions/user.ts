@@ -57,6 +57,20 @@ export const deleteBeneficiary = (data: { is_delete: boolean }, id: string, toke
   };
 };
 
+export const signIn = (data: { email: string }, callback?: any) => {
+  return {
+    type: UserTypes.SIGN_IN,
+    payload: { data, callback },
+  };
+};
+
+export const validateOtp = (data: { email: string, otp: string }, callback?: any) => {
+  return {
+    type: UserTypes.VERIFY_USER_OTP,
+    payload: { data, callback },
+  };
+};
+
 export const setPercents = (data: ISetPercent[], token: string, callback) => {
   return {
     type: UserTypes.UPDATE_PERCENT_BENEFICIARIES,

@@ -320,6 +320,7 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
                 isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
                 initialValue={editingFormInput}
+                setIsShowFormInput={setIsEditing}
               />
             )}
             <div className="alternative-beneficiary-container">

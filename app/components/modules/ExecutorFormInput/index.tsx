@@ -13,12 +13,14 @@ import {
   UndoIcon,
   SaveIconEnabled,
   UndoIconEnabled,
+  IconExit,
 } from "../../../../public/images";
 const { Option } = Select;
 interface ExecutorFormPropsInterface {
   isMobile?: boolean;
   onSaveData: (data: any) => void;
   initialValue: DataFormInput;
+  setIsShowFormInput: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface DataFormInput {
@@ -30,7 +32,7 @@ export interface DataFormInput {
   id: string;
 }
 const executorFormInput = (props: ExecutorFormPropsInterface) => {
-  const { isMobile, onSaveData, initialValue } = props;
+  const { isMobile, onSaveData, initialValue, setIsShowFormInput } = props;
 
   useEffect(() => {
     setDataForm(initialValue)
@@ -102,7 +104,8 @@ const executorFormInput = (props: ExecutorFormPropsInterface) => {
   };
 
   return (
-    <div className={"executor-form-input-container"}>
+    <div className="executor-form-input-container">
+      <div className="close-icon" onClick={() => setIsShowFormInput(false)}><IconExit /></div>
       <div className="executor-form-input-wrapper">
         <div className="legal-name">
           <div className="container-input">

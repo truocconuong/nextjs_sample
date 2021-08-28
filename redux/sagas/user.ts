@@ -15,7 +15,7 @@ function* updatePersonalInformation(action: any) {
     callback && callback(res[0]?.data);
   } catch (error) {
     callback && callback(error?.response?.data);
-    console.log("user._error: ", error?.response?.data);
+    console.log("user._error: ", error);
   }
 }
 
@@ -121,6 +121,41 @@ function* updatePercentBeneficiaries(action: any) {
   }
 }
 
+function* signIn(action: any) {
+  const { callback, data, token } = action?.payload;
+  try {
+    const res = yield call(() =>
+      Request.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/send-otp`,
+        data,
+        token
+      )
+    );
+    callback && callback(res[0]?.data);
+  } catch (error) {
+    callback && callback(error?.response?.data);
+    console.log("user.error: ", error?.response?.data);
+  }
+}
+
+function* verifyOtp(action: any) {
+  console.log("call 1 lan")
+  const { callback, data } = action?.payload;
+  try {
+    const res = yield call(() =>
+      Request.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/verify-otp`,
+        data
+      )
+    );
+    console.log("call callback")
+    callback && callback(res[0]?.data);
+  } catch (error) {
+    callback && callback(error?.response?.data);
+    console.log("user.error: ", error?.response?.data);
+  }
+}
+
 export default function* userSaga() {
   yield takeLatest(UserTypes.UPDATE_PERSONAL_INFORMATION, updatePersonalInformation);
   yield takeLatest(UserTypes.UPDATE_PERSONAL_EXECUTOR, updatePersonaExecutor);
@@ -131,6 +166,8 @@ export default function* userSaga() {
   yield takeLatest(UserTypes.CREATE_PERSONAL_BENEFICIARY, createPersonaBeneficiary);
   yield takeLatest(UserTypes.UPDATE_PERCENT_BENEFICIARIES, updatePercentBeneficiaries);
   yield takeLatest(UserTypes.UPDATE_INFOR_USER, updateInforUser);
+  yield takeLatest(UserTypes.SIGN_IN, signIn);
+  yield takeLatest(UserTypes.VERIFY_USER_OTP, verifyOtp);
 
 }
 
