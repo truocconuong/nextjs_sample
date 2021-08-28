@@ -1,7 +1,9 @@
-import { isEmail } from "@util/index";
+import { MAX_LENGTH_NAME } from "@constant/index";
+import { isEmail, isValidName, isValidNric } from "@util/index";
 import CustomButton from "generals/Button";
 import InputField from "generals/InputField";
 import React, { useState } from "react";
+import {getAddress} from "onemap-address-search-singapore";
 import { useEffect } from "react";
 import {
   SaveIcon,
@@ -32,6 +34,9 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
   }, [initialValue])
   const onValueChange = (key: string, value: string) => {
     const newDataForm = { ...dataForm };
+    if(value.length >= MAX_LENGTH_NAME){
+      return;
+    }
     newDataForm[key] = value;
     setDataForm(newDataForm);
   };
@@ -70,7 +75,17 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
     onSaveData(dataForm);
   };
 
-  const onSearchAddress = () => {};
+  const onSearchAddress = () => {
+    getAddress({
+      postalCode: dataForm?.address,
+    }).then(address => {
+      const newDataForm = { ...dataForm };
+      newDataForm.unitNumber = address?.blockNo,
+      newDataForm.addressLine1 = address?.address[0] && address?.address[0].ADDRESS;
+      newDataForm.addressLine2 = address?.address[1] && address?.address[1].ADDRESS;
+      setDataForm(newDataForm);
+    });
+  };
 
   return (
     <div className={"personal-form-input-container"}>
@@ -85,8 +100,12 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
                 value: dataForm.legalName,
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                   onValueChange("legalName", e?.target?.value),
+                maxLength: 30
               }}
               wrapperClassName="wrapper-class"
+              isError={dataForm.legalName && !isValidName(dataForm.legalName)}
+              displayErrorText={dataForm.legalName && !isValidName(dataForm.legalName)}
+              errorTextStr="Name can not contain special characters except @"
             />
           </div>
         </div>
@@ -116,9 +135,11 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
                 placeholder: "e.g. G1234567A",
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                   onValueChange("passport", e?.target?.value),
-                value: dataForm.passport
+                value: dataForm.passport,
               }}
-              limitLines={5}
+              isError={dataForm.passport && !isValidNric(dataForm.passport)}
+              displayErrorText={dataForm.passport && !isValidNric(dataForm.passport)}
+              errorTextStr="Nric is invalid"
               displaySupportText
               supportText="The NRIC and Passport No. may only contain letters and numbers."
             />

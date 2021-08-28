@@ -81,7 +81,7 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
       dispatch(
         ProgressActions.setRouter(
           {
-            router: "/personal-estates-listing/property",
+            router: "/allocation",
           },
           () => { }
         )
