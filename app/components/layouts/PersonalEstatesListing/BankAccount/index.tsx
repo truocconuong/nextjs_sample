@@ -21,6 +21,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
 import {v4 as uuidv4} from "uuid";
+import {limitLength, extractAlpha} from "@util/index";
 
 const {Option} = Select;
 
@@ -97,7 +98,7 @@ function BankAccountLayout(props: IProps) {
     if (categoryData?.bank_accounts) {
       setListData(categoryData.bank_accounts);
       setNumberForm(categoryData.bank_accounts.length + 1);
-      if (categoryData.bank_accounts.length >= 1) {
+      if (categoryData.bank_accounts.length >= 1 && !data.id) {
         setIsShowForm(false);
         setIsShowModalSplash(false);
       }
@@ -108,7 +109,7 @@ function BankAccountLayout(props: IProps) {
     dispatch(
       ProgressActions.setAmountPercentIncreament(
         {
-          amountPercentIncreament: 0,
+          amountPercentIncreament: 10,
         },
         () => {}
       )
@@ -177,6 +178,12 @@ function BankAccountLayout(props: IProps) {
       current_balance: 0,
       account_holder: "",
     });
+  };
+
+  const handleResetState = () => {
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleShowModal = () => {
@@ -254,12 +261,10 @@ function BankAccountLayout(props: IProps) {
       setNumberForm(numberForm + 1);
     }
     handleReset();
+    handleResetState();
     // if (!isContinue) {
     //   setIsContinue(true);
     // }
-    setDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
   };
 
   const handleEdit = item => {
@@ -273,6 +278,10 @@ function BankAccountLayout(props: IProps) {
 
   const handleDelete = item => {
     const tempItem = {...item, is_delete: true};
+    if (item?.id === data?.id) {
+      handleReset();
+      handleResetState();
+    }
     if (isLogin) {
       dispatch(
         PersonalEstatesListingActions.updateBankAccount(
@@ -294,13 +303,25 @@ function BankAccountLayout(props: IProps) {
   const handleChangeInput = e => {
     const {name, value} = e.target;
     setErrors(prev => ({...prev, [name]: false}));
-    setData(prev => ({...prev, [name]: value}));
+    if (name === "account_holder") {
+      setData(prev => ({
+        ...prev,
+        [name]: limitLength(extractAlpha(value), 30),
+      }));
+      return;
+    }
+    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
   const handleAddBankAccount = () => {
     if (isShowForm) return;
     setIsShowForm(true);
     setDisabledEdit(false);
+  };
+
+  const handleDeleteForm = () => {
+    handleReset();
+    handleResetState();
   };
 
   return (
@@ -350,7 +371,7 @@ function BankAccountLayout(props: IProps) {
                                   masterDataReducer.find(
                                     masterData =>
                                       masterData.id === item?.bank_id
-                                  ).name
+                                  )?.name
                                 }
                               </span>
                             </Row>
@@ -397,6 +418,9 @@ function BankAccountLayout(props: IProps) {
                         </span>
                       </Col>
                     </Col>
+                    <Col className="trash-icon div-center">
+                      <TrashEnabledIcon onClick={handleDeleteForm} />
+                    </Col>
                   </Row>
                   <Col className="w-full">
                     <Row className="mb-32">
@@ -429,6 +453,7 @@ function BankAccountLayout(props: IProps) {
                           value: data?.account_no,
                           name: "account_no",
                           onChange: e => handleChangeInput(e),
+                          type: "number",
                         }}
                         isError={errors?.account_no}
                       ></InputField>

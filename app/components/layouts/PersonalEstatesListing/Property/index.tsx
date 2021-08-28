@@ -27,6 +27,7 @@ import {createSelector} from "reselect";
 import {IData, IMasterdata, IProperty} from "@constant/data.interface";
 import _ from "lodash";
 import {v4 as uuidv4} from "uuid";
+import {limitLength} from "@util/index";
 
 const {Option} = Select;
 
@@ -103,13 +104,13 @@ function PropertyLayout(props: IProps) {
     address_line_2: "",
     unit_number: "",
     tenure: 0,
-    current_bank_loan_id: "",
-    type_id: "",
+    current_bank_loan_id: null,
+    type_id: null,
     remaining_loan_tenure: 0,
     joint_name: "",
     joint_contact: "",
-    loan_start_date: "",
-    loan_end_date: "",
+    loan_start_date: null,
+    loan_end_date: null,
     year_loan_taken: 0,
     interest_rate: 0,
     outstanding_loan_amount: 0,
@@ -136,10 +137,9 @@ function PropertyLayout(props: IProps) {
             ? moment(item?.loan_end_date || "").format("DD/MM/YYYY")
             : "",
       }));
-      console.log("temp", temp);
       setListData(temp);
       setNumberForm(temp.length + 1);
-      if (temp.length >= 1) {
+      if (temp.length >= 1 && !data?.id) {
         setIsShowForm(false);
         setIsShowModalSplash(false);
       }
@@ -174,7 +174,7 @@ function PropertyLayout(props: IProps) {
     dispatch(
       ProgressActions.setAmountPercentIncreament(
         {
-          amountPercentIncreament: 0,
+          amountPercentIncreament: 10,
         },
         () => {}
       )
@@ -229,8 +229,8 @@ function PropertyLayout(props: IProps) {
       address_line_2: "",
       unit_number: "",
       tenure: 0,
-      current_bank_loan_id: "",
-      type_id: "",
+      current_bank_loan_id: null,
+      type_id: null,
       remaining_loan_tenure: 0,
       joint_name: "",
       joint_contact: "",
@@ -241,6 +241,12 @@ function PropertyLayout(props: IProps) {
       outstanding_loan_amount: 0,
       is_delete: false,
     });
+  };
+
+  const handleResetState = () => {
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleShowModal = () => {
@@ -278,6 +284,8 @@ function PropertyLayout(props: IProps) {
       year_loan_taken: Number(data.year_loan_taken),
       interest_rate: Number(data.interest_rate),
       outstanding_loan_amount: Number(data.outstanding_loan_amount),
+      loan_start_date: moment(data.loan_start_date, "DD/MM/YYYY"),
+      loan_end_date: moment(data.loan_end_date, "DD/MM/YYYY"),
     };
     if (disabledEdit) {
       // edit
@@ -319,12 +327,10 @@ function PropertyLayout(props: IProps) {
       setNumberForm(numberForm + 1);
     }
     handleReset();
+    handleResetState();
     // if (!isContinue) {
     //   setIsContinue(true);
     // }
-    setDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
   };
 
   const handleEdit = item => {
@@ -338,6 +344,10 @@ function PropertyLayout(props: IProps) {
 
   const handleDelete = item => {
     const tempItem = {...item, is_delete: true};
+    if (item?.id === data?.id) {
+      handleReset();
+      handleResetState();
+    }
     if (isLogin) {
       dispatch(
         PersonalEstatesListingActions.updateProperty(
@@ -358,7 +368,7 @@ function PropertyLayout(props: IProps) {
     if (data?.is_solely && name === "postal_code") {
       setErrors(prev => ({...prev, postal_code: false}));
     }
-    setData(prev => ({...prev, [name]: value}));
+    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
   const handleAddProperty = () => {
@@ -410,6 +420,11 @@ function PropertyLayout(props: IProps) {
         address_line_2: address?.address[1] && address?.address[1].ADDRESS,
       }));
     });
+  };
+
+  const handleDeleteForm = () => {
+    handleReset();
+    handleResetState();
   };
 
   return (
@@ -500,6 +515,9 @@ function PropertyLayout(props: IProps) {
                           Property Details
                         </span>
                       </Col>
+                    </Col>
+                    <Col className="div-center trash-icon">
+                      <TrashEnabledIcon onClick={handleDeleteForm} />
                     </Col>
                   </Row>
                   <Col className="w-full">
@@ -635,7 +653,7 @@ function PropertyLayout(props: IProps) {
                                     })),
                                 }}
                               >
-                                {optionBanks.map((item, index) => {
+                                {optionBanks.map(item => {
                                   return (
                                     <Option value={item.value}>
                                       {item.label}
@@ -694,6 +712,8 @@ function PropertyLayout(props: IProps) {
                                     name: "interest_rate",
                                     onChange: e => handleChangeInput(e),
                                     type: "number",
+                                    pattern: "^d*(.d{0,2})?$",
+                                    step: "0.01",
                                   }}
                                 ></InputField>
                               </div>
