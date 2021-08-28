@@ -11,8 +11,10 @@ export enum PERSONAL_ALLOCATION {
   MOTHER = "Mother",
   SON = "Son",
   DAUGHTER = "Daughter",
-  OTHER= "Other",
-  WIFE= "Wife"
+  GRANDCHILD = "Grandchild",
+  NEPHEW = "Nephew",
+  NIECE = "Niece",
+  OTHERS = "Others",
 }
 
 export enum MASTERDATA_TYPE {
@@ -22,3 +24,5 @@ export enum MASTERDATA_TYPE {
   INVESTMENT = "INVESTMENT",
   TYPE_PROPERTY = "TYPE_PROPERTY"
 }
+
+export const MAX_LENGTH_NAME = 30;

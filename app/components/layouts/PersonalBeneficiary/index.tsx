@@ -81,7 +81,7 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
       dispatch(
         ProgressActions.setRouter(
           {
-            router: "/personal-estates-listing/property",
+            router: "/allocation",
           },
           () => { }
         )
@@ -396,6 +396,8 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
           <Modal
             centered={true}
             visible={visibleModalDelete}
+            closable={true}
+            onClose={() => setVisibleModalDelete(false)}
             wrapClassName="modal-delete"
             footer={
               <div className="btn-wrapper">
@@ -408,7 +410,6 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
                 </CustomButton>
               </div>
             }
-            closable={false}
             className={
               " modal-information " +
               (isMobile

@@ -132,6 +132,7 @@ const executorFormInput = (props: ExecutorFormPropsInterface) => {
                 placeholder: "Select",
                 onChange: (value) => onValueChange("relationship", value),
               }}
+              searchable
             >
               {
                 relationships.map((relationship) => <Option key={relationship.id} value={relationship.id}>{relationship.name}</Option>)

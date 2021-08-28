@@ -170,7 +170,7 @@
     .custom-modal {
         position: unset !important;
         .ant-modal-content {
-            position: unset !important;
+            position: relative;
         }
     }
 }
