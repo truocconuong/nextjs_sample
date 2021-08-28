@@ -62,7 +62,7 @@ export interface IBankAccount {
 
 export interface IInsurancePolicy {
   id: string;
-  insurance_company: string;
+  insurance_company_id: string;
   is_non_nomivated: boolean;
   policy_name: string;
   policy_no: string;

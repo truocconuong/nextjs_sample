@@ -18,8 +18,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
 import {useEffect} from "react";
 import {v4 as uuidv4} from "uuid";
-import {IData} from "@constant/data.interface";
+import {IData, IMasterdata} from "@constant/data.interface";
 import {createSelector} from "reselect";
+import {limitLength} from "@util/index";
 
 const {Option} = Select;
 interface IProps {
@@ -39,6 +40,15 @@ function InsurancePolicyLayout(props: IProps) {
     )
   );
 
+  const masterDataReducer = useSelector(
+    createSelector(
+      (state: any) => state?.masterdata,
+      (masterdata: IMasterdata[]) => {
+        return masterdata;
+      }
+    )
+  );
+
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [isShowForm, setIsShowForm] = useState(true);
@@ -47,7 +57,7 @@ function InsurancePolicyLayout(props: IProps) {
   const [disabledEdit, setDisabledEdit] = useState(false);
   const [data, setData] = useState({
     id: "",
-    insurance_company: "",
+    insurance_company_id: null,
     is_non_nomivated: true,
     policy_name: "",
     policy_no: "",
@@ -58,8 +68,9 @@ function InsurancePolicyLayout(props: IProps) {
   });
   // const [isContinue, setIsContinue] = useState(false);
   const [optionBeneficiaries, setOptionBeneficiaries] = useState([]);
+  const [optionInsuranceCompanies, setOptionInsuranceCompanies] = useState([]);
   const [errors, setErrors] = useState({
-    insurance_company: false,
+    insurance_company_id: false,
     beneficiary_name: false,
   });
 
@@ -67,11 +78,26 @@ function InsurancePolicyLayout(props: IProps) {
     if (categoryData?.insurance_policies) {
       setListData(categoryData.insurance_policies);
       setNumberForm(categoryData.insurance_policies.length + 1);
-      if (categoryData.insurance_policies.length >= 1) {
+      if (categoryData.insurance_policies.length >= 1 && !data.id) {
         setIsShowForm(false);
       }
     }
   }, [categoryData?.insurance_policies]);
+
+  useEffect(() => {
+    if (masterDataReducer) {
+      const tempInsuranceCompanies = [];
+      masterDataReducer.map(item => {
+        if (item?.value === "INSURANCE_COMPANY") {
+          tempInsuranceCompanies.push({
+            label: item?.name,
+            value: item?.id,
+          });
+        }
+      });
+      setOptionInsuranceCompanies(tempInsuranceCompanies);
+    }
+  }, [masterDataReducer]);
 
   useEffect(() => {
     if (categoryData?.beneficiaries) {
@@ -90,7 +116,7 @@ function InsurancePolicyLayout(props: IProps) {
     dispatch(
       ProgressActions.setAmountPercentIncreament(
         {
-          amountPercentIncreament: 0,
+          amountPercentIncreament: 10,
         },
         () => {}
       )
@@ -137,7 +163,7 @@ function InsurancePolicyLayout(props: IProps) {
   const handleReset = () => {
     setData({
       id: "",
-      insurance_company: "",
+      insurance_company_id: null,
       is_non_nomivated: true,
       policy_name: "",
       policy_no: "",
@@ -146,6 +172,12 @@ function InsurancePolicyLayout(props: IProps) {
       beneficiary_name: null,
       is_nominated: false,
     });
+  };
+
+  const handleResetState = () => {
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleShowModal = () => {
@@ -159,8 +191,8 @@ function InsurancePolicyLayout(props: IProps) {
   const handleValidate = () => {
     let isError = false;
     let error = errors;
-    if (!data?.insurance_company) {
-      error.insurance_company = true;
+    if (!data?.insurance_company_id) {
+      error.insurance_company_id = true;
       isError = true;
     }
     if (!data?.beneficiary_name && data?.is_nominated) {
@@ -224,12 +256,10 @@ function InsurancePolicyLayout(props: IProps) {
       setNumberForm(numberForm + 1);
     }
     handleReset();
+    handleResetState();
     // if (!isContinue) {
     //   setIsContinue(true);
     // }
-    setDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
   };
 
   const handleEdit = item => {
@@ -243,6 +273,10 @@ function InsurancePolicyLayout(props: IProps) {
 
   const handleDelete = item => {
     const tempItem = {...item, is_delete: true};
+    if (item?.id === data?.id) {
+      handleReset();
+      handleResetState();
+    }
     if (isLogin) {
       dispatch(
         PersonalEstatesListingActions.updateInsurancePolicy(
@@ -264,13 +298,18 @@ function InsurancePolicyLayout(props: IProps) {
   const handleChangeInput = e => {
     const {name, value} = e.target;
     setErrors(prev => ({...prev, [name]: false}));
-    setData(prev => ({...prev, [name]: value}));
+    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
   const handleAddInsurancePolicy = () => {
     if (isShowForm) return;
     setIsShowForm(true);
     setDisabledEdit(false);
+  };
+
+  const handleDeleteForm = () => {
+    handleReset();
+    handleResetState();
   };
 
   return (
@@ -309,7 +348,13 @@ function InsurancePolicyLayout(props: IProps) {
                           <Col>
                             <Row>
                               <span className="type">
-                                {item?.insurance_company}
+                                {
+                                  masterDataReducer.find(
+                                    masterData =>
+                                      masterData.id ===
+                                      item?.insurance_company_id
+                                  )?.name
+                                }
                               </span>
                             </Row>
                             <Row>
@@ -355,20 +400,37 @@ function InsurancePolicyLayout(props: IProps) {
                         </span>
                       </Col>
                     </Col>
+                    <Col className="div-center trash-icon">
+                      <TrashEnabledIcon onClick={handleDeleteForm} />
+                    </Col>
                   </Row>
                   <Col className="w-full">
                     <Row className="mb-32">
-                      <InputField
+                      <SelectField
                         displayLabel
                         label="Insurance Company"
-                        inputProps={{
-                          placeholder: "e.g. FWD Insurance",
-                          value: data?.insurance_company,
-                          name: "insurance_company",
-                          onChange: e => handleChangeInput(e),
+                        selectProps={{
+                          placeholder: "Select",
+                          value: data?.insurance_company_id,
+                          onChange: value => {
+                            setErrors(prev => ({
+                              ...prev,
+                              insurance_company_id: false,
+                            }));
+                            setData(prev => ({
+                              ...prev,
+                              insurance_company_id: value,
+                            }));
+                          },
                         }}
-                        isError={errors?.insurance_company}
-                      ></InputField>
+                        isError={errors?.insurance_company_id}
+                      >
+                        {optionInsuranceCompanies.map(item => {
+                          return (
+                            <Option value={item.value}>{item.label}</Option>
+                          );
+                        })}
+                      </SelectField>
                     </Row>
                     <Row className="mb-24">
                       <CustomCheckboxInfo
@@ -452,6 +514,7 @@ function InsurancePolicyLayout(props: IProps) {
                                 value: data?.policy_no,
                                 name: "policy_no",
                                 onChange: e => handleChangeInput(e),
+                                type: "number",
                               }}
                             ></InputField>
                           </div>

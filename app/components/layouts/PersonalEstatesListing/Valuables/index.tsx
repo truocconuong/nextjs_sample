@@ -19,6 +19,7 @@ import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
 import {v4 as uuidv4} from "uuid";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
+import {limitLength} from "@util/index";
 
 const {Option} = Select;
 
@@ -70,7 +71,7 @@ function ValuablesLayout(props: IProps) {
   useEffect(() => {
     if (categoryData?.valuables) {
       setListData(categoryData.valuables);
-      if (categoryData.valuables.length >= 1) {
+      if (categoryData.valuables.length >= 1 && !data.id) {
         setIsShowForm(false);
       }
     }
@@ -95,7 +96,7 @@ function ValuablesLayout(props: IProps) {
     dispatch(
       ProgressActions.setAmountPercentIncreament(
         {
-          amountPercentIncreament: 0,
+          amountPercentIncreament: 10,
         },
         () => {}
       )
@@ -147,6 +148,12 @@ function ValuablesLayout(props: IProps) {
       model: "",
       serial_no: "",
     });
+  };
+
+  const handleResetState = () => {
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleShowModal = () => {
@@ -215,12 +222,10 @@ function ValuablesLayout(props: IProps) {
       }
     }
     handleReset();
+    handleResetState();
     // if (!isContinue) {
     //   setIsContinue(true);
     // }
-    setDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
   };
 
   const handleEdit = item => {
@@ -234,6 +239,10 @@ function ValuablesLayout(props: IProps) {
 
   const handleDelete = item => {
     const tempItem = {...item, is_delete: true};
+    if (item?.id === data?.id) {
+      handleReset();
+      handleResetState();
+    }
     if (isLogin) {
       dispatch(
         PersonalEstatesListingActions.updateValuable(
@@ -252,7 +261,7 @@ function ValuablesLayout(props: IProps) {
   const handleChangeInput = e => {
     const {name, value} = e.target;
     setErrors(prev => ({...prev, [name]: false}));
-    setData(prev => ({...prev, [name]: value}));
+    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
   // const handleConfirmDelete = item => {
@@ -272,6 +281,11 @@ function ValuablesLayout(props: IProps) {
     setData(prev => ({...prev, type_id: value}));
     setErrors(prev => ({...prev, type_id: false}));
     setIsShowDetail(true);
+  };
+
+  const handleDeleteForm = () => {
+    handleReset();
+    handleResetState();
   };
 
   return (
@@ -314,7 +328,7 @@ function ValuablesLayout(props: IProps) {
                                   masterDataReducer.find(
                                     masterData =>
                                       masterData.id === item?.type_id
-                                  ).name
+                                  )?.name
                                 }
                               </span>
                             </Row>
@@ -367,6 +381,9 @@ function ValuablesLayout(props: IProps) {
                           Valuables Details
                         </span>
                       </Col>
+                    </Col>
+                    <Col className="div-center trash-icon">
+                      <TrashEnabledIcon onClick={handleDeleteForm} />
                     </Col>
                   </Row>
                   <Col className="w-full">

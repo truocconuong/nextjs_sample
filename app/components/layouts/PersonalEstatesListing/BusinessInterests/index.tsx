@@ -19,6 +19,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {IData} from "@constant/data.interface";
 import {v4 as uuidv4} from "uuid";
+import {limitLength} from "@util/index";
 
 interface IProps {
   isLogin: boolean;
@@ -61,7 +62,7 @@ function BusinessInterestsLayout(props: IProps) {
     if (categoryData?.business_interests) {
       setListData(categoryData.business_interests);
       setNumberForm(categoryData.business_interests.length + 1);
-      if (categoryData.business_interests.length >= 1) {
+      if (categoryData.business_interests.length >= 1 && !data.id) {
         setIsShowForm(false);
       }
     }
@@ -71,7 +72,7 @@ function BusinessInterestsLayout(props: IProps) {
     dispatch(
       ProgressActions.setAmountPercentIncreament(
         {
-          amountPercentIncreament: 0,
+          amountPercentIncreament: 10,
         },
         () => {}
       )
@@ -124,6 +125,12 @@ function BusinessInterestsLayout(props: IProps) {
       estimated_current_market_value: 0,
       percentage_share: 0,
     });
+  };
+
+  const handleResetState = () => {
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleShowModal = () => {
@@ -204,12 +211,10 @@ function BusinessInterestsLayout(props: IProps) {
       setNumberForm(numberForm + 1);
     }
     handleReset();
+    handleResetState();
     // if (!isContinue) {
     //   setIsContinue(true);
     // }
-    setDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
   };
 
   const handleEdit = item => {
@@ -223,6 +228,10 @@ function BusinessInterestsLayout(props: IProps) {
 
   const handleDelete = item => {
     const tempItem = {...item, is_delete: true};
+    if (item?.id === data?.id) {
+      handleReset();
+      handleResetState();
+    }
     if (isLogin) {
       dispatch(
         PersonalEstatesListingActions.updateBusinessInterest(
@@ -244,13 +253,18 @@ function BusinessInterestsLayout(props: IProps) {
   const handleChangeInput = e => {
     const {name, value} = e.target;
     setErrors(prev => ({...prev, [name]: false}));
-    setData(prev => ({...prev, [name]: value}));
+    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
   const handleAddInvestment = () => {
     if (isShowForm) return;
     setIsShowForm(true);
     setDisabledEdit(false);
+  };
+
+  const handleDeleteForm = () => {
+    handleReset();
+    handleResetState();
   };
 
   return (
@@ -336,6 +350,9 @@ function BusinessInterestsLayout(props: IProps) {
                         </span>
                       </Col>
                     </Col>
+                    <Col className="div-center trash-icon">
+                      <TrashEnabledIcon onClick={handleDeleteForm} />
+                    </Col>
                   </Row>
                   <Col className="w-full">
                     <Row className="mb-32">
@@ -389,6 +406,7 @@ function BusinessInterestsLayout(props: IProps) {
                             displayLabel
                             label="Estimated Current Market Value ($)"
                             inputProps={{
+                              type: "number",
                               placeholder: "0.00",
                               value: data?.estimated_current_market_value,
                               name: "estimated_current_market_value",
@@ -412,6 +430,7 @@ function BusinessInterestsLayout(props: IProps) {
                               value: data?.percentage_share,
                               name: "percentage_share",
                               onChange: e => handleChangeInput(e),
+                              type: "number",
                             }}
                           ></InputField>
                         </Row>

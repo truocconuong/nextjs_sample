@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
 import {v4 as uuidv4} from "uuid";
+import {limitLength} from "@util/index";
 
 const {Option} = Select;
 
@@ -72,7 +73,7 @@ function InvestmentsLayout(props: IProps) {
     if (categoryData?.investments) {
       setListData(categoryData.investments);
       setNumberForm(categoryData.investments.length + 1);
-      if (categoryData.investments.length >= 1) {
+      if (categoryData.investments.length >= 1 && !data.id) {
         setIsShowForm(false);
       }
     }
@@ -97,7 +98,7 @@ function InvestmentsLayout(props: IProps) {
     dispatch(
       ProgressActions.setAmountPercentIncreament(
         {
-          amountPercentIncreament: 0,
+          amountPercentIncreament: 10,
         },
         () => {}
       )
@@ -150,6 +151,12 @@ function InvestmentsLayout(props: IProps) {
       capital_outlay: 0,
       current_market_value: 0,
     });
+  };
+
+  const handleResetState = () => {
+    setDisabledEdit(false);
+    setIsShowDetail(false);
+    setIsShowForm(false);
   };
 
   const handleShowModal = () => {
@@ -228,12 +235,10 @@ function InvestmentsLayout(props: IProps) {
       setNumberForm(numberForm + 1);
     }
     handleReset();
+    handleResetState();
     // if (!isContinue) {
     //   setIsContinue(true);
     // }
-    setDisabledEdit(false);
-    setIsShowDetail(false);
-    setIsShowForm(false);
   };
 
   const handleEdit = item => {
@@ -247,6 +252,10 @@ function InvestmentsLayout(props: IProps) {
 
   const handleDelete = item => {
     const tempItem = {...item, is_delete: true};
+    if (item?.id === data?.id) {
+      handleReset();
+      handleResetState();
+    }
     if (isLogin) {
       dispatch(
         PersonalEstatesListingActions.updateInvestment(
@@ -268,13 +277,18 @@ function InvestmentsLayout(props: IProps) {
   const handleChangeInput = e => {
     const {name, value} = e.target;
     setErrors(prev => ({...prev, [name]: false}));
-    setData(prev => ({...prev, [name]: value}));
+    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
   const handleAddInvestment = () => {
     if (isShowForm) return;
     setIsShowForm(true);
     setDisabledEdit(false);
+  };
+
+  const handleDeleteForm = () => {
+    handleReset();
+    handleResetState();
   };
 
   return (
@@ -318,7 +332,7 @@ function InvestmentsLayout(props: IProps) {
                                   masterDataReducer.find(
                                     masterData =>
                                       masterData.id === item?.type_id
-                                  ).name
+                                  )?.name
                                 }
                               </span>
                             </Row>
@@ -362,6 +376,9 @@ function InvestmentsLayout(props: IProps) {
                           Investment Details
                         </span>
                       </Col>
+                    </Col>
+                    <Col className="div-center trash-icon">
+                      <TrashEnabledIcon onClick={handleDeleteForm} />
                     </Col>
                   </Row>
                   <Col className="w-full">
@@ -416,6 +433,7 @@ function InvestmentsLayout(props: IProps) {
                               value: data?.account_no,
                               name: "account_no",
                               onChange: e => handleChangeInput(e),
+                              type: "number",
                             }}
                           ></InputField>
                         </Row>
