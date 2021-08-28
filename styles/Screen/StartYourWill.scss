@@ -202,6 +202,13 @@
         font-size: 18px;
         font-family: Graphik;
       }
+      .start-btn {
+        @extend .edit-btn;
+        background: #00199e;
+        border: 1px solid #00199e;
+        border-radius: 7px;
+        color: #ffffff;
+      }
       .option {
         margin: 16px 0;
         height: 56px;

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Col, Row } from "antd";
+import React, { useEffect, useState } from "react";
+import { Col, Row } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { useRouter } from "next/router";
@@ -14,12 +14,14 @@ import AuthHoc from "../AuthHoc";
 import { sendOTP, signUpEmail, verifyOTP } from "@redux/actions/startYourWill";
 
 function StartYourWill() {
-  const [start, setStart] = useState(true);
-  const [asContinue, SetAsContinue] = useState(false);
   const [showModalSignUpEmail, setShowModalSignUpEmail] = useState(false);
   // const [email, setEmail] = useState("");
   const [showModalOtp, setShowModalOtp] = useState(false);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
+  const [donePersonalParticulars, setDonePersonalParticulars] = useState(false);
+  const [doneExecutor, setDoneExecutor] = useState(false);
+  const [doneBenefit, setDoneBenefit] = useState(false);
+  const [doneEstateDistribute, setDoneEstateDistribute] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -45,12 +47,7 @@ function StartYourWill() {
     )
   );
 
-  const checkDisplayCreate = (category) => {
-    const token = localStorage.getItem("accessToken");
-    let donePersonalParticulars = false;
-    let doneExecutor = false;
-    let doneBenefit = false;
-    let doneEstateDistribute = false;
+  useEffect(() => {
     if (
       category?.email &&
       category?.full_legal_name &&
@@ -60,13 +57,13 @@ function StartYourWill() {
       category?.address_line_2 &&
       category?.unit_number
     ) {
-      donePersonalParticulars = true;
+      setDonePersonalParticulars(true);
     }
     if (category?.executors.length >= 1) {
-      doneExecutor = true;
+      setDoneExecutor(true);
     }
     if (category?.beneficiaries.length >= 1) {
-      doneBenefit = true;
+      setDoneBenefit(true);
     }
 
     if (category?.beneficiaries?.length >= 2) {
@@ -76,10 +73,12 @@ function StartYourWill() {
           percent += item.percent;
         }
       });
-      if (percent === 100) doneEstateDistribute = true;
+      if (percent === 100) setDoneEstateDistribute(true);
     }
+  }, [category]);
+
+  const checkDisplayCreate = () => {
     return (
-      !token &&
       donePersonalParticulars &&
       doneExecutor &&
       doneBenefit &&
@@ -87,23 +86,70 @@ function StartYourWill() {
     );
   };
 
-  const handleStart = () => {
-    setStart(false);
-    SetAsContinue(true);
+  const handleDraftYourWill = () => {
+    if (!donePersonalParticulars) {
+      router.push("/personal-information");
+      return;
+    }
+    if (!doneExecutor) {
+      router.push("/personal-executor");
+      return;
+    }
+    if (!doneBenefit) {
+      router.push("/personal-beneficiary");
+      return;
+    }
+    if (!doneEstateDistribute) {
+      router.push("/allocation");
+      return;
+    }
+    return null;
+  };
+
+  const countOptionNotDone = () => {
+    let num = 0;
+    if (!donePersonalParticulars) {
+      num += 1;
+    }
+    if (!doneExecutor) {
+      num += 1;
+    }
+    if (!doneBenefit) {
+      num += 1;
+    }
+    if (!doneEstateDistribute) {
+      num += 1;
+    }
+    return num;
+  };
+
+  const checkStart = () => {
+    return (
+      !donePersonalParticulars &&
+      !doneExecutor &&
+      !doneBenefit &&
+      !doneEstateDistribute
+    );
   };
 
   const renderTitle = () => {
-    if (start) {
+    if (checkDisplayCreate()) {
+      return "You’re Almost There!";
+    }
+    if (checkStart()) {
       return `Hello, ${name}`;
     }
-    if (asContinue) return "Let’s Keep Going!";
+    return "Let’s Keep Going!";
   };
 
   const renderTextContinue = () => {
-    if (start) {
+    if (checkDisplayCreate()) {
+      return `Let's create your account!`;
+    }
+    if (checkStart()) {
       return "Start drafting your Will!";
     }
-    if (asContinue) return "Continue drafting your Will!";
+    return "Continue drafting your Will!";
   };
 
   const onSignUpEmail = () => {
@@ -191,7 +237,7 @@ function StartYourWill() {
           </span>
         </Col>
         <Col xs={9} sm={9} md={6} lg={6} xl={6} xxl={6}>
-          {checkDisplayCreate(category) && (
+          {checkDisplayCreate() && (
             <span
               className="text right"
               style={{ cursor: "pointer" }}
@@ -221,26 +267,33 @@ function StartYourWill() {
               eiusmod tempor
             </span>
             &nbsp;
-            {!start && <span className="remaining">1 sections remaining</span>}
+            {(donePersonalParticulars ||
+              doneExecutor ||
+              doneBenefit ||
+              doneEstateDistribute) &&
+              !checkDisplayCreate() && (
+                <span className="remaining">
+                  {countOptionNotDone()}&nbsp;sections remaining
+                </span>
+              )}
           </div>
-          {start && (
-            <CustomButton
-              type="ghost"
-              size="large"
-              className="continue-btn"
-              onClick={handleStart}
-            >
-              Get Started
-            </CustomButton>
-          )}
-          {asContinue && (
+          {checkDisplayCreate() ? (
             <CustomButton
               type="ghost"
               size="large"
               className="continue-btn"
               onClick={() => setShowModalSignUpEmail(true)}
             >
-              Continue Drafting Your Will
+              Create Your Account
+            </CustomButton>
+          ) : (
+            <CustomButton
+              type="ghost"
+              size="large"
+              className="continue-btn"
+              onClick={handleDraftYourWill}
+            >
+              {checkStart() ? "Get Started" : "Continue Drafting Your Will"}
             </CustomButton>
           )}
         </Col>

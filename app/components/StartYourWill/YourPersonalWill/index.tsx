@@ -192,95 +192,104 @@ function YourPersonalWill() {
         !doneExecutor ||
         !doneBenefit ||
         !doneEstateDistribute ||
-        !doneCreateAcc) && (
-        <div className="fix-issues">
-          <Row className="center">
-            <IssuesIcon />
-            <span className="text-title">Fix these issues</span>
-          </Row>
-          <Row className="text-note ">
-            You won’t be able to upload your will until you complete these
-            information
-          </Row>
+        !doneCreateAcc) &&
+        !(
+          !donePersonalParticulars &&
+          !doneExecutor &&
+          !doneBenefit &&
+          !doneEstateDistribute
+        ) && (
+          <div className="fix-issues">
+            <Row className="center">
+              <IssuesIcon />
+              <span className="text-title">Fix these issues</span>
+            </Row>
+            <Row className="text-note ">
+              You won’t be able to upload your will until you complete these
+              information
+            </Row>
 
-          {!donePersonalParticulars && (
-            <>
-              <hr />
-              <Row>
-                <Col span={18} className="center text-fix-now">
-                  Personal Particulars
-                </Col>
-                <Col span={6} className="item-end">
-                  {width > 600 && (
-                    <Button
-                      className="button-fix"
-                      onClick={onEditPersonalParticular}
-                    >
-                      Fix Now
-                    </Button>
-                  )}
-                </Col>
-              </Row>
-            </>
-          )}
-          {!doneExecutor && (
-            <>
-              <hr />
-              <Row>
-                <Col span={18} className="center text-fix-now">
-                  Executor Details
-                </Col>
-                <Col span={6} className="item-end">
-                  {width > 600 && (
-                    <Button
-                      className="button-fix"
-                      onClick={onEditExecutorDetail}
-                    >
-                      Fix Now
-                    </Button>
-                  )}
-                </Col>
-              </Row>
-            </>
-          )}
-          {!doneBenefit && (
-            <>
-              <hr />
-              <Row>
-                <Col span={18} className="center text-fix-now">
-                  Beneficiary Details
-                </Col>
-                <Col span={6} className="item-end">
-                  {width > 600 && (
-                    <Button
-                      className="button-fix"
-                      onClick={onEditBeneficiaryDetail}
-                    >
-                      Fix Now
-                    </Button>
-                  )}
-                </Col>
-              </Row>
-            </>
-          )}
-          {!doneEstateDistribute && (
-            <>
-              <hr />
-              <Row>
-                <Col span={18} className="center text-fix-now">
-                  Estate Distribution
-                </Col>
-                <Col span={6} className="item-end">
-                  {width > 600 && (
-                    <Button className="button-fix" onClick={onEditDistribution}>
-                      Fix Now
-                    </Button>
-                  )}
-                </Col>
-              </Row>
-            </>
-          )}
-          {/* {!donePersonalEstatesList && (
+            {!donePersonalParticulars && (
+              <>
+                <hr />
+                <Row>
+                  <Col span={18} className="center text-fix-now">
+                    Personal Particulars
+                  </Col>
+                  <Col span={6} className="item-end">
+                    {width > 600 && (
+                      <Button
+                        className="button-fix"
+                        onClick={onEditPersonalParticular}
+                      >
+                        Fix Now
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </>
+            )}
+            {!doneExecutor && (
+              <>
+                <hr />
+                <Row>
+                  <Col span={18} className="center text-fix-now">
+                    Executor Details
+                  </Col>
+                  <Col span={6} className="item-end">
+                    {width > 600 && (
+                      <Button
+                        className="button-fix"
+                        onClick={onEditExecutorDetail}
+                      >
+                        Fix Now
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </>
+            )}
+            {!doneBenefit && (
+              <>
+                <hr />
+                <Row>
+                  <Col span={18} className="center text-fix-now">
+                    Beneficiary Details
+                  </Col>
+                  <Col span={6} className="item-end">
+                    {width > 600 && (
+                      <Button
+                        className="button-fix"
+                        onClick={onEditBeneficiaryDetail}
+                      >
+                        Fix Now
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </>
+            )}
+            {!doneEstateDistribute && (
+              <>
+                <hr />
+                <Row>
+                  <Col span={18} className="center text-fix-now">
+                    Estate Distribution
+                  </Col>
+                  <Col span={6} className="item-end">
+                    {width > 600 && (
+                      <Button
+                        className="button-fix"
+                        onClick={onEditDistribution}
+                      >
+                        Fix Now
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </>
+            )}
+            {/* {!donePersonalEstatesList && (
             <>
               <Row>
                 <Col span={18} className="center text-fix-now">
@@ -300,39 +309,39 @@ function YourPersonalWill() {
               <hr />
             </>
           )} */}
-          {donePersonalParticulars &&
-            doneExecutor &&
-            doneBenefit &&
-            doneEstateDistribute &&
-            !doneCreateAcc && (
-              <>
-                <hr />
-                <Row>
-                  <Col span={18} className="center ">
-                    <span
-                      className="text-fix-now"
-                      onClick={() =>
-                        width > 600 ? {} : setShowModalSignUpEmail(true)
-                      }
-                    >
-                      Create Your Account
-                    </span>
-                  </Col>
-                  <Col span={6} className="item-end">
-                    {width > 600 && (
-                      <Button
-                        className="button-fix"
-                        onClick={() => setShowModalSignUpEmail(true)}
+            {donePersonalParticulars &&
+              doneExecutor &&
+              doneBenefit &&
+              doneEstateDistribute &&
+              !doneCreateAcc && (
+                <>
+                  <hr />
+                  <Row>
+                    <Col span={18} className="center ">
+                      <span
+                        className="text-fix-now"
+                        onClick={() =>
+                          width > 600 ? {} : setShowModalSignUpEmail(true)
+                        }
                       >
-                        Fix Now
-                      </Button>
-                    )}
-                  </Col>
-                </Row>
-              </>
-            )}
-        </div>
-      )}
+                        Create Your Account
+                      </span>
+                    </Col>
+                    <Col span={6} className="item-end">
+                      {width > 600 && (
+                        <Button
+                          className="button-fix"
+                          onClick={() => setShowModalSignUpEmail(true)}
+                        >
+                          Fix Now
+                        </Button>
+                      )}
+                    </Col>
+                  </Row>
+                </>
+              )}
+          </div>
+        )}
 
       <div className="your-personal-will">
         <Row className="center">
@@ -383,8 +392,14 @@ function YourPersonalWill() {
             className="item-end center"
           >
             {width > 600 && (
-              <Button className="edit-btn" onClick={onEditPersonalParticular}>
-                <PenIcon /> <span className="ml-8">Edit</span>
+              <Button
+                className={donePersonalParticulars ? "edit-btn" : "start-btn"}
+                onClick={onEditPersonalParticular}
+              >
+                {donePersonalParticulars && <PenIcon />}
+                <span className="ml-8">
+                  {donePersonalParticulars ? "Edit" : "Start"}
+                </span>
               </Button>
             )}
           </Col>
@@ -428,8 +443,12 @@ function YourPersonalWill() {
             className="item-end center"
           >
             {width > 600 && (
-              <Button className="edit-btn" onClick={onEditExecutorDetail}>
-                <PenIcon /> <span className="ml-8">Edit</span>
+              <Button
+                className={doneExecutor ? "edit-btn" : "start-btn"}
+                onClick={onEditExecutorDetail}
+              >
+                {doneExecutor && <PenIcon />}
+                <span className="ml-8">{doneExecutor ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>
@@ -473,8 +492,12 @@ function YourPersonalWill() {
             className="item-end center"
           >
             {width > 600 && (
-              <Button className="edit-btn" onClick={onEditBeneficiaryDetail}>
-                <PenIcon /> <span className="ml-8">Edit</span>
+              <Button
+                className={doneBenefit ? "edit-btn" : "start-btn"}
+                onClick={onEditBeneficiaryDetail}
+              >
+                {doneBenefit && <PenIcon />}
+                <span className="ml-8">{doneBenefit ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>
@@ -518,8 +541,14 @@ function YourPersonalWill() {
             className="item-end center"
           >
             {width > 600 && (
-              <Button className="edit-btn" onClick={onEditDistribution}>
-                <PenIcon /> <span className="ml-8">Edit</span>
+              <Button
+                className={doneEstateDistribute ? "edit-btn" : "start-btn"}
+                onClick={onEditDistribution}
+              >
+                {doneEstateDistribute && <PenIcon />}
+                <span className="ml-8">
+                  {doneEstateDistribute ? "Edit" : "Start"}
+                </span>
               </Button>
             )}
           </Col>
@@ -568,8 +597,14 @@ function YourPersonalWill() {
             className="item-end center"
           >
             {width > 600 && (
-              <Button className="edit-btn" onClick={handleMovePersonalDetail}>
-                <PenIcon /> <span className="ml-8">Edit</span>
+              <Button
+                className={donePersonalEstatesList ? "edit-btn" : "start-btn"}
+                onClick={handleMovePersonalDetail}
+              >
+                {donePersonalEstatesList && <PenIcon />}
+                <span className="ml-8">
+                  {donePersonalEstatesList ? "Edit" : "Start"}
+                </span>
               </Button>
             )}
           </Col>
