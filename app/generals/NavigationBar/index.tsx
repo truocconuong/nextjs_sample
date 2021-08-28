@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Row } from "antd";
 import React, { useEffect, useState } from "react";
 import {
   IWill,
@@ -11,9 +11,7 @@ import {
 import ProgressBar from "generals/Progress";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import SignInForm from "@layout/SignIn";
 import router from "next/router";
-import { MasterDataActions } from "@redux/actions";
 
 const NavigationBar = () => {
   const dispatch = useDispatch();
@@ -24,8 +22,6 @@ const NavigationBar = () => {
       (sizeBrowser) => sizeBrowser?.width
     )
   );
-
-  const [isShowSignIn, setIsShowSignIn] = useState(false);
 
   useEffect(() => {
     setIsMobile(width < 884)
@@ -169,7 +165,6 @@ const NavigationBar = () => {
               </div>
             </div>
           )}
-          {isShowSignIn && <SignInForm isMobile={isMobile} />}
         </div>
       </nav>
       <div className={isMobile ? "height-150" : "height-100"}></div>

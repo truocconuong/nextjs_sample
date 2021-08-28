@@ -14,12 +14,14 @@ import {
 
   SaveIconEnabled,
   UndoIconEnabled,
+  IconExit,
 } from "../../../../public/images";
 const { Option } = Select;
 interface BeneficiaryPropsInterface {
   isMobile?: boolean;
   onSaveData: (data: any, relationshipName: string) => void;
   initialValue: DataFormInput;
+  setIsShowFormInput: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface DataFormInput {
@@ -31,7 +33,7 @@ export interface DataFormInput {
   count?: number;
 }
 const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
-  const { isMobile, onSaveData, initialValue } = props;
+  const { isMobile, onSaveData, initialValue, setIsShowFormInput } = props;
   const initialState: DataFormInput = {
     legalName: "",
     relationship: "",
@@ -111,6 +113,7 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
 
   return (
     <div className={"beneficiary-form-input-container"}>
+      <div className="close-icon" onClick={() => setIsShowFormInput(false)}><IconExit /></div>
       <div className="beneficiary-form-input-wrapper">
         <div className="title-form">
           <div className="step"><span>{initialValue.count}</span></div>

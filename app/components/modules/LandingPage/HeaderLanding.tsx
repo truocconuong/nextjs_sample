@@ -5,16 +5,20 @@ import {
     HomeIconLogoHeaderMini,
     MenuMobile,
 } from '@images/index';
+import SignInForm from '@layout/SignIn';
 import { Col, Drawer, Row } from 'antd';
 import { Header } from 'antd/lib/layout/layout';
 import ModalBeforeStart from 'components/StartYourWill/Modal/ModalBeforeStart';
 import ModalContinueYourWill from 'components/StartYourWill/Modal/ModalContinueYourWill';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 function HeaderLanding(props) {
     const router = useRouter();
     const [isShowModal, setIsShowModal] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const refDrawer = useRef();
     const openShowModal = () => {
         setIsShowModal(true);
@@ -24,6 +28,7 @@ function HeaderLanding(props) {
     };
 
     const [showModalBeforeStart, setShowModalBeforeStart] = useState(false);
+    const [showModalSignIn, setIsShowModalSignIn] = useState(false);
     const [showModalContinueYourWill, setShowModalContinueYourWill] = useState(
         false
     );
@@ -36,6 +41,22 @@ function HeaderLanding(props) {
         setShowModalBeforeStart(false);
         setShowModalContinueYourWill(true);
     };
+
+
+    const width = useSelector(
+        createSelector(
+            (state: any) => state?.sizeBrowser,
+            sizeBrowser => sizeBrowser?.width
+        )
+    );
+
+    useEffect(() => {
+        setIsMobile(width < 768);
+    }, [width]);
+
+    const onSignIn = () => {
+        setIsShowModalSignIn(true);
+    }
 
     return (
         <Header className='header-landing'>
@@ -101,9 +122,9 @@ function HeaderLanding(props) {
                             </Link>
                         </Col>
                         <Col>
-                            <Link href='/'>
+                            <div onClick={onSignIn}>
                                 <a>Sign In</a>
-                            </Link>
+                            </div>
                         </Col>
                         <Col>
                             <CustomButton
@@ -186,9 +207,9 @@ function HeaderLanding(props) {
                                     </Link>
                                 </Col>
                                 <Col style={{ border: 0 }}>
-                                    <Link href='/'>
+                                    <div onClick={onSignIn}>
                                         <a>Sign In</a>
-                                    </Link>
+                                    </div>
                                 </Col>
                                 <Col style={{ border: 0 }}>
                                     <CustomButton
@@ -206,6 +227,7 @@ function HeaderLanding(props) {
                     )}
                 </Col>
             </Row>
+            {showModalSignIn && <SignInForm isMobile={isMobile} setVisibleModal={setIsShowModalSignIn} />}
         </Header>
     );
 }

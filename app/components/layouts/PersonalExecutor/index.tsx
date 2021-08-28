@@ -268,6 +268,7 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
                 isMobile={isMobile}
                 onSaveData={onSaveDataFormInput}
                 initialValue={editingFormInput}
+                setIsShowFormInput={setIsEditing}
               />
             )}
             {dataForm.length < 2 ? (
