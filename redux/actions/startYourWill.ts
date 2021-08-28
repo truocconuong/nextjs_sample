@@ -14,6 +14,20 @@ export const setMakePayment = (makePayment: boolean) => {
   };
 };
 
+export const setDownloaded = (downloaded: boolean) => {
+  return {
+    type: StartYourWill.SET_DOWNLOADED,
+    payload: { downloaded },
+  };
+};
+
+export const setUploaded = (uploaded: boolean) => {
+  return {
+    type: StartYourWill.SET_UPLOADED,
+    payload: { uploaded },
+  };
+};
+
 export const signUpEmail = (data, callback) => {
   return {
     type: StartYourWill.SIGN_UP_EMAIL,

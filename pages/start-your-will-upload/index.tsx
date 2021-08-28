@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
 import {
@@ -19,14 +19,14 @@ import CustomButton from "generals/Button";
 import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
 import { useRouter } from "next/router";
 import YourPersonalWill from "components/StartYourWill/YourPersonalWill";
+import { setDownloaded } from "@redux/actions/startYourWill";
 
 function StartYourWill() {
   const [showModalSuccess, setShowModalSuccess] = useState(false);
-  const [isUpload, setIsUpload] = useState(false);
   const [renderPage, setRenderPage] = useState(false);
 
   const router = useRouter();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -41,22 +41,34 @@ function StartYourWill() {
     )
   );
 
-  const makePayment = useSelector(
+  const starYourWillData = useSelector(
     createSelector(
       (state: any) => state?.startYourWill,
-      (startYourWill) => startYourWill?.makePayment
+      (startYourWill) => startYourWill
+    )
+  );
+
+  const category = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category) => category
     )
   );
 
   const renderIconTitle = () => {
-    if (isUpload) {
+    if (starYourWillData?.uploaded) {
       return width > 768 ? <UploadSecure /> : <UploadSecureMobile />;
     }
     return width > 768 ? <Download /> : <DownloadMobile />;
   };
 
+  const handlePreView = () => {
+    router.push("/preview-pdf");
+    dispatch(setDownloaded(true));
+  };
+
   const handleDownloadWill = () => {
-    setIsUpload(true);
+    dispatch(setDownloaded(true));
   };
 
   const handleMakePayment = () => {
@@ -76,7 +88,9 @@ function StartYourWill() {
         )}
         <Row
           className="keep-going"
-          style={{ background: !isUpload ? "#E9FAF4" : "#FFD9D1" }}
+          style={{
+            background: !starYourWillData?.uploaded ? "#E9FAF4" : "#FFD9D1",
+          }}
         >
           <Col
             xs={24}
@@ -88,37 +102,43 @@ function StartYourWill() {
             className="left-header"
           >
             <div className="text-keep-going">
-              {!isUpload ? "Your Will Is Ready" : "Upload & Secure"}
+              {!starYourWillData?.uploaded
+                ? "Your Will Is Ready"
+                : "Upload & Secure"}
             </div>
             <div className="text-continue mt-8">
-              {!isUpload
+              {!starYourWillData?.uploaded
                 ? "Let's sign and upload your Will!"
                 : "Your privacy and security is our utmost importance"}
             </div>
             <div className="text mt-16 mb-40">
               <span>
-                {!isUpload
+                {!starYourWillData?.uploaded
                   ? "You've done all the hard work, so take a look at your completed will,"
                   : "Let’s complete your Will. All your information is saved as you go."}
               </span>
               &nbsp;
               <span className="remaining">
-                {!isUpload
+                {!starYourWillData?.uploaded
                   ? "dowload, and print it!"
                   : "Upload your signed will."}
               </span>
             </div>
-            {!isUpload && (
-              <CustomButton
-                type="ghost"
-                size="large"
-                className="continue-btn"
-                onClick={handleDownloadWill}
+            {!starYourWillData?.uploaded && (
+              <a
+                href={`${process.env.NEXT_PUBLIC_API_URL}${category?.will_pdf_link}`}
               >
-                Download Will
-              </CustomButton>
+                <CustomButton
+                  type="ghost"
+                  size="large"
+                  className="continue-btn"
+                  onClick={handleDownloadWill}
+                >
+                  Download Will
+                </CustomButton>
+              </a>
             )}
-            {isUpload && (
+            {starYourWillData?.uploaded && (
               <div>
                 <CustomButton
                   type="primary"
@@ -182,7 +202,7 @@ function StartYourWill() {
                 className="item-end"
               >
                 {width > 768 && (
-                  <Button className="download-btn" onClick={handleDownloadWill}>
+                  <Button className="download-btn" onClick={handlePreView}>
                     Download Will
                   </Button>
                 )}
@@ -199,83 +219,89 @@ function StartYourWill() {
             </Row>
           </div>
 
-          <div className="download upload" style={{ background: "#fff" }}>
-            <Col span={24} className="center">
-              <span>
-                <UploadFile />
-              </span>
-              <span className="text-title">Upload Your Signed Will</span>
-            </Col>
-            <Row className="optional-text mt-16" style={{ color: "#6670A2" }}>
-              Once your Will has been signed, your Will is completed and you can
-              upload your signed Will into the iWills platform for future
-              reference. You should store the original Will in a safe location
-              and inform the Executors of their roles and the location of the
-              Will.
-            </Row>
-            <div className="drag-drop-file mt-24">
-              <Row className="item-center">
-                <FileIcon />
+          {starYourWillData?.downloaded && (
+            <div className="download upload" style={{ background: "#fff" }}>
+              <Col span={24} className="center">
+                <span>
+                  <UploadFile />
+                </span>
+                <span className="text-title">Upload Your Signed Will</span>
+              </Col>
+              <Row className="optional-text mt-16" style={{ color: "#6670A2" }}>
+                Once your Will has been signed, your Will is completed and you
+                can upload your signed Will into the iWills platform for future
+                reference. You should store the original Will in a safe location
+                and inform the Executors of their roles and the location of the
+                Will.
               </Row>
-              <Row className="item-center optional-text mt-16">
-                Drag and Drop files here
-              </Row>
-              <Row className="item-center text-file-support mt-8">
-                File Supported: PDF only, (Max 3mb)
-              </Row>
-              <Row className="item-center mt-16">
-                <Button className="upload-btn">Upload Will</Button>
-              </Row>
-            </div>
+              <div className="drag-drop-file mt-24">
+                <Row className="item-center">
+                  <FileIcon />
+                </Row>
+                <Row className="item-center optional-text mt-16">
+                  Drag and Drop files here
+                </Row>
+                <Row className="item-center text-file-support mt-8">
+                  File Supported: PDF only, (Max 3mb)
+                </Row>
+                <Row className="item-center mt-16">
+                  <Button className="upload-btn">Upload Will</Button>
+                </Row>
+              </div>
 
-            {!makePayment && (
-              <>
-                <div className="make-overlay"></div>
-                <div className="make-payment">
-                  <Row>
-                    <Col
-                      xs={24}
-                      sm={24}
-                      md={18}
-                      lg={18}
-                      xl={18}
-                      xxl={18}
-                      className="center"
-                    >
-                      <Col style={{ paddingRight: 10 }}>
-                        {width > 768 ? <MakePayment /> : <MakePaymentMobile />}
-                      </Col>
-                      <Col>
-                        <div className="text-title">
-                          Pay to upload Your Signed Will
-                        </div>
-                        <div className="text-note">
-                          A secured interface with your data encrypted and your
-                          Will stored safely to protect your privacy.
-                        </div>
-                      </Col>
-                    </Col>
-                    <Col
-                      xs={24}
-                      sm={24}
-                      md={6}
-                      lg={6}
-                      xl={6}
-                      xxl={6}
-                      className="col-btn-pay"
-                    >
-                      <Button
-                        className="make-payment-btn"
-                        onClick={handleMakePayment}
+              {!starYourWillData?.makePayment && (
+                <>
+                  <div className="make-overlay"></div>
+                  <div className="make-payment">
+                    <Row>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={18}
+                        lg={18}
+                        xl={18}
+                        xxl={18}
+                        className="center"
                       >
-                        Make Payment
-                      </Button>
-                    </Col>
-                  </Row>
-                </div>
-              </>
-            )}
-          </div>
+                        <Col style={{ paddingRight: 10 }}>
+                          {width > 768 ? (
+                            <MakePayment />
+                          ) : (
+                            <MakePaymentMobile />
+                          )}
+                        </Col>
+                        <Col>
+                          <div className="text-title">
+                            Pay to upload Your Signed Will
+                          </div>
+                          <div className="text-note">
+                            A secured interface with your data encrypted and
+                            your Will stored safely to protect your privacy.
+                          </div>
+                        </Col>
+                      </Col>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                        xxl={6}
+                        className="col-btn-pay"
+                      >
+                        <Button
+                          className="make-payment-btn"
+                          onClick={handleMakePayment}
+                        >
+                          Make Payment
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <div className="body-1"></div>

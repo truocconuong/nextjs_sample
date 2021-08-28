@@ -21,6 +21,8 @@ export const StartYourWill = {
   VERIFY_OTP: "VERIFY_OTP",
   GET_PROMO_CODE: "GET_PROMO_CODE",
   SUBSCRIPTIONS: "SUBSCRIPTIONS",
+  SET_DOWNLOADED: "SET_DOWNLOADED",
+  SET_UPLOADED: "SET_UPLOADED",
 };
 
 export const PersonalEstatesListingTypes = {
@@ -91,12 +93,11 @@ export const UserTypes = {
   UPDATE_INFOR_USER: "UPDATE_INFOR_USER",
   SIGN_IN: "SIGN_IN",
   VERIFY_USER_OTP: "VERIFY_USER_OTP",
-
 };
 
 export const ContactTypes = {
-  POST_CONTACT_FORM: "POST_CONTACT_FORM"
-}
+  POST_CONTACT_FORM: "POST_CONTACT_FORM",
+};
 export const ProfileTypes = {
-  GET_PROFILE: "GET_PROFILE"
-}
+  GET_PROFILE: "GET_PROFILE",
+};
