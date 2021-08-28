@@ -2,7 +2,8 @@ import { IData } from '@constant/data.interface';
 import { IconEditMyAccount, LodgeForm } from '@images/index';
 import HeaderDashboard from '@module/MyAccount/HeaderDashboard';
 import ModalUpdateAccount from '@module/MyAccount/ModalUpdateAccount';
-import { UserActions } from '@redux/actions';
+import { CategoryActions, UserActions } from '@redux/actions';
+import { sendOtpProfile, verifyOtpProfile } from '@redux/actions/profile';
 import { Button, Col, Row } from 'antd';
 import ModalOtp from 'components/StartYourWill/Modal/ModalOtp';
 import ModalSignUpEmail from 'components/StartYourWill/Modal/ModalSignUpEmail';
@@ -20,6 +21,13 @@ function MyAccountLayout(props) {
       }
     )
   );
+
+  const updateDataCategory = () => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      dispatch(CategoryActions.getCategoriesData(token));
+    }
+  };
   const [showModalUpdateEmail, setShowModalUpdateEmail] = useState(false);
   const [showModalUpdatePhone, setShowModalUpdatePhone] = useState(false);
   const [email, setEmail] = useState<string>(categoryData?.email);
@@ -31,16 +39,26 @@ function MyAccountLayout(props) {
   const onUpdateEmail = (email: string) => {
     setEmail(email);
     const token = localStorage.getItem('accessToken');
-    if (token)
-      dispatch(UserActions.updateInforUser({ email }, token, () => {}));
-    setShowModalUpdateEmail(false);
-    setShowModalOtp(true);
+    if (token) {
+      dispatch(
+        sendOtpProfile({ email }, (responseOTP) => {
+          if (responseOTP.success) {
+            setShowModalOtp(true);
+          }
+        })
+      );
+      setShowModalUpdateEmail(false);
+    }
   };
 
   const onUpdatePhone = (phone) => {
     const token = localStorage.getItem('accessToken');
     if (token)
-      dispatch(UserActions.updateInforUser({ email }, token, () => {}));
+      dispatch(
+        UserActions.updateInforUser({ phone }, token, (res) => {
+          if (res) updateDataCategory();
+        })
+      );
     setPhone(phone);
     setShowModalUpdatePhone(false);
   };
@@ -48,8 +66,15 @@ function MyAccountLayout(props) {
   const changeOtp = (otp) => {
     if (otp.length === 4) {
       setTimeout(() => {
-        setShowModalOtp(false);
-        setShowModalSuccess(true);
+        dispatch(
+          verifyOtpProfile({ email, otp }, (response) => {
+            if (response.success) {
+              setShowModalOtp(false);
+              setShowModalSuccess(true);
+              updateDataCategory();
+            }
+          })
+        );
       }, 1000);
     }
   };

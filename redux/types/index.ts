@@ -100,4 +100,6 @@ export const ContactTypes = {
 };
 export const ProfileTypes = {
   GET_PROFILE: "GET_PROFILE",
-};
+  SEND_OTP_PROFILE: "SEND_OTP_PROFILE",
+  VERIFY_OTP_PROFILE: "VERIFY_OTP_PROFILE",
+}
