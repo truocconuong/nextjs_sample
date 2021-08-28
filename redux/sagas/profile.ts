@@ -1,5 +1,5 @@
 import { IResponseGetProfile } from "@constant/data.interface";
-import { NotificationWarning } from "@generals/Notifications";
+import { NotificationWarning } from "@generals/notifications";
 import { ProfileTypes } from "@redux/types";
 import { takeLatest, call } from "redux-saga/effects";
 import Request from "../../app/api/RestClient";
