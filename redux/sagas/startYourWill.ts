@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import { StartYourWill } from "../types";
 import Request from "../../app/api/RestClient";
-import { NotificationWarning } from "@generals/Notifications";
+import { NotificationWarning } from "@generals/notifications";
 
 function* signUpEmail(action: any) {
   const { data, callback } = action?.payload;
