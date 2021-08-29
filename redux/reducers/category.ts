@@ -300,13 +300,14 @@ const categoryReducer = (state = initState, action: any) => {
     }
     case PersonalTypes.SET_BENEFICIARY: {
       const { data, callback } = action?.payload;
-      if (callback) {
-        callback(state);
-      }
-      return {
+      const newState = {
         ...state,
         beneficiaries: data,
       };
+      if (callback) {
+        callback(newState);
+      }
+      return newState;
     }
     default: {
       return state;

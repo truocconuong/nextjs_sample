@@ -63,14 +63,6 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
   useEffect(() => {
     if (dataForm.length > 0) {
       dispatch(
-        ProgressActions.setAmountPercentIncreament(
-          {
-            amountPercentIncreament: 0,
-          },
-          () => { }
-        )
-      );
-      dispatch(
         ProgressActions.setPushable(
           {
             pushable: true,
@@ -188,14 +180,6 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
       ProgressActions.setPushable(
         {
           pushable: true,
-        },
-        () => { }
-      )
-    );
-    dispatch(
-      ProgressActions.setAmountPercentIncreament(
-        {
-          amountPercentIncreament: 10,
         },
         () => { }
       )
