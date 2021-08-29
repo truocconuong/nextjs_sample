@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { useDispatch } from "react-redux";
+import { getAmountPercentCompleted } from "../../../../utils/helpers/Tool.util";
 export interface AllocationPersonalInterface {
   id: string;
   type: string;
@@ -109,14 +110,6 @@ const Allocation = () => {
 
   useEffect(() => {
     dispatch(
-      ProgressActions.setAmountPercentIncreament(
-        {
-          amountPercentIncreament: 0,
-        },
-        () => { }
-      )
-    );
-    dispatch(
       ProgressActions.setPushable(
         {
           pushable: true,
@@ -201,8 +194,22 @@ const Allocation = () => {
       dispatch(UserActions.updateBeneficiary({percent: value}, `${id}`, token, () => {
       }))
     }
-    dispatch(CategoryActions.setBeneficiary(dataForm, () => {
+    dispatch(CategoryActions.setBeneficiary(dataForm, (data) => {
     }));
+
+    setNewPercent(dataForm);
+  }
+
+  function setNewPercent(dataForm: IBeneficiary[]) {
+    categoryData.beneficiaries = dataForm;
+    dispatch(
+      ProgressActions.setPercent(
+        {
+          percent: getAmountPercentCompleted(categoryData),
+        },
+        () => { }
+      )
+    );
   }
 
   const toApiDataForm = (dataForm: AllocationPersonalInterface[]) => {
@@ -242,6 +249,7 @@ const Allocation = () => {
       dispatch(CategoryActions.setBeneficiary(dataForm, () => {
       }));
     }
+    setNewPercent(dataForm);
   }
 
   const toSetPercentApiData = (persons: AllocationPersonalInterface[]) => {
@@ -427,3 +435,5 @@ const Allocation = () => {
 };
 
 export default Allocation;
+
+

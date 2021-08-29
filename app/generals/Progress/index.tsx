@@ -1,7 +1,7 @@
 import Button from "generals/Button";
 import React from "react";
 import { ProgressActions } from "../../../redux/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "react-circular-progressbar/dist/styles.css";
 import {
   buildStyles,
@@ -10,6 +10,9 @@ import {
 import { ProgressIcon } from "../../../public/images";
 import { Row } from "antd";
 import router from "next/router";
+import { getAmountPercentCompleted } from "../../../utils/helpers/Tool.util";
+import { createSelector } from "reselect";
+import { IData } from "@constant/data.interface";
 interface ProgressPropsInterface {
   textDescription?: string;
   textButton?: string;
@@ -26,31 +29,33 @@ const ProgressBar = (props: ProgressPropsInterface) => {
     textButton,
     disabled,
     percent,
-    amountPercent,
     isMobile,
     routerPush,
     pushable
   } = props;
 
   const dispatch = useDispatch();
-
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
   const increaPercent = () => {
-    if (percent >= 100 || disabled) {
+    if (disabled) {
       return;
-    }
-    let valuePercent = percent + amountPercent;
-    if (valuePercent > 100) {
-      valuePercent = 100;
     }
     dispatch(
       ProgressActions.setPercent(
         {
-          percent: valuePercent,
+          percent: getAmountPercentCompleted(categoryData),
         },
         () => {}
       )
     );
-    pushable &&  router.push(routerPush);
+    pushable && router.push(routerPush);
     dispatch(
       ProgressActions.setDisabled(
         {
@@ -78,7 +83,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
                   ? "button-progress-active"
                   : "button-progress-disabled"
               }
-              disabled={percent >= 100 || disabled}
+              disabled={disabled}
             >
               {textButton || "Continue"}
             </Button>
@@ -112,7 +117,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
                     ? "button-progress-active"
                     : "button-progress-disabled"
                 }
-                disabled={percent >= 100 || disabled}
+                disabled={disabled}
               >
                 {textButton || "Continue"}
               </Button>

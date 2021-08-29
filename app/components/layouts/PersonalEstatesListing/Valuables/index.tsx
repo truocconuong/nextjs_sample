@@ -94,14 +94,6 @@ function ValuablesLayout(props: IProps) {
 
   useEffect(() => {
     dispatch(
-      ProgressActions.setAmountPercentIncreament(
-        {
-          amountPercentIncreament: 10,
-        },
-        () => {}
-      )
-    );
-    dispatch(
       ProgressActions.setPushable(
         {
           pushable: true,

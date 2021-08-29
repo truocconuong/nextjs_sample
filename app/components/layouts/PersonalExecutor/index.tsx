@@ -72,14 +72,6 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
   useEffect(() => {
     if (dataForm.length === 2) {
       dispatch(
-        ProgressActions.setAmountPercentIncreament(
-          {
-            amountPercentIncreament: 0,
-          },
-          () => { }
-        )
-      );
-      dispatch(
         ProgressActions.setPushable(
           {
             pushable: true,

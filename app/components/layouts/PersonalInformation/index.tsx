@@ -29,6 +29,7 @@ const PersonalInformation = () => {
     description: "",
     id: uuidv4(),
   };
+
   const [dataForm, setDataForm] = useState<DataFormInput>({
     legalName: "",
     email: "",
@@ -38,6 +39,15 @@ const PersonalInformation = () => {
     addressLine2: "",
     unitNumber: "",
   });
+
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
 
   const width = useSelector(
     createSelector(
@@ -52,14 +62,6 @@ const PersonalInformation = () => {
 
   useEffect(() => {
     dispatch(
-      ProgressActions.setPercent(
-        {
-          percent: 20,
-        },
-        () => {}
-      )
-    );
-    dispatch(
       ProgressActions.setPushable(
         {
           pushable: true,
@@ -67,14 +69,16 @@ const PersonalInformation = () => {
         () => {}
       )
     );
+
     dispatch(
-      ProgressActions.setAmountPercentIncreament(
+      ProgressActions.setDisabled(
         {
-          amountPercentIncreament: 0,
+          disabled: categoryData?.full_legal_name?.length === 0,
         },
         () => {}
       )
     );
+
     dispatch(
       ProgressActions.setRouter(
         {
@@ -84,15 +88,6 @@ const PersonalInformation = () => {
       )
     );
   }, []);
-
-  const categoryData = useSelector(
-    createSelector(
-      (state: any) => state?.category,
-      (category: IData) => {
-        return category;
-      }
-    )
-  );
 
   useEffect(() => {
     const initialDataForm: DataFormInput = {
