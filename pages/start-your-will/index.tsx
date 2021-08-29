@@ -22,9 +22,19 @@ function StartYourWill() {
   const [doneExecutor, setDoneExecutor] = useState(false);
   const [doneBenefit, setDoneBenefit] = useState(false);
   const [doneEstateDistribute, setDoneEstateDistribute] = useState(false);
+  const [renderPage, setRenderPage] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      router.push("/start-your-will-upload");
+      return;
+    }
+    setRenderPage(true);
+  }, []);
 
   const width = useSelector(
     createSelector(
@@ -190,7 +200,7 @@ function StartYourWill() {
     router.push("/start-your-will-upload");
   };
 
-  return (
+  return renderPage ? (
     <div className="start-your-will-container">
       {showModalSignUpEmail && (
         <ModalSignUpEmail
@@ -314,6 +324,8 @@ function StartYourWill() {
         <YourPersonalWill />
       </div>
     </div>
+  ) : (
+    <></>
   );
 }
 
