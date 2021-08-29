@@ -60,6 +60,15 @@
     color: #001064;
     background-color: #eef3ff;
     border: none;
+    &:disabled {
+      background: #eef3ff;
+      border-color: #eef3ff;
+      color: #c3c5d2;
+      &:hover {
+        background: #eef3ff;
+        border-color: #eef3ff;
+      }
+    }
   }
 
   .ant-btn-dashed,
@@ -81,6 +90,15 @@
       background: #001064;
       border-color: #001064;
     }
+    &:disabled {
+      background: #00199e;
+      border: none;
+      color: #c3c5d2;
+      &:hover {
+        background: #00199e;
+        border: none;
+      }
+    }
   }
 
   .ant-btn-dashed {
@@ -97,6 +115,15 @@
       background: #001064;
       border-color: #001064;
     }
+    &:disabled {
+      background: #17c67e;
+      border-color: #17c67e;
+      color: #c3c5d2;
+      &:hover {
+        background: #17c67e;
+        border-color: #17c67e;
+      }
+    }
   }
 
   .ant-btn-dangerous {
@@ -110,6 +137,13 @@
       border: 1px solid #fb3640;
       background: #fff;
       box-shadow: none;
+    }
+    &:disabled {
+      border-color: #c3c5d2;
+      color: #c3c5d2;
+      &:hover {
+        border-color: #c3c5d2;
+      }
     }
   }
 }
