@@ -1,5 +1,30 @@
 .preview-pdf {
   padding: 2% 12%;
   background: url("/images/img-background.svg");
-  height: 87%;
+  //   height: 87%;
+  /* For pdf */
+  //   .react-pdf__Page {
+  //     margin-top: 10px;
+  //   }
+  .react-pdf__Page__textContent {
+    border: 1px solid darkgrey;
+    box-shadow: 5px 5px 5px 1px #ccc;
+    border-radius: 5px;
+  }
+
+  .react-pdf__Page__annotations.annotationLayer {
+    // padding: 4px;
+    padding-bottom: 8px;
+  }
+
+  .react-pdf__Page__canvas {
+    margin: 0 auto;
+  }
+
+  /* For all pages */
+  .all-page-container {
+    height: 100%;
+    max-height: 500px;
+    overflow: auto;
+  }
 }

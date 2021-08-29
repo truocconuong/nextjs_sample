@@ -20,6 +20,7 @@ import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
 import { useRouter } from "next/router";
 import YourPersonalWill from "components/StartYourWill/YourPersonalWill";
 import { setDownloaded } from "@redux/actions/startYourWill";
+import AuthHoc from "../AuthHoc";
 
 function StartYourWill() {
   const [showModalSuccess, setShowModalSuccess] = useState(false);
@@ -311,4 +312,4 @@ function StartYourWill() {
   );
 }
 
-export default StartYourWill;
+export default AuthHoc(StartYourWill);
