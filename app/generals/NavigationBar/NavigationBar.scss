@@ -26,6 +26,27 @@
         width: 95%;
         @extend .based-flex-row;
         justify-content: space-between;
+        .will-download {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          .file {
+            margin-right: 10px;
+          }
+          .file-name {
+            font-family: Graphik;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 125%;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            letter-spacing: -0.5px;
+            color: #001064;
+            margin-right: 10px;
+          }
+        }
         .logo-will-container {
           width: 30%;
           height: 80px;

@@ -1,6 +1,7 @@
 import { Row } from "antd";
 import React, { useEffect, useState } from "react";
 import {
+  IconFilePdf,
   IWill,
   IWillMobile,
   Logo,
@@ -11,7 +12,10 @@ import {
 import ProgressBar from "generals/Progress";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import router from "next/router";
+import router, { useRouter } from "next/router";
+import { DownloadOutlined } from "@ant-design/icons";
+import CustomButton from "@generals/Button";
+import { IData } from "@constant/data.interface";
 
 const NavigationBar = () => {
   const dispatch = useDispatch();
@@ -79,6 +83,15 @@ const NavigationBar = () => {
     router.push('/start-your-will');
   }
 
+  const categoryData = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category: IData) => {
+        return category;
+      }
+    )
+  );
+
   return (
     <React.Fragment>
       <nav className="navigation-bar-container">
@@ -116,7 +129,7 @@ const NavigationBar = () => {
                   </div>
                 </div>
               </div>
-              {isShowProgressBar && (
+              {isShowProgressBar && router.pathname !== '/preview-pdf' ? (
                 <ProgressBar
                   disabled={disabledBtn}
                   textButton={textButtonProgress}
@@ -126,7 +139,26 @@ const NavigationBar = () => {
                   routerPush={routerPush}
                   pushable={pushable}
                 />
-              )}
+              ) :
+                <div className="will-download">
+                  <div className="file">
+                    <IconFilePdf />
+                  </div>
+                  <div className="file-name">
+                    {categoryData.will_pdf_link.length > 30
+                      ? `...${categoryData.will_pdf_link.substr(categoryData.will_pdf_link.length - 30, categoryData.will_pdf_link.length)}`
+                      : categoryData.will_pdf_link}
+                  </div>
+                  <a
+                    target="_blank"
+                    href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
+                  >
+                    <CustomButton borderLarge fontWeightLarge icon={<DownloadOutlined />}>
+                      Download
+                    </CustomButton>
+                  </a>
+                </div>
+              }
             </>
           ) : (
             <div className="row-wrapper">
@@ -141,7 +173,7 @@ const NavigationBar = () => {
                     </div>
                   </div>
                 </div>
-                {isShowProgressBar && (
+                {isShowProgressBar && router.pathname !== '/preview-pdf' ? (
                   <ProgressBar
                     disabled={disabledBtn}
                     textButton={textButtonProgress}
@@ -151,7 +183,26 @@ const NavigationBar = () => {
                     routerPush={routerPush}
                     pushable={pushable}
                   />
-                )}
+                ) :
+                  <div className="will-download">
+                    <div className="file">
+                      <IconFilePdf />
+                    </div>
+                    <div className="file-name">
+                      {categoryData.will_pdf_link.length > 30
+                        ? `...${categoryData.will_pdf_link.substr(categoryData.will_pdf_link.length - 30, categoryData.will_pdf_link.length)}`
+                        : categoryData.will_pdf_link}
+                    </div>
+                    <a
+                      target="_blank"
+                      href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
+                    >
+                      <CustomButton borderLarge fontWeightLarge icon={<DownloadOutlined />}>
+                        Download
+                      </CustomButton>
+                    </a>
+                  </div>
+                }
                 <div className="back-container" onClick={returnToDashBoard}>
                   <div className="back-wrapper">
                     <div className="back">

@@ -138,6 +138,7 @@ export interface IData {
   investments: IInvestment[];
   business_interests: IBusinessInterest[];
   valuables: IValuable[];
+  will_pdf_link?: string;
 }
 
 export interface IMasterdata {
