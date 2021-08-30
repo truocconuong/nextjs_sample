@@ -181,3 +181,7 @@ export { ReactComponent as IconBusinessInterest } from "./icon-business-interest
 export { ReactComponent as IconValuable } from "./icon-valuable.svg";
 export { ReactComponent as IconExit } from "./exit.svg";
 
+//pdf-preview
+export { ReactComponent as IconFilePdf } from "./file-pdf.svg";
+
+
