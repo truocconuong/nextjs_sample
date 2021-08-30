@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, Spin, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
@@ -11,7 +11,10 @@ import {
   FileIcon,
   MakePayment,
   MakePaymentMobile,
+  RemoveIcon,
+  UploadDone,
   UploadFile,
+  Uploading,
   UploadSecure,
   UploadSecureMobile,
 } from "../../public/images";
@@ -19,12 +22,22 @@ import CustomButton from "generals/Button";
 import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
 import { useRouter } from "next/router";
 import YourPersonalWill from "components/StartYourWill/YourPersonalWill";
-import { setDownloaded } from "@redux/actions/startYourWill";
+import {
+  removeFileUpload,
+  setDownloaded,
+  uploadFile,
+} from "@redux/actions/startYourWill";
 import AuthHoc from "../AuthHoc";
+import moment from "moment";
+import { getCategoriesData } from "@redux/actions/category";
+
+const { Dragger } = Upload;
 
 function StartYourWill() {
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [renderPage, setRenderPage] = useState(false);
+  const [pdfName, setPdfName] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -56,6 +69,13 @@ function StartYourWill() {
     )
   );
 
+  useEffect(() => {
+    setUploading(false);
+    if (category) {
+      setPdfName(category?.pdf_upload_url || "");
+    }
+  }, [category]);
+
   const renderIconTitle = () => {
     if (starYourWillData?.uploaded) {
       return width > 768 ? <UploadSecure /> : <UploadSecureMobile />;
@@ -74,6 +94,42 @@ function StartYourWill() {
 
   const handleMakePayment = () => {
     router.push("/payment-summary");
+  };
+
+  const getCategories = () => {
+    const token = localStorage.getItem("accessToken");
+    dispatch(getCategoriesData(token));
+  };
+
+  const props = {
+    accept: ".pdf",
+    name: "file",
+    transformFile(file) {
+      if (file) {
+        setUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+        dispatch(
+          uploadFile(formData, (response) => {
+            if (response.success) {
+              getCategories();
+            } else setUploading(false);
+          })
+        );
+      }
+    },
+    fileList: [],
+    multiple: false,
+  };
+
+  const handleRemoveFile = () => {
+    dispatch(
+      removeFileUpload((response) => {
+        if (response.success) {
+          getCategories();
+        }
+      })
+    );
   };
 
   return renderPage ? (
@@ -215,8 +271,12 @@ function StartYourWill() {
               your assets according to your wishes, and also indicate your
               wishes you might have when you are gone.
             </Row>
-            <Row className="optional-text mt-24" style={{ color: "#6670A2" }}>
-              Last Edited: Tuesday 17 May 2021, 7:04 PM
+            <Row
+              className="optional-text mt-24"
+              style={{ color: "#6670A2", fontSize: 16 }}
+            >
+              Last Edited:&nbsp;
+              {moment(new Date(category.created_at)).format("LLLL")}
             </Row>
           </div>
 
@@ -235,21 +295,97 @@ function StartYourWill() {
                 and inform the Executors of their roles and the location of the
                 Will.
               </Row>
-              <div className="drag-drop-file mt-24">
-                <Row className="item-center">
-                  <FileIcon />
-                </Row>
-                <Row className="item-center optional-text mt-16">
-                  Drag and Drop files here
-                </Row>
-                <Row className="item-center text-file-support mt-8">
-                  File Supported: PDF only, (Max 3mb)
-                </Row>
-                <Row className="item-center mt-16">
-                  <Button className="upload-btn">Upload Will</Button>
-                </Row>
-              </div>
-
+              {!pdfName
+                ? !uploading && (
+                    <Dragger {...(props as any)}>
+                      <div className="drag-drop-file mt-24">
+                        <Row className="item-center">
+                          <FileIcon />
+                        </Row>
+                        <Row className="item-center optional-text mt-16">
+                          Drag and Drop files here
+                        </Row>
+                        <Row className="item-center text-file-support mt-8">
+                          File Supported: PDF only, (Max 3mb)
+                        </Row>
+                        <Row className="item-center mt-16">
+                          <Button className="upload-btn">Upload Will</Button>
+                        </Row>
+                      </div>
+                    </Dragger>
+                  )
+                : !uploading && (
+                    <div className="upload-done">
+                      <Row>
+                        <Col
+                          xs={24}
+                          sm={24}
+                          md={18}
+                          lg={18}
+                          xl={18}
+                          xxl={18}
+                          className="center"
+                        >
+                          <Col>
+                            <UploadDone />
+                          </Col>
+                          <Col style={{ paddingLeft: 16 }}>
+                            <div className="text-pdf">
+                              {category?.pdf_upload_url?.replace(
+                                "/upload-pdf/",
+                                ""
+                              )}
+                            </div>
+                            <div className="text-upload-day">
+                              Uploaded:&nbsp;
+                              {moment(
+                                new Date(category.time_upload_pdf)
+                              ).format("LLLL")}
+                            </div>
+                          </Col>
+                        </Col>
+                        <Col
+                          xs={24}
+                          sm={24}
+                          md={6}
+                          lg={6}
+                          xl={6}
+                          xxl={6}
+                          className="remove-col"
+                        >
+                          <Button
+                            className="remove-btn"
+                            onClick={handleRemoveFile}
+                          >
+                            <RemoveIcon />
+                            <span className="ml-8">Remove</span>
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
+              <Spin spinning={uploading}>
+                {uploading && (
+                  <div className="upload-done">
+                    <Row>
+                      <Col className="center">
+                        <Col>
+                          <Uploading />
+                        </Col>
+                        <Col style={{ paddingLeft: 16 }}>
+                          <div className="text-pdf">Uploading...</div>
+                          <div
+                            className="text-upload-day"
+                            style={{ color: " #A0A5BE" }}
+                          >
+                            Storing your will document into our secure cloud
+                          </div>
+                        </Col>
+                      </Col>
+                    </Row>
+                  </div>
+                )}
+              </Spin>
               {!starYourWillData?.makePayment && (
                 <>
                   <div className="make-overlay"></div>
@@ -308,7 +444,13 @@ function StartYourWill() {
       <div className="body-1"></div>
     </>
   ) : (
-    <></>
+    <Row
+      justify="center"
+      align="middle"
+      style={{ height: "50%", width: "100%" }}
+    >
+      <Spin size="large" />
+    </Row>
   );
 }
 

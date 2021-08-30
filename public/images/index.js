@@ -117,6 +117,8 @@ export { ReactComponent as CheckboxUnselectedIcon } from "./icon-checkbox-unsele
 export { ReactComponent as CheckboxSelectedIcon } from "./icon-checkbox-selected.svg";
 export { ReactComponent as Arrow } from "./arrow.svg";
 export { ReactComponent as RemoveIcon } from "./remove-icon.svg";
+export { ReactComponent as UploadDone } from "./upload-done.svg";
+export { ReactComponent as Uploading } from "./uploading.svg";
 
 // Personal Estates listing
 export { ReactComponent as PropertyImage } from "./image-property.svg";
@@ -183,5 +185,3 @@ export { ReactComponent as IconExit } from "./exit.svg";
 
 //pdf-preview
 export { ReactComponent as IconFilePdf } from "./file-pdf.svg";
-
-

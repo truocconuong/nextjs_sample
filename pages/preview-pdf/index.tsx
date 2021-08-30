@@ -2,23 +2,36 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { Document, Page, pdfjs } from "react-pdf";
+import { useRouter } from "next/router";
+import { Row, Spin } from "antd";
 
 function PreviewPDF() {
+  const [numPages, setNumPages] = useState(null);
+  const [renderPage, setRenderPage] = useState(false);
+
+  const router = useRouter();
+
   const category = useSelector(
     createSelector(
       (state: any) => state?.category,
       (category) => category
     )
   );
+
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
-  const [numPages, setNumPages] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setRenderPage(true);
+    } else router.push("/start-your-will");
+  }, []);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
-  return (
+  return renderPage ? (
     <div className="preview-pdf">
       <Document
         file={{
@@ -48,6 +61,14 @@ function PreviewPDF() {
         </p>
       </object> */}
     </div>
+  ) : (
+    <Row
+      justify="center"
+      align="middle"
+      style={{ height: "50%", width: "100%" }}
+    >
+      <Spin size="large" />
+    </Row>
   );
 }
 

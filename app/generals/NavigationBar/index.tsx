@@ -28,8 +28,8 @@ const NavigationBar = () => {
   );
 
   useEffect(() => {
-    setIsMobile(width < 884)
-  }, [width])
+    setIsMobile(width < 884);
+  }, [width]);
 
   const disabledBtn = useSelector(
     createSelector(
@@ -80,8 +80,8 @@ const NavigationBar = () => {
   );
 
   const returnToDashBoard = () => {
-    router.push('/start-your-will');
-  }
+    router.push("/start-your-will");
+  };
 
   const categoryData = useSelector(
     createSelector(
@@ -117,9 +117,8 @@ const NavigationBar = () => {
                   </div>
                   <div className="container-back-mobile">
                     <div className="container-back-wrap">
-                      <div className="back-wrapper">
-                      </div>
-                      <div className="back" onClick={() => { }}>
+                      <div className="back-wrapper"></div>
+                      <div className="back" onClick={() => {}}>
                         Dashboard
                       </div>
                       <div className="icon-menu">
@@ -129,7 +128,7 @@ const NavigationBar = () => {
                   </div>
                 </div>
               </div>
-              {isShowProgressBar && router.pathname !== '/preview-pdf' ? (
+              {isShowProgressBar && router.pathname !== "/preview-pdf" ? (
                 <ProgressBar
                   disabled={disabledBtn}
                   textButton={textButtonProgress}
@@ -139,26 +138,32 @@ const NavigationBar = () => {
                   routerPush={routerPush}
                   pushable={pushable}
                 />
-              ) :
+              ) : (
                 <div className="will-download">
                   <div className="file">
                     <IconFilePdf />
                   </div>
                   <div className="file-name">
                     {categoryData.will_pdf_link.length > 30
-                      ? `...${categoryData.will_pdf_link.substr(categoryData.will_pdf_link.length - 30, categoryData.will_pdf_link.length)}`
+                      ? `...${categoryData.will_pdf_link.substr(
+                          categoryData.will_pdf_link.length - 30,
+                          categoryData.will_pdf_link.length
+                        )}`
                       : categoryData.will_pdf_link}
                   </div>
                   <a
-                    target="_blank"
                     href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
                   >
-                    <CustomButton borderLarge fontWeightLarge icon={<DownloadOutlined />}>
+                    <CustomButton
+                      borderLarge
+                      fontWeightLarge
+                      icon={<DownloadOutlined />}
+                    >
                       Download
                     </CustomButton>
                   </a>
                 </div>
-              }
+              )}
             </>
           ) : (
             <div className="row-wrapper">
@@ -173,7 +178,7 @@ const NavigationBar = () => {
                     </div>
                   </div>
                 </div>
-                {isShowProgressBar && router.pathname !== '/preview-pdf' ? (
+                {isShowProgressBar && router.pathname !== "/preview-pdf" ? (
                   <ProgressBar
                     disabled={disabledBtn}
                     textButton={textButtonProgress}
@@ -183,32 +188,36 @@ const NavigationBar = () => {
                     routerPush={routerPush}
                     pushable={pushable}
                   />
-                ) :
+                ) : (
                   <div className="will-download">
                     <div className="file">
                       <IconFilePdf />
                     </div>
                     <div className="file-name">
                       {categoryData.will_pdf_link.length > 30
-                        ? `...${categoryData.will_pdf_link.substr(categoryData.will_pdf_link.length - 30, categoryData.will_pdf_link.length)}`
+                        ? `...${categoryData.will_pdf_link.substr(
+                            categoryData.will_pdf_link.length - 30,
+                            categoryData.will_pdf_link.length
+                          )}`
                         : categoryData.will_pdf_link}
                     </div>
                     <a
-                      target="_blank"
                       href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
                     >
-                      <CustomButton borderLarge fontWeightLarge icon={<DownloadOutlined />}>
+                      <CustomButton
+                        borderLarge
+                        fontWeightLarge
+                        icon={<DownloadOutlined />}
+                      >
                         Download
                       </CustomButton>
                     </a>
                   </div>
-                }
+                )}
                 <div className="back-container" onClick={returnToDashBoard}>
                   <div className="back-wrapper">
-                    <div className="back">
-                      Return to Dashboard
-                    </div>
-                    <div className="icon-menu" >
+                    <div className="back">Return to Dashboard</div>
+                    <div className="icon-menu">
                       <MenuIcon />
                     </div>
                   </div>

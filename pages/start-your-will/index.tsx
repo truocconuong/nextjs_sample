@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "antd";
+import { Col, Row, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { useRouter } from "next/router";
@@ -325,7 +325,13 @@ function StartYourWill() {
       </div>
     </div>
   ) : (
-    <></>
+    <Row
+      justify="center"
+      align="middle"
+      style={{ height: "50%", width: "100%" }}
+    >
+      <Spin size="large" />
+    </Row>
   );
 }
 

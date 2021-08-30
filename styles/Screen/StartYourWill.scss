@@ -24,9 +24,12 @@
       padding: 0 24px !important;
     }
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     .body {
       padding: 0px 5% 40px !important ;
+    }
+    .upload-done {
+      padding: 10px;
     }
   }
 
@@ -35,6 +38,11 @@
       width: 168px !important;
       height: 46px !important;
       font-size: 18px !important;
+    }
+    .remove-col {
+      padding-left: 0px;
+      margin-top: 16px;
+      justify-content: center !important;
     }
     .keep-going {
       padding: 24px !important;
@@ -255,6 +263,40 @@
     }
     .upload {
       position: relative;
+
+      .text-upload-day {
+        font-size: 16px;
+        font-family: Graphik;
+        color: #001064;
+      }
+      .text-pdf {
+        @extend .text-upload-day;
+        font-weight: bold;
+        font-size: 20px;
+      }
+      .remove-btn {
+        width: 146px;
+        height: 46px;
+        border: 1px solid #6670a2;
+        border-radius: 7px;
+        color: #6670a2;
+        font-family: Graphik;
+        font-size: 18px;
+        background: #e9faf4;
+      }
+      .upload-done {
+        margin-top: 16px;
+        background: #e9faf4;
+        border-radius: 7px;
+        padding: 30px 24px;
+      }
+
+      .remove-col {
+        padding-left: 8px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
       .make-overlay {
         background-color: red;
         background-color: rgba(255, 255, 255, 0.6);
