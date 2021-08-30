@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, Spin } from "antd";
 import {
   Elements,
   CardExpiryElement,
@@ -43,6 +43,7 @@ function PaymentSummary() {
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [hide, setHide] = useState(true);
   const [percent, setPercent] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -116,6 +117,7 @@ function PaymentSummary() {
 
   const handlePay = async (event) => {
     event.preventDefault();
+    setLoading(true);
     if (!stripe || !elements) {
       return;
     }
@@ -136,6 +138,7 @@ function PaymentSummary() {
         if (response.success) {
           setShowModalSuccess(true);
         }
+        setLoading(false);
       })
     );
   };
@@ -288,120 +291,127 @@ function PaymentSummary() {
           xxl={11}
           className="payment-card"
         >
-          <Row className="text-name mb-16">Cardholder’s Name</Row>
-          <Row>
-            <InputField
-              inputProps={{
-                // placeholder: "Promo Code",
-                value: cardHolderName,
-                onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                  setCardHolderName(e.target.value),
-              }}
-            />
-          </Row>
-          <br />
-          <Row>
-            <Col xs={24} sm={17} md={17} lg={15} xl={16} xxl={17}>
-              <div className="text-name">Card Number</div>
-              <div className="card-number mt-16">
-                <CardNumberElement
-                  options={options}
-                  onChange={(e) => handleChangeFieldStripe(e)}
-                />
-              </div>
-            </Col>
+          <Spin
+            spinning={loading}
+            style={{ position: "absolute", left: 0, right: 0 }}
+            size="large"
+          >
+            <Row className="text-name mb-16">Cardholder’s Name</Row>
+            <Row>
+              <InputField
+                inputProps={{
+                  // placeholder: "Promo Code",
+                  value: cardHolderName,
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                    setCardHolderName(e.target.value),
+                }}
+              />
+            </Row>
+            <br />
+            <Row>
+              <Col xs={24} sm={17} md={17} lg={15} xl={16} xxl={17}>
+                <div className="text-name">Card Number</div>
+                <div className="card-number mt-16">
+                  <CardNumberElement
+                    options={options}
+                    onChange={(e) => handleChangeFieldStripe(e)}
+                  />
+                </div>
+              </Col>
 
-            <Col
-              xs={12}
-              sm={7}
-              md={7}
-              lg={9}
-              xl={8}
-              xxl={7}
-              className="expiration"
-            >
-              <div className="text-name">Expiration</div>
-              <div className="card-number mt-16">
-                <CardExpiryElement
-                  options={options}
-                  onChange={(e) => handleChangeFieldStripe(e)}
-                />
-              </div>
-            </Col>
-            <Col xs={12} className="cvv">
-              <div className="text-name">CVV / CVV2</div>
-              <div className="card-number mt-16">
-                <CardCvcElement
-                  options={options}
-                  onChange={(e) => handleChangeFieldStripe(e)}
-                />
-              </div>
-            </Col>
-            <Col
-              xs={24}
-              sm={12}
-              md={12}
-              lg={12}
-              xl={12}
-              xxl={12}
-              className="postal-code"
-            >
-              <div className="text-name">Postal Code</div>
-              <div className=" mt-16">
-                <InputField
-                  inputProps={{
-                    placeholder: "6 digit postal code",
-                    value: postalCode,
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                      setPostalCode(e.target.value),
-                  }}
-                />
-              </div>
-            </Col>
-          </Row>
-          <Row className="footer mt-40">
-            <Col
-              xs={24}
-              sm={12}
-              md={12}
-              lg={13}
-              xl={13}
-              xxl={13}
-              className="center secure"
-            >
-              <span>
-                <LockIcon />
-              </span>
-              <span className="text-name" style={{ margin: "6px 0 0 10px" }}>
-                Secure Encrypted Form
-              </span>
-            </Col>
-            <Col
-              xs={24}
-              sm={12}
-              md={12}
-              lg={11}
-              xl={11}
-              xxl={11}
-              className="item-end pay"
-            >
-              <Button
-                className="pay-now-btn"
-                disabled={
-                  cardHolderName &&
-                  cardNumberComplete &&
-                  expComplete &&
-                  CVVComplete &&
-                  postalCode
-                    ? false
-                    : true
-                }
-                onClick={handlePay}
+              <Col
+                xs={12}
+                sm={7}
+                md={7}
+                lg={9}
+                xl={8}
+                xxl={7}
+                className="expiration"
               >
-                Pay Now
-              </Button>
-            </Col>
-          </Row>
+                <div className="text-name">Expiration</div>
+                <div className="card-number mt-16">
+                  <CardExpiryElement
+                    options={options}
+                    onChange={(e) => handleChangeFieldStripe(e)}
+                  />
+                </div>
+              </Col>
+
+              <Col xs={12} className="cvv">
+                <div className="text-name">CVV / CVV2</div>
+                <div className="card-number mt-16">
+                  <CardCvcElement
+                    options={options}
+                    onChange={(e) => handleChangeFieldStripe(e)}
+                  />
+                </div>
+              </Col>
+              <Col
+                xs={24}
+                sm={12}
+                md={12}
+                lg={12}
+                xl={12}
+                xxl={12}
+                className="postal-code"
+              >
+                <div className="text-name">Postal Code</div>
+                <div className=" mt-16">
+                  <InputField
+                    inputProps={{
+                      placeholder: "6 digit postal code",
+                      value: postalCode,
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                        setPostalCode(e.target.value),
+                    }}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Row className="footer mt-40">
+              <Col
+                xs={24}
+                sm={12}
+                md={12}
+                lg={13}
+                xl={13}
+                xxl={13}
+                className="center secure"
+              >
+                <span>
+                  <LockIcon />
+                </span>
+                <span className="text-name" style={{ margin: "6px 0 0 10px" }}>
+                  Secure Encrypted Form
+                </span>
+              </Col>
+              <Col
+                xs={24}
+                sm={12}
+                md={12}
+                lg={11}
+                xl={11}
+                xxl={11}
+                className="item-end pay"
+              >
+                <Button
+                  className="pay-now-btn"
+                  disabled={
+                    cardHolderName &&
+                    cardNumberComplete &&
+                    expComplete &&
+                    CVVComplete &&
+                    postalCode
+                      ? false
+                      : true
+                  }
+                  onClick={handlePay}
+                >
+                  Pay Now
+                </Button>
+              </Col>
+            </Row>
+          </Spin>
         </Col>
       </Row>
     </div>

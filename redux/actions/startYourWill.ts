@@ -62,3 +62,17 @@ export const subscriptions = (data, callback) => {
     payload: { data, callback },
   };
 };
+
+export const uploadFile = (data, callback) => {
+  return {
+    type: StartYourWill.UPLOAD_FILE,
+    payload: { data, callback },
+  };
+};
+
+export const removeFileUpload = (callback) => {
+  return {
+    type: StartYourWill.REMOVE_FILE_UPLOAD,
+    payload: { callback },
+  };
+};

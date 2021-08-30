@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import { StartYourWill } from "../types";
 import Request from "../../app/api/RestClient";
-import { NotificationWarning } from "@generals/notifications";
+import { NotificationWarning } from "../../app/generals/Notifications";
 
 function* signUpEmail(action: any) {
   const { data, callback } = action?.payload;
@@ -89,10 +89,50 @@ function* subscriptions(action: any) {
   }
 }
 
+function* uploadFile(action: any) {
+  const { data, callback } = action?.payload;
+  const token = localStorage.getItem("accessToken");
+  try {
+    const res = yield call(() =>
+      Request.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/upload-pdf`,
+        data,
+        token
+      )
+    );
+    callback && callback({ success: true, data: res[0]?.data });
+  } catch (error) {
+    callback && callback({ success: false, data: error });
+    console.log("uploadFileError: ", error);
+    NotificationWarning(error[2]);
+  }
+}
+
+function* removeFileUpload(action: any) {
+  const { callback } = action?.payload;
+  const token = localStorage.getItem("accessToken");
+  try {
+    const res = yield call(() =>
+      Request.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
+        { pdf_upload_url: null },
+        token
+      )
+    );
+    callback && callback({ success: true });
+  } catch (error) {
+    callback && callback({ success: false });
+    console.log("uploadFileUploadError: ", error);
+    NotificationWarning(error[2]);
+  }
+}
+
 export default function* startYourWillSaga() {
   yield takeLatest(StartYourWill.SIGN_UP_EMAIL, signUpEmail);
   yield takeLatest(StartYourWill.SEND_OTP, sendOTP);
   yield takeLatest(StartYourWill.VERIFY_OTP, verifyOTP);
   yield takeLatest(StartYourWill.GET_PROMO_CODE, getPromoCode);
   yield takeLatest(StartYourWill.SUBSCRIPTIONS, subscriptions);
+  yield takeLatest(StartYourWill.UPLOAD_FILE, uploadFile);
+  yield takeLatest(StartYourWill.REMOVE_FILE_UPLOAD, removeFileUpload);
 }
