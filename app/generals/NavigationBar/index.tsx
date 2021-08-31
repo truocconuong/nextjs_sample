@@ -80,7 +80,7 @@ const NavigationBar = () => {
   );
 
   const returnToDashBoard = () => {
-    router.push("/start-your-will");
+    router.push("/start-your-will-create");
   };
 
   const categoryData = useSelector(

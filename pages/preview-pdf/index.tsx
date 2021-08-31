@@ -25,7 +25,7 @@ function PreviewPDF() {
     const token = localStorage.getItem("accessToken");
     if (token) {
       setRenderPage(true);
-    } else router.push("/start-your-will");
+    } else router.push("/start-your-will-create");
   }, []);
 
   function onDocumentLoadSuccess({ numPages }) {
