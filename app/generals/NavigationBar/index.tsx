@@ -12,10 +12,11 @@ import {
 import ProgressBar from "generals/Progress";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import router, { useRouter } from "next/router";
+import router from "next/router";
 import { DownloadOutlined } from "@ant-design/icons";
 import CustomButton from "@generals/Button";
 import { IData } from "@constant/data.interface";
+import { MAX_LENGTH_FILE_NAME } from "@constant/";
 
 const NavigationBar = () => {
   const dispatch = useDispatch();
@@ -92,6 +93,39 @@ const NavigationBar = () => {
     )
   );
 
+  const toFileName = () => {
+    if (!categoryData) {
+      return "";
+    }
+    let fileName = categoryData?.will_pdf_link?.split("/")[2] || "";
+    if (fileName?.length > MAX_LENGTH_FILE_NAME) {
+      fileName = `...${fileName?.substr(fileName?.length - MAX_LENGTH_FILE_NAME, fileName?.length)}`;
+    }
+    return fileName;
+  }
+
+  const renderDownload = () => {
+    return <div className="will-download">
+      <div className="file">
+        <IconFilePdf />
+      </div>
+      <div className="file-name">
+        {toFileName()}
+      </div>
+      <a
+        href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
+      >
+        <CustomButton
+          borderLarge
+          fontWeightLarge
+          icon={<DownloadOutlined />}
+        >
+          Download
+        </CustomButton>
+      </a>
+    </div>
+  }
+
   return (
     <React.Fragment>
       <nav className="navigation-bar-container">
@@ -115,10 +149,11 @@ const NavigationBar = () => {
                       </div>
                     </Row>
                   </div>
+                  {router.pathname === "/preview-pdf" && renderDownload()}
                   <div className="container-back-mobile">
                     <div className="container-back-wrap">
                       <div className="back-wrapper"></div>
-                      <div className="back" onClick={() => {}}>
+                      <div className="back" onClick={() => { }}>
                         Dashboard
                       </div>
                       <div className="icon-menu">
@@ -128,7 +163,7 @@ const NavigationBar = () => {
                   </div>
                 </div>
               </div>
-              {isShowProgressBar && router.pathname !== "/preview-pdf" ? (
+              {isShowProgressBar && router.pathname !== "/preview-pdf" &&
                 <ProgressBar
                   disabled={disabledBtn}
                   textButton={textButtonProgress}
@@ -138,32 +173,7 @@ const NavigationBar = () => {
                   routerPush={routerPush}
                   pushable={pushable}
                 />
-              ) : (
-                <div className="will-download">
-                  <div className="file">
-                    <IconFilePdf />
-                  </div>
-                  <div className="file-name">
-                    {categoryData.will_pdf_link.length > 30
-                      ? `...${categoryData.will_pdf_link.substr(
-                          categoryData.will_pdf_link.length - 30,
-                          categoryData.will_pdf_link.length
-                        )}`
-                      : categoryData.will_pdf_link}
-                  </div>
-                  <a
-                    href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
-                  >
-                    <CustomButton
-                      borderLarge
-                      fontWeightLarge
-                      icon={<DownloadOutlined />}
-                    >
-                      Download
-                    </CustomButton>
-                  </a>
-                </div>
-              )}
+              }
             </>
           ) : (
             <div className="row-wrapper">
@@ -188,32 +198,7 @@ const NavigationBar = () => {
                     routerPush={routerPush}
                     pushable={pushable}
                   />
-                ) : (
-                  <div className="will-download">
-                    <div className="file">
-                      <IconFilePdf />
-                    </div>
-                    <div className="file-name">
-                      {categoryData.will_pdf_link.length > 30
-                        ? `...${categoryData.will_pdf_link.substr(
-                            categoryData.will_pdf_link.length - 30,
-                            categoryData.will_pdf_link.length
-                          )}`
-                        : categoryData.will_pdf_link}
-                    </div>
-                    <a
-                      href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
-                    >
-                      <CustomButton
-                        borderLarge
-                        fontWeightLarge
-                        icon={<DownloadOutlined />}
-                      >
-                        Download
-                      </CustomButton>
-                    </a>
-                  </div>
-                )}
+                ) : renderDownload()}
                 <div className="back-container" onClick={returnToDashBoard}>
                   <div className="back-wrapper">
                     <div className="back">Return to Dashboard</div>
