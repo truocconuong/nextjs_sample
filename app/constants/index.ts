@@ -26,3 +26,4 @@ export enum MASTERDATA_TYPE {
 }
 
 export const MAX_LENGTH_NAME = 30;
+export const MAX_LENGTH_FILE_NAME = 20;
