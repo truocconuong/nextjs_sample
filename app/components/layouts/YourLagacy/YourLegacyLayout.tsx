@@ -37,13 +37,6 @@ function YourLegacyLayout(props) {
     )
   );
 
-  const category = useSelector(
-    createSelector(
-      (state: any) => state?.category,
-      (category) => category
-    )
-  );
-
   const formatMoney = (n: number) => {
     return n?.toFixed(2)?.replace(/\d(?=(\d{3})+\.)/g, '$&,');
   };
@@ -160,7 +153,7 @@ function YourLegacyLayout(props) {
             <Row className='lodge-btn'>
               <Col>
                 <a
-                  href={`${process.env.NEXT_PUBLIC_API_URL}${category?.will_pdf_link}`}
+                  href={`${process.env.NEXT_PUBLIC_API_URL}/${dataProfile?.will_pdf_link}`}
                 >
                   <CustomButton type='ghost' className='btn-login'>
                     Download Will
