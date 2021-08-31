@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
-import { ThreeFaceIcon, ThreeFaceMobileIcon } from '@images/index.js';
+import { ThreeFaceIcon, ThreeFaceMobileIcon } from "@images/index.js";
 import InputField from "@generals/InputField";
 import { setNameStart } from "../../../../redux/actions/startYourWill";
 import { useRouter } from "next/router";
@@ -17,7 +17,7 @@ function ModalContinueYourWill(props) {
   const handleContinue = () => {
     dispatch(setNameStart(name));
     setShowModal(false);
-    router.push("/start-your-will");
+    router.push("/start-your-will-create");
   };
 
   const width = useSelector(

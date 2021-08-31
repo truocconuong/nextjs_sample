@@ -1,4 +1,9 @@
-import { IBeneficiary, IData, IMasterdata, ISetPercent } from "@constant/data.interface";
+import {
+  IBeneficiary,
+  IData,
+  IMasterdata,
+  ISetPercent,
+} from "@constant/data.interface";
 import { MASTERDATA_TYPE, PERSONAL_ALLOCATION } from "@constant/index";
 import CustomButton from "@generals/Button";
 import ModalStep from "@generals/Modal/ModalStep";
@@ -37,28 +42,32 @@ const colorsMap = {
   [PERSONAL_ALLOCATION.NEPHEW]: "#D3EDFF",
   [PERSONAL_ALLOCATION.NIECE]: "#BAF0DF",
   [PERSONAL_ALLOCATION.GRANDCHILD]: "#FFD9D1",
-}
+};
 const Allocation = () => {
   const dispatch = useDispatch();
   const maxPercent = 100;
   const [isMobile, setIsMobile] = useState(false);
   const [totalPercent, setTotalPercent] = useState(0);
   const toPersonsData = () => {
-    const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map((beneficiary: IBeneficiary) => {
-      const relationshipName = masterdata.filter(item => item.value === MASTERDATA_TYPE.RELATIONSHIP).find(item => item.id === beneficiary.relationship_id)?.name;
-      return {
-        color: colorsMap[relationshipName],
-        id: beneficiary.id,
-        name: beneficiary.full_legal_name,
-        percent: beneficiary.percent,
-        type: relationshipName,
-        email: beneficiary.email,
-        nric: beneficiary.nric,
-        relationship_id: beneficiary.relationship_id
+    const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map(
+      (beneficiary: IBeneficiary) => {
+        const relationshipName = masterdata
+          .filter((item) => item.value === MASTERDATA_TYPE.RELATIONSHIP)
+          .find((item) => item.id === beneficiary.relationship_id)?.name;
+        return {
+          color: colorsMap[relationshipName],
+          id: beneficiary.id,
+          name: beneficiary.full_legal_name,
+          percent: beneficiary.percent,
+          type: relationshipName,
+          email: beneficiary.email,
+          nric: beneficiary.nric,
+          relationship_id: beneficiary.relationship_id,
+        };
       }
-    })
+    );
     return persons || [];
-  }
+  };
   const [persons, setPersons] = useState<AllocationPersonalInterface[]>(
     toPersonsData()
   );
@@ -68,7 +77,7 @@ const Allocation = () => {
     createSelector(
       (state: any) => state?.category,
       (category: IData) => {
-        return category
+        return category;
       }
     )
   );
@@ -79,14 +88,16 @@ const Allocation = () => {
     const total = persons.reduce(function (acc, obj) {
       return acc + obj.percent;
     }, 0);
-    const existedAllocationError = persons.find(item => item.percent === maxPercent);
+    const existedAllocationError = persons.find(
+      (item) => item.percent === maxPercent
+    );
     if (total === maxPercent && !existedAllocationError) {
       dispatch(
         ProgressActions.setDisabled(
           {
             disabled: false,
           },
-          () => { }
+          () => {}
         )
       );
     } else {
@@ -95,11 +106,11 @@ const Allocation = () => {
           {
             disabled: true,
           },
-          () => { }
+          () => {}
         )
       );
     }
-  }, [categoryData])
+  }, [categoryData]);
 
   const masterdata = useSelector(
     createSelector(
@@ -114,18 +125,18 @@ const Allocation = () => {
         {
           pushable: true,
         },
-        () => { }
+        () => {}
       )
     );
     dispatch(
       ProgressActions.setRouter(
         {
-          router: "/start-your-will",
+          router: "/start-your-will-create",
         },
-        () => { }
+        () => {}
       )
     );
-  }, [])
+  }, []);
 
   const optionsSplash = [
     {
@@ -190,15 +201,20 @@ const Allocation = () => {
   const saveAllocation = (value: number, id: string) => {
     const dataForm = toApiDataForm(persons);
     const token = localStorage.getItem("accessToken");
-    if(token){
-      dispatch(UserActions.updateBeneficiary({percent: value}, `${id}`, token, () => {
-      }))
+    if (token) {
+      dispatch(
+        UserActions.updateBeneficiary(
+          { percent: value },
+          `${id}`,
+          token,
+          () => {}
+        )
+      );
     }
-    dispatch(CategoryActions.setBeneficiary(dataForm, (data) => {
-    }));
+    dispatch(CategoryActions.setBeneficiary(dataForm, (data) => {}));
 
     setNewPercent(dataForm);
-  }
+  };
 
   function setNewPercent(dataForm: IBeneficiary[]) {
     categoryData.beneficiaries = dataForm;
@@ -207,60 +223,60 @@ const Allocation = () => {
         {
           percent: getAmountPercentCompleted(categoryData),
         },
-        () => { }
+        () => {}
       )
     );
   }
 
   const toApiDataForm = (dataForm: AllocationPersonalInterface[]) => {
-    const dataRes: IBeneficiary[] = dataForm.map((dataForm: AllocationPersonalInterface) => {
-      return {
-        full_legal_name: dataForm.name,
-        relationship_id: dataForm.relationship_id,
-        email: dataForm.email,
-        nric: dataForm.nric,
-        id: dataForm?.id,
-        percent: dataForm.percent,
+    const dataRes: IBeneficiary[] = dataForm.map(
+      (dataForm: AllocationPersonalInterface) => {
+        return {
+          full_legal_name: dataForm.name,
+          relationship_id: dataForm.relationship_id,
+          email: dataForm.email,
+          nric: dataForm.nric,
+          id: dataForm?.id,
+          percent: dataForm.percent,
+        };
       }
-    })
+    );
     return dataRes;
-  }
+  };
 
   const onAutoDistribute = () => {
     const personsCopy = [...persons];
     let total = 0;
-    personsCopy.map(item => {
+    personsCopy.map((item) => {
       const value = Math.round(maxPercent / personsCopy.length);
       item.percent = value;
       total += value;
     });
-    if(total !== maxPercent){
-      personsCopy[0].percent = (maxPercent - total + personsCopy[0].percent);
+    if (total !== maxPercent) {
+      personsCopy[0].percent = maxPercent - total + personsCopy[0].percent;
     }
-    setTotalPercent(maxPercent)
-    setPersons(personsCopy)
+    setTotalPercent(maxPercent);
+    setPersons(personsCopy);
     const dataForm = toApiDataForm(personsCopy);
     const token = localStorage.getItem("accessToken");
-    if(token){
+    if (token) {
       const dataSetPercents = toSetPercentApiData(personsCopy);
-      dispatch(UserActions.setPercents(dataSetPercents, token, () => {
-      }));
-    }else{
-      dispatch(CategoryActions.setBeneficiary(dataForm, () => {
-      }));
+      dispatch(UserActions.setPercents(dataSetPercents, token, () => {}));
+    } else {
+      dispatch(CategoryActions.setBeneficiary(dataForm, () => {}));
     }
     setNewPercent(dataForm);
-  }
+  };
 
   const toSetPercentApiData = (persons: AllocationPersonalInterface[]) => {
-    const res: ISetPercent[] = persons.map(item => {
+    const res: ISetPercent[] = persons.map((item) => {
       return {
         id: item.id,
-        percent: item.percent
-      }
-    })
+        percent: item.percent,
+      };
+    });
     return res;
-  }
+  };
 
   return (
     <div className="allocation-container">
@@ -282,8 +298,9 @@ const Allocation = () => {
             }
           >
             {isMobile && (
-              <div className="title-mobile">{`${100 - totalPercent
-                }% left to distribute`}</div>
+              <div className="title-mobile">{`${
+                100 - totalPercent
+              }% left to distribute`}</div>
             )}
             <div
               className={
@@ -307,10 +324,17 @@ const Allocation = () => {
                         key={person.id}
                         style={{
                           width: `${person.percent || 0}%`,
-                          backgroundColor: person.percent === maxPercent ? "#FFEBEC" : person.color,
+                          backgroundColor:
+                            person.percent === maxPercent
+                              ? "#FFEBEC"
+                              : person.color,
                         }}
                       >
-                        <div className={"char-represent"}>{person.percent === maxPercent ? "Error" : person?.name && person.name[0]}</div>
+                        <div className={"char-represent"}>
+                          {person.percent === maxPercent
+                            ? "Error"
+                            : person?.name && person.name[0]}
+                        </div>
                       </div>
                     )
                   );
@@ -327,7 +351,10 @@ const Allocation = () => {
               <div className="description-left">
                 <div className="title">
                   <div className="text">Estate Distribution</div>
-                  <div className="icon" onClick={() => setIsShowModalSplash(true)}>
+                  <div
+                    className="icon"
+                    onClick={() => setIsShowModalSplash(true)}
+                  >
                     <TipIcon />
                   </div>
                 </div>
@@ -338,8 +365,9 @@ const Allocation = () => {
               </div>
               <div className="description-right">
                 {!isMobile && (
-                  <div className="title-desktop">{`${100 - totalPercent
-                    }% left to distribute`}</div>
+                  <div className="title-desktop">{`${
+                    100 - totalPercent
+                  }% left to distribute`}</div>
                 )}
                 <div className="button">
                   <CustomButton
@@ -367,7 +395,12 @@ const Allocation = () => {
           {persons.map((person: AllocationPersonalInterface) => {
             return (
               <React.Fragment key={person.id}>
-                <div className={"item-container " + (person.percent === maxPercent ? "error-ratio" : "")}>
+                <div
+                  className={
+                    "item-container " +
+                    (person.percent === maxPercent ? "error-ratio" : "")
+                  }
+                >
                   <div className="item-wrap">
                     <div
                       className={
@@ -395,8 +428,14 @@ const Allocation = () => {
                             tipFormatter={formatter}
                             onChange={(e: any) => onRangeChange(e, person.id)}
                             value={person.percent}
-                            className={person.percent === maxPercent ? "slider-wrap-error" : ""}
-                            onAfterChange={(e: any) => saveAllocation(e, person.id)}
+                            className={
+                              person.percent === maxPercent
+                                ? "slider-wrap-error"
+                                : ""
+                            }
+                            onAfterChange={(e: any) =>
+                              saveAllocation(e, person.id)
+                            }
                           />
                         </div>
                       )}
@@ -412,14 +451,24 @@ const Allocation = () => {
                           tipFormatter={formatter}
                           onChange={(e: any) => onRangeChange(e, person.id)}
                           value={person.percent || 0}
-                          className={person.percent === maxPercent ? "slider-wrap-error" : ""}
-                          onAfterChange={(e: any) => saveAllocation(e, person.id)}
+                          className={
+                            person.percent === maxPercent
+                              ? "slider-wrap-error"
+                              : ""
+                          }
+                          onAfterChange={(e: any) =>
+                            saveAllocation(e, person.id)
+                          }
                         />
                       </div>
                     )}
                   </div>
                 </div>
-                {person.percent === maxPercent && <div className="error-text-ratio">Please adjust the percentage</div>}
+                {person.percent === maxPercent && (
+                  <div className="error-text-ratio">
+                    Please adjust the percentage
+                  </div>
+                )}
               </React.Fragment>
             );
           })}
@@ -435,5 +484,3 @@ const Allocation = () => {
 };
 
 export default Allocation;
-
-

@@ -112,7 +112,7 @@ function PaymentSummary() {
 
   const handleReturnDashboard = () => {
     dispatch(setMakePayment(true));
-    router.push("/start-your-will-upload");
+    router.push("/start-your-will");
   };
 
   const handlePay = async (event) => {

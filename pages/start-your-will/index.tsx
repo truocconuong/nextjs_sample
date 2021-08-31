@@ -1,39 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Spin } from "antd";
+import { Button, Col, Row, Spin, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { useRouter } from "next/router";
 
-import { HandIcon, KeepGoing, KeepGoingMobile } from "../../public/images";
+import {
+  CloudAWS,
+  Download,
+  DownloadIcon,
+  DownloadMobile,
+  FileIcon,
+  MakePayment,
+  MakePaymentMobile,
+  RemoveIcon,
+  UploadDone,
+  UploadFile,
+  Uploading,
+  UploadSecure,
+  UploadSecureMobile,
+} from "../../public/images";
 import CustomButton from "generals/Button";
-import ModalSignUpEmail from "components/StartYourWill/Modal/ModalSignUpEmail";
-import ModalOtp from "components/StartYourWill/Modal/ModalOtp";
 import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
+import { useRouter } from "next/router";
 import YourPersonalWill from "components/StartYourWill/YourPersonalWill";
+import {
+  removeFileUpload,
+  setDownloaded,
+  setUploaded,
+  uploadFile,
+} from "@redux/actions/startYourWill";
 import AuthHoc from "../AuthHoc";
-import { sendOTP, signUpEmail, verifyOTP } from "@redux/actions/startYourWill";
+import moment from "moment";
+import { getCategoriesData } from "@redux/actions/category";
+
+const { Dragger } = Upload;
 
 function StartYourWill() {
-  const [showModalSignUpEmail, setShowModalSignUpEmail] = useState(false);
-  // const [email, setEmail] = useState("");
-  const [showModalOtp, setShowModalOtp] = useState(false);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
-  const [donePersonalParticulars, setDonePersonalParticulars] = useState(false);
-  const [doneExecutor, setDoneExecutor] = useState(false);
-  const [doneBenefit, setDoneBenefit] = useState(false);
-  const [doneEstateDistribute, setDoneEstateDistribute] = useState(false);
   const [renderPage, setRenderPage] = useState(false);
+  const [pdfName, setPdfName] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
-
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      router.push("/start-your-will-upload");
-      return;
-    }
-    setRenderPage(true);
+      setRenderPage(true);
+    } else router.push("/start-your-will-create");
   }, []);
 
   const width = useSelector(
@@ -43,10 +56,10 @@ function StartYourWill() {
     )
   );
 
-  const name = useSelector(
+  const starYourWillData = useSelector(
     createSelector(
       (state: any) => state?.startYourWill,
-      (startYourWill) => startYourWill?.name
+      (startYourWill) => startYourWill
     )
   );
 
@@ -58,272 +71,381 @@ function StartYourWill() {
   );
 
   useEffect(() => {
-    if (
-      category?.email &&
-      category?.full_legal_name &&
-      category?.nric &&
-      category?.postal_code &&
-      category?.address_line_1 &&
-      category?.address_line_2 &&
-      category?.unit_number
-    ) {
-      setDonePersonalParticulars(true);
-    }
-    if (category?.executors.length >= 1) {
-      setDoneExecutor(true);
-    }
-    if (category?.beneficiaries.length >= 1) {
-      setDoneBenefit(true);
-    }
-
-    if (category?.beneficiaries?.length >= 2) {
-      let percent = 0;
-      category?.beneficiaries?.map((item) => {
-        if (item.percent !== 100) {
-          percent += item.percent;
-        }
-      });
-      if (percent === 100) setDoneEstateDistribute(true);
+    setUploading(false);
+    if (category) {
+      setPdfName(category?.pdf_upload_url || "");
     }
   }, [category]);
 
-  const checkDisplayCreate = () => {
-    return (
-      donePersonalParticulars &&
-      doneExecutor &&
-      doneBenefit &&
-      doneEstateDistribute
-    );
+  const renderIconTitle = () => {
+    if (starYourWillData?.uploaded) {
+      return width > 768 ? <UploadSecure /> : <UploadSecureMobile />;
+    }
+    return width > 768 ? <Download /> : <DownloadMobile />;
   };
 
-  const handleDraftYourWill = () => {
-    if (!donePersonalParticulars) {
-      router.push("/personal-information");
-      return;
-    }
-    if (!doneExecutor) {
-      router.push("/personal-executor");
-      return;
-    }
-    if (!doneBenefit) {
-      router.push("/personal-beneficiary");
-      return;
-    }
-    if (!doneEstateDistribute) {
-      router.push("/allocation");
-      return;
-    }
-    return null;
+  const handlePreView = () => {
+    router.push("/preview-pdf");
+    dispatch(setDownloaded(true));
   };
 
-  const countOptionNotDone = () => {
-    let num = 0;
-    if (!donePersonalParticulars) {
-      num += 1;
-    }
-    if (!doneExecutor) {
-      num += 1;
-    }
-    if (!doneBenefit) {
-      num += 1;
-    }
-    if (!doneEstateDistribute) {
-      num += 1;
-    }
-    return num;
+  const handleDownloadWill = () => {
+    dispatch(setDownloaded(true));
   };
 
-  const checkStart = () => {
-    return (
-      !donePersonalParticulars &&
-      !doneExecutor &&
-      !doneBenefit &&
-      !doneEstateDistribute
-    );
+  const handleMakePayment = () => {
+    router.push("/payment-summary");
   };
 
-  const renderTitle = () => {
-    if (checkDisplayCreate()) {
-      return "You’re Almost There!";
-    }
-    if (checkStart()) {
-      return `Hello, ${name}`;
-    }
-    return "Let’s Keep Going!";
+  const getCategories = () => {
+    const token = localStorage.getItem("accessToken");
+    dispatch(getCategoriesData(token));
   };
 
-  const renderTextContinue = () => {
-    if (checkDisplayCreate()) {
-      return `Let's create your account!`;
-    }
-    if (checkStart()) {
-      return "Start drafting your Will!";
-    }
-    return "Continue drafting your Will!";
+  const props = {
+    accept: ".pdf",
+    name: "file",
+    transformFile(file) {
+      if (file) {
+        setUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+        dispatch(
+          uploadFile(formData, (response) => {
+            if (response.success) {
+              getCategories();
+              dispatch(setUploaded(true));
+            }
+            setUploading(false);
+          })
+        );
+      }
+    },
+    fileList: [],
+    multiple: false,
   };
 
-  const onSignUpEmail = () => {
+  const handleRemoveFile = () => {
     dispatch(
-      signUpEmail(category, (response) => {
+      removeFileUpload((response) => {
         if (response.success) {
-          setShowModalSignUpEmail(false);
-          dispatch(
-            sendOTP({ email: category?.email }, (responseOTP) => {
-              if (responseOTP.success) {
-                setShowModalOtp(true);
-              }
-            })
-          );
+          getCategories();
         }
       })
     );
   };
 
-  const changeOtp = (otp) => {
-    if (otp.length === 4) {
-      setTimeout(() => {
-        dispatch(
-          verifyOTP({ email: category?.email, otp }, (response) => {
-            if (response.success) {
-              const token = response?.data?.access_token;
-              localStorage.setItem("accessToken", token);
-              setShowModalOtp(false);
-              setShowModalSuccess(true);
-            }
-          })
-        );
-      }, 1000);
-    }
-  };
-
-  const handleReturnDashboard = () => {
-    router.push("/start-your-will-upload");
-  };
-
   return renderPage ? (
-    <div className="start-your-will-container">
-      {showModalSignUpEmail && (
-        <ModalSignUpEmail
-          showModal={showModalSignUpEmail}
-          setShowModal={setShowModalSignUpEmail}
-          name={name}
-          onSignUpEmail={onSignUpEmail}
-          email={category?.email || ""}
-        />
-      )}
-      {showModalOtp && (
-        <ModalOtp
-          showModal={showModalOtp}
-          setShowModal={setShowModalOtp}
-          email={category?.email || ""}
-          changeOtp={changeOtp}
-        />
-      )}
-      {showModalSuccess && (
-        <ModalSuccess
-          showModal={showModalSuccess}
-          setShowModal={setShowModalSuccess}
-          title="Account Created"
-          textNote="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun."
-          handleReturn={handleReturnDashboard}
-        />
-      )}
-      <Row className="create-acc">
-        <Col
-          xs={15}
-          sm={15}
-          md={18}
-          lg={18}
-          xl={18}
-          xxl={18}
-          className="center"
+    <>
+      <div className="start-your-will-container">
+        {showModalSuccess && (
+          <ModalSuccess
+            showModal={showModalSuccess}
+            setShowModal={setShowModalSuccess}
+            title="Account Created"
+            textNote="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun."
+          />
+        )}
+        <Row
+          className="keep-going"
+          style={{
+            background: !starYourWillData?.uploaded ? "#E9FAF4" : "#FFD9D1",
+          }}
         >
-          <span>
-            {width > 768 ? <HandIcon /> : "✋"}
-            <span className="text ml-8">
-              Don’t lose your information{" "}
-              {width > 768 && ", let’s create your iWills account"}
-            </span>
-          </span>
-        </Col>
-        <Col xs={9} sm={9} md={6} lg={6} xl={6} xxl={6}>
-          {checkDisplayCreate() && (
-            <span
-              className="text right"
-              style={{ cursor: "pointer" }}
-              onClick={() => setShowModalSignUpEmail(true)}
-            >
-              Create Account
-            </span>
-          )}
-        </Col>
-      </Row>
+          <Col
+            xs={24}
+            sm={24}
+            md={24}
+            lg={11}
+            xl={11}
+            xxl={11}
+            className="left-header"
+          >
+            <div className="text-keep-going">
+              {!starYourWillData?.uploaded
+                ? "Your Will Is Ready"
+                : "Upload & Secure"}
+            </div>
+            <div className="text-continue mt-8">
+              {!starYourWillData?.uploaded
+                ? "Let's sign and upload your Will!"
+                : "Your privacy and security is our utmost importance"}
+            </div>
+            <div className="text mt-16 mb-40">
+              <span>
+                {!starYourWillData?.uploaded
+                  ? "You've done all the hard work, so take a look at your completed will,"
+                  : "Let’s complete your Will. All your information is saved as you go."}
+              </span>
+              &nbsp;
+              <span className="remaining">
+                {!starYourWillData?.uploaded
+                  ? "dowload, and print it!"
+                  : "Upload your signed will."}
+              </span>
+            </div>
+            {!starYourWillData?.uploaded && (
+              <a
+                href={`${process.env.NEXT_PUBLIC_API_URL}${category?.will_pdf_link}`}
+              >
+                <CustomButton
+                  type="ghost"
+                  size="large"
+                  className="continue-btn"
+                  onClick={handleDownloadWill}
+                >
+                  Download Will
+                </CustomButton>
+              </a>
+            )}
+            {starYourWillData?.uploaded && (
+              <div>
+                <CustomButton
+                  type="primary"
+                  size="large"
+                  className="continue-btn"
+                  onClick={() => {
+                    router.push("/lodge-will");
+                  }}
+                >
+                  Upload Will Securely
+                </CustomButton>
+                {width > 768 && (
+                  <div className="mt-24">
+                    <CloudAWS />
+                    <span className="text-cloud ml-8">
+                      Cloud Infrastructure by AWS 256-bit system
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+          </Col>
+          <Col
+            xs={24}
+            sm={24}
+            md={24}
+            lg={13}
+            xl={13}
+            xxl={13}
+            className="right-header"
+          >
+            {renderIconTitle()}
+          </Col>
+        </Row>
 
-      <Row className="keep-going">
-        <Col
-          xs={24}
-          sm={24}
-          md={24}
-          lg={11}
-          xl={11}
-          xxl={11}
-          className="left-header"
-        >
-          <div className="text-keep-going">{renderTitle()}</div>
-          <div className="text-continue mt-8">{renderTextContinue()}</div>
-          <div className="text mt-16 mb-40">
-            <span>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor
-            </span>
-            &nbsp;
-            {(donePersonalParticulars ||
-              doneExecutor ||
-              doneBenefit ||
-              doneEstateDistribute) &&
-              !checkDisplayCreate() && (
-                <span className="remaining">
-                  {countOptionNotDone()}&nbsp;sections remaining
+        <div className="body">
+          <YourPersonalWill />
+          <div className="download ">
+            <Row>
+              <Col
+                xs={24}
+                sm={24}
+                md={24}
+                lg={18}
+                xl={18}
+                xxl={18}
+                className="center"
+              >
+                <span>
+                  <DownloadIcon />
                 </span>
-              )}
+                <span className="text-title">Preview & Download Your Will</span>
+              </Col>
+              <Col
+                xs={0}
+                sm={0}
+                md={24}
+                lg={6}
+                xl={6}
+                xxl={6}
+                className="item-end"
+              >
+                {width > 768 && (
+                  <Button className="download-btn" onClick={handlePreView}>
+                    Download Will
+                  </Button>
+                )}
+              </Col>
+            </Row>
+            <Row className="optional-text mt-16" style={{ color: "#6670A2" }}>
+              By writing a will, you will be able to take care of your loved
+              ones when you are gone. Having a will allows you to distribute
+              your assets according to your wishes, and also indicate your
+              wishes you might have when you are gone.
+            </Row>
+            <Row
+              className="optional-text mt-24"
+              style={{ color: "#6670A2", fontSize: 16 }}
+            >
+              Last Edited:&nbsp;
+              {moment(new Date(category.created_at)).format("LLLL")}
+            </Row>
           </div>
-          {checkDisplayCreate() ? (
-            <CustomButton
-              type="ghost"
-              size="large"
-              className="continue-btn"
-              onClick={() => setShowModalSignUpEmail(true)}
-            >
-              Create Your Account
-            </CustomButton>
-          ) : (
-            <CustomButton
-              type="ghost"
-              size="large"
-              className="continue-btn"
-              onClick={handleDraftYourWill}
-            >
-              {checkStart() ? "Get Started" : "Continue Drafting Your Will"}
-            </CustomButton>
-          )}
-        </Col>
-        <Col
-          xs={24}
-          sm={24}
-          md={24}
-          lg={13}
-          xl={13}
-          xxl={13}
-          className="right-header"
-        >
-          {width > 768 ? <KeepGoing /> : <KeepGoingMobile />}
-        </Col>
-      </Row>
 
-      <div className="body">
-        <YourPersonalWill />
+          {starYourWillData?.downloaded && (
+            <div className="download upload" style={{ background: "#fff" }}>
+              <Col span={24} className="center">
+                <span>
+                  <UploadFile />
+                </span>
+                <span className="text-title">Upload Your Signed Will</span>
+              </Col>
+              <Row className="optional-text mt-16" style={{ color: "#6670A2" }}>
+                Once your Will has been signed, your Will is completed and you
+                can upload your signed Will into the iWills platform for future
+                reference. You should store the original Will in a safe location
+                and inform the Executors of their roles and the location of the
+                Will.
+              </Row>
+              {!pdfName
+                ? !uploading && (
+                    <Dragger {...(props as any)}>
+                      <div className="drag-drop-file mt-24">
+                        <Row className="item-center">
+                          <FileIcon />
+                        </Row>
+                        <Row className="item-center optional-text mt-16">
+                          Drag and Drop files here
+                        </Row>
+                        <Row className="item-center text-file-support mt-8">
+                          File Supported: PDF only, (Max 3mb)
+                        </Row>
+                        <Row className="item-center mt-16">
+                          <Button className="upload-btn">Upload Will</Button>
+                        </Row>
+                      </div>
+                    </Dragger>
+                  )
+                : !uploading && (
+                    <div className="upload-done">
+                      <Row>
+                        <Col
+                          xs={24}
+                          sm={24}
+                          md={18}
+                          lg={18}
+                          xl={18}
+                          xxl={18}
+                          className="center"
+                        >
+                          <Col>
+                            <UploadDone />
+                          </Col>
+                          <Col style={{ paddingLeft: 16 }}>
+                            <div className="text-pdf">
+                              {category?.pdf_upload_url?.replace(
+                                "/upload-pdf/",
+                                ""
+                              )}
+                            </div>
+                            <div className="text-upload-day">
+                              Uploaded:&nbsp;
+                              {moment(
+                                new Date(category.time_upload_pdf)
+                              ).format("LLLL")}
+                            </div>
+                          </Col>
+                        </Col>
+                        <Col
+                          xs={24}
+                          sm={24}
+                          md={6}
+                          lg={6}
+                          xl={6}
+                          xxl={6}
+                          className="remove-col"
+                        >
+                          <Button
+                            className="remove-btn"
+                            onClick={handleRemoveFile}
+                          >
+                            <RemoveIcon />
+                            <span className="ml-8">Remove</span>
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
+              <Spin spinning={uploading}>
+                {uploading && (
+                  <div className="upload-done">
+                    <Row>
+                      <Col className="center">
+                        <Col>
+                          <Uploading />
+                        </Col>
+                        <Col style={{ paddingLeft: 16 }}>
+                          <div className="text-pdf">Uploading...</div>
+                          <div
+                            className="text-upload-day"
+                            style={{ color: " #A0A5BE" }}
+                          >
+                            Storing your will document into our secure cloud
+                          </div>
+                        </Col>
+                      </Col>
+                    </Row>
+                  </div>
+                )}
+              </Spin>
+              {!starYourWillData?.makePayment && (
+                <>
+                  <div className="make-overlay"></div>
+                  <div className="make-payment">
+                    <Row>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={18}
+                        lg={18}
+                        xl={18}
+                        xxl={18}
+                        className="center"
+                      >
+                        <Col style={{ paddingRight: 10 }}>
+                          {width > 768 ? (
+                            <MakePayment />
+                          ) : (
+                            <MakePaymentMobile />
+                          )}
+                        </Col>
+                        <Col>
+                          <div className="text-title">
+                            Pay to upload Your Signed Will
+                          </div>
+                          <div className="text-note">
+                            A secured interface with your data encrypted and
+                            your Will stored safely to protect your privacy.
+                          </div>
+                        </Col>
+                      </Col>
+                      <Col
+                        xs={24}
+                        sm={24}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                        xxl={6}
+                        className="col-btn-pay"
+                      >
+                        <Button
+                          className="make-payment-btn"
+                          onClick={handleMakePayment}
+                        >
+                          Make Payment
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <div className="body-1"></div>
+    </>
   ) : (
     <Row
       justify="center"

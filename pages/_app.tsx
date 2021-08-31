@@ -14,8 +14,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <React.Fragment>
-          {(router?.pathname === "/start-your-will" ||
-            router?.pathname === "/start-your-will-upload" ||
+          {(router?.pathname === "/start-your-will-create" ||
+            router?.pathname === "/start-your-will" ||
             router?.pathname === "/personal-information" ||
             router?.pathname === "/personal-executor" ||
             router?.pathname === "/personal-beneficiary" ||

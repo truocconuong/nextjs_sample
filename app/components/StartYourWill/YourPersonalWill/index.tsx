@@ -137,7 +137,7 @@ function YourPersonalWill() {
   };
 
   const handleReturnDashboard = () => {
-    router.push("/start-your-will-upload");
+    router.push("/start-your-will");
   };
 
   const onEditPersonalParticular = () => {
