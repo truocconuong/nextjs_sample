@@ -16,7 +16,7 @@ import router from "next/router";
 import { DownloadOutlined } from "@ant-design/icons";
 import CustomButton from "@generals/Button";
 import { IData } from "@constant/data.interface";
-import { MAX_LENGTH_FILE_NAME } from "@constant/";
+import { MAX_LENGTH_FILE_NAME } from "@constant/index";
 
 const NavigationBar = () => {
   const dispatch = useDispatch();
