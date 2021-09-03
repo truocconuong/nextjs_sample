@@ -1,4 +1,4 @@
-import React, {useState, ReactNode} from "react";
+import React, {useState} from "react";
 import {countries, findFlagUrlByCountryName} from "country-flags-svg";
 import SelectField from "generals/SelectField";
 import {Select} from "antd";
@@ -17,6 +17,7 @@ countries.map(item => {
     ),
     value: item.name,
   };
+  if (item.name === "Afghanistan") return;
   options.push(temp);
 });
 

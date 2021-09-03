@@ -414,7 +414,15 @@ function InsurancePolicyLayout(props: IProps) {
                               insurance_company_id: value,
                             }));
                           },
+                          filterOption: (input, option) => {
+                            return (
+                              option?.children
+                                ?.toLowerCase()
+                                ?.indexOf(input.toLowerCase()) >= 0
+                            );
+                          },
                         }}
+                        searchable
                         isError={errors?.insurance_company_id}
                       >
                         {optionInsuranceCompanies.map(item => {

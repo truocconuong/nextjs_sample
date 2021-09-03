@@ -758,7 +758,7 @@ function PropertyLayout(props: IProps) {
                               ></InputField>
                               <InputField
                                 inputProps={{
-                                  placeholder: "joint_contact",
+                                  placeholder: "Contact",
                                   value: data?.joint_contact,
                                   name: "joint_contact",
                                   onChange: e => handleChangeInput(e),
