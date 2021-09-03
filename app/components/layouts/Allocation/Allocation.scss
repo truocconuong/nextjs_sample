@@ -313,11 +313,9 @@
                             margin-right: 32px;
                             display: flex;
                             flex-direction: column;
-                            width: calc(100% - 64px);
+                            min-width: fit-content;
                             align-items: flex-start;
                             height: 44px;
-                            width: fit-content;
-                            min-width: 120px;
                             .name {
                                 height: 26px;
                                 font-family: Recoleta-Medium;

@@ -97,7 +97,7 @@ const Allocation = () => {
           {
             disabled: false,
           },
-          () => {}
+          () => { }
         )
       );
     } else {
@@ -106,7 +106,7 @@ const Allocation = () => {
           {
             disabled: true,
           },
-          () => {}
+          () => { }
         )
       );
     }
@@ -125,7 +125,7 @@ const Allocation = () => {
         {
           pushable: true,
         },
-        () => {}
+        () => { }
       )
     );
     dispatch(
@@ -133,7 +133,7 @@ const Allocation = () => {
         {
           router: "/start-your-will-create",
         },
-        () => {}
+        () => { }
       )
     );
   }, []);
@@ -207,11 +207,11 @@ const Allocation = () => {
           { percent: value },
           `${id}`,
           token,
-          () => {}
+          () => { }
         )
       );
     }
-    dispatch(CategoryActions.setBeneficiary(dataForm, (data) => {}));
+    dispatch(CategoryActions.setBeneficiary(dataForm, (data) => { }));
 
     setNewPercent(dataForm);
   };
@@ -223,7 +223,7 @@ const Allocation = () => {
         {
           percent: getAmountPercentCompleted(categoryData),
         },
-        () => {}
+        () => { }
       )
     );
   }
@@ -261,9 +261,9 @@ const Allocation = () => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       const dataSetPercents = toSetPercentApiData(personsCopy);
-      dispatch(UserActions.setPercents(dataSetPercents, token, () => {}));
+      dispatch(UserActions.setPercents(dataSetPercents, token, () => { }));
     } else {
-      dispatch(CategoryActions.setBeneficiary(dataForm, () => {}));
+      dispatch(CategoryActions.setBeneficiary(dataForm, () => { }));
     }
     setNewPercent(dataForm);
   };
@@ -277,6 +277,15 @@ const Allocation = () => {
     });
     return res;
   };
+
+  const maxLengthName = () => {
+    const item = persons?.reduce(
+      function (a, b) {
+        return a?.name?.length > b?.name?.length ? a : b;
+      }
+    );
+    return item?.name?.length || 0;
+  }
 
   return (
     <div className="allocation-container">
@@ -298,9 +307,8 @@ const Allocation = () => {
             }
           >
             {isMobile && (
-              <div className="title-mobile">{`${
-                100 - totalPercent
-              }% left to distribute`}</div>
+              <div className="title-mobile">{`${100 - totalPercent
+                }% left to distribute`}</div>
             )}
             <div
               className={
@@ -365,9 +373,8 @@ const Allocation = () => {
               </div>
               <div className="description-right">
                 {!isMobile && (
-                  <div className="title-desktop">{`${
-                    100 - totalPercent
-                  }% left to distribute`}</div>
+                  <div className="title-desktop">{`${100 - totalPercent
+                    }% left to distribute`}</div>
                 )}
                 <div className="button">
                   <CustomButton
@@ -415,7 +422,7 @@ const Allocation = () => {
                       >
                         <div className="text">{person.name[0]}</div>
                       </div>
-                      <div className="base-info">
+                      <div className="base-info" style={{minWidth: `${(maxLengthName() * 10) + 10}px`}}>
                         <div className="name">{person.name}</div>
                         <div className="description">{person.type}</div>
                       </div>
