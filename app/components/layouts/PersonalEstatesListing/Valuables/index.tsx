@@ -2,7 +2,6 @@ import {EditOutlined, InfoCircleOutlined} from "@ant-design/icons";
 import {Row, Col, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import CustomButton from "@generals/Button";
-import InputField from "@generals/InputField";
 import SelectField from "@generals/SelectField";
 import ModalInfo from "@generals/Modal/ModalInfo";
 import _ from "lodash";
@@ -19,7 +18,7 @@ import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
 import {v4 as uuidv4} from "uuid";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
-import {limitLength} from "@util/index";
+import GenerateForm from "./components/GenerateForm";
 
 const {Option} = Select;
 
@@ -57,10 +56,19 @@ function ValuablesLayout(props: IProps) {
   const [listData, setListData] = useState([]);
   const [data, setData] = useState({
     id: "",
-    type_id: null,
+    type_id: "",
     brand: "",
     model: "",
     serial_no: "",
+    plate_no: "",
+    country_name: "",
+    address_line_1: "",
+    address_line_2: "",
+    postal_code: "",
+    pet_name: "",
+    pet_breed: "",
+    pet_registration_number: "",
+    safe_box_detail: "",
   });
   // const [isContinue, setIsContinue] = useState(false);
   const [errors, setErrors] = useState({
@@ -135,10 +143,19 @@ function ValuablesLayout(props: IProps) {
   const handleReset = () => {
     setData({
       id: "",
-      type_id: null,
+      type_id: "",
       brand: "",
       model: "",
       serial_no: "",
+      plate_no: "",
+      country_name: "",
+      address_line_1: "",
+      address_line_2: "",
+      postal_code: "",
+      pet_name: "",
+      pet_breed: "",
+      pet_registration_number: "",
+      safe_box_detail: "",
     });
   };
 
@@ -248,12 +265,6 @@ function ValuablesLayout(props: IProps) {
     dispatch(
       PersonalEstatesListingActions.deleteValuableGuest(tempItem?.id, () => {})
     );
-  };
-
-  const handleChangeInput = e => {
-    const {name, value} = e.target;
-    setErrors(prev => ({...prev, [name]: false}));
-    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
   // const handleConfirmDelete = item => {
@@ -397,44 +408,11 @@ function ValuablesLayout(props: IProps) {
                       </SelectField>
                     </Row>
                     {isShowDetail && (
-                      <>
-                        <Row className="mb-32">
-                          <InputField
-                            displayLabel
-                            label="Brand"
-                            inputProps={{
-                              placeholder: "e.g. Armani",
-                              value: data?.brand,
-                              name: "brand",
-                              onChange: e => handleChangeInput(e),
-                            }}
-                          ></InputField>
-                        </Row>
-                        <Row className="mb-32">
-                          <InputField
-                            displayLabel
-                            label="Model"
-                            inputProps={{
-                              placeholder: "e.g. Three-Hand Brown Leather",
-                              value: data?.model,
-                              name: "model",
-                              onChange: e => handleChangeInput(e),
-                            }}
-                          ></InputField>
-                        </Row>
-                        <Row className="mb-32">
-                          <InputField
-                            displayLabel
-                            label="Serial No."
-                            inputProps={{
-                              placeholder: "e.g. 110099",
-                              value: data?.serial_no,
-                              name: "serial_no",
-                              onChange: e => handleChangeInput(e),
-                            }}
-                          ></InputField>
-                        </Row>
-                      </>
+                      <GenerateForm
+                        masterDataReducer={masterDataReducer}
+                        data={data}
+                        setData={setData}
+                      />
                     )}
                     <Row justify="center">
                       <Col style={{marginRight: "24px"}}>

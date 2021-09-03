@@ -96,10 +96,19 @@ export interface IBusinessInterest {
 export interface IValuable {
   id: string;
   type_id: string;
-  brand: string;
-  model: string;
-  serial_no: string;
-  is_delete: boolean;
+  brand?: string;
+  model?: string;
+  serial_no?: string;
+  plate_no?: string;
+  country_name?: string;
+  address_line_1?: string;
+  address_line_2?: string;
+  postal_code?: string;
+  pet_name?: string;
+  pet_breed?: string;
+  pet_registration_number?: string;
+  safe_box_detail?: string;
+  is_delete?: boolean;
 }
 
 export interface IPersonalInformation {

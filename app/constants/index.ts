@@ -22,8 +22,17 @@ export enum MASTERDATA_TYPE {
   BANK = "BANK",
   ASSET = "ASSET",
   INVESTMENT = "INVESTMENT",
-  TYPE_PROPERTY = "TYPE_PROPERTY"
+  TYPE_PROPERTY = "TYPE_PROPERTY",
 }
 
 export const MAX_LENGTH_NAME = 30;
 export const MAX_LENGTH_FILE_NAME = 20;
+
+export enum VALUABLES_TYPE {
+  WATCH = "Watch",
+  JEWELLERY = "Jewellery",
+  MOTOR_VEHICLE = "Motor Vehicle",
+  REAL_ESTATE = "Real Estate",
+  PET = "Pet",
+  SAFE_BOX = "Safe Box",
+}

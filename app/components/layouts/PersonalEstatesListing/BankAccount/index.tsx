@@ -426,8 +426,16 @@ function BankAccountLayout(props: IProps) {
                             setData(prev => ({...prev, bank_id: value}));
                             setErrors(prev => ({...prev, bank_id: false}));
                           },
+                          filterOption: (input, option) => {
+                            return (
+                              option?.children
+                                ?.toLowerCase()
+                                ?.indexOf(input.toLowerCase()) >= 0
+                            );
+                          },
                         }}
                         isError={errors?.bank_id}
+                        searchable
                       >
                         {optionBanks.map(item => {
                           return (
