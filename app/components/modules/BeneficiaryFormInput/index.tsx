@@ -143,6 +143,9 @@ const BeneficiaryFormInput = (props: BeneficiaryPropsInterface) => {
                 value: dataForm.relationship || undefined,
                 placeholder: "Select",
                 onChange: (value) => onValueChange("relationship", value),
+                filterOption: (input, option) => {
+                  return option?.children?.toLowerCase()?.indexOf(input.toLowerCase()) >= 0
+                }
               }}
               searchable
             >

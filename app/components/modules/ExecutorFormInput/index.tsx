@@ -99,7 +99,6 @@ const executorFormInput = (props: ExecutorFormPropsInterface) => {
     if (!isFullForm()) {
       return;
     }
-    console.log(dataForm)
     onSaveData(dataForm);
   };
 
@@ -131,6 +130,9 @@ const executorFormInput = (props: ExecutorFormPropsInterface) => {
                 value: dataForm.relationship || undefined,
                 placeholder: "Select",
                 onChange: (value) => onValueChange("relationship", value),
+                filterOption: (input, option) => {
+                  return option?.children?.toLowerCase()?.indexOf(input.toLowerCase()) >= 0
+                }
               }}
               searchable
             >

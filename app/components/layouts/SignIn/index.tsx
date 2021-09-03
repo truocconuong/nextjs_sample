@@ -31,6 +31,7 @@ const SignInForm = (props: ISignInFormProps) => {
   const { isMobile, setVisibleModal } = props;
   const [currentStep, setCurrentStep] = useState(1);
   const [isSignInFailed, setIsSignFailed] = useState<boolean>(false);
+  const [isLoadingSignIn, setIsLoadingSignIn] = useState<boolean>(false);
   const [showModalOtp, setShowModalOtp] = useState(false);
   const [signInFormData, setSignInFormData] = useState<ISignInForm>({
     address: "",
@@ -54,10 +55,12 @@ const SignInForm = (props: ISignInFormProps) => {
   };
 
   const onSignIn = () => {
+    setIsLoadingSignIn(true);
     if (!signInFormData.email) {
       return;
     }
     dispatch(UserActions.signIn({ email: signInFormData.email }, (res: any) => {
+      setIsLoadingSignIn(false);
       if (res) {
         setIsSignFailed(false);
         setShowModalOtp(true);
@@ -164,18 +167,15 @@ const SignInForm = (props: ISignInFormProps) => {
       id: 2,
       isMobile: isMobile,
       icon: <InformationIcon />,
-      header: "Bernard, let’s protect your information",
+      header: "Sign In to iWills",
       content: (
         <React.Fragment>
           <div className="content-title">
-            Your privacy and data security are important to us. All your
-            personal information will be securely encrypted and protected.
+            Update your financial assets and will regularly to protect your legacy and love ones.
           </div>
           <div className="content-body">
             <div className="input-address">
               <InputField
-                displayLabel
-                label="Email"
                 inputProps={{
                   placeholder: "e.g. user@gmail.com",
                   value: signInFormData.email,
@@ -190,7 +190,7 @@ const SignInForm = (props: ISignInFormProps) => {
           </div>
         </React.Fragment>
       ),
-      button: <CustomButton onClick={onSignIn} type="dashed" size="large" icon={<SecurityIcon />} disabled={!signInFormData.email}>
+      button: <CustomButton loading={isLoadingSignIn} onClick={onSignIn} type="dashed" size="large" icon={<SecurityIcon />} disabled={!signInFormData.email}>
         Sign In Securely
       </CustomButton>,
       onCloseModal: () => setVisibleModal(false)
