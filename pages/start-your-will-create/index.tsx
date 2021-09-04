@@ -238,7 +238,7 @@ function StartYourWill() {
           setShowModal={setShowModalSignUpEmail}
           name={name}
           onSignUpEmail={onSignUpEmail}
-          email={email}
+          emailProps={email}
         />
       )}
       {showModalOtp && (
