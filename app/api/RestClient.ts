@@ -24,7 +24,9 @@ function Request() {
       let { data } = response;
       return [data, data?.message];
     } catch (error) {
-      throw [null, error, error?.message];
+      if (error.response) {
+        throw error.response.data;
+      }
       // return [null, error, error?.message];
     }
   }

@@ -81,50 +81,47 @@ const NavigationBar = () => {
   );
 
   const returnToDashBoard = () => {
-    router.push("/start-your-will-create");
+    router.push("/start-your-will");
   };
 
-  const categoryData = useSelector(
+  const starYourWillData = useSelector(
     createSelector(
-      (state: any) => state?.category,
-      (category: IData) => {
-        return category;
-      }
+      (state: any) => state?.startYourWill,
+      (startYourWill) => startYourWill
     )
   );
 
   const toFileName = () => {
-    if (!categoryData) {
+    if (!starYourWillData) {
       return "";
     }
-    let fileName = categoryData?.will_pdf_link?.split("/")[2] || "";
+    let fileName = starYourWillData?.pathDownload?.split("/")[2] || "";
     if (fileName?.length > MAX_LENGTH_FILE_NAME) {
-      fileName = `...${fileName?.substr(fileName?.length - MAX_LENGTH_FILE_NAME, fileName?.length)}`;
+      fileName = `...${fileName?.substr(
+        fileName?.length - MAX_LENGTH_FILE_NAME,
+        fileName?.length
+      )}`;
     }
     return fileName;
-  }
+  };
 
   const renderDownload = () => {
-    return <div className="will-download">
-      <div className="file">
-        <IconFilePdf />
-      </div>
-      <div className="file-name">
-        {toFileName()}
-      </div>
-      <a
-        href={`${process.env.NEXT_PUBLIC_API_URL}${categoryData?.will_pdf_link}`}
-      >
-        <CustomButton
-          borderLarge
-          fontWeightLarge
-          icon={<DownloadOutlined />}
+    return (
+      <div className="will-download">
+        <div className="file">
+          <IconFilePdf />
+        </div>
+        <div className="file-name">{toFileName()}</div>
+        <a
+          href={`${process.env.NEXT_PUBLIC_API_URL}${starYourWillData?.pathDownload}`}
         >
-          Download
-        </CustomButton>
-      </a>
-    </div>
-  }
+          <CustomButton borderLarge fontWeightLarge icon={<DownloadOutlined />}>
+            Download
+          </CustomButton>
+        </a>
+      </div>
+    );
+  };
 
   return (
     <React.Fragment>
@@ -153,7 +150,7 @@ const NavigationBar = () => {
                   <div className="container-back-mobile">
                     <div className="container-back-wrap">
                       <div className="back-wrapper"></div>
-                      <div className="back" onClick={() => { }}>
+                      <div className="back" onClick={() => {}}>
                         Dashboard
                       </div>
                       <div className="icon-menu">
@@ -163,7 +160,7 @@ const NavigationBar = () => {
                   </div>
                 </div>
               </div>
-              {isShowProgressBar && router.pathname !== "/preview-pdf" &&
+              {isShowProgressBar && router.pathname !== "/preview-pdf" && (
                 <ProgressBar
                   disabled={disabledBtn}
                   textButton={textButtonProgress}
@@ -173,7 +170,7 @@ const NavigationBar = () => {
                   routerPush={routerPush}
                   pushable={pushable}
                 />
-              }
+              )}
             </>
           ) : (
             <div className="row-wrapper">
@@ -198,7 +195,9 @@ const NavigationBar = () => {
                     routerPush={routerPush}
                     pushable={pushable}
                   />
-                ) : renderDownload()}
+                ) : (
+                  renderDownload()
+                )}
                 <div className="back-container" onClick={returnToDashBoard}>
                   <div className="back-wrapper">
                     <div className="back">Return to Dashboard</div>

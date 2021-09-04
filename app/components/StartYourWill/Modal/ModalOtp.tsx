@@ -7,7 +7,7 @@ import OtpInput from "react-otp-input";
 import { Otp, OtpMobile } from "../../../../public/images";
 
 function ModalOtp(props) {
-  const { showModal, setShowModal, changeOtp, email } = props;
+  const { showModal, setShowModal, changeOtp, email, onChangeEmail } = props;
   const [otp, setOtp] = useState("");
 
   const width = useSelector(
@@ -61,7 +61,9 @@ function ModalOtp(props) {
           Didn’t receive email OTP, Click here to re-send a new OTP for
           verification
         </div>
-        <div className="change-email mt-40 mb-8">Change Email</div>
+        <div className="change-email mt-40 mb-8" onClick={onChangeEmail}>
+          Change Email
+        </div>
       </div>
     </Modal>
   );

@@ -185,3 +185,4 @@ export { ReactComponent as IconExit } from "./exit.svg";
 
 //pdf-preview
 export { ReactComponent as IconFilePdf } from "./file-pdf.svg";
+export { ReactComponent as CloseIconUpload } from "./close.svg";

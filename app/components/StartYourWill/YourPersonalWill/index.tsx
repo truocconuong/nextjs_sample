@@ -29,6 +29,7 @@ function YourPersonalWill() {
   const [doneEstateDistribute, setDoneEstateDistribute] = useState(false);
   const [donePersonalEstatesList, setDonePersonalEstatesList] = useState(false);
   const [doneCreateAcc, setDoneCreateAcc] = useState(false);
+
   // const [otp, setOTP] = useState("");
 
   const dispatch = useDispatch();
@@ -62,9 +63,9 @@ function YourPersonalWill() {
   );
 
   useEffect(() => {
-    setEmail(category?.email || "");
+    setEmail(category?.email_personal || "");
     if (
-      category?.email &&
+      category?.email_personal &&
       category?.full_legal_name &&
       category?.nric &&
       category?.postal_code &&
@@ -102,18 +103,26 @@ function YourPersonalWill() {
     }
   }, [category]);
 
-  const onSignUpEmail = () => {
+  const onSignUpEmail = (emailRes) => {
+    // dispatch(
+    //   signUpEmail({ email }, (response) => {
+    //     if (response.success) {
+    //       setShowModalSignUpEmail(false);
+    //       dispatch(
+    //         sendOTP({ email }, (responseOTP) => {
+    //           if (responseOTP.success) {
+    //             setShowModalOtp(true);
+    //           }
+    //         })
+    //       );
+    //     }
+    //   })
+    // );
     dispatch(
-      signUpEmail(category, (response) => {
-        if (response.success) {
-          setShowModalSignUpEmail(false);
-          dispatch(
-            sendOTP({ email }, (responseOTP) => {
-              if (responseOTP.success) {
-                setShowModalOtp(true);
-              }
-            })
-          );
+      sendOTP({ email: emailRes }, (responseOTP) => {
+        if (responseOTP.success) {
+          setEmail(emailRes);
+          setShowModalOtp(true);
         }
       })
     );
@@ -123,11 +132,12 @@ function YourPersonalWill() {
     if (otp.length === 4) {
       setTimeout(() => {
         dispatch(
-          verifyOTP({ email, otp }, (response) => {
+          signUpEmail({ email, otp, full_legal_name: name }, (response) => {
             if (response.success) {
               const token = response?.data?.access_token;
               localStorage.setItem("accessToken", token);
               setShowModalOtp(false);
+              setDoneCreateAcc(true);
               setShowModalSuccess(true);
             }
           })
@@ -137,7 +147,15 @@ function YourPersonalWill() {
   };
 
   const handleReturnDashboard = () => {
-    router.push("/start-your-will");
+    if (
+      donePersonalParticulars &&
+      doneExecutor &&
+      doneBenefit &&
+      doneEstateDistribute
+    ) {
+      router.push("/start-your-will");
+    }
+    setShowModalSuccess(false);
   };
 
   const onEditPersonalParticular = () => {
@@ -160,6 +178,11 @@ function YourPersonalWill() {
     router.push("/allocation");
   };
 
+  const handleChangeEmail = () => {
+    setShowModalOtp(false);
+    setShowModalSignUpEmail(true);
+  };
+
   return (
     <div>
       {showModalSuccess && (
@@ -177,7 +200,7 @@ function YourPersonalWill() {
           setShowModal={setShowModalSignUpEmail}
           name={name}
           onSignUpEmail={onSignUpEmail}
-          email={email}
+          emailProps={email}
         />
       )}
       {showModalOtp && (
@@ -186,6 +209,7 @@ function YourPersonalWill() {
           setShowModal={setShowModalOtp}
           email={email}
           changeOtp={changeOtp}
+          onChangeEmail={handleChangeEmail}
         />
       )}
       {(!donePersonalParticulars ||
@@ -309,37 +333,33 @@ function YourPersonalWill() {
               <hr />
             </>
           )} */}
-            {donePersonalParticulars &&
-              doneExecutor &&
-              doneBenefit &&
-              doneEstateDistribute &&
-              !doneCreateAcc && (
-                <>
-                  <hr />
-                  <Row>
-                    <Col span={18} className="center ">
-                      <span
-                        className="text-fix-now"
-                        onClick={() =>
-                          width > 600 ? {} : setShowModalSignUpEmail(true)
-                        }
+            {!doneCreateAcc && (
+              <>
+                <hr />
+                <Row>
+                  <Col span={18} className="center ">
+                    <span
+                      className="text-fix-now"
+                      onClick={() =>
+                        width > 600 ? {} : setShowModalSignUpEmail(true)
+                      }
+                    >
+                      Create Your Account
+                    </span>
+                  </Col>
+                  <Col span={6} className="item-end">
+                    {width > 600 && (
+                      <Button
+                        className="button-fix"
+                        onClick={() => setShowModalSignUpEmail(true)}
                       >
-                        Create Your Account
-                      </span>
-                    </Col>
-                    <Col span={6} className="item-end">
-                      {width > 600 && (
-                        <Button
-                          className="button-fix"
-                          onClick={() => setShowModalSignUpEmail(true)}
-                        >
-                          Fix Now
-                        </Button>
-                      )}
-                    </Col>
-                  </Row>
-                </>
-              )}
+                        Fix Now
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </>
+            )}
           </div>
         )}
 
@@ -396,10 +416,12 @@ function YourPersonalWill() {
                 className={donePersonalParticulars ? "edit-btn" : "start-btn"}
                 onClick={onEditPersonalParticular}
               >
-                {donePersonalParticulars && <PenIcon />}
-                <span className="ml-8">
-                  {donePersonalParticulars ? "Edit" : "Start"}
-                </span>
+                {donePersonalParticulars && (
+                  <span className="mr-8">
+                    <PenIcon />
+                  </span>
+                )}
+                <span>{donePersonalParticulars ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>
@@ -447,8 +469,12 @@ function YourPersonalWill() {
                 className={doneExecutor ? "edit-btn" : "start-btn"}
                 onClick={onEditExecutorDetail}
               >
-                {doneExecutor && <PenIcon />}
-                <span className="ml-8">{doneExecutor ? "Edit" : "Start"}</span>
+                {doneExecutor && (
+                  <span className="mr-8">
+                    <PenIcon />
+                  </span>
+                )}
+                <span>{doneExecutor ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>
@@ -496,8 +522,12 @@ function YourPersonalWill() {
                 className={doneBenefit ? "edit-btn" : "start-btn"}
                 onClick={onEditBeneficiaryDetail}
               >
-                {doneBenefit && <PenIcon />}
-                <span className="ml-8">{doneBenefit ? "Edit" : "Start"}</span>
+                {doneBenefit && (
+                  <span className="mr-8">
+                    <PenIcon />
+                  </span>
+                )}
+                <span>{doneBenefit ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>
@@ -545,10 +575,12 @@ function YourPersonalWill() {
                 className={doneEstateDistribute ? "edit-btn" : "start-btn"}
                 onClick={onEditDistribution}
               >
-                {doneEstateDistribute && <PenIcon />}
-                <span className="ml-8">
-                  {doneEstateDistribute ? "Edit" : "Start"}
-                </span>
+                {doneEstateDistribute && (
+                  <span className="mr-8">
+                    <PenIcon />
+                  </span>
+                )}
+                <span>{doneEstateDistribute ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>
@@ -601,10 +633,12 @@ function YourPersonalWill() {
                 className={donePersonalEstatesList ? "edit-btn" : "start-btn"}
                 onClick={handleMovePersonalDetail}
               >
-                {donePersonalEstatesList && <PenIcon />}
-                <span className="ml-8">
-                  {donePersonalEstatesList ? "Edit" : "Start"}
-                </span>
+                {donePersonalEstatesList && (
+                  <span className="mr-8">
+                    <PenIcon />
+                  </span>
+                )}
+                <span>{donePersonalEstatesList ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>

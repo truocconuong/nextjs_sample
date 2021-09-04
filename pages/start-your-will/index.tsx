@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Input, Row, Spin, Upload } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Col, Input, Progress, Row, Spin, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
 import {
+  CloseIconUpload,
   CloudAWS,
   Download,
   DownloadIcon,
@@ -28,6 +29,7 @@ import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
 import { useRouter } from "next/router";
 import YourPersonalWill from "components/StartYourWill/YourPersonalWill";
 import {
+  generatePDF,
   removeFileUpload,
   setDownloaded,
   setUploaded,
@@ -37,6 +39,8 @@ import AuthHoc from "../AuthHoc";
 import moment from "moment";
 import { getCategoriesData } from "@redux/actions/category";
 import CustomCheckbox from "@generals/CustomCheckbox";
+import _ from "lodash";
+import { checkDoneAllOption } from "@util/index";
 
 const { Dragger } = Upload;
 
@@ -46,12 +50,31 @@ function StartYourWill() {
   const [pdfName, setPdfName] = useState("");
   const [uploading, setUploading] = useState(false);
   const [lodgeWillCheckbox, setLodgeWillCheckbox] = useState(false);
+  const [percent, setPercent] = useState(0);
+  const [fileUpload, setFileUpload] = useState(new FormData());
+  const [pathURLDownload, setPathURLDownload] = useState("");
+
+  const downloadRef = useRef(null);
 
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const category = useSelector(
+    createSelector(
+      (state: any) => state?.category,
+      (category) => category
+    )
+  );
+
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
+    if (checkDoneAllOption(category)) {
+      dispatch(
+        generatePDF((response) => {
+          if (response.success) {
+            setPathURLDownload(response?.data);
+          }
+        })
+      );
       setRenderPage(true);
     } else router.push("/start-your-will-create");
   }, []);
@@ -69,13 +92,32 @@ function StartYourWill() {
       (startYourWill) => startYourWill
     )
   );
-  console.log(starYourWillData);
-  const category = useSelector(
-    createSelector(
-      (state: any) => state?.category,
-      (category) => category
-    )
-  );
+
+  useEffect(() => {
+    if (percent === 33) {
+      setTimeout(() => {
+        setPercent(percent + 33);
+      }, 200);
+    }
+    if (percent === 66) {
+      setTimeout(() => {
+        setPercent(percent + 34);
+      }, 100);
+    }
+    if (percent === 100) {
+      dispatch(
+        uploadFile(fileUpload, (response) => {
+          if (response.success) {
+            getCategories();
+            dispatch(setUploaded(true));
+            setPdfName("file_upload");
+          }
+          setPercent(0);
+          setUploading(false);
+        })
+      );
+    }
+  }, [percent]);
 
   useEffect(() => {
     setUploading(false);
@@ -117,15 +159,10 @@ function StartYourWill() {
         setUploading(true);
         const formData = new FormData();
         formData.append("file", file);
-        dispatch(
-          uploadFile(formData, (response) => {
-            if (response.success) {
-              getCategories();
-              dispatch(setUploaded(true));
-            }
-            setUploading(false);
-          })
-        );
+        setTimeout(() => {
+          setPercent(percent + 33);
+        }, 400);
+        setFileUpload(formData);
       }
     },
     fileList: [],
@@ -137,14 +174,40 @@ function StartYourWill() {
       removeFileUpload((response) => {
         if (response.success) {
           getCategories();
+          setPercent(0);
         }
       })
     );
   };
 
+  const downloadWillSecurely = () => {
+    downloadRef.current.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  const renderPercentUpload = () => {
+    if (percent === 0) return "";
+    if (percent === 33) return "1/3";
+    if (percent === 66) return "2/3";
+    if (percent === 100) return "3/3";
+  };
+
+  const handleCloseUpload = () => {
+    setUploading(false);
+    setPercent(0);
+    setFileUpload(new FormData());
+    if (!pdfName) {
+      setPdfName("");
+    }
+  };
+
   return renderPage ? (
     <>
       <div className="start-your-will-container lodge-will-banner">
+        <div className="meter animate">
+          <span style={{ width: "50%" }}></span>
+        </div>
         {showModalSuccess && (
           <ModalSuccess
             showModal={showModalSuccess}
@@ -237,7 +300,7 @@ function StartYourWill() {
               </div>
               {!starYourWillData?.downloaded && (
                 <a
-                  href={`${process.env.NEXT_PUBLIC_API_URL}${category?.will_pdf_link}`}
+                  href={`${process.env.NEXT_PUBLIC_API_URL}${pathURLDownload}`}
                 >
                   <CustomButton
                     type="ghost"
@@ -255,9 +318,7 @@ function StartYourWill() {
                     type="ghost"
                     size="large"
                     className="continue-btn"
-                    // onClick={() => {
-                    //   router.push("/lodge-will");
-                    // }}
+                    onClick={downloadWillSecurely}
                   >
                     Upload Will Securely
                   </CustomButton>
@@ -336,7 +397,7 @@ function StartYourWill() {
 
           {starYourWillData?.downloaded && (
             <div className="download upload" style={{ background: "#fff" }}>
-              <Col span={24} className="center">
+              <Col span={24} className="center" ref={downloadRef}>
                 <span>
                   <UploadFile />
                 </span>
@@ -418,28 +479,51 @@ function StartYourWill() {
                       </Row>
                     </div>
                   )}
-              <Spin spinning={uploading}>
-                {uploading && (
-                  <div className="upload-done">
-                    <Row>
-                      <Col className="center">
-                        <Col>
-                          <Uploading />
-                        </Col>
-                        <Col style={{ paddingLeft: 16 }}>
-                          <div className="text-pdf">Uploading...</div>
-                          <div
-                            className="text-upload-day"
-                            style={{ color: " #A0A5BE" }}
-                          >
-                            Storing your will document into our secure cloud
-                          </div>
-                        </Col>
+              {/* <Spin spinning={uploading}> */}
+              {uploading && (
+                <div className="uploading">
+                  <Row>
+                    <Col className="center" span={22}>
+                      <Col>
+                        <Uploading />
                       </Col>
-                    </Row>
-                  </div>
-                )}
-              </Spin>
+                      <Col style={{ paddingLeft: 16 }}>
+                        <div className="text-pdf">
+                          Uploading In Progress...&nbsp;{renderPercentUpload()}
+                        </div>
+                        <div
+                          className="text-upload-day"
+                          style={{ color: " #A0A5BE" }}
+                        >
+                          Storing your will document into our secure cloud
+                        </div>
+                      </Col>
+                    </Col>
+                    <Col span={2} className="item-end">
+                      {percent !== 100 && (
+                        <span
+                          onClick={handleCloseUpload}
+                          className="close-upload "
+                        >
+                          <CloseIconUpload />
+                        </span>
+                      )}
+                    </Col>
+                  </Row>
+
+                  <Row className="mt-8">
+                    <Progress
+                      strokeColor={{
+                        "0%": "#108ee9",
+                        "100%": "#87d068",
+                      }}
+                      showInfo={false}
+                      percent={percent}
+                    />
+                  </Row>
+                </div>
+              )}
+              {/* </Spin> */}
               {!starYourWillData?.makePayment && (
                 <>
                   <div className="make-overlay"></div>

@@ -1,16 +1,15 @@
-import { IData } from '@constant/data.interface';
-import { IconEditMyAccount, LodgeForm } from '@images/index';
-import HeaderDashboard from '@module/MyAccount/HeaderDashboard';
-import ModalUpdateAccount from '@module/MyAccount/ModalUpdateAccount';
-import { CategoryActions, UserActions } from '@redux/actions';
-import { sendOtpProfile, verifyOtpProfile } from '@redux/actions/profile';
-import { Button, Col, Row } from 'antd';
-import ModalOtp from 'components/StartYourWill/Modal/ModalOtp';
-import ModalSignUpEmail from 'components/StartYourWill/Modal/ModalSignUpEmail';
-import ModalSuccess from 'components/StartYourWill/Modal/ModalSuccess';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { IData } from "@constant/data.interface";
+import { IconEditMyAccount, LodgeForm } from "@images/index";
+import HeaderDashboard from "@module/MyAccount/HeaderDashboard";
+import ModalUpdateAccount from "@module/MyAccount/ModalUpdateAccount";
+import { CategoryActions, UserActions } from "@redux/actions";
+import { sendOtpProfile, verifyOtpProfile } from "@redux/actions/profile";
+import { Button, Col, Row } from "antd";
+import ModalOtp from "components/StartYourWill/Modal/ModalOtp";
+import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createSelector } from "reselect";
 
 function MyAccountLayout(props) {
   const categoryData = useSelector(
@@ -23,7 +22,7 @@ function MyAccountLayout(props) {
   );
 
   const updateDataCategory = () => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       dispatch(CategoryActions.getCategoriesData(token));
     }
@@ -38,7 +37,7 @@ function MyAccountLayout(props) {
 
   const onUpdateEmail = (email: string) => {
     setEmail(email);
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       dispatch(
         sendOtpProfile({ email }, (responseOTP) => {
@@ -52,7 +51,7 @@ function MyAccountLayout(props) {
   };
 
   const onUpdatePhone = (phone) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token)
       dispatch(
         UserActions.updateInforUser({ phone }, token, (res) => {
@@ -85,13 +84,13 @@ function MyAccountLayout(props) {
   return (
     <>
       <HeaderDashboard />
-      <Row className='my-account' justify='center'>
+      <Row className="my-account" justify="center">
         {showModalUpdateEmail && (
           <ModalUpdateAccount
             showModal={showModalUpdateEmail}
             setShowModal={setShowModalUpdateEmail}
             onUpdate={onUpdateEmail}
-            type={'email'}
+            type={"email"}
           />
         )}
         {showModalUpdatePhone && (
@@ -99,7 +98,7 @@ function MyAccountLayout(props) {
             showModal={showModalUpdatePhone}
             setShowModal={setShowModalUpdatePhone}
             onUpdate={onUpdatePhone}
-            type={'phone'}
+            type={"phone"}
           />
         )}
         {showModalOtp && (
@@ -114,18 +113,18 @@ function MyAccountLayout(props) {
           <ModalSuccess
             showModal={showModalSuccess}
             setShowModal={setShowModalSuccess}
-            title='Account Created'
-            textNote='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun.'
+            title="Account Created"
+            textNote="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun."
             handleReturn={handleReturnSuccess}
           />
         )}
         <Col lg={12} md={14} sm={20} xs={22}>
-          <h1>Hello, {categoryData?.full_legal_name.split(' ')[0]}</h1>
-          <Row className='content'>
-            <Col span={24} style={{ marginBottom: '24px' }}>
-              <Row align='middle'>
+          <h1>Hello, {categoryData?.full_legal_name.split(" ")[0]}</h1>
+          <Row className="content">
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Row align="middle">
                 <LodgeForm />
-                <span className='jnsadj'>Account Settings</span>
+                <span className="jnsadj">Account Settings</span>
               </Row>
             </Col>
             <Col span={24}>
@@ -135,12 +134,12 @@ function MyAccountLayout(props) {
                 your assets according to your wishes.
               </h3>
             </Col>
-            <Col span={24} className='infor-account'>
+            <Col span={24} className="infor-account">
               <h4>Your Full Legal Name</h4>
               <h5>{categoryData?.full_legal_name}</h5>
             </Col>
-            <Col span={24} className='infor-account'>
-              <Row justify='space-between' align='middle'>
+            <Col span={24} className="infor-account">
+              <Row justify="space-between" align="middle">
                 <Col>
                   <h4>Email</h4>
                   <h5>{email}</h5>
@@ -153,8 +152,8 @@ function MyAccountLayout(props) {
                 </Col>
               </Row>
             </Col>
-            <Col span={24} className='infor-account'>
-              <Row justify='space-between' align='middle'>
+            <Col span={24} className="infor-account">
+              <Row justify="space-between" align="middle">
                 <Col>
                   <h4>Phone Number</h4>
                   <h5>{phone}</h5>
