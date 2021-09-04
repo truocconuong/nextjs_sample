@@ -279,7 +279,7 @@ const categoryReducer = (state = initState, action: any) => {
       }
       return {
         ...state,
-        email: email,
+        email_personal: email,
         full_legal_name: legalName,
         nric: passport,
         postal_code: address,
