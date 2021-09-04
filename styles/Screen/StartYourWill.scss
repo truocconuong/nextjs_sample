@@ -265,6 +265,7 @@
       position: relative;
 
       .text-upload-day {
+        word-break: break-word;
         font-size: 16px;
         font-family: Graphik;
         color: #001064;
@@ -289,6 +290,30 @@
         background: #e9faf4;
         border-radius: 7px;
         padding: 30px 24px;
+      }
+
+      .uploading {
+        @extend .upload-done;
+        background: #ffffff;
+        border: 2px solid #e7e8f1;
+        .ant-progress-success-bg,
+        .ant-progress-bg {
+          background-image: linear-gradient(
+            125deg,
+            #00b67a 25%,
+            #00d38e 25%,
+            #00d38e 50%,
+            #00b67a 50%,
+            #00b67a 75%,
+            #00d38e 75%,
+            #00d38e 100%
+          ) !important;
+          background-size: 14.65px 20.92px;
+        }
+      }
+
+      .close-upload {
+        cursor: pointer;
       }
 
       .remove-col {

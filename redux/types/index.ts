@@ -25,6 +25,8 @@ export const StartYourWill = {
   SET_UPLOADED: "SET_UPLOADED",
   UPLOAD_FILE: "UPLOAD_FILE",
   REMOVE_FILE_UPLOAD: "REMOVE_FILE_UPLOAD",
+  GENERATE_PDF: "GENERATE_PDF",
+  SET_PATH_DOWNLOAD: "SET_PATH_DOWNLOAD",
 };
 
 export const PersonalEstatesListingTypes = {

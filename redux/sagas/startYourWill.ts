@@ -2,6 +2,7 @@ import { takeLatest, call, put } from "redux-saga/effects";
 import { StartYourWill } from "../types";
 import Request from "../../app/api/RestClient";
 import { NotificationWarning } from "@generals/notifications";
+import { setPathDownload } from "@redux/actions/startYourWill";
 
 function* signUpEmail(action: any) {
   const { data, callback } = action?.payload;
@@ -12,10 +13,10 @@ function* signUpEmail(action: any) {
         data
       )
     );
-    callback && callback({ success: true, data: res?.data });
+    callback && callback({ success: true, data: res[0]?.data });
   } catch (error) {
     callback && callback({ success: false, data: error });
-    NotificationWarning(error[2]);
+    NotificationWarning(error?.message || "bad request");
     console.log("userSingUpError: ", error);
   }
 }
@@ -31,8 +32,9 @@ function* sendOTP(action: any) {
     );
     callback && callback({ success: true, data: res?.data });
   } catch (error) {
+    const { message } = error;
     callback && callback({ success: false, data: error });
-    NotificationWarning(error[2]);
+    NotificationWarning(message || "bad request");
     console.log("sendOTPError: ", error);
   }
 }
@@ -50,7 +52,7 @@ function* verifyOTP(action: any) {
   } catch (error) {
     callback && callback({ success: false, data: error });
     console.log("verifyOTPError: ", error);
-    NotificationWarning(error[2]);
+    NotificationWarning(error?.message || "bad request");
   }
 }
 
@@ -66,7 +68,7 @@ function* getPromoCode(action: any) {
   } catch (error) {
     callback && callback({ success: false, data: error });
     console.log("getPromo: ", error);
-    NotificationWarning(error[2]);
+    NotificationWarning(error?.message || "bad request");
   }
 }
 
@@ -85,7 +87,7 @@ function* subscriptions(action: any) {
   } catch (error) {
     callback && callback({ success: false, data: error });
     console.log("subscriptionsError: ", error);
-    NotificationWarning(error[2]);
+    NotificationWarning(error?.message || "bad request");
   }
 }
 
@@ -104,7 +106,7 @@ function* uploadFile(action: any) {
   } catch (error) {
     callback && callback({ success: false, data: error });
     console.log("uploadFileError: ", error);
-    NotificationWarning(error[2]);
+    NotificationWarning(error?.message || "bad request");
   }
 }
 
@@ -123,7 +125,29 @@ function* removeFileUpload(action: any) {
   } catch (error) {
     callback && callback({ success: false });
     console.log("uploadFileUploadError: ", error);
-    NotificationWarning(error[2]);
+    NotificationWarning(error?.message || "bad request");
+  }
+}
+
+function* generatePDF(action: any) {
+  const { callback } = action?.payload;
+  const token = localStorage.getItem("accessToken");
+  try {
+    const res = yield call(() =>
+      Request.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/generate-pdf`,
+        null,
+        token
+      )
+    );
+    if (res[0]?.data) {
+      yield put(setPathDownload(res[0]?.data));
+    }
+    callback && callback({ success: true, data: res[0]?.data });
+  } catch (error) {
+    callback && callback({ success: false, data: error });
+    console.log("generateERROR: ", error);
+    NotificationWarning(error?.message || "bad request");
   }
 }
 
@@ -135,4 +159,5 @@ export default function* startYourWillSaga() {
   yield takeLatest(StartYourWill.SUBSCRIPTIONS, subscriptions);
   yield takeLatest(StartYourWill.UPLOAD_FILE, uploadFile);
   yield takeLatest(StartYourWill.REMOVE_FILE_UPLOAD, removeFileUpload);
+  yield takeLatest(StartYourWill.GENERATE_PDF, generatePDF);
 }

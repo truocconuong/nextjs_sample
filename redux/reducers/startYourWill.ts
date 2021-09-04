@@ -5,6 +5,7 @@ const initState = {
   makePayment: false,
   downloaded: false,
   uploaded: false,
+  pathDownload: "",
 };
 
 const startYourWillReducer = (state = initState, action) => {
@@ -27,6 +28,11 @@ const startYourWillReducer = (state = initState, action) => {
     case StartYourWill.SET_UPLOADED: {
       const { uploaded } = action?.payload;
       const newState = { ...state, uploaded };
+      return newState;
+    }
+    case StartYourWill.SET_PATH_DOWNLOAD: {
+      const { pathDownload } = action?.payload;
+      const newState = { ...state, pathDownload };
       return newState;
     }
     default: {

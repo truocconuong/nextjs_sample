@@ -4,6 +4,8 @@ import { createSelector } from "reselect";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useRouter } from "next/router";
 import { Row, Spin } from "antd";
+import { checkDoneAllOption } from "@util/index";
+import AuthHoc from "../AuthHoc";
 
 function PreviewPDF() {
   const [numPages, setNumPages] = useState(null);
@@ -18,12 +20,18 @@ function PreviewPDF() {
     )
   );
 
+  const starYourWillData = useSelector(
+    createSelector(
+      (state: any) => state?.startYourWill,
+      (startYourWill) => startYourWill
+    )
+  );
+
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
+    if (checkDoneAllOption(category)) {
       setRenderPage(true);
     } else router.push("/start-your-will-create");
   }, []);
@@ -35,7 +43,7 @@ function PreviewPDF() {
     <div className="preview-pdf">
       <Document
         file={{
-          url: `${process.env.NEXT_PUBLIC_API_URL}${category?.will_pdf_link}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}${starYourWillData?.pathDownload}`,
         }}
         options={{ workerSrc: "/pdf.worker.js" }}
         onLoadSuccess={onDocumentLoadSuccess}
@@ -44,22 +52,6 @@ function PreviewPDF() {
           <Page key={`page_${index + 1}`} pageNumber={index + 1} />
         ))}
       </Document>
-
-      {/* <object
-        data={`${process.env.NEXT_PUBLIC_API_URL}${category?.will_pdf_link}`}
-        type="application/pdf"
-        width="100%"
-        height="100%"
-      >
-        <p>
-          Your web browser doesn't have a PDF plugin.
-          <a
-            href={`${process.env.NEXT_PUBLIC_API_URL}${category?.will_pdf_link}`}
-          >
-            click here to download the PDF file.
-          </a>
-        </p>
-      </object> */}
     </div>
   ) : (
     <Row
@@ -72,4 +64,4 @@ function PreviewPDF() {
   );
 }
 
-export default PreviewPDF;
+export default AuthHoc(PreviewPDF);

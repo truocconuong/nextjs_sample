@@ -145,6 +145,7 @@
     justify-content: center;
     text-align: center;
     color: #001064;
+    cursor: pointer;
   }
   .email-otp {
     font-family: Graphik;
@@ -164,6 +165,8 @@
 }
 .background {
   .ant-modal-content {
-    // background: url("/images/background-success.svg");
+    background-image: url(/images/bg-complete.svg);
+    background-repeat: no-repeat;
+    background-size: 112vmin 72%;
   }
 }

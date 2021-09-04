@@ -12,25 +12,30 @@ import ModalSuccess from "components/StartYourWill/Modal/ModalSuccess";
 import YourPersonalWill from "components/StartYourWill/YourPersonalWill";
 import AuthHoc from "../AuthHoc";
 import { sendOTP, signUpEmail, verifyOTP } from "@redux/actions/startYourWill";
+import { checkDoneAllOption } from "@util/index";
 
 function StartYourWill() {
   const [showModalSignUpEmail, setShowModalSignUpEmail] = useState(false);
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [showModalOtp, setShowModalOtp] = useState(false);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [donePersonalParticulars, setDonePersonalParticulars] = useState(false);
   const [doneExecutor, setDoneExecutor] = useState(false);
   const [doneBenefit, setDoneBenefit] = useState(false);
   const [doneEstateDistribute, setDoneEstateDistribute] = useState(false);
+  const [doneCreateAcc, setDoneCreateAcc] = useState(false);
   const [renderPage, setRenderPage] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
+    if (checkDoneAllOption(category)) {
       router.push("/start-your-will");
+      return;
+    }
+    if (!name) {
+      router.push("/");
       return;
     }
     setRenderPage(true);
@@ -58,8 +63,13 @@ function StartYourWill() {
   );
 
   useEffect(() => {
+    setEmail(category?.email_personal || "");
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setDoneCreateAcc(true);
+    }
     if (
-      category?.email &&
+      category?.email_personal &&
       category?.full_legal_name &&
       category?.nric &&
       category?.postal_code &&
@@ -162,18 +172,12 @@ function StartYourWill() {
     return "Continue drafting your Will!";
   };
 
-  const onSignUpEmail = () => {
+  const onSignUpEmail = (emailRes) => {
     dispatch(
-      signUpEmail(category, (response) => {
-        if (response.success) {
-          setShowModalSignUpEmail(false);
-          dispatch(
-            sendOTP({ email: category?.email }, (responseOTP) => {
-              if (responseOTP.success) {
-                setShowModalOtp(true);
-              }
-            })
-          );
+      sendOTP({ email: emailRes }, (responseOTP) => {
+        if (responseOTP.success) {
+          setEmail(emailRes);
+          setShowModalOtp(true);
         }
       })
     );
@@ -182,12 +186,25 @@ function StartYourWill() {
   const changeOtp = (otp) => {
     if (otp.length === 4) {
       setTimeout(() => {
+        // dispatch(
+        //   verifyOTP({ email: category?.email_personal, otp }, (response) => {
+        //     if (response.success) {
+        //       const token = response?.data?.access_token;
+        //       localStorage.setItem("accessToken", token);
+        //       setShowModalOtp(false);
+        //       setDoneCreateAcc(true);
+        //       setShowModalSuccess(true);
+        //     }
+        //   })
+        // );
+
         dispatch(
-          verifyOTP({ email: category?.email, otp }, (response) => {
+          signUpEmail({ email, otp, full_legal_name: name }, (response) => {
             if (response.success) {
               const token = response?.data?.access_token;
               localStorage.setItem("accessToken", token);
               setShowModalOtp(false);
+              setDoneCreateAcc(true);
               setShowModalSuccess(true);
             }
           })
@@ -197,7 +214,20 @@ function StartYourWill() {
   };
 
   const handleReturnDashboard = () => {
-    router.push("/start-your-will");
+    if (
+      donePersonalParticulars &&
+      doneExecutor &&
+      doneBenefit &&
+      doneEstateDistribute
+    ) {
+      router.push("/start-your-will");
+    }
+    setShowModalSuccess(false);
+  };
+
+  const handleChangeEmail = () => {
+    setShowModalOtp(false);
+    setShowModalSignUpEmail(true);
   };
 
   return renderPage ? (
@@ -208,15 +238,16 @@ function StartYourWill() {
           setShowModal={setShowModalSignUpEmail}
           name={name}
           onSignUpEmail={onSignUpEmail}
-          email={category?.email || ""}
+          email={email}
         />
       )}
       {showModalOtp && (
         <ModalOtp
           showModal={showModalOtp}
           setShowModal={setShowModalOtp}
-          email={category?.email || ""}
+          email={email}
           changeOtp={changeOtp}
+          onChangeEmail={handleChangeEmail}
         />
       )}
       {showModalSuccess && (
@@ -228,26 +259,26 @@ function StartYourWill() {
           handleReturn={handleReturnDashboard}
         />
       )}
-      <Row className="create-acc">
-        <Col
-          xs={15}
-          sm={15}
-          md={18}
-          lg={18}
-          xl={18}
-          xxl={18}
-          className="center"
-        >
-          <span>
-            {width > 768 ? <HandIcon /> : "✋"}
-            <span className="text ml-8">
-              Don’t lose your information{" "}
-              {width > 768 && ", let’s create your iWills account"}
+      {!doneCreateAcc && (
+        <Row className="create-acc">
+          <Col
+            xs={15}
+            sm={15}
+            md={18}
+            lg={18}
+            xl={18}
+            xxl={18}
+            className="center"
+          >
+            <span>
+              {width > 768 ? <HandIcon /> : "✋"}
+              <span className="text ml-8">
+                Don’t lose your information{" "}
+                {width > 768 && ", let’s create your iWills account"}
+              </span>
             </span>
-          </span>
-        </Col>
-        <Col xs={9} sm={9} md={6} lg={6} xl={6} xxl={6}>
-          {checkDisplayCreate() && (
+          </Col>
+          <Col xs={9} sm={9} md={6} lg={6} xl={6} xxl={6}>
             <span
               className="text right"
               style={{ cursor: "pointer" }}
@@ -255,9 +286,9 @@ function StartYourWill() {
             >
               Create Account
             </span>
-          )}
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
 
       <Row className="keep-going">
         <Col

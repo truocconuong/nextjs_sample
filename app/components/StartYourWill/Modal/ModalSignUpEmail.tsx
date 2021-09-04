@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "antd";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
 import { SignUpEmail, SignUpEmailMobile } from "../../../../public/images";
 import InputField from "@generals/InputField";
+import { isEmail } from "@util/index";
 
 function ModalSignUpEmail(props) {
-  const { showModal, setShowModal, onSignUpEmail, name, email } = props;
-  // const [email, setEmail] = useState("");
+  const { showModal, setShowModal, onSignUpEmail, name, emailProps } = props;
+  const [email, setEmail] = useState("");
 
   const handleSignUp = () => {
-    onSignUpEmail();
+    onSignUpEmail(email);
     setShowModal(false);
   };
+
+  useEffect(() => {
+    setEmail(emailProps);
+  }, []);
 
   const width = useSelector(
     createSelector(
@@ -46,19 +51,21 @@ function ModalSignUpEmail(props) {
         <div className="mt-24 mb-40">
           <InputField
             inputProps={{
-              placeholder: "Your preferred name",
+              placeholder: "e.g. user@gmail.com",
               value: email,
-              disabled: true,
-              // onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-              //   setEmail(e.target.value),
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value),
             }}
+            isError={email && !isEmail(email)}
+            displayErrorText={email && !isEmail(email)}
+            errorTextStr="Email is invalid."
           />
         </div>
         <div className="item-center mt-24 mb-8">
           <Button
             className="continue-btn"
             onClick={handleSignUp}
-            disabled={email ? false : true}
+            disabled={(email && !isEmail(email)) || !email ? true : false}
           >
             Sign Up
           </Button>

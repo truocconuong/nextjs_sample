@@ -76,3 +76,17 @@ export const removeFileUpload = (callback) => {
     payload: { callback },
   };
 };
+
+export const generatePDF = (callback) => {
+  return {
+    type: StartYourWill.GENERATE_PDF,
+    payload: { callback },
+  };
+};
+
+export const setPathDownload = (pathDownload) => {
+  return {
+    type: StartYourWill.SET_PATH_DOWNLOAD,
+    payload: { pathDownload },
+  };
+};
