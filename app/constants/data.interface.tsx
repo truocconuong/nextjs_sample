@@ -112,7 +112,7 @@ export interface IValuable {
 }
 
 export interface IPersonalInformation {
-  email: string;
+  email_personal: string;
   full_legal_name: string;
   nric: string;
   postal_code: string;
@@ -148,6 +148,7 @@ export interface IData {
   business_interests: IBusinessInterest[];
   valuables: IValuable[];
   will_pdf_link?: string;
+  email_personal?: string;
 }
 
 export interface IMasterdata {
