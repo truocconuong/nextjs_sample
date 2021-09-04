@@ -12,6 +12,10 @@ import { postContactForm } from '@redux/actions/contact';
 import { createSelector } from 'reselect';
 import { IMasterdata } from '@constant/data.interface';
 import { MasterDataActions } from '@redux/actions';
+import {
+  NotificationSuccess,
+  NotificationWarning,
+} from '@generals/notifications';
 
 const { Option } = Select;
 
@@ -43,7 +47,13 @@ function ContactLayout(props) {
       reason: reason,
       message: yourMessage,
     };
-    dispatch(postContactForm({ data }));
+    dispatch(
+      postContactForm({ data }, (res) => {
+        if (typeof res !== 'string') {
+          NotificationSuccess('Success');
+        } else NotificationWarning(res);
+      })
+    );
   };
 
   const handleSetReason = (value) => {
