@@ -92,7 +92,7 @@ const PersonalInformation = () => {
   useEffect(() => {
     const initialDataForm: DataFormInput = {
       legalName: categoryData?.full_legal_name || "",
-      email: categoryData?.email || "",
+      email: categoryData?.email_personal || "",
       passport: categoryData?.nric || "",
       address: categoryData?.postal_code || "",
       addressLine1: categoryData?.address_line_1 || "",
@@ -142,7 +142,7 @@ const PersonalInformation = () => {
   const toDataApiUpdatePersonalInformation = (data: DataFormInput) => {
     return {
       full_legal_name: data.legalName,
-      email: data.email,
+      email_personal: data.email,
       postal_code: data.address,
       address_line_1: data.addressLine1,
       address_line_2: data.addressLine2,
