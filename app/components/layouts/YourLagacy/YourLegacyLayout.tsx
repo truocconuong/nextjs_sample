@@ -153,6 +153,7 @@ function YourLegacyLayout(props) {
             <Row className='lodge-btn'>
               <Col>
                 <a
+                  target='_blank'
                   href={`${process.env.NEXT_PUBLIC_API_URL}/${dataProfile?.will_pdf_link}`}
                 >
                   <CustomButton type='ghost' className='btn-login'>

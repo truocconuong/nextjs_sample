@@ -11,8 +11,8 @@ function* postContactForm(action: any) {
         );
         callback && callback(res[0]?.data);
     } catch (error) {
-        callback && callback(error?.response?.data);
-        console.log("getMasterdata._error: ", error?.response?.data);
+        callback && callback(error[1]?.response?.data?.message?.[0]);
+        console.log("postContact._error: ", error[1]?.response?.data?.message);
     }
 }
 
