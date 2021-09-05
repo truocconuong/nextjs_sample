@@ -155,7 +155,6 @@ function YourLegacyLayout(props) {
                 <a
                   target='_blank'
                   href={`${process.env.NEXT_PUBLIC_API_URL}/${dataProfile?.will_pdf_link}`}
-                  target="_blank"
                 >
                   <CustomButton type='ghost' className='btn-login'>
                     Download Will

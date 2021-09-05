@@ -29,9 +29,11 @@ function LodgeWillLayout(props) {
             </h3>
             <Row className='lodge-btn'>
               <Col>
-                <CustomButton type='ghost' className='btn-login'>
-                  Login Wills Registry
-                </CustomButton>
+                <a href="https://google.com" >
+                  <CustomButton type='ghost' className='btn-login'>
+                    Login Wills Registry
+                  </CustomButton>
+                </a>
               </Col>
               <Col>
                 <CustomButton

@@ -246,9 +246,9 @@ function StartYourWill() {
             textNote='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun.'
           />
         )}
-        {starYourWillData?.uploaded ? (
-          <div className='lodge-will-banner'>
-            <Row align='middle' justify='center' className='lodge-banner'>
+        {starYourWillData?.uploaded ?(
+          <div className="lodge-will-banner">
+            <Row align="middle" justify="center" className="lodge-banner">
               <Col
                 xl={{ span: 7, order: 1 }}
                 sm={{ span: 24, order: 2 }}
@@ -267,9 +267,11 @@ function StartYourWill() {
                 </h3>
                 <Row className='lodge-btn'>
                   <Col>
-                    <CustomButton type='ghost' className='btn-login'>
-                      Login Wills Registry
-                    </CustomButton>
+                    <a href="https://google.com" target="_blank">
+                      <CustomButton type="ghost" className="btn-login">
+                        Login Wills Registry
+                      </CustomButton>
+                    </a>
                   </Col>
                   <Col>
                     <CustomButton
