@@ -81,3 +81,10 @@ export const setPercents = (data: ISetPercent[], token: string, callback) => {
     },
   };
 };
+
+export const updateLodgeWill = (data: { will_registry: string}, token: string, callback?: any) => {
+  return {
+    type: UserTypes.UPDATE_LODGE_WILL,
+    payload: { data, token, callback },
+  };
+};
