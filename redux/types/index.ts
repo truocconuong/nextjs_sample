@@ -97,6 +97,7 @@ export const UserTypes = {
   UPDATE_INFOR_USER: "UPDATE_INFOR_USER",
   SIGN_IN: "SIGN_IN",
   VERIFY_USER_OTP: "VERIFY_USER_OTP",
+  UPDATE_LODGE_WILL: "UPDATE_LODGE_WILL",
 };
 
 export const ContactTypes = {

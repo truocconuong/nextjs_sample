@@ -41,6 +41,8 @@ import { getCategoriesData } from '@redux/actions/category';
 import CustomCheckbox from '@generals/CustomCheckbox';
 import _ from 'lodash';
 import { checkDoneAllOption } from '@util/index';
+import InputField from "@generals/InputField";
+import { UserActions } from "@redux/actions";
 
 const { Dragger } = Upload;
 
@@ -55,6 +57,12 @@ function StartYourWill() {
   const [pathURLDownload, setPathURLDownload] = useState('');
 
   const downloadRef = useRef(null);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isLoadingConfirmWill, setIsLoadingConfirmWill] = useState<boolean>(false);
+  const [isErrorVerify, setIsErrorVerify] = useState<boolean>(false);
+  const [isVerifySuccessfully, setIsVerifySuccessfully] = useState<boolean>(false);
+  const [errorConfirmString, setErrorConfirmString] = useState('');
+
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -201,6 +209,28 @@ function StartYourWill() {
       setPdfName('');
     }
   };
+  const handleConfirmWill = () => {
+    setIsLoadingConfirmWill(true);
+    const token = localStorage.getItem("accessToken") || "";
+    if (!token) {
+      return;
+    }
+    dispatch(UserActions.updateLodgeWill({ will_registry: inputValue }, token, (res) => {
+      if (res !== true) {
+        setErrorConfirmString(res);
+        updateMessage(false);
+
+      } else {
+        updateMessage(true);
+      }
+      setIsLoadingConfirmWill(false);
+    }))
+  }
+
+  const updateMessage = (isSuccess: boolean) => {
+    setIsErrorVerify(!isSuccess);
+    setIsVerifySuccessfully(isSuccess);
+  }
 
   return renderPage ? (
     <>
@@ -216,9 +246,9 @@ function StartYourWill() {
             textNote='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun.'
           />
         )}
-        {starYourWillData?.uploaded ? (
-          <div className='lodge-will-banner'>
-            <Row align='middle' justify='center' className='lodge-banner'>
+        {starYourWillData?.uploaded ?(
+          <div className="lodge-will-banner">
+            <Row align="middle" justify="center" className="lodge-banner">
               <Col
                 xl={{ span: 7, order: 1 }}
                 sm={{ span: 24, order: 2 }}
@@ -237,9 +267,11 @@ function StartYourWill() {
                 </h3>
                 <Row className='lodge-btn'>
                   <Col>
-                    <CustomButton type='ghost' className='btn-login'>
-                      Login Wills Registry
-                    </CustomButton>
+                    <a href="https://google.com" target="_blank">
+                      <CustomButton type="ghost" className="btn-login">
+                        Login Wills Registry
+                      </CustomButton>
+                    </a>
                   </Col>
                   <Col>
                     <CustomButton
@@ -649,14 +681,14 @@ function StartYourWill() {
                     className='item-end center'
                   >
                     {width > 600 && (
-                      <Button
-                        className='complete-this'
-                        onClick={() =>
-                          window.open('https://www.singpass.gov.sg/', '_blank')
-                        }
-                      >
-                        Complete This
-                      </Button>
+                      <a href="https://google.com" target="_blank">
+                        <Button
+                          className="complete-this"
+                        // onClick={onEditPersonalParticular}
+                        >
+                          Complete This
+                        </Button>
+                      </a>
                     )}
                   </Col>
                 </Row>
@@ -667,11 +699,25 @@ function StartYourWill() {
                   </h3>
                   <Row justify='space-between'>
                     <Col xs={24} md={16} lg={18}>
-                      <Input placeholder='000-0000-000' />
+                      <InputField
+                        inputProps={{
+                          placeholder: "0000-0000-0000",
+                          value: inputValue,
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                            setInputValue(e?.target?.value),
+                        }}
+                        isError={isErrorVerify}
+                        errorTextStr={errorConfirmString}
+                        displayErrorText={isErrorVerify}
+                        wrapperClassName="wrapper-class"
+                        displaySupportText={isVerifySuccessfully}
+                        supportText="Verify Will Successfully!"
+                      />
                     </Col>
                     <Col className='btn-lodge-confirm' md={{ offset: '2' }}>
                       <CustomButton
-                      // onClick={handleCreateYourWill}
+                        onClick={handleConfirmWill}
+                        loading={isLoadingConfirmWill}
                       >
                         Confirm
                       </CustomButton>

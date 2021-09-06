@@ -139,7 +139,6 @@ function* signIn(action: any) {
 }
 
 function* verifyOtp(action: any) {
-  console.log("call 1 lan")
   const { callback, data } = action?.payload;
   try {
     const res = yield call(() =>
@@ -148,11 +147,27 @@ function* verifyOtp(action: any) {
         data
       )
     );
-    console.log("call callback")
     callback && callback(res[0]?.data);
   } catch (error) {
     callback && callback(error?.response?.data);
     console.log("user.error: ", error?.response?.data);
+  }
+}
+
+function* updateLodgeWill(action: any) {
+  const { callback, data, token } = action?.payload;
+  try {
+    const res = yield call(() =>
+      Request.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
+        data,
+        token
+      )
+    );
+    callback && callback(res[0]?.data);
+  } catch (error) {
+    callback && callback(error && error[1]?.response?.data?.message && error[1]?.response?.data?.message[0]);
+    console.log("user.error: ", error);
   }
 }
 
@@ -168,6 +183,7 @@ export default function* userSaga() {
   yield takeLatest(UserTypes.UPDATE_INFOR_USER, updateInforUser);
   yield takeLatest(UserTypes.SIGN_IN, signIn);
   yield takeLatest(UserTypes.VERIFY_USER_OTP, verifyOtp);
+  yield takeLatest(UserTypes.UPDATE_LODGE_WILL, updateLodgeWill);
 
 }
 

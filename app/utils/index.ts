@@ -58,3 +58,8 @@ export const checkDoneAllOption = (category) => {
   }
   return check1 && check2 && check3 && check4 && check5;
 };
+
+export function isValidPhoneNumber(phone: string) {
+  const regex = /\+65[6|8|9]\d{7}/;
+  return regex.test(String(phone).toLowerCase());
+}

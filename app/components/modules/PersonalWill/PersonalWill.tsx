@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Input, Row } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import {
@@ -16,10 +16,18 @@ import CustomButton from 'generals/Button';
 import CustomCheckbox from 'generals/CustomCheckbox';
 import ModalSuccess from 'components/StartYourWill/Modal/ModalSuccess';
 import YourPersonalWill from 'components/StartYourWill/YourPersonalWill';
+import InputField from '@generals/InputField';
+import { UserActions } from '@redux/actions';
 
 function PersonalWill() {
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [isUpload, setIsUpload] = useState(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isLoadingConfirmWill, setIsLoadingConfirmWill] = useState<boolean>(false);
+  const [isErrorVerify, setIsErrorVerify] = useState<boolean>(false);
+  const [isVerifySuccessfully, setIsVerifySuccessfully] = useState<boolean>(false);
+  const [errorConfirmString, setErrorConfirmString] = useState('');
+  const dispatch = useDispatch();
 
   const [lodgeWillCheckbox, setLodgeWillCheckbox] = useState(false);
 
@@ -33,6 +41,29 @@ function PersonalWill() {
   const handleDownloadWill = () => {
     setIsUpload(true);
   };
+
+  const handleConfirmWill = () => {
+    setIsLoadingConfirmWill(true);
+    const token = localStorage.getItem("accessToken") || "";
+    if (!token) {
+      return;
+    }
+    dispatch(UserActions.updateLodgeWill({ will_registry: inputValue }, token, (res) => {
+      if (res !== true) {
+        setErrorConfirmString(res);
+        updateMessage(false);
+
+      } else {
+        updateMessage(true);
+      }
+      setIsLoadingConfirmWill(false);
+    }))
+  }
+
+  const updateMessage = (isSuccess: boolean) => {
+    setIsErrorVerify(!isSuccess);
+    setIsVerifySuccessfully(isSuccess);
+  }
 
   return (
     <>
@@ -261,12 +292,14 @@ function PersonalWill() {
                 className='item-end center'
               >
                 {width > 600 && (
-                  <Button
-                    className='complete-this'
+                  <a href="https://google.com" target="_blank">
+                    <Button
+                      className='complete-this'
                     // onClick={onEditPersonalParticular}
-                  >
-                    Complete This
-                  </Button>
+                    >
+                      Complete This
+                    </Button>
+                  </a>
                 )}
               </Col>
             </Row>
@@ -277,11 +310,25 @@ function PersonalWill() {
               </h3>
               <Row justify='space-between'>
                 <Col xs={24} md={16} lg={18}>
-                  <Input placeholder='000-0000-000' />
+                  <InputField
+                    inputProps={{
+                      placeholder: "0000-0000-0000",
+                      value: inputValue,
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                        setInputValue(e?.target?.value),
+                    }}
+                    isError={isErrorVerify}
+                    errorTextStr={errorConfirmString}
+                    displayErrorText={isErrorVerify}
+                    wrapperClassName="wrapper-class"
+                    displaySupportText={isVerifySuccessfully}
+                    supportText="Verify Will Successfully!"
+                  />
                 </Col>
                 <Col className='btn-lodge-confirm' md={{ offset: '2' }}>
                   <CustomButton
-                  // onClick={handleCreateYourWill}
+                    onClick={handleConfirmWill}
+                    loading={isLoadingConfirmWill}
                   >
                     Confirm
                   </CustomButton>
