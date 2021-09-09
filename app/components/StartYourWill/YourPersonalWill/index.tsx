@@ -55,12 +55,18 @@ function YourPersonalWill() {
     }
   }, []);
 
-  const name = useSelector(
+  const starYourWillData = useSelector(
     createSelector(
       (state: any) => state?.startYourWill,
-      (startYourWill) => startYourWill?.name
+      (startYourWill) => startYourWill
     )
   );
+
+  useEffect(() => {
+    if (starYourWillData?.doneCreateAcc) {
+      setDoneCreateAcc(true);
+    }
+  }, [starYourWillData?.doneCreateAcc]);
 
   useEffect(() => {
     setEmail(category?.email_personal || "");
@@ -121,6 +127,7 @@ function YourPersonalWill() {
     dispatch(
       sendOTP({ email: emailRes }, (responseOTP) => {
         if (responseOTP.success) {
+          setShowModalSignUpEmail(false);
           setEmail(emailRes);
           setShowModalOtp(true);
         }
@@ -132,15 +139,18 @@ function YourPersonalWill() {
     if (otp.length === 4) {
       setTimeout(() => {
         dispatch(
-          signUpEmail({ email, otp, full_legal_name: name }, (response) => {
-            if (response.success) {
-              const token = response?.data?.access_token;
-              localStorage.setItem("accessToken", token);
-              setShowModalOtp(false);
-              setDoneCreateAcc(true);
-              setShowModalSuccess(true);
+          signUpEmail(
+            { email, otp, full_legal_name: starYourWillData?.name },
+            (response) => {
+              if (response.success) {
+                const token = response?.data?.access_token;
+                localStorage.setItem("accessToken", token);
+                setShowModalOtp(false);
+                setDoneCreateAcc(true);
+                setShowModalSuccess(true);
+              }
             }
-          })
+          )
         );
       }, 1000);
     }
@@ -198,7 +208,7 @@ function YourPersonalWill() {
         <ModalSignUpEmail
           showModal={showModalSignUpEmail}
           setShowModal={setShowModalSignUpEmail}
-          name={name}
+          name={starYourWillData?.name}
           onSignUpEmail={onSignUpEmail}
           emailProps={email}
         />

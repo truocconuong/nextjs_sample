@@ -90,3 +90,10 @@ export const setPathDownload = (pathDownload) => {
     payload: { pathDownload },
   };
 };
+
+export const setDoneCreateAcc = (doneCreateAcc) => {
+  return {
+    type: StartYourWill.SET_DONE_CREATE_ACC,
+    payload: { doneCreateAcc },
+  };
+};

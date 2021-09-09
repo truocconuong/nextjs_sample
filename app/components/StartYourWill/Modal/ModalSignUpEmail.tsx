@@ -13,7 +13,7 @@ function ModalSignUpEmail(props) {
 
   const handleSignUp = () => {
     onSignUpEmail(email);
-    setShowModal(false);
+    // setShowModal(false);
   };
 
   useEffect(() => {

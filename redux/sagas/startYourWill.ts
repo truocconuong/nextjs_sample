@@ -2,7 +2,10 @@ import { takeLatest, call, put } from "redux-saga/effects";
 import { StartYourWill } from "../types";
 import Request from "../../app/api/RestClient";
 import { NotificationWarning } from "@generals/notifications";
-import { setPathDownload } from "@redux/actions/startYourWill";
+import {
+  setDoneCreateAcc,
+  setPathDownload,
+} from "@redux/actions/startYourWill";
 
 function* signUpEmail(action: any) {
   const { data, callback } = action?.payload;
@@ -13,6 +16,7 @@ function* signUpEmail(action: any) {
         data
       )
     );
+    yield put(setDoneCreateAcc(true));
     callback && callback({ success: true, data: res[0]?.data });
   } catch (error) {
     callback && callback({ success: false, data: error });
@@ -25,10 +29,10 @@ function* sendOTP(action: any) {
   const { data, callback } = action?.payload;
   try {
     const res = yield call(() =>
-      Request.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/send-otp`,
-        data
-      )
+      Request.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/send-otp`, {
+        ...data,
+        type: "SIGNUP",
+      })
     );
     callback && callback({ success: true, data: res?.data });
   } catch (error) {

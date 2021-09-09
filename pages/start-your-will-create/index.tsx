@@ -34,7 +34,7 @@ function StartYourWill() {
       router.push("/start-your-will");
       return;
     }
-    if (!name) {
+    if (!starYourWillData?.name) {
       router.push("/");
       return;
     }
@@ -48,12 +48,18 @@ function StartYourWill() {
     )
   );
 
-  const name = useSelector(
+  const starYourWillData = useSelector(
     createSelector(
       (state: any) => state?.startYourWill,
-      (startYourWill) => startYourWill?.name
+      (startYourWill) => startYourWill
     )
   );
+
+  useEffect(() => {
+    if (starYourWillData?.doneCreateAcc) {
+      setDoneCreateAcc(true);
+    }
+  }, [starYourWillData?.doneCreateAcc]);
 
   const category = useSelector(
     createSelector(
@@ -157,7 +163,7 @@ function StartYourWill() {
       return "You’re Almost There!";
     }
     if (checkStart()) {
-      return `Hello, ${name}`;
+      return `Hello, ${starYourWillData?.name}`;
     }
     return "Let’s Keep Going!";
   };
@@ -176,6 +182,7 @@ function StartYourWill() {
     dispatch(
       sendOTP({ email: emailRes }, (responseOTP) => {
         if (responseOTP.success) {
+          setShowModalSignUpEmail(false);
           setEmail(emailRes);
           setShowModalOtp(true);
         }
@@ -199,15 +206,18 @@ function StartYourWill() {
         // );
 
         dispatch(
-          signUpEmail({ email, otp, full_legal_name: name }, (response) => {
-            if (response.success) {
-              const token = response?.data?.access_token;
-              localStorage.setItem("accessToken", token);
-              setShowModalOtp(false);
-              setDoneCreateAcc(true);
-              setShowModalSuccess(true);
+          signUpEmail(
+            { email, otp, full_legal_name: starYourWillData?.name },
+            (response) => {
+              if (response.success) {
+                const token = response?.data?.access_token;
+                localStorage.setItem("accessToken", token);
+                setShowModalOtp(false);
+                setDoneCreateAcc(true);
+                setShowModalSuccess(true);
+              }
             }
-          })
+          )
         );
       }, 1000);
     }
@@ -236,7 +246,7 @@ function StartYourWill() {
         <ModalSignUpEmail
           showModal={showModalSignUpEmail}
           setShowModal={setShowModalSignUpEmail}
-          name={name}
+          name={starYourWillData?.name}
           onSignUpEmail={onSignUpEmail}
           emailProps={email}
         />

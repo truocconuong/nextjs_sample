@@ -6,6 +6,7 @@ const initState = {
   downloaded: false,
   uploaded: false,
   pathDownload: "",
+  doneCreateAcc: false,
 };
 
 const startYourWillReducer = (state = initState, action) => {
@@ -33,6 +34,11 @@ const startYourWillReducer = (state = initState, action) => {
     case StartYourWill.SET_PATH_DOWNLOAD: {
       const { pathDownload } = action?.payload;
       const newState = { ...state, pathDownload };
+      return newState;
+    }
+    case StartYourWill.SET_DONE_CREATE_ACC: {
+      const { doneCreateAcc } = action?.payload;
+      const newState = { ...state, doneCreateAcc };
       return newState;
     }
     default: {
