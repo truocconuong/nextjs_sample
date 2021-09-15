@@ -369,7 +369,7 @@ function StartYourWill() {
     <Row
       justify="center"
       align="middle"
-      style={{ height: "50%", width: "100%" }}
+      style={{ height: "80vh", width: "100%" }}
     >
       <Spin size="large" />
     </Row>
