@@ -1,38 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { createSelector } from "reselect";
+import { useDispatch } from "react-redux";
 import { Document, Page, pdfjs } from "react-pdf";
 import { useRouter } from "next/router";
 import { Row, Spin } from "antd";
-import { checkDoneAllOption } from "@util/index";
 import AuthHoc from "../AuthHoc";
+import { generatePDF } from "@redux/actions/startYourWill";
 
 function PreviewPDF() {
   const [numPages, setNumPages] = useState(null);
   const [renderPage, setRenderPage] = useState(false);
+  const [urlPdf, setUrlPdf] = useState("");
 
   const router = useRouter();
-
-  const category = useSelector(
-    createSelector(
-      (state: any) => state?.category,
-      (category) => category
-    )
-  );
-
-  const starYourWillData = useSelector(
-    createSelector(
-      (state: any) => state?.startYourWill,
-      (startYourWill) => startYourWill
-    )
-  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
   useEffect(() => {
-    if (checkDoneAllOption(category)) {
-      setRenderPage(true);
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      dispatch(
+        generatePDF((response) => {
+          if (response.success) {
+            setUrlPdf(response?.data);
+            setRenderPage(true);
+          }
+        })
+      );
     } else router.push("/start-your-will-create");
   }, []);
 
@@ -43,7 +38,7 @@ function PreviewPDF() {
     <div className="preview-pdf">
       <Document
         file={{
-          url: `${process.env.NEXT_PUBLIC_API_URL}${starYourWillData?.pathDownload}`,
+          url: `${process.env.NEXT_PUBLIC_API_URL}${urlPdf}`,
         }}
         options={{ workerSrc: "/pdf.worker.js" }}
         onLoadSuccess={onDocumentLoadSuccess}
@@ -57,7 +52,7 @@ function PreviewPDF() {
     <Row
       justify="center"
       align="middle"
-      style={{ height: "50%", width: "100%" }}
+      style={{ height: "80vh", width: "100%" }}
     >
       <Spin size="large" />
     </Row>
