@@ -25,7 +25,7 @@ export enum MASTERDATA_TYPE {
   TYPE_PROPERTY = "TYPE_PROPERTY",
 }
 
-export const MAX_LENGTH_NAME = 30;
+export const MAX_LENGTH_NAME = 255;
 export const MAX_LENGTH_FILE_NAME = 20;
 
 export enum VALUABLES_TYPE {

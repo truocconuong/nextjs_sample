@@ -16,12 +16,14 @@ import {
   TipIcon,
 } from "@images/index";
 import { CategoryActions, ProgressActions, UserActions } from "@redux/actions";
-import { Slider } from "antd";
+import { Input, Slider } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { useDispatch } from "react-redux";
 import { getAmountPercentCompleted } from "../../../../utils/helpers/Tool.util";
+import InputField from "@generals/InputField";
+import { isNumber } from "@util/index";
 export interface AllocationPersonalInterface {
   id: string;
   type: string;
@@ -33,29 +35,27 @@ export interface AllocationPersonalInterface {
   relationship_id?: string;
 }
 
-const colorsMap = {
-  [PERSONAL_ALLOCATION.FATHER]: "#FFE9BE",
-  [PERSONAL_ALLOCATION.MOTHER]: "#FFD9D1",
-  [PERSONAL_ALLOCATION.SON]: "#BAF0DF",
-  [PERSONAL_ALLOCATION.DAUGHTER]: "#D3EDFF",
-  [PERSONAL_ALLOCATION.OTHERS]: "#BAF0DF",
-  [PERSONAL_ALLOCATION.NEPHEW]: "#D3EDFF",
-  [PERSONAL_ALLOCATION.NIECE]: "#BAF0DF",
-  [PERSONAL_ALLOCATION.GRANDCHILD]: "#FFD9D1",
-};
+const colorsMap = [
+  "#FFE9BE",
+  "#FFD9D1",
+  "#BAF0DF",
+  "#D3EDFF",
+];
 const Allocation = () => {
   const dispatch = useDispatch();
   const maxPercent = 100;
   const [isMobile, setIsMobile] = useState(false);
   const [totalPercent, setTotalPercent] = useState(0);
+  const [currentInputShow, setCurrentInputShow] = useState<string>("");
+  const [isErrorInputPercent, setIsErrorInputPercent] = useState<boolean>(false);
   const toPersonsData = () => {
     const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map(
-      (beneficiary: IBeneficiary) => {
+      (beneficiary: IBeneficiary, index: number) => {
         const relationshipName = masterdata
           .filter((item) => item.value === MASTERDATA_TYPE.RELATIONSHIP)
           .find((item) => item.id === beneficiary.relationship_id)?.name;
         return {
-          color: colorsMap[relationshipName],
+          color: colorsMap[(index % colorsMap.length)],
           id: beneficiary.id,
           name: beneficiary.full_legal_name,
           percent: beneficiary.percent,
@@ -85,12 +85,14 @@ const Allocation = () => {
   useEffect(() => {
     const persons = toPersonsData();
     setPersons(persons);
-    const total = persons.reduce(function (acc, obj) {
-      return acc + obj.percent;
-    }, 0);
+    let total = 0;
+    persons.forEach(person => {
+      total += person.percent;
+    })
     const existedAllocationError = persons.find(
       (item) => item.percent === maxPercent
     );
+    setTotalPercent(total);
     if (total === maxPercent && !existedAllocationError) {
       dispatch(
         ProgressActions.setDisabled(
@@ -110,6 +112,8 @@ const Allocation = () => {
         )
       );
     }
+
+    
   }, [categoryData]);
 
   const masterdata = useSelector(
@@ -216,6 +220,14 @@ const Allocation = () => {
     setNewPercent(dataForm);
   };
 
+  const saveAllocationByInput = (value: string, id: string, isEnter: boolean) => {
+    if(!isEnter || !isNumber(value)){
+      return;
+    }
+    onRangeChange(parseInt(value), id);
+    setCurrentInputShow(null);
+  };
+
   function setNewPercent(dataForm: IBeneficiary[]) {
     categoryData.beneficiaries = dataForm;
     dispatch(
@@ -287,6 +299,43 @@ const Allocation = () => {
     return item?.name?.length || 0;
   }
 
+  const getPresentName = (name: string) => {
+    if(!name){
+      return "";
+    }
+    const value = name.split(" ");
+    if(value?.length === 0){
+      return "";
+    }
+    return value[value.length - 1][0];
+  }
+
+  useEffect(() => {
+    const existedAllocationError = persons.find(
+      (item) => item.percent === maxPercent
+    );
+    if (totalPercent === maxPercent && !existedAllocationError) {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => { }
+        )
+      );
+    } else {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => { }
+        )
+      );
+    }
+    const dataForm = toApiDataForm(persons);
+    setNewPercent(dataForm);
+  }, [totalPercent])
   return (
     <div className="allocation-container">
       <div className="allocation-wrapper">
@@ -341,7 +390,7 @@ const Allocation = () => {
                         <div className={"char-represent"}>
                           {person.percent === maxPercent
                             ? "Error"
-                            : person?.name && person.name[0]}
+                            : person?.name && getPresentName(person.name)}
                         </div>
                       </div>
                     )
@@ -422,7 +471,7 @@ const Allocation = () => {
                       >
                         <div className="text">{person.name[0]}</div>
                       </div>
-                      <div className="base-info" style={{minWidth: `${(maxLengthName() * 10) + 10}px`}}>
+                      <div className="base-info" style={{ minWidth: `${(maxLengthName() * 10) + 10}px` }}>
                         <div className="name">{person.name}</div>
                         <div className="description">{person.type}</div>
                       </div>
@@ -450,7 +499,22 @@ const Allocation = () => {
                         className={
                           "percent " + (person.percent > 0 ? "bold" : "normal")
                         }
-                      >{`${person.percent || 0}%`}</div>
+                        onClick={() => setCurrentInputShow(person.id)}
+                      >
+                        {currentInputShow === person.id ?
+                          <InputField
+                            inputProps={{
+                              defaultValue: person.percent || 0,
+                              onKeyUp: (e) => saveAllocationByInput(e.currentTarget.value, person.id, e.key === 'Enter' || e.keyCode === 13),
+                              maxLength: 2,
+                              autoFocus: true,
+                            }}
+                            wrapperClassName="input-percent-custom"
+                          />
+                          : `${person.percent || 0}%`
+                        }
+                      </div>
+
                     </div>
                     {isMobile && (
                       <div className="range width-full">

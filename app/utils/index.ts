@@ -13,6 +13,11 @@ export function isValidNric(nric: string) {
   return regex.test(String(nric).toLowerCase());
 }
 
+export function isNumber(value: string) {
+  const regex = /^[0-9]+$/;
+  return regex.test(value);
+}
+
 export const limitLength = (str, length) => str.substring(0, length);
 
 const extract = (str, pattern) => (str.match(pattern) || []).pop() || "";

@@ -6,6 +6,7 @@ import { createSelector } from "reselect";
 import { SignUpEmail, SignUpEmailMobile } from "../../../../public/images";
 import InputField from "@generals/InputField";
 import { isEmail } from "@util/index";
+import { MAX_LENGTH_NAME } from "@constant/index";
 
 function ModalSignUpEmail(props) {
   const { showModal, setShowModal, onSignUpEmail, name, emailProps } = props;
@@ -53,8 +54,12 @@ function ModalSignUpEmail(props) {
             inputProps={{
               placeholder: "e.g. user@gmail.com",
               value: email,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value),
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                if(e?.target?.value.length > MAX_LENGTH_NAME){
+                  return;
+                }
+                setEmail(e.target.value)
+              },
             }}
             isError={email && !isEmail(email)}
             displayErrorText={email && !isEmail(email)}
