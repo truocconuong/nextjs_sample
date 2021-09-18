@@ -33,16 +33,12 @@ export interface AllocationPersonalInterface {
   relationship_id?: string;
 }
 
-const colorsMap = {
-  [PERSONAL_ALLOCATION.FATHER]: "#FFE9BE",
-  [PERSONAL_ALLOCATION.MOTHER]: "#FFD9D1",
-  [PERSONAL_ALLOCATION.SON]: "#BAF0DF",
-  [PERSONAL_ALLOCATION.DAUGHTER]: "#D3EDFF",
-  [PERSONAL_ALLOCATION.OTHERS]: "#BAF0DF",
-  [PERSONAL_ALLOCATION.NEPHEW]: "#D3EDFF",
-  [PERSONAL_ALLOCATION.NIECE]: "#BAF0DF",
-  [PERSONAL_ALLOCATION.GRANDCHILD]: "#FFD9D1",
-};
+const colorsMap = [
+  "#FFE9BE",
+  "#FFD9D1",
+  "#BAF0DF",
+  "#D3EDFF",
+];
 const Allocation = () => {
   const dispatch = useDispatch();
   const maxPercent = 100;
@@ -50,12 +46,12 @@ const Allocation = () => {
   const [totalPercent, setTotalPercent] = useState(0);
   const toPersonsData = () => {
     const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map(
-      (beneficiary: IBeneficiary) => {
+      (beneficiary: IBeneficiary, index: number) => {
         const relationshipName = masterdata
           .filter((item) => item.value === MASTERDATA_TYPE.RELATIONSHIP)
           .find((item) => item.id === beneficiary.relationship_id)?.name;
         return {
-          color: colorsMap[relationshipName],
+          color: colorsMap[(index % colorsMap.length)],
           id: beneficiary.id,
           name: beneficiary.full_legal_name,
           percent: beneficiary.percent,
