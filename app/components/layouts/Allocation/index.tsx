@@ -16,12 +16,14 @@ import {
   TipIcon,
 } from "@images/index";
 import { CategoryActions, ProgressActions, UserActions } from "@redux/actions";
-import { Slider } from "antd";
+import { Input, Slider } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { useDispatch } from "react-redux";
 import { getAmountPercentCompleted } from "../../../../utils/helpers/Tool.util";
+import InputField from "@generals/InputField";
+import { isNumber } from "@util/index";
 export interface AllocationPersonalInterface {
   id: string;
   type: string;
@@ -44,6 +46,8 @@ const Allocation = () => {
   const maxPercent = 100;
   const [isMobile, setIsMobile] = useState(false);
   const [totalPercent, setTotalPercent] = useState(0);
+  const [currentInputShow, setCurrentInputShow] = useState<string>("");
+  const [isErrorInputPercent, setIsErrorInputPercent] = useState<boolean>(false);
   const toPersonsData = () => {
     const persons: AllocationPersonalInterface[] = categoryData?.beneficiaries?.map(
       (beneficiary: IBeneficiary, index: number) => {
@@ -81,12 +85,14 @@ const Allocation = () => {
   useEffect(() => {
     const persons = toPersonsData();
     setPersons(persons);
-    const total = persons.reduce(function (acc, obj) {
-      return acc + obj.percent;
-    }, 0);
+    let total = 0;
+    persons.forEach(person => {
+      total += person.percent;
+    })
     const existedAllocationError = persons.find(
       (item) => item.percent === maxPercent
     );
+    setTotalPercent(total);
     if (total === maxPercent && !existedAllocationError) {
       dispatch(
         ProgressActions.setDisabled(
@@ -106,6 +112,8 @@ const Allocation = () => {
         )
       );
     }
+
+    
   }, [categoryData]);
 
   const masterdata = useSelector(
@@ -212,6 +220,14 @@ const Allocation = () => {
     setNewPercent(dataForm);
   };
 
+  const saveAllocationByInput = (value: string, id: string, isEnter: boolean) => {
+    if(!isEnter || !isNumber(value)){
+      return;
+    }
+    onRangeChange(parseInt(value), id);
+    setCurrentInputShow(null);
+  };
+
   function setNewPercent(dataForm: IBeneficiary[]) {
     categoryData.beneficiaries = dataForm;
     dispatch(
@@ -283,6 +299,43 @@ const Allocation = () => {
     return item?.name?.length || 0;
   }
 
+  const getPresentName = (name: string) => {
+    if(!name){
+      return "";
+    }
+    const value = name.split(" ");
+    if(value?.length === 0){
+      return "";
+    }
+    return value[value.length - 1][0];
+  }
+
+  useEffect(() => {
+    const existedAllocationError = persons.find(
+      (item) => item.percent === maxPercent
+    );
+    if (totalPercent === maxPercent && !existedAllocationError) {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: false,
+          },
+          () => { }
+        )
+      );
+    } else {
+      dispatch(
+        ProgressActions.setDisabled(
+          {
+            disabled: true,
+          },
+          () => { }
+        )
+      );
+    }
+    const dataForm = toApiDataForm(persons);
+    setNewPercent(dataForm);
+  }, [totalPercent])
   return (
     <div className="allocation-container">
       <div className="allocation-wrapper">
@@ -337,7 +390,7 @@ const Allocation = () => {
                         <div className={"char-represent"}>
                           {person.percent === maxPercent
                             ? "Error"
-                            : person?.name && person.name[0]}
+                            : person?.name && getPresentName(person.name)}
                         </div>
                       </div>
                     )
@@ -418,7 +471,7 @@ const Allocation = () => {
                       >
                         <div className="text">{person.name[0]}</div>
                       </div>
-                      <div className="base-info" style={{minWidth: `${(maxLengthName() * 10) + 10}px`}}>
+                      <div className="base-info" style={{ minWidth: `${(maxLengthName() * 10) + 10}px` }}>
                         <div className="name">{person.name}</div>
                         <div className="description">{person.type}</div>
                       </div>
@@ -446,7 +499,22 @@ const Allocation = () => {
                         className={
                           "percent " + (person.percent > 0 ? "bold" : "normal")
                         }
-                      >{`${person.percent || 0}%`}</div>
+                        onClick={() => setCurrentInputShow(person.id)}
+                      >
+                        {currentInputShow === person.id ?
+                          <InputField
+                            inputProps={{
+                              defaultValue: person.percent || 0,
+                              onKeyUp: (e) => saveAllocationByInput(e.currentTarget.value, person.id, e.key === 'Enter' || e.keyCode === 13),
+                              maxLength: 2,
+                              autoFocus: true,
+                            }}
+                            wrapperClassName="input-percent-custom"
+                          />
+                          : `${person.percent || 0}%`
+                        }
+                      </div>
+
                     </div>
                     {isMobile && (
                       <div className="range width-full">
