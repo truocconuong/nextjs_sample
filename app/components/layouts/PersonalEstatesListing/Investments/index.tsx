@@ -18,7 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
 import {v4 as uuidv4} from "uuid";
-import {limitLength} from "@util/index";
+import {formatNumberMoney, isValidMoney, limitLength} from "@util/index";
 
 const {Option} = Select;
 
@@ -58,8 +58,8 @@ function InvestmentsLayout(props: IProps) {
     type_id: null,
     financial_institutions: "",
     account_no: "",
-    capital_outlay: 0,
-    current_market_value: 0,
+    capital_outlay: "",
+    current_market_value: "",
   });
   // const [isContinue, setIsContinue] = useState(false);
   const [errors, setErrors] = useState({
@@ -71,7 +71,12 @@ function InvestmentsLayout(props: IProps) {
 
   useEffect(() => {
     if (categoryData?.investments) {
-      setListData(categoryData.investments);
+      const temp = categoryData?.investments.map(item => ({
+        ...item,
+        capital_outlay: item?.capital_outlay && formatNumberMoney(item?.capital_outlay),
+        current_market_value: item?.current_market_value && formatNumberMoney(item?.current_market_value),
+      }));
+      setListData(temp);
       setNumberForm(categoryData.investments.length + 1);
       if (categoryData.investments.length >= 1 && !data.id) {
         setIsShowForm(false);
@@ -140,8 +145,8 @@ function InvestmentsLayout(props: IProps) {
       type_id: null,
       financial_institutions: "",
       account_no: "",
-      capital_outlay: 0,
-      current_market_value: 0,
+      capital_outlay: "",
+      current_market_value: "",
     });
   };
 
@@ -181,8 +186,8 @@ function InvestmentsLayout(props: IProps) {
     }
     const submitData = {
       ...data,
-      capital_outlay: Number(data.capital_outlay),
-      current_market_value: Number(data.current_market_value),
+      capital_outlay: Number(data.capital_outlay.toString().replaceAll(',', '')),
+      current_market_value: Number(data.current_market_value.toString().replaceAll(',', '')),
     };
     if (disabledEdit) {
       // edit
@@ -270,6 +275,16 @@ function InvestmentsLayout(props: IProps) {
     const {name, value} = e.target;
     setErrors(prev => ({...prev, [name]: false}));
     setData(prev => ({...prev, [name]: limitLength(value, 30)}));
+  };
+
+  const handleChangeInputNumberWithMoney = e => {
+    const {name, value} = e.target;
+    const tempValue = Number(value.replaceAll(",", ""));
+    if (value.split(".").length - 1 > 1 || !isValidMoney(tempValue)) return;
+    setData(prev => ({
+      ...prev,
+      [name]: limitLength(formatNumberMoney(value), 30),
+    }));
   };
 
   const handleAddInvestment = () => {
@@ -438,7 +453,8 @@ function InvestmentsLayout(props: IProps) {
                                 placeholder: "e.g. 20,000.00",
                                 value: data?.capital_outlay,
                                 name: "capital_outlay",
-                                onChange: e => handleChangeInput(e),
+                                onChange: e =>
+                                  handleChangeInputNumberWithMoney(e),
                               }}
                             ></InputField>
                           </div>
@@ -450,7 +466,8 @@ function InvestmentsLayout(props: IProps) {
                                 placeholder: "e.g. 90,000.00",
                                 value: data?.current_market_value,
                                 name: "current_market_value",
-                                onChange: e => handleChangeInput(e),
+                                onChange: e =>
+                                  handleChangeInputNumberWithMoney(e),
                               }}
                             ></InputField>
                           </div>

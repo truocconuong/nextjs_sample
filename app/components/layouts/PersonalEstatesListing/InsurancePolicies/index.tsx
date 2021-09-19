@@ -20,7 +20,7 @@ import {useEffect} from "react";
 import {v4 as uuidv4} from "uuid";
 import {IData, IMasterdata} from "@constant/data.interface";
 import {createSelector} from "reselect";
-import {limitLength} from "@util/index";
+import {formatNumberMoney, isValidMoney, limitLength} from "@util/index";
 
 const {Option} = Select;
 interface IProps {
@@ -57,12 +57,12 @@ function InsurancePolicyLayout(props: IProps) {
   const [disabledEdit, setDisabledEdit] = useState(false);
   const [data, setData] = useState({
     id: "",
-    insurance_company_id: null,
+    insurance_company: null,
     is_non_nomivated: true,
     policy_name: "",
     policy_no: "",
-    current_value: 0,
-    converage: 0,
+    current_value: "",
+    converage: "",
     beneficiary_name: null,
     is_nominated: false,
   });
@@ -70,13 +70,19 @@ function InsurancePolicyLayout(props: IProps) {
   const [optionBeneficiaries, setOptionBeneficiaries] = useState([]);
   const [optionInsuranceCompanies, setOptionInsuranceCompanies] = useState([]);
   const [errors, setErrors] = useState({
-    insurance_company_id: false,
+    insurance_company: false,
     beneficiary_name: false,
   });
 
   useEffect(() => {
     if (categoryData?.insurance_policies) {
-      setListData(categoryData.insurance_policies);
+      const temp = categoryData?.insurance_policies.map(item => ({
+        ...item,
+        current_value:
+          item?.current_value && formatNumberMoney(item?.current_value),
+        converage: item?.converage && formatNumberMoney(item?.converage),
+      }));
+      setListData(temp);
       setNumberForm(categoryData.insurance_policies.length + 1);
       if (categoryData.insurance_policies.length >= 1 && !data.id) {
         setIsShowForm(false);
@@ -155,12 +161,12 @@ function InsurancePolicyLayout(props: IProps) {
   const handleReset = () => {
     setData({
       id: "",
-      insurance_company_id: null,
+      insurance_company: null,
       is_non_nomivated: true,
       policy_name: "",
       policy_no: "",
-      current_value: 0,
-      converage: 0,
+      current_value: "",
+      converage: "",
       beneficiary_name: null,
       is_nominated: false,
     });
@@ -183,8 +189,8 @@ function InsurancePolicyLayout(props: IProps) {
   const handleValidate = () => {
     let isError = false;
     let error = errors;
-    if (!data?.insurance_company_id) {
-      error.insurance_company_id = true;
+    if (!data?.insurance_company) {
+      error.insurance_company = true;
       isError = true;
     }
     if (!data?.beneficiary_name && data?.is_nominated) {
@@ -202,8 +208,8 @@ function InsurancePolicyLayout(props: IProps) {
     }
     const submitData = {
       ...data,
-      current_value: Number(data?.current_value),
-      converage: Number(data?.converage),
+      current_value: Number(data?.current_value.toString().replaceAll(",", "")),
+      converage: Number(data?.converage.toString().replaceAll(",", "")),
     };
     if (disabledEdit) {
       // Edit
@@ -293,6 +299,16 @@ function InsurancePolicyLayout(props: IProps) {
     setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
+  const handleChangeInputNumberWithMoney = e => {
+    const {name, value} = e.target;
+    const tempValue = Number(value.replaceAll(",", ""));
+    if (value.split(".").length - 1 > 1 || !isValidMoney(tempValue)) return;
+    setData(prev => ({
+      ...prev,
+      [name]: limitLength(formatNumberMoney(value), 30),
+    }));
+  };
+
   const handleAddInsurancePolicy = () => {
     if (isShowForm) return;
     setIsShowForm(true);
@@ -303,6 +319,18 @@ function InsurancePolicyLayout(props: IProps) {
     handleReset();
     handleResetState();
   };
+
+  const handleCompany = (input: string) => {
+    if (data?.insurance_company === input) return;
+    setErrors(prev => ({
+      ...prev,
+      insurance_company: false,
+    }));
+    setData(prev => ({
+      ...prev,
+      insurance_company: input,
+    }));
+  }
 
   return (
     <>
@@ -340,13 +368,7 @@ function InsurancePolicyLayout(props: IProps) {
                           <Col>
                             <Row>
                               <span className="type">
-                                {
-                                  masterDataReducer.find(
-                                    masterData =>
-                                      masterData.id ===
-                                      item?.insurance_company_id
-                                  )?.name
-                                }
+                                {item?.insurance_company}
                               </span>
                             </Row>
                             <Row>
@@ -403,18 +425,15 @@ function InsurancePolicyLayout(props: IProps) {
                         label="Insurance Company"
                         selectProps={{
                           placeholder: "Select",
-                          value: data?.insurance_company_id,
+                          value: data?.insurance_company,
                           onChange: value => {
-                            setErrors(prev => ({
-                              ...prev,
-                              insurance_company_id: false,
-                            }));
                             setData(prev => ({
                               ...prev,
-                              insurance_company_id: value,
+                              insurance_company: value,
                             }));
                           },
                           filterOption: (input, option) => {
+                            handleCompany(input);
                             return (
                               option?.children
                                 ?.toLowerCase()
@@ -423,7 +442,7 @@ function InsurancePolicyLayout(props: IProps) {
                           },
                         }}
                         searchable
-                        isError={errors?.insurance_company_id}
+                        isError={errors?.insurance_company}
                       >
                         {optionInsuranceCompanies.map(item => {
                           return (
@@ -523,11 +542,12 @@ function InsurancePolicyLayout(props: IProps) {
                               displayLabel
                               label="Current Value ($)"
                               inputProps={{
-                                type: "number",
+                                // type: "number",
                                 placeholder: "0.00",
                                 value: data?.current_value,
                                 name: "current_value",
-                                onChange: e => handleChangeInput(e),
+                                onChange: e =>
+                                  handleChangeInputNumberWithMoney(e),
                               }}
                             ></InputField>
                           </div>
@@ -537,11 +557,12 @@ function InsurancePolicyLayout(props: IProps) {
                             displayLabel
                             label="Coverage ($)"
                             inputProps={{
-                              type: "number",
+                              // type: "number",
                               placeholder: "0.00",
                               value: data?.converage,
                               name: "converage",
-                              onChange: e => handleChangeInput(e),
+                              onChange: e =>
+                                handleChangeInputNumberWithMoney(e),
                               className: "mb-16",
                             }}
                           ></InputField>

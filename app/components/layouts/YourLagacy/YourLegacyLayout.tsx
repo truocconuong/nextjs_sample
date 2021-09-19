@@ -9,7 +9,7 @@ import {
   LodgeForm,
   IconInvestment,
   IconBusinessInterest,
-  WatchIcon,
+  WatchIconValuables,
 } from '@images/index';
 import { Col, Row } from 'antd';
 import React from 'react';
@@ -532,7 +532,7 @@ function YourLegacyLayout(props) {
                             }}
                           >
                             {
-                              find(masterdata, { id: e?.bank_id })?.name?.split(
+                              find(masterdata, { name: e?.bank })?.name?.split(
                                 ':'
                               )[0]
                             }
@@ -591,7 +591,7 @@ function YourLegacyLayout(props) {
                             }}
                           >
                             {
-                              find(masterdata, { id: e?.insurance_company_id })
+                              find(masterdata, { name: e?.insurance_company })
                                 ?.name
                             }
                           </div>
@@ -739,7 +739,7 @@ function YourLegacyLayout(props) {
                           height: '48px',
                         }}
                       >
-                        <WatchIcon />
+                        <WatchIconValuables />
                       </Col>
                       <Col>
                         <Row

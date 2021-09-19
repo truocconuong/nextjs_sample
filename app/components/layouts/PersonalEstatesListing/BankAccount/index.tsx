@@ -21,7 +21,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
 import {v4 as uuidv4} from "uuid";
-import {limitLength, extractAlpha} from "@util/index";
+import {
+  limitLength,
+  extractAlpha,
+  isValidMoney,
+  formatNumberMoney,
+} from "@util/index";
 
 const {Option} = Select;
 
@@ -80,23 +85,28 @@ function BankAccountLayout(props: IProps) {
   const [disabledEdit, setDisabledEdit] = useState(false);
   const [data, setData] = useState({
     id: "",
-    bank_id: null,
+    bank: null,
     account_no: "",
     is_solely: true,
     is_joint: false,
-    current_balance: 0,
+    current_balance: "",
     account_holder: "",
   });
   // const [isContinue, setIsContinue] = useState(false);
   const [errors, setErrors] = useState({
     account_no: false,
-    bank_id: false,
+    bank: false,
   });
   const [optionBanks, setOptionBanks] = useState([]);
 
   useEffect(() => {
     if (categoryData?.bank_accounts) {
-      setListData(categoryData.bank_accounts);
+      const temp = categoryData?.bank_accounts.map(item => ({
+        ...item,
+        current_balance:
+          item?.current_balance && formatNumberMoney(item?.current_balance),
+      }));
+      setListData(temp);
       setNumberForm(categoryData.bank_accounts.length + 1);
       if (categoryData.bank_accounts.length >= 1 && !data.id) {
         setIsShowForm(false);
@@ -152,7 +162,7 @@ function BankAccountLayout(props: IProps) {
         if (item?.value === "BANK") {
           tempBanks.push({
             label: item?.name,
-            value: item?.id,
+            value: item?.name,
           });
         }
       });
@@ -163,11 +173,11 @@ function BankAccountLayout(props: IProps) {
   const handleReset = () => {
     setData({
       id: "",
-      bank_id: null,
+      bank: null,
       account_no: "",
       is_solely: true,
       is_joint: false,
-      current_balance: 0,
+      current_balance: "",
       account_holder: "",
     });
   };
@@ -189,8 +199,8 @@ function BankAccountLayout(props: IProps) {
   const handleValidate = () => {
     let isError = false;
     let error = errors;
-    if (!data?.bank_id) {
-      error.bank_id = true;
+    if (!data?.bank) {
+      error.bank = true;
       isError = true;
     }
     if (!data?.account_no) {
@@ -208,7 +218,9 @@ function BankAccountLayout(props: IProps) {
     }
     const submitData = {
       ...data,
-      current_balance: Number(data.current_balance),
+      current_balance: Number(
+        data.current_balance.toString().replaceAll(",", "")
+      ),
     };
     if (disabledEdit) {
       // edit
@@ -259,6 +271,12 @@ function BankAccountLayout(props: IProps) {
     // }
   };
 
+  const handleBank = (input: string) => {
+    if (data?.bank === input) return;
+    setData(prev => ({...prev, bank: input}));
+    setErrors(prev => ({...prev, bank: false}));
+  };
+
   const handleEdit = item => {
     setDisabledEdit(true);
     setIsShowForm(true);
@@ -303,6 +321,16 @@ function BankAccountLayout(props: IProps) {
       return;
     }
     setData(prev => ({...prev, [name]: limitLength(value, 30)}));
+  };
+
+  const handleChangeInputNumberWithMoney = e => {
+    const {name, value} = e.target;
+    const tempValue = Number(value.replaceAll(",", ""));
+    if (value.split(".").length - 1 > 1 || !isValidMoney(tempValue)) return;
+    setData(prev => ({
+      ...prev,
+      [name]: limitLength(formatNumberMoney(value), 30),
+    }));
   };
 
   const handleAddBankAccount = () => {
@@ -358,14 +386,7 @@ function BankAccountLayout(props: IProps) {
                           </Col>
                           <Col>
                             <Row className="limit-width">
-                              <span className="type">
-                                {
-                                  masterDataReducer.find(
-                                    masterData =>
-                                      masterData.id === item?.bank_id
-                                  )?.name
-                                }
-                              </span>
+                              <span className="type">{item?.bank}</span>
                             </Row>
                             <Row>
                               <span className="financial">
@@ -421,12 +442,12 @@ function BankAccountLayout(props: IProps) {
                         label="Bank"
                         selectProps={{
                           placeholder: "Select",
-                          value: data?.bank_id,
+                          value: data?.bank,
                           onChange: value => {
-                            setData(prev => ({...prev, bank_id: value}));
-                            setErrors(prev => ({...prev, bank_id: false}));
+                            setData(prev => ({...prev, bank: value}));
                           },
                           filterOption: (input, option) => {
+                            handleBank(input);
                             return (
                               option?.children
                                 ?.toLowerCase()
@@ -434,7 +455,7 @@ function BankAccountLayout(props: IProps) {
                             );
                           },
                         }}
-                        isError={errors?.bank_id}
+                        isError={errors?.bank}
                         searchable
                       >
                         {optionBanks.map(item => {
@@ -499,11 +520,12 @@ function BankAccountLayout(props: IProps) {
                             displayLabel
                             label="Current Balance ($)"
                             inputProps={{
-                              type: "number",
+                              // type: "number",
                               placeholder: "0.00",
                               value: data?.current_balance,
                               name: "current_balance",
-                              onChange: e => handleChangeInput(e),
+                              onChange: e =>
+                                handleChangeInputNumberWithMoney(e),
                               className: "mb-16",
                             }}
                           ></InputField>

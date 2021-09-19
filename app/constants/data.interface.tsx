@@ -44,17 +44,17 @@ export interface IProperty {
   loan_end_date: string;
   year_loan_taken: number;
   interest_rate: number;
-  outstanding_loan_amount: number;
+  outstanding_loan_amount: number | string;
   is_delete: boolean;
 }
 
 export interface IBankAccount {
   id?: string;
-  bank_id: string;
+  bank: string;
   account_no: string;
   is_solely: boolean;
   is_joint: boolean;
-  current_balance: number;
+  current_balance: number | string;
   account_holder: string;
   is_delete: boolean;
   user_id?: string;
@@ -62,12 +62,12 @@ export interface IBankAccount {
 
 export interface IInsurancePolicy {
   id: string;
-  insurance_company_id: string;
+  insurance_company: string;
   is_non_nomivated: boolean;
   policy_name: string;
   policy_no: string;
-  current_value: number;
-  converage: number;
+  current_value: number | string;
+  converage: number | string;
   beneficiary_name: string;
   is_nominated: boolean;
   is_delete: boolean;
@@ -78,8 +78,8 @@ export interface IInvestment {
   type_id: string;
   financial_institutions: string;
   account_no: string;
-  capital_outlay: number;
-  current_market_value: number;
+  capital_outlay: number | string;
+  current_market_value: number | string;
   is_delete: boolean;
 }
 
