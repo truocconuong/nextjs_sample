@@ -27,7 +27,12 @@ import {createSelector} from "reselect";
 import {IData, IMasterdata, IProperty} from "@constant/data.interface";
 import _ from "lodash";
 import {v4 as uuidv4} from "uuid";
-import {limitLength} from "@util/index";
+import {
+  formatNumberMoney,
+  isValidMoney,
+  isValidPercent,
+  limitLength,
+} from "@util/index";
 
 const {Option} = Select;
 
@@ -113,7 +118,7 @@ function PropertyLayout(props: IProps) {
     loan_end_date: null,
     year_loan_taken: 0,
     interest_rate: 0,
-    outstanding_loan_amount: 0,
+    outstanding_loan_amount: "",
     is_delete: false,
   });
   // const [isContinue, setIsContinue] = useState(true);
@@ -136,6 +141,9 @@ function PropertyLayout(props: IProps) {
           item?.loan_end_date !== null
             ? moment(item?.loan_end_date || "").format("DD/MM/YYYY")
             : "",
+        outstanding_loan_amount: formatNumberMoney(
+          item?.outstanding_loan_amount
+        ),
       }));
       setListData(temp);
       setNumberForm(temp.length + 1);
@@ -230,7 +238,7 @@ function PropertyLayout(props: IProps) {
       loan_end_date: "",
       year_loan_taken: 0,
       interest_rate: 0,
-      outstanding_loan_amount: 0,
+      outstanding_loan_amount: "",
       is_delete: false,
     });
   };
@@ -275,7 +283,9 @@ function PropertyLayout(props: IProps) {
       remaining_loan_tenure: Number(data.remaining_loan_tenure),
       year_loan_taken: Number(data.year_loan_taken),
       interest_rate: Number(data.interest_rate),
-      outstanding_loan_amount: Number(data.outstanding_loan_amount),
+      outstanding_loan_amount: Number(
+        data.outstanding_loan_amount.toString().replaceAll(",", "")
+      ),
       loan_start_date: moment(data.loan_start_date, "DD/MM/YYYY"),
       loan_end_date: moment(data.loan_end_date, "DD/MM/YYYY"),
     };
@@ -360,6 +370,22 @@ function PropertyLayout(props: IProps) {
     if (data?.is_solely && name === "postal_code") {
       setErrors(prev => ({...prev, postal_code: false}));
     }
+    setData(prev => ({...prev, [name]: limitLength(value, 30)}));
+  };
+
+  const handleChangeInputNumberWithMoney = e => {
+    const {name, value} = e.target;
+    const tempValue = Number(value.replaceAll(",", ""));
+    if (value.split(".").length - 1 > 1 || !isValidMoney(tempValue)) return;
+    setData(prev => ({
+      ...prev,
+      [name]: limitLength(formatNumberMoney(value), 30),
+    }));
+  };
+
+  const handleChangeInputNumberWithPercent = e => {
+    const {name, value} = e.target;
+    if (!isValidPercent(value)) return;
     setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
@@ -702,10 +728,9 @@ function PropertyLayout(props: IProps) {
                                     placeholder: "0",
                                     value: data?.interest_rate,
                                     name: "interest_rate",
-                                    onChange: e => handleChangeInput(e),
+                                    onChange: e =>
+                                      handleChangeInputNumberWithPercent(e),
                                     type: "number",
-                                    pattern: "^d*(.d{0,2})?$",
-                                    step: "0.01",
                                   }}
                                 ></InputField>
                               </div>
@@ -715,11 +740,12 @@ function PropertyLayout(props: IProps) {
                                 displayLabel
                                 label="Outstanding Loan Amount ($)"
                                 inputProps={{
-                                  placeholder: "0",
+                                  placeholder: "",
                                   value: data?.outstanding_loan_amount,
                                   name: "outstanding_loan_amount",
-                                  onChange: e => handleChangeInput(e),
-                                  type: "number",
+                                  onChange: e =>
+                                    handleChangeInputNumberWithMoney(e),
+                                  // type: "number",
                                 }}
                               ></InputField>
                             </Row>
@@ -732,7 +758,7 @@ function PropertyLayout(props: IProps) {
                                   value: data?.remaining_loan_tenure,
                                   name: "remaining_loan_tenure",
                                   onChange: e => handleChangeInput(e),
-                                  type: "number",
+                                  // type: "number",
                                 }}
                               ></InputField>
                             </Row>

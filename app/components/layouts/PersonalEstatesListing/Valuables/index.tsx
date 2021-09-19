@@ -6,12 +6,17 @@ import SelectField from "@generals/SelectField";
 import ModalInfo from "@generals/Modal/ModalInfo";
 import _ from "lodash";
 import {
+  CarIconValuables,
   CloudValuablesIcon,
+  DiamondIconValuables,
+  PetIconValuables,
+  RealEstatesIconValuables,
   ResetIcon,
+  SafeBoxIconValuables,
   SaveIcon,
   TrashEnabledIcon,
   ValuablesImage,
-  WatchIcon,
+  WatchIconValuables,
 } from "@images/index";
 import {useDispatch, useSelector} from "react-redux";
 import {PersonalEstatesListingActions, ProgressActions} from "@redux/actions";
@@ -19,6 +24,15 @@ import {v4 as uuidv4} from "uuid";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
 import GenerateForm from "./components/GenerateForm";
+
+enum TYPE_VALUABLES {
+  WATCH = "Watch",
+  PET = "Pet",
+  REAL_ESTATE = "Real Estate",
+  SAFE_BOX = "Safe Box",
+  JEWELLERY = "Jewellery",
+  MOTOR_VEHICLE = "Motor Vehicle",
+}
 
 const {Option} = Select;
 
@@ -291,6 +305,44 @@ function ValuablesLayout(props: IProps) {
     handleResetState();
   };
 
+  const generateIcon = id => {
+    const name = masterDataReducer.find(masterData => masterData.id === id)
+      ?.name;
+    switch (name) {
+      case TYPE_VALUABLES.JEWELLERY:
+        return <DiamondIconValuables />;
+      case TYPE_VALUABLES.MOTOR_VEHICLE:
+        return <CarIconValuables />;
+      case TYPE_VALUABLES.PET:
+        return <PetIconValuables />;
+      case TYPE_VALUABLES.REAL_ESTATE:
+        return <RealEstatesIconValuables />;
+      case TYPE_VALUABLES.WATCH:
+        return <WatchIconValuables />;
+      case TYPE_VALUABLES.SAFE_BOX:
+        return <SafeBoxIconValuables />;
+      default:
+        return <WatchIconValuables />;
+    }
+  };
+  
+  const generateInfoSecond = (item) => {
+    const name = masterDataReducer.find(masterData => masterData.id === item?.type_id)
+      ?.name;
+    switch (name) {
+      case TYPE_VALUABLES.JEWELLERY, TYPE_VALUABLES.MOTOR_VEHICLE, TYPE_VALUABLES.WATCH:
+        return item?.brand;
+      case TYPE_VALUABLES.PET:
+        return item?.name;
+      case TYPE_VALUABLES.REAL_ESTATE:
+        return item?.country;
+      case TYPE_VALUABLES.SAFE_BOX:
+        return item?.safe_box_detail.substring(0, 20);
+      default:
+        return;
+    }
+  }
+
   return (
     <>
       <Row className="investments">
@@ -322,7 +374,7 @@ function ValuablesLayout(props: IProps) {
                       <Row justify="space-between" align="middle">
                         <Col className="div-center">
                           <Col className="number-1 div-center valuables__number1--color">
-                            <WatchIcon />
+                            {generateIcon(item?.type_id)}
                           </Col>
                           <Col>
                             <Row>
@@ -336,7 +388,7 @@ function ValuablesLayout(props: IProps) {
                               </span>
                             </Row>
                             <Row>
-                              <span className="financial">{item?.brand}</span>
+                              <span className="financial">{generateInfoSecond(item)}</span>
                             </Row>
                           </Col>
                         </Col>
@@ -377,7 +429,7 @@ function ValuablesLayout(props: IProps) {
                   <Row justify="space-between" align="middle" className="mb-32">
                     <Col className="div-center">
                       <Col className="number-1 div-center valuables__number1--color">
-                        <WatchIcon />
+                        {generateIcon(data.type_id)};
                       </Col>
                       <Col>
                         <span className="investment-details-text">

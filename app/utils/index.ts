@@ -68,3 +68,24 @@ export function isValidPhoneNumber(phone: string) {
   const regex = /\+65[6|8|9]\d{7}/;
   return regex.test(String(phone).toLowerCase());
 }
+
+export const isValidPercent = (percent: number) => {
+  const regexPercent = /^\d*(\.\d{0,2})?$/;
+  return regexPercent.test(percent.toString());
+} 
+
+export const isValidMoney = (money: number) => {
+  const regex = /^[0-9]*\.?[0-9]*$/;
+  return regex.test(money.toString());
+} 
+
+export const formatNumberMoney = (number) => {
+  let tempNum = Number(number.toString().replaceAll(',', ''));
+
+  if (number[number.length - 1] === '.' || number[number.length - 2] === '.' || number[number.length - 3] === '.') return number;
+  if (Number(tempNum) % 1 !== 0) {
+    return tempNum.toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  }
+  return tempNum.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+}
+

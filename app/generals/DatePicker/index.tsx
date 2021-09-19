@@ -11,7 +11,7 @@ function CustomDatePicker(props: IProps) {
         showToday={false}
         dropdownClassName="custom-date-picker__dropdown"
         suffixIcon=""
-        placeholder="0/0/0"
+        placeholder="DD/MM/YYYY"
         format="DD/MM/YYYY"
         value={value}
         onChange={(value, dataString) => onChange && onChange(value, dataString)}
