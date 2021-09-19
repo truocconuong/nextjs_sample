@@ -24,7 +24,7 @@ import { IMasterdata, IResponseGetProfile } from '@constant/data.interface';
 import { useState } from 'react';
 import { createSelector } from 'reselect';
 import { find } from 'lodash';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 
 function YourLegacyLayout(props) {
   const route = useRouter();
@@ -143,7 +143,7 @@ function YourLegacyLayout(props) {
             sm={{ span: 24, order: 2 }}
             xs={{ span: 24, order: 2 }}
           >
-            <h1>Hello, {dataProfile?.full_legal_name.split(' ')[0]}</h1>
+            <h1>Hello, {dataProfile?.full_legal_name?.split(' ')[0]}</h1>
             <h2>The legacy you leave behind.</h2>
             <p>
               You have spent your entire life building your legacy and estate,
@@ -232,12 +232,12 @@ function YourLegacyLayout(props) {
                       <Col>
                         <div className='sub-percent'>
                           {dataProfile?.totalAssets !== 0 &&
-                          dataProfile?.totalAssets
+                            dataProfile?.totalAssets
                             ? (
-                                (dataProfile?.insurance_policies?.total /
-                                  dataProfile?.totalAssets) *
-                                100
-                              ).toFixed(2) + '%'
+                              (dataProfile?.insurance_policies?.total /
+                                dataProfile?.totalAssets) *
+                              100
+                            ).toFixed(2) + '%'
                             : '%'}
                         </div>
                       </Col>
@@ -262,12 +262,12 @@ function YourLegacyLayout(props) {
                       <Col>
                         <div className='sub-percent'>
                           {dataProfile?.totalAssets !== 0 &&
-                          dataProfile?.totalAssets
+                            dataProfile?.totalAssets
                             ? (
-                                (dataProfile?.investments?.total /
-                                  dataProfile?.totalAssets) *
-                                100
-                              ).toFixed(2) + '%'
+                              (dataProfile?.investments?.total /
+                                dataProfile?.totalAssets) *
+                              100
+                            ).toFixed(2) + '%'
                             : '%'}
                         </div>
                       </Col>
@@ -293,12 +293,12 @@ function YourLegacyLayout(props) {
                         <div className='sub-percent'>
                           {' '}
                           {dataProfile?.totalAssets !== 0 &&
-                          dataProfile?.totalAssets
+                            dataProfile?.totalAssets
                             ? (
-                                (dataProfile?.properties?.total /
-                                  dataProfile?.totalAssets) *
-                                100
-                              ).toFixed(2) + '%'
+                              (dataProfile?.properties?.total /
+                                dataProfile?.totalAssets) *
+                              100
+                            ).toFixed(2) + '%'
                             : '%'}
                         </div>
                       </Col>
@@ -323,12 +323,12 @@ function YourLegacyLayout(props) {
                       <Col>
                         <div className='sub-percent'>
                           {dataProfile?.totalAssets !== 0 &&
-                          dataProfile?.totalAssets
+                            dataProfile?.totalAssets
                             ? (
-                                (dataProfile?.bank_accounts?.total /
-                                  dataProfile?.totalAssets) *
-                                100
-                              ).toFixed(2) + '%'
+                              (dataProfile?.bank_accounts?.total /
+                                dataProfile?.totalAssets) *
+                              100
+                            ).toFixed(2) + '%'
                             : '%'}
                         </div>
                       </Col>
@@ -356,12 +356,12 @@ function YourLegacyLayout(props) {
                       <Col>
                         <div className='sub-percent'>
                           {dataProfile?.totalAssets !== 0 &&
-                          dataProfile?.totalAssets
+                            dataProfile?.totalAssets
                             ? (
-                                (dataProfile?.business_interests?.total /
-                                  dataProfile?.totalAssets) *
-                                100
-                              ).toFixed(2) + '%'
+                              (dataProfile?.business_interests?.total /
+                                dataProfile?.totalAssets) *
+                              100
+                            ).toFixed(2) + '%'
                             : '%'}
                         </div>
                       </Col>
@@ -490,6 +490,8 @@ function YourLegacyLayout(props) {
                       </Col>
                     </Row>
                   ))}
+                  {dataProfile?.properties?.total === 0 && <Row className="add-data"><CustomButton type="ghost" onClick={() => router.push("/personal-estates-listing/property")}>Add Property</CustomButton></Row>}
+
                 </div>
               </div>
 
@@ -548,6 +550,7 @@ function YourLegacyLayout(props) {
                       </Col>
                     </Row>
                   ))}
+                  {dataProfile?.bank_accounts?.total === 0 && <Row className="add-data"><CustomButton onClick={() => router.push("/personal-estates-listing/bank-account")} type="ghost">Add Bank Account</CustomButton></Row>}
                 </div>
               </div>
 
@@ -605,6 +608,7 @@ function YourLegacyLayout(props) {
                       </Col>
                     </Row>
                   ))}
+                  {dataProfile?.insurance_policies?.total === 0 && <Row className="add-data" onClick={() => router.push("/personal-estates-listing/insurance-policy")}><CustomButton type="ghost">Add Insurance</CustomButton></Row>}
                 </div>
               </div>
               <div>
@@ -657,6 +661,7 @@ function YourLegacyLayout(props) {
                       </Col>
                     </Row>
                   ))}
+                  {dataProfile?.investments?.total === 0 && <Row className="add-data"><CustomButton type="ghost" onClick={() => router.push("/personal-estates-listing/investment")}>Add Investments</CustomButton></Row>}
                 </div>
               </div>
 
@@ -710,6 +715,7 @@ function YourLegacyLayout(props) {
                       </Col>
                     </Row>
                   ))}
+                  {dataProfile?.business_interests?.total === 0 && <Row className="add-data"><CustomButton type="ghost" onClick={() => router.push("/personal-estates-listing/business-interest")}>Add Businesses</CustomButton></Row>}
                 </div>
               </div>
 
@@ -761,6 +767,7 @@ function YourLegacyLayout(props) {
                       </Col>
                     </Row>
                   ))}
+                  {dataProfile?.valuables?.data?.length === 0 && <Row className="add-data"><CustomButton type="ghost" onClick={() => router.push("/personal-estates-listing/valuables")}>Add Valueables</CustomButton></Row>}
                 </div>
               </div>
             </Slider>
