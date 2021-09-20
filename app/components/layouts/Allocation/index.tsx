@@ -469,7 +469,7 @@ const Allocation = () => {
                         className="highlight-text"
                         style={{ backgroundColor: person.color }}
                       >
-                        <div className="text">{person.name[0]}</div>
+                        <div className="text">{getPresentName(person.name)}</div>
                       </div>
                       <div className="base-info" style={{ minWidth: `${(maxLengthName() * 10) + 10}px` }}>
                         <div className="name">{person.name}</div>
