@@ -429,7 +429,7 @@ function ValuablesLayout(props: IProps) {
                   <Row justify="space-between" align="middle" className="mb-32">
                     <Col className="div-center">
                       <Col className="number-1 div-center valuables__number1--color">
-                        {generateIcon(data.type_id)};
+                        {generateIcon(data.type_id)}
                       </Col>
                       <Col>
                         <span className="investment-details-text">
