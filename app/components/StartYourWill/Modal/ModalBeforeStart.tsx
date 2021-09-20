@@ -4,6 +4,7 @@ import { Button, Col, Modal, Row } from "antd";
 import { DotIcon, FaceIcon, FaceMobileIcon } from "../../../../public/images";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
+import Link from "next/link";
 function ModalBeforeStart(props) {
   const { showModal, setShowModal, handleStart } = props;
 
@@ -60,7 +61,12 @@ function ModalBeforeStart(props) {
           and/or agents, can collect, use or disclose my personal data in the
           manner set forth in &nbsp;
           <span className="text-link">iWills’ Data Protection Policy</span> and
-          the <span className="text-link">FAQs.</span>
+          the{" "}
+          <Link href="/faq">
+            <a target="_blank">
+              <span className="text-link">FAQs.</span>
+            </a>
+          </Link>
         </div>
         <div className="item-center mt-24 mb-8">
           <Button className="let-get-btn" onClick={handleStart}>
