@@ -30,11 +30,13 @@ function StartYourWill() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
     if (checkDoneAllOption(category)) {
       router.push("/start-your-will");
       return;
     }
-    if (!starYourWillData?.name) {
+    if (!starYourWillData?.name && !token) {
       router.push("/");
       return;
     }
@@ -163,7 +165,7 @@ function StartYourWill() {
       return "You’re Almost There!";
     }
     if (checkStart()) {
-      return `Hello, ${starYourWillData?.name}`;
+      return `Hello, ${starYourWillData?.name || category?.full_legal_name}`;
     }
     return "Let’s Keep Going!";
   };
