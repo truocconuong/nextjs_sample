@@ -1,6 +1,7 @@
 import { takeLatest, call } from "redux-saga/effects";
 import { UserTypes } from "../types";
 import Request from "../../app/api/RestClient";
+import { NotificationWarning } from "@generals/notifications";
 
 function* updatePersonalInformation(action: any) {
   const { callback, data, token, id } = action?.payload;
@@ -149,6 +150,7 @@ function* verifyOtp(action: any) {
     );
     callback && callback(res[0]?.data);
   } catch (error) {
+    NotificationWarning(error?.message);
     callback && callback(error?.response?.data);
     console.log("user.error: ", error?.response?.data);
   }
