@@ -195,31 +195,35 @@ function StartYourWill() {
   const changeOtp = (otp) => {
     if (otp.length === 4) {
       setTimeout(() => {
-        // dispatch(
-        //   verifyOTP({ email: category?.email_personal, otp }, (response) => {
-        //     if (response.success) {
-        //       const token = response?.data?.access_token;
-        //       localStorage.setItem("accessToken", token);
-        //       setShowModalOtp(false);
-        //       setDoneCreateAcc(true);
-        //       setShowModalSuccess(true);
-        //     }
-        //   })
-        // );
-
+        let param = {};
+        if (
+          donePersonalParticulars ||
+          doneExecutor ||
+          doneBenefit ||
+          doneEstateDistribute
+        ) {
+          param = {
+            ...category,
+            email: email,
+            otp,
+            full_legal_name: starYourWillData?.name,
+          };
+        } else
+          param = {
+            email: email,
+            otp,
+            full_legal_name: starYourWillData?.name,
+          };
         dispatch(
-          signUpEmail(
-            { email, otp, full_legal_name: starYourWillData?.name },
-            (response) => {
-              if (response.success) {
-                const token = response?.data?.access_token;
-                localStorage.setItem("accessToken", token);
-                setShowModalOtp(false);
-                setDoneCreateAcc(true);
-                setShowModalSuccess(true);
-              }
+          signUpEmail(param, (response) => {
+            if (response.success) {
+              const token = response?.data?.access_token;
+              localStorage.setItem("accessToken", token);
+              setShowModalOtp(false);
+              setDoneCreateAcc(true);
+              setShowModalSuccess(true);
             }
-          )
+          })
         );
       }, 1000);
     }
