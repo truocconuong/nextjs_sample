@@ -309,6 +309,9 @@ const categoryReducer = (state = initState, action: any) => {
       }
       return newState;
     }
+    case PersonalTypes.RESET_CATEGORY_DATA: {
+      return initState;
+    }
     default: {
       return state;
     }

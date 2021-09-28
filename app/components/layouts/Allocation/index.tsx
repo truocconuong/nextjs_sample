@@ -72,7 +72,6 @@ const Allocation = () => {
     toPersonsData()
   );
   const [isShowModalSplash, setIsShowModalSplash] = useState(false);
-
   const categoryData = useSelector(
     createSelector(
       (state: any) => state?.category,
@@ -81,6 +80,7 @@ const Allocation = () => {
       }
     )
   );
+
 
   useEffect(() => {
     const persons = toPersonsData();
@@ -259,13 +259,13 @@ const Allocation = () => {
   const onAutoDistribute = () => {
     const personsCopy = [...persons];
     let total = 0;
-    personsCopy.map((item) => {
+    personsCopy?.map((item) => {
       const value = Math.round(maxPercent / personsCopy.length);
       item.percent = value;
       total += value;
     });
-    if (total !== maxPercent) {
-      personsCopy[0].percent = maxPercent - total + personsCopy[0].percent;
+    if (total !== maxPercent && personsCopy[0]) {
+      personsCopy[0].percent = maxPercent - total + personsCopy[0]?.percent;
     }
     setTotalPercent(maxPercent);
     setPersons(personsCopy);

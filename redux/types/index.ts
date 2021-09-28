@@ -74,6 +74,7 @@ export const PersonalTypes = {
   SET_EXECUTOR: "SET_EXECUTOR",
   SET_BENEFICIARY: "SET_BENEFICIARY",
   SET_PERCENT: "SET_PERCENT",
+  RESET_CATEGORY_DATA: "RESET_CATEGORY_DATA",
 };
 
 export const MasterDataTypes = {
