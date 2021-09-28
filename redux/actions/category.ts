@@ -44,3 +44,12 @@ export const setBeneficiary = (data: IBeneficiary[], callback) => {
     },
   };
 };
+
+
+export const resetCategoryData = () => {
+  return {
+    type: PersonalTypes.RESET_CATEGORY_DATA,
+    payload: {
+    },
+  };
+};

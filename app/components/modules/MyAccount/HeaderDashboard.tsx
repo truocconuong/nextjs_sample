@@ -6,6 +6,7 @@ import {
     IconSignOut,
     MenuMobile,
 } from '@images/index';
+import { CategoryActions } from '@redux/actions';
 import { Col, Drawer, Row } from 'antd';
 import { Header } from 'antd/lib/layout/layout';
 import ModalBeforeStart from 'components/StartYourWill/Modal/ModalBeforeStart';
@@ -13,8 +14,10 @@ import ModalContinueYourWill from 'components/StartYourWill/Modal/ModalContinueY
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ModalLogout from './ModalLogOut';
 function HeaderDashboard(props) {
+    const dispatch = useDispatch();
     const router = useRouter();
     const [isShowModal, setIsShowModal] = useState(false);
     const [showModalLogout, setShowModalLogout] = useState(false);
@@ -27,7 +30,9 @@ function HeaderDashboard(props) {
     };
 
     const onHandleLogOut = () => {
-        console.log('log out');
+        localStorage.removeItem("accessToken");
+        dispatch(CategoryActions.resetCategoryData());
+        router.push("/home");
         setShowModalLogout(false);
     };
 
