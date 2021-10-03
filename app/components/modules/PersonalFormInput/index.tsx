@@ -57,7 +57,7 @@ const PersonalFormInput = (props: PersonalFormPropsInterface) => {
 
   const isFullForm = () => {
     const dataFormCopy = { ...dataForm };
-    if (!isEmail(dataFormCopy.email)) {
+    if (!isEmail(dataFormCopy.email) || !isValidName(dataForm.legalName)) {
       return false;
     }
     for (let key in dataFormCopy) {

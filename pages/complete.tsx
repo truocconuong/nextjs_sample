@@ -3,6 +3,7 @@ import { SmileComplete } from '@images/index';
 import { Row, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import React from 'react';
+import AuthHoc from './AuthHoc';
 
 const CompleteScreen = () => {
     const router = useRouter();
@@ -32,4 +33,4 @@ const CompleteScreen = () => {
     );
 };
 
-export default CompleteScreen;
+export default AuthHoc(CompleteScreen);
