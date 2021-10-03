@@ -81,7 +81,9 @@ const NavigationBar = () => {
   );
 
   const returnToDashBoard = () => {
-    router.push("/start-your-will");
+    if(router.pathname !== "/start-your-will-create"){
+      router.push("/start-your-will-create");
+    }
   };
 
   const starYourWillData = useSelector(
@@ -147,10 +149,10 @@ const NavigationBar = () => {
                     </Row>
                   </div>
                   {router.pathname === "/preview-pdf" && renderDownload()}
-                  <div className="container-back-mobile">
+                  <div className="container-back-mobile" onClick={returnToDashBoard}>
                     <div className="container-back-wrap">
                       <div className="back-wrapper"></div>
-                      <div className="back" onClick={() => {}}>
+                      <div className="back">
                         Dashboard
                       </div>
                       <div className="icon-menu">

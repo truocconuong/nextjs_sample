@@ -16,7 +16,7 @@ function* getCategoryData(action: any) {
     callback && callback(res[0]?.data);
     yield put(CategoryActions.saveCategoriesData(res[0]?.data));
   } catch (error) {
-    callback && callback(error?.response?.data);
+    callback && callback(error);
     console.log("getMasterdata._error: ", error?.response?.data);
   }
 }

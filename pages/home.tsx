@@ -2,6 +2,7 @@ import Layout, {Content, Header} from 'antd/lib/layout/layout';
 import React from 'react';
 import HomeLayout from '@layout/Home/HomeLayout';
 import HeaderLanding from '@module/LandingPage/HeaderLanding';
+import AuthHoc from './AuthHoc';
 
 function Home(props) {
   return (
@@ -14,4 +15,4 @@ function Home(props) {
   );
 }
 
-export default Home;
+export default  AuthHoc(Home);

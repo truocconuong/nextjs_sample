@@ -31,6 +31,7 @@ const SignInForm = (props: ISignInFormProps) => {
   const { isMobile, setVisibleModal } = props;
   const [currentStep, setCurrentStep] = useState(1);
   const [isSignInFailed, setIsSignFailed] = useState<boolean>(false);
+  const [isShowSignInForm, setIsShowSignInForm] = useState<boolean>(true);
   const [isLoadingSignIn, setIsLoadingSignIn] = useState<boolean>(false);
   const [showModalOtp, setShowModalOtp] = useState(false);
   const [signInFormData, setSignInFormData] = useState<ISignInForm>({
@@ -49,6 +50,7 @@ const SignInForm = (props: ISignInFormProps) => {
           localStorage.setItem("accessToken", res?.access_token);
           setShowModalOtp(false);
           router.push('/your-lagacy');
+          setIsShowSignInForm(false);
         }
       }))
     }
@@ -69,6 +71,10 @@ const SignInForm = (props: ISignInFormProps) => {
       }
     }))
   }
+
+  const handleChangeEmail = () => {
+    setShowModalOtp(false);
+  };
 
   const onChangeSignInFormValue = (key: string, value: string) => {
     if(isSignInFailed){
@@ -200,7 +206,7 @@ const SignInForm = (props: ISignInFormProps) => {
     <div className="sign-in-container">
       {modalData.map((item) => {
         if (item.id === currentStep) {
-          return <ModalSignIn {...item} key={item.id} />;
+          return isShowSignInForm && <ModalSignIn {...item} key={item.id} />;
         }
       })}
       {showModalOtp && (
@@ -209,6 +215,7 @@ const SignInForm = (props: ISignInFormProps) => {
           setShowModal={setShowModalOtp}
           email={signInFormData.email}
           changeOtp={changeOtp}
+          onChangeEmail={handleChangeEmail}
         />
       )}
     </div>

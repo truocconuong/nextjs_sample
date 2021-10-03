@@ -32,7 +32,7 @@ function HeaderDashboard(props) {
     const onHandleLogOut = () => {
         localStorage.removeItem("accessToken");
         dispatch(CategoryActions.resetCategoryData());
-        router.push("/home");
+        router.push("/");
         setShowModalLogout(false);
     };
 

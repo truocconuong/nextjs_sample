@@ -69,6 +69,7 @@
           width: 50% !important;
         }
         .container-back-mobile {
+          cursor: pointer;
           width: 40%;
           .container-back-wrap {
             @extend .based-flex-row;

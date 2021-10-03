@@ -1,10 +1,10 @@
 import {IBeneficiary, IData, IExecutor} from "@constant/data.interface";
 import {CategoryTypes, PersonalTypes} from "../types";
 import {DataFormInput as DataPersonal} from "@module/PersonalFormInput";
-export const getCategoriesData = (token: string) => {
+export const getCategoriesData = (token: string, callback?: any) => {
   return {
     type: CategoryTypes.GET_CATEGORY_DATA,
-    payload: {token},
+    payload: {token, callback},
   };
 };
 
