@@ -60,7 +60,7 @@ function GenerateForm(props) {
               displayLabel
               label="Brand"
               inputProps={{
-                placeholder: "e.g. Armani",
+                placeholder: "",
                 value: data?.brand,
                 name: "brand",
                 onChange: e => handleChangeInput(e),
@@ -72,7 +72,7 @@ function GenerateForm(props) {
               displayLabel
               label="Model"
               inputProps={{
-                placeholder: "e.g. Three-Hand Brown Leather",
+                placeholder: "",
                 value: data?.model,
                 name: "model",
                 onChange: e => handleChangeInput(e),
@@ -84,7 +84,7 @@ function GenerateForm(props) {
               displayLabel
               label="Serial No."
               inputProps={{
-                placeholder: "e.g. 110099",
+                placeholder: "",
                 value: data?.serial_no,
                 name: "serial_no",
                 onChange: e => handleChangeInput(e),
@@ -100,7 +100,7 @@ function GenerateForm(props) {
               displayLabel
               label="Name"
               inputProps={{
-                placeholder: "e.g. Armani",
+                placeholder: "",
                 value: data?.pet_name,
                 name: "pet_name",
                 onChange: e => handleChangeInput(e),
@@ -110,9 +110,9 @@ function GenerateForm(props) {
           <Row className="mb-32">
             <InputField
               displayLabel
-              label="e.g. Pug"
+              label="Breed"
               inputProps={{
-                placeholder: "e.g. Three-Hand Brown Leather",
+                placeholder: "",
                 value: data?.pet_breed,
                 name: "pet_breed",
                 onChange: e => handleChangeInput(e),
@@ -124,7 +124,7 @@ function GenerateForm(props) {
               displayLabel
               label="Pet Registration Number"
               inputProps={{
-                placeholder: "e.g. 1234-4321",
+                placeholder: "",
                 value: data?.pet_registration_number,
                 name: "pet_registration_number",
                 onChange: e => handleChangeInput(e),
