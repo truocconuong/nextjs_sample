@@ -67,14 +67,18 @@ function InvestmentsLayout(props: IProps) {
     financial_institutions: false,
   });
   const [optionInvestments, setOptionInvestments] = useState([]);
+  const [optionFinancials, setOptionFinancials] = useState([]);
   const [disabledEdit, setDisabledEdit] = useState(false);
 
   useEffect(() => {
     if (categoryData?.investments) {
       const temp = categoryData?.investments.map(item => ({
         ...item,
-        capital_outlay: item?.capital_outlay && formatNumberMoney(item?.capital_outlay),
-        current_market_value: item?.current_market_value && formatNumberMoney(item?.current_market_value),
+        capital_outlay:
+          item?.capital_outlay && formatNumberMoney(item?.capital_outlay),
+        current_market_value:
+          item?.current_market_value &&
+          formatNumberMoney(item?.current_market_value),
       }));
       setListData(temp);
       setNumberForm(categoryData.investments.length + 1);
@@ -87,6 +91,7 @@ function InvestmentsLayout(props: IProps) {
   useEffect(() => {
     if (masterDataReducer) {
       const tempInvestments = [];
+      const tempFinancials = [];
       masterDataReducer.map(item => {
         if (item?.value === "INVESTMENT") {
           tempInvestments.push({
@@ -94,8 +99,15 @@ function InvestmentsLayout(props: IProps) {
             value: item?.id,
           });
         }
+        if (item?.value === "FINANCIAL_INSTITUTIONS") {
+          tempFinancials.push({
+            label: item?.name,
+            value: item?.name,
+          });
+        }
       });
       setOptionInvestments(tempInvestments);
+      setOptionFinancials(tempFinancials);
     }
   }, [masterDataReducer]);
 
@@ -186,8 +198,12 @@ function InvestmentsLayout(props: IProps) {
     }
     const submitData = {
       ...data,
-      capital_outlay: Number(data.capital_outlay.toString().replaceAll(',', '')),
-      current_market_value: Number(data.current_market_value.toString().replaceAll(',', '')),
+      capital_outlay: Number(
+        data.capital_outlay.toString().replaceAll(",", "")
+      ),
+      current_market_value: Number(
+        data.current_market_value.toString().replaceAll(",", "")
+      ),
     };
     if (disabledEdit) {
       // edit
@@ -296,6 +312,12 @@ function InvestmentsLayout(props: IProps) {
   const handleDeleteForm = () => {
     handleReset();
     handleResetState();
+  };
+
+  const handleFinancial = (input: string) => {
+    if (data?.financial_institutions === input) return;
+    setData(prev => ({...prev, financial_institutions: input}));
+    setErrors(prev => ({...prev, financial_institutions: false}));
   };
 
   return (
@@ -411,17 +433,40 @@ function InvestmentsLayout(props: IProps) {
                       </SelectField>
                     </Row>
                     <Row className="mb-32">
-                      <InputField
+                      <SelectField
                         displayLabel
                         label="Financial Institutions"
-                        inputProps={{
-                          placeholder: "e.g. Standard Chartered",
-                          name: "financial_institutions",
+                        selectProps={{
+                          placeholder: "Select",
                           value: data?.financial_institutions,
-                          onChange: e => handleChangeInput(e),
+                          onChange: value => {
+                            setData(prev => ({
+                              ...prev,
+                              financial_institutions: value,
+                            }));
+                            setErrors(prev => ({
+                              ...prev,
+                              financial_institutions: false,
+                            }));
+                          },
+                          filterOption: (input, option) => {
+                            handleFinancial(input);
+                            return (
+                              option?.children
+                                ?.toLowerCase()
+                                ?.indexOf(input.toLowerCase()) >= 0
+                            );
+                          },
                         }}
                         isError={errors?.financial_institutions}
-                      ></InputField>
+                        searchable
+                      >
+                        {optionFinancials.map(item => {
+                          return (
+                            <Option value={item.value}>{item.label}</Option>
+                          );
+                        })}
+                      </SelectField>
                     </Row>
                     <Row className={isShowDetail ? "mb-32" : "mb-40"}>
                       <CustomToggle

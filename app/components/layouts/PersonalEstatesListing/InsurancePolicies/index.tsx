@@ -63,7 +63,7 @@ function InsurancePolicyLayout(props: IProps) {
     policy_no: "",
     current_value: "",
     converage: "",
-    beneficiary_name: null,
+    beneficiary_name: "",
     is_nominated: false,
   });
   // const [isContinue, setIsContinue] = useState(false);
@@ -295,7 +295,6 @@ function InsurancePolicyLayout(props: IProps) {
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
-    setErrors(prev => ({...prev, [name]: false}));
     setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
@@ -330,7 +329,13 @@ function InsurancePolicyLayout(props: IProps) {
       ...prev,
       insurance_company: input,
     }));
-  }
+  };
+
+  const handleBeneficiary = (input: string) => {
+    if (data?.beneficiary_name === input) return;
+    setData(prev => ({...prev, beneficiary_name: input}));
+    setErrors(prev => ({...prev, beneficiary_name: false}));
+  };
 
   return (
     <>
@@ -368,7 +373,12 @@ function InsurancePolicyLayout(props: IProps) {
                           <Col>
                             <Row>
                               <span className="type">
-                                {item?.insurance_company}
+                                {
+                                  masterDataReducer.find(
+                                    masterData =>
+                                      masterData.id === item?.insurance_company
+                                  )?.name
+                                }
                               </span>
                             </Row>
                             <Row>
@@ -487,13 +497,27 @@ function InsurancePolicyLayout(props: IProps) {
                           selectProps={{
                             placeholder: "Select",
                             value: data?.beneficiary_name,
-                            onChange: value =>
+                            onChange: value => {
                               setData(prev => ({
                                 ...prev,
                                 beneficiary_name: value,
-                              })),
+                              }));
+                              setErrors(prev => ({
+                                ...prev,
+                                beneficiary_name: false,
+                              }));
+                            },
+                            filterOption: (input, option) => {
+                              handleBeneficiary(input);
+                              return (
+                                option?.children
+                                  ?.toLowerCase()
+                                  ?.indexOf(input.toLowerCase()) >= 0
+                              );
+                            },
                           }}
                           isError={errors?.beneficiary_name}
+                          searchable
                         >
                           {optionBeneficiaries.map(item => {
                             return (

@@ -123,7 +123,6 @@ function PropertyLayout(props: IProps) {
   });
   // const [isContinue, setIsContinue] = useState(true);
   const [errors, setErrors] = useState({
-    postal_code: false,
     country: false,
   });
   const [optionTypes, setOptionTypes] = useState([]);
@@ -264,10 +263,6 @@ function PropertyLayout(props: IProps) {
       error.country = true;
       isError = true;
     }
-    if (data?.is_solely && !data?.postal_code) {
-      error.postal_code = true;
-      isError = true;
-    }
     setErrors(prev => ({...prev, error}));
     return isError;
   };
@@ -367,9 +362,6 @@ function PropertyLayout(props: IProps) {
 
   const handleChangeInput = e => {
     const {name, value} = e.target;
-    if (data?.is_solely && name === "postal_code") {
-      setErrors(prev => ({...prev, postal_code: false}));
-    }
     setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 
@@ -575,7 +567,6 @@ function PropertyLayout(props: IProps) {
                               onChange: e => handleChangeInput(e),
                               className: "mb-16",
                             }}
-                            isError={errors?.postal_code}
                             searchable
                             onSearch={handleSearchPostalCode}
                           />
@@ -646,7 +637,7 @@ function PropertyLayout(props: IProps) {
                               <div className="wp-48">
                                 <InputField
                                   displayLabel
-                                  label="Tenure (in years)"
+                                  label="Completion Year"
                                   inputProps={{
                                     placeholder: "0",
                                     value: data?.tenure,
@@ -738,7 +729,7 @@ function PropertyLayout(props: IProps) {
                             <Row className="mb-32">
                               <InputField
                                 displayLabel
-                                label="Outstanding Loan Amount ($)"
+                                label="Estimated Property Value"
                                 inputProps={{
                                   placeholder: "",
                                   value: data?.outstanding_loan_amount,
@@ -752,7 +743,7 @@ function PropertyLayout(props: IProps) {
                             <Row className="mb-40">
                               <InputField
                                 displayLabel
-                                label="Remaining Loan Tenure (in years)"
+                                label="Outstanding Loan Amount ($)"
                                 inputProps={{
                                   placeholder: "0",
                                   value: data?.remaining_loan_tenure,

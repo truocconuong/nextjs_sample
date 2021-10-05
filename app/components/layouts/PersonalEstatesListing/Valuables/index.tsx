@@ -24,15 +24,7 @@ import {v4 as uuidv4} from "uuid";
 import {createSelector} from "reselect";
 import {IData, IMasterdata} from "@constant/data.interface";
 import GenerateForm from "./components/GenerateForm";
-
-enum TYPE_VALUABLES {
-  WATCH = "Watch",
-  PET = "Pet",
-  REAL_ESTATE = "Real Estate",
-  SAFE_BOX = "Safe Box",
-  JEWELLERY = "Jewellery",
-  MOTOR_VEHICLE = "Motor Vehicle",
-}
+import {VALUABLES_TYPE} from "@constant/index";
 
 const {Option} = Select;
 
@@ -110,6 +102,7 @@ function ValuablesLayout(props: IProps) {
           });
         }
       });
+
       setOptionAssets(tempAssets);
     }
   }, [masterDataReducer]);
@@ -309,39 +302,48 @@ function ValuablesLayout(props: IProps) {
     const name = masterDataReducer.find(masterData => masterData.id === id)
       ?.name;
     switch (name) {
-      case TYPE_VALUABLES.JEWELLERY:
+      case VALUABLES_TYPE.JEWELLERY:
         return <DiamondIconValuables />;
-      case TYPE_VALUABLES.MOTOR_VEHICLE:
+      case VALUABLES_TYPE.VEHICLE:
         return <CarIconValuables />;
-      case TYPE_VALUABLES.PET:
+      case VALUABLES_TYPE.PET:
         return <PetIconValuables />;
-      case TYPE_VALUABLES.REAL_ESTATE:
+      case VALUABLES_TYPE.REAL_ESTATE:
         return <RealEstatesIconValuables />;
-      case TYPE_VALUABLES.WATCH:
+      case VALUABLES_TYPE.TIME_PIECE:
         return <WatchIconValuables />;
-      case TYPE_VALUABLES.SAFE_BOX:
+      case VALUABLES_TYPE.SAFE_BOX:
+      case VALUABLES_TYPE.ANTIQUE:
+      case VALUABLES_TYPE.ART_PIECE:
+      case VALUABLES_TYPE.COLLECTION:
         return <SafeBoxIconValuables />;
       default:
         return <WatchIconValuables />;
     }
   };
-  
-  const generateInfoSecond = (item) => {
-    const name = masterDataReducer.find(masterData => masterData.id === item?.type_id)
-      ?.name;
+
+  const generateInfoSecond = item => {
+    const name = masterDataReducer.find(
+      masterData => masterData.id === item?.type_id
+    )?.name;
     switch (name) {
-      case TYPE_VALUABLES.JEWELLERY, TYPE_VALUABLES.MOTOR_VEHICLE, TYPE_VALUABLES.WATCH:
+      case (VALUABLES_TYPE.JEWELLERY,
+      VALUABLES_TYPE.VEHICLE,
+      VALUABLES_TYPE.TIME_PIECE):
         return item?.brand;
-      case TYPE_VALUABLES.PET:
+      case VALUABLES_TYPE.PET:
         return item?.name;
-      case TYPE_VALUABLES.REAL_ESTATE:
+      case VALUABLES_TYPE.REAL_ESTATE:
         return item?.country;
-      case TYPE_VALUABLES.SAFE_BOX:
+      case VALUABLES_TYPE.SAFE_BOX:
+      case VALUABLES_TYPE.ANTIQUE:
+      case VALUABLES_TYPE.ART_PIECE:
+      case VALUABLES_TYPE.COLLECTION:
         return item?.safe_box_detail.substring(0, 20);
       default:
         return;
     }
-  }
+  };
 
   return (
     <>
@@ -388,7 +390,9 @@ function ValuablesLayout(props: IProps) {
                               </span>
                             </Row>
                             <Row>
-                              <span className="financial">{generateInfoSecond(item)}</span>
+                              <span className="financial">
+                                {generateInfoSecond(item)}
+                              </span>
                             </Row>
                           </Col>
                         </Col>
