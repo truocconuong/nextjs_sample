@@ -5,40 +5,17 @@ import {limitLength} from "@util/index";
 import {Row} from "antd";
 import React, {useState, useEffect} from "react";
 
-enum TYPE_FORM {
-  COMMON = "common",
-  PET = "pet",
-  REAL_ESTATE = "real estate",
-  SAFE_BOX = "safe box",
-}
-
 function GenerateForm(props) {
   const {masterDataReducer, data, setData} = props;
 
   const [typeForm, setTypeForm] = useState("");
 
   useEffect(() => {
-    switch (
-      masterDataReducer.find(masterData => masterData.id === data?.type_id)
-        ?.name
-    ) {
-      case VALUABLES_TYPE.MOTOR_VEHICLE:
-      case VALUABLES_TYPE.WATCH:
-      case VALUABLES_TYPE.JEWELLERY:
-        setTypeForm(TYPE_FORM.COMMON);
-        break;
-      case VALUABLES_TYPE.PET:
-        setTypeForm(TYPE_FORM.PET);
-        break;
-      case VALUABLES_TYPE.REAL_ESTATE:
-        setTypeForm(TYPE_FORM.REAL_ESTATE);
-        break;
-      case VALUABLES_TYPE.SAFE_BOX:
-        setTypeForm(TYPE_FORM.SAFE_BOX);
-        break;
-      default:
-        setTypeForm(TYPE_FORM.COMMON);
-        break;
+    if (data?.type_id) {
+      setTypeForm(
+        masterDataReducer.find(masterData => masterData.id === data?.type_id)
+          ?.name
+      );
     }
   }, [data?.type_id]);
 
@@ -53,14 +30,14 @@ function GenerateForm(props) {
 
   return (
     <>
-      {typeForm === TYPE_FORM.COMMON && (
+      {typeForm === VALUABLES_TYPE.TIME_PIECE && (
         <>
           <Row className="mb-32">
             <InputField
               displayLabel
               label="Brand"
               inputProps={{
-                placeholder: "",
+                placeholder: "e.g. Rolex",
                 value: data?.brand,
                 name: "brand",
                 onChange: e => handleChangeInput(e),
@@ -72,7 +49,7 @@ function GenerateForm(props) {
               displayLabel
               label="Model"
               inputProps={{
-                placeholder: "",
+                placeholder: "e.g Submariner",
                 value: data?.model,
                 name: "model",
                 onChange: e => handleChangeInput(e),
@@ -84,7 +61,7 @@ function GenerateForm(props) {
               displayLabel
               label="Serial No."
               inputProps={{
-                placeholder: "",
+                placeholder: "e.g 124060",
                 value: data?.serial_no,
                 name: "serial_no",
                 onChange: e => handleChangeInput(e),
@@ -93,14 +70,94 @@ function GenerateForm(props) {
           </Row>
         </>
       )}
-      {typeForm === TYPE_FORM.PET && (
+      {typeForm === VALUABLES_TYPE.JEWELLERY && (
+        <>
+          <Row className="mb-32">
+            <InputField
+              displayLabel
+              label="Brand"
+              inputProps={{
+                placeholder: "e.g. Harry Winston",
+                value: data?.brand,
+                name: "brand",
+                onChange: e => handleChangeInput(e),
+              }}
+            ></InputField>
+          </Row>
+          <Row className="mb-32">
+            <InputField
+              displayLabel
+              label="Model"
+              inputProps={{
+                placeholder: "e.g Winston Cluster Diamond Necklace",
+                value: data?.model,
+                name: "model",
+                onChange: e => handleChangeInput(e),
+              }}
+            ></InputField>
+          </Row>
+          <Row className="mb-32">
+            <InputField
+              displayLabel
+              label="Serial No."
+              inputProps={{
+                placeholder: "e.g 124060",
+                value: data?.serial_no,
+                name: "serial_no",
+                onChange: e => handleChangeInput(e),
+              }}
+            ></InputField>
+          </Row>
+        </>
+      )}
+      {typeForm === VALUABLES_TYPE.VEHICLE && (
+        <>
+          <Row className="mb-32">
+            <InputField
+              displayLabel
+              label="Brand"
+              inputProps={{
+                placeholder: "e.g. BMW",
+                value: data?.brand,
+                name: "brand",
+                onChange: e => handleChangeInput(e),
+              }}
+            ></InputField>
+          </Row>
+          <Row className="mb-32">
+            <InputField
+              displayLabel
+              label="Model"
+              inputProps={{
+                placeholder: "e.g BMW i4 M50",
+                value: data?.model,
+                name: "model",
+                onChange: e => handleChangeInput(e),
+              }}
+            ></InputField>
+          </Row>
+          <Row className="mb-32">
+            <InputField
+              displayLabel
+              label="Number Plate"
+              inputProps={{
+                placeholder: "e.g 124060",
+                value: data?.serial_no,
+                name: "serial_no",
+                onChange: e => handleChangeInput(e),
+              }}
+            ></InputField>
+          </Row>
+        </>
+      )}
+      {typeForm === VALUABLES_TYPE.PET && (
         <>
           <Row className="mb-32">
             <InputField
               displayLabel
               label="Name"
               inputProps={{
-                placeholder: "",
+                placeholder: "e.g. Cookie",
                 value: data?.pet_name,
                 name: "pet_name",
                 onChange: e => handleChangeInput(e),
@@ -112,7 +169,7 @@ function GenerateForm(props) {
               displayLabel
               label="Breed"
               inputProps={{
-                placeholder: "",
+                placeholder: "e.g. I will entrust Cookie to John.",
                 value: data?.pet_breed,
                 name: "pet_breed",
                 onChange: e => handleChangeInput(e),
@@ -133,7 +190,7 @@ function GenerateForm(props) {
           </Row>
         </>
       )}
-      {typeForm === TYPE_FORM.REAL_ESTATE && (
+      {typeForm === VALUABLES_TYPE.REAL_ESTATE && (
         <>
           <Row className="mb-32">
             <SelectCountry
@@ -173,12 +230,15 @@ function GenerateForm(props) {
           </Row>
         </>
       )}
-      {typeForm === TYPE_FORM.SAFE_BOX && (
+      {(typeForm === VALUABLES_TYPE.SAFE_BOX ||
+        typeForm === VALUABLES_TYPE.ANTIQUE ||
+        typeForm === VALUABLES_TYPE.COLLECTION ||
+        typeForm === VALUABLES_TYPE.ART_PIECE) && (
         <>
           <Row className="mb-32">
             <InputField
               displayLabel
-              label="Safe Box Details"
+              label="Details"
               inputProps={{
                 placeholder: "Type here...",
                 value: data?.safe_box_detail,

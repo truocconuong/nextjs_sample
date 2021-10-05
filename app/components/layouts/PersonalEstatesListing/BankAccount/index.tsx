@@ -313,13 +313,6 @@ function BankAccountLayout(props: IProps) {
   const handleChangeInput = e => {
     const {name, value} = e.target;
     setErrors(prev => ({...prev, [name]: false}));
-    if (name === "account_holder") {
-      setData(prev => ({
-        ...prev,
-        [name]: limitLength(extractAlpha(value), 30),
-      }));
-      return;
-    }
     setData(prev => ({...prev, [name]: limitLength(value, 30)}));
   };
 

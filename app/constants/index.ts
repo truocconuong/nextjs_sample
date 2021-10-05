@@ -29,9 +29,12 @@ export const MAX_LENGTH_NAME = 255;
 export const MAX_LENGTH_FILE_NAME = 20;
 
 export enum VALUABLES_TYPE {
-  WATCH = "Watch",
+  ART_PIECE = "Art Piece",
+  ANTIQUE = "Antique",
+  COLLECTION = "Collection",
+  TIME_PIECE = "Time Piece",
   JEWELLERY = "Jewellery",
-  MOTOR_VEHICLE = "Motor Vehicle",
+  VEHICLE = "Vehicle",
   REAL_ESTATE = "Real Estate",
   PET = "Pet",
   SAFE_BOX = "Safe Box",
