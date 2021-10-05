@@ -159,7 +159,7 @@ function BankAccountLayout(props: IProps) {
     if (masterDataReducer) {
       const tempBanks = [];
       masterDataReducer.map(item => {
-        if (item?.value === "BANK") {
+        if (item?.value === "CURRENT_BANK") {
           tempBanks.push({
             label: item?.name,
             value: item?.name,

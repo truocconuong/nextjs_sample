@@ -166,7 +166,7 @@ function PropertyLayout(props: IProps) {
           });
           return;
         }
-        if (item?.value === "BANK") {
+        if (item?.value === "CURRENT_BANK") {
           tempBanks.push({
             label: item?.name,
             value: item?.id,
