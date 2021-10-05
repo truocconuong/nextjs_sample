@@ -70,7 +70,7 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
   }, [width])
 
   useEffect(() => {
-    if (dataForm.length === 2) {
+    if (dataForm.length >= 1) {
       dispatch(
         ProgressActions.setPushable(
           {
@@ -106,6 +106,12 @@ const PersonalExecutor = (props: IPersonalExecutorProps) => {
       );
     }
   }, [dataForm])
+
+  useEffect(() => {
+    setTimeout(() => {
+      window?.scrollTo({top: 0, behavior: "smooth"});
+    })
+  }, [])
 
   const onSaveDataFormInput = (data: DataFormInput) => {
     const dataFormCopy = [...dataForm];

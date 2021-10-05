@@ -52,7 +52,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
         {
           percent: getAmountPercentCompleted(categoryData),
         },
-        () => {}
+        () => { }
       )
     );
     pushable && router.push(routerPush);
@@ -61,7 +61,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
         {
           disabled: true,
         },
-        () => {}
+        () => { }
       )
     );
   };
@@ -78,11 +78,7 @@ const ProgressBar = (props: ProgressPropsInterface) => {
           <div className="btn-progress-container">
             <Button
               onClick={increaPercent}
-              className={
-                !disabled
-                  ? "button-progress-active"
-                  : "button-progress-disabled"
-              }
+              type="primary"
               disabled={disabled}
             >
               {textButton || "Continue"}
@@ -109,14 +105,10 @@ const ProgressBar = (props: ProgressPropsInterface) => {
               <span>{textDescription || "Your Will is"} </span>
               <span className="percent-completed">{`${percent}% Completed`}</span>
             </div>
-            <div style={{width: "fit-content"}}>
+            <div style={{ width: "fit-content" }}>
               <Button
                 onClick={increaPercent}
-                className={
-                  !disabled
-                    ? "button-progress-active"
-                    : "button-progress-disabled"
-                }
+                type="primary"
                 disabled={disabled}
               >
                 {textButton || "Continue"}
