@@ -89,7 +89,7 @@ const Allocation = () => {
     persons.forEach(person => {
       total += person.percent;
     })
-    const existedAllocationError = persons.find(
+    const existedAllocationError = persons.length > 1 && persons.find(
       (item) => item.percent === maxPercent
     );
     setTotalPercent(total);
@@ -113,7 +113,7 @@ const Allocation = () => {
       );
     }
 
-    
+
   }, [categoryData]);
 
   const masterdata = useSelector(
@@ -221,7 +221,7 @@ const Allocation = () => {
   };
 
   const saveAllocationByInput = (value: string, id: string, isEnter: boolean) => {
-    if(!isEnter || !isNumber(value)){
+    if (!isEnter || !isNumber(value)) {
       return;
     }
     onRangeChange(parseInt(value), id);
@@ -300,18 +300,18 @@ const Allocation = () => {
   }
 
   const getPresentName = (name: string) => {
-    if(!name){
+    if (!name) {
       return "";
     }
     const value = name.split(" ");
-    if(value?.length === 0){
+    if (value?.length === 0) {
       return "";
     }
     return value[value.length - 1][0];
   }
 
   useEffect(() => {
-    const existedAllocationError = persons.find(
+    const existedAllocationError = persons.length > 1 && persons.find(
       (item) => item.percent === maxPercent
     );
     if (totalPercent === maxPercent && !existedAllocationError) {
@@ -336,6 +336,11 @@ const Allocation = () => {
     const dataForm = toApiDataForm(persons);
     setNewPercent(dataForm);
   }, [totalPercent])
+
+  useEffect(() => {
+    window?.scrollTo({top: 0, behavior: "smooth"});
+  }, [])
+
   return (
     <div className="allocation-container">
       <div className="allocation-wrapper">
@@ -374,6 +379,7 @@ const Allocation = () => {
                 }
               >
                 {persons.map((person: AllocationPersonalInterface) => {
+                  const isError = person.percent === maxPercent && persons.length > 1;
                   return (
                     person.percent > 0 && (
                       <div
@@ -382,13 +388,13 @@ const Allocation = () => {
                         style={{
                           width: `${person.percent || 0}%`,
                           backgroundColor:
-                            person.percent === maxPercent
+                            isError
                               ? "#FFEBEC"
                               : person.color,
                         }}
                       >
                         <div className={"char-represent"}>
-                          {person.percent === maxPercent
+                          {isError
                             ? "Error"
                             : person?.name && getPresentName(person.name)}
                         </div>
@@ -449,12 +455,13 @@ const Allocation = () => {
           }
         >
           {persons.map((person: AllocationPersonalInterface) => {
+            const isError = person.percent === maxPercent && persons.length > 1;
             return (
               <React.Fragment key={person.id}>
                 <div
                   className={
                     "item-container " +
-                    (person.percent === maxPercent ? "error-ratio" : "")
+                    (isError ? "error-ratio" : "")
                   }
                 >
                   <div className="item-wrap">
@@ -485,7 +492,7 @@ const Allocation = () => {
                             onChange={(e: any) => onRangeChange(e, person.id)}
                             value={person.percent}
                             className={
-                              person.percent === maxPercent
+                              isError
                                 ? "slider-wrap-error"
                                 : ""
                             }
@@ -523,7 +530,7 @@ const Allocation = () => {
                           onChange={(e: any) => onRangeChange(e, person.id)}
                           value={person.percent || 0}
                           className={
-                            person.percent === maxPercent
+                            isError
                               ? "slider-wrap-error"
                               : ""
                           }
@@ -535,7 +542,7 @@ const Allocation = () => {
                     )}
                   </div>
                 </div>
-                {person.percent === maxPercent && (
+                {isError && (
                   <div className="error-text-ratio">
                     Please adjust the percentage
                   </div>

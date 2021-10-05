@@ -57,6 +57,12 @@ const PersonalInformation = () => {
   );
 
   useEffect(() => {
+    setTimeout(() => {
+      window?.scrollTo({top: 0, behavior: "smooth"});
+    })
+  }, [])
+
+  useEffect(() => {
     setIsMobile(width < 768);
   }, [width]);
 

@@ -176,6 +176,9 @@ const PersonalBeneficiary = (props: IPersonalBeneficiaryProps) => {
   }
 
   useEffect(() => {
+    setTimeout(() => {
+      window?.scrollTo({top: 0, behavior: "smooth"});
+    })
     dispatch(
       ProgressActions.setPushable(
         {
