@@ -28,6 +28,7 @@ function YourPersonalWill() {
   const [doneBenefit, setDoneBenefit] = useState(false);
   const [doneEstateDistribute, setDoneEstateDistribute] = useState(false);
   const [donePersonalEstatesList, setDonePersonalEstatesList] = useState(false);
+  const [editPersonalEstatesList, setEditPersonalEstatesList] = useState(false);
   const [doneCreateAcc, setDoneCreateAcc] = useState(false);
 
   // const [otp, setOTP] = useState("");
@@ -96,6 +97,17 @@ function YourPersonalWill() {
       category?.valuables.length >= 1
     ) {
       setDonePersonalEstatesList(true);
+    }
+
+    if (
+      category?.properties.length >= 1 ||
+      category?.bank_accounts.length >= 1 ||
+      category?.insurance_policies.length >= 1 ||
+      category?.investments.length >= 1 ||
+      category?.business_interests.length >= 1 ||
+      category?.valuables.length >= 1
+    ) {
+      setEditPersonalEstatesList(true);
     }
 
     if (category?.beneficiaries?.length >= 2) {
@@ -656,15 +668,15 @@ function YourPersonalWill() {
           >
             {width > 600 && (
               <Button
-                className={donePersonalEstatesList ? "edit-btn" : "start-btn"}
+                className={editPersonalEstatesList ? "edit-btn" : "start-btn"}
                 onClick={handleMovePersonalDetail}
               >
-                {donePersonalEstatesList && (
+                {editPersonalEstatesList && (
                   <span className="mr-8">
                     <PenIcon />
                   </span>
                 )}
-                <span>{donePersonalEstatesList ? "Edit" : "Start"}</span>
+                <span>{editPersonalEstatesList ? "Edit" : "Start"}</span>
               </Button>
             )}
           </Col>
