@@ -43,7 +43,7 @@ import _ from "lodash";
 import { checkDoneAllOption } from "@util/index";
 import InputField from "@generals/InputField";
 import { UserActions } from "@redux/actions";
-import Link from "next/link";
+// import Link from "next/link";
 
 const { Dragger } = Upload;
 
@@ -138,13 +138,13 @@ function StartYourWill() {
   };
 
   const handlePreView = () => {
-    // router.push("/preview-pdf");
+    router.push("/preview-pdf");
     dispatch(setDownloaded(true));
   };
 
-  const handleDownloadWill = () => {
-    dispatch(setDownloaded(true));
-  };
+  // const handleDownloadWill = () => {
+  //   dispatch(setDownloaded(true));
+  // };
 
   const handleMakePayment = () => {
     router.push("/payment-summary");
@@ -332,18 +332,18 @@ function StartYourWill() {
                 </span>
               </div>
               {!starYourWillData?.downloaded && (
-                <Link href="/preview-pdf">
-                  <a target="_blank">
-                    <CustomButton
-                      type="ghost"
-                      size="large"
-                      className="continue-btn"
-                      onClick={handleDownloadWill}
-                    >
-                      Download Will
-                    </CustomButton>
-                  </a>
-                </Link>
+                // <Link href="/preview-pdf">
+                //   <a target="_blank">
+                <CustomButton
+                  type="ghost"
+                  size="large"
+                  className="continue-btn"
+                  onClick={handlePreView}
+                >
+                  Download Will
+                </CustomButton>
+                //   </a>
+                // </Link>
               )}
               {starYourWillData?.downloaded && (
                 <div>
@@ -407,13 +407,13 @@ function StartYourWill() {
                 className="item-end"
               >
                 {width > 768 && (
-                  <Link href="/preview-pdf">
-                    <a target="_blank">
-                      <Button className="download-btn" onClick={handlePreView}>
-                        Download Will
-                      </Button>
-                    </a>
-                  </Link>
+                  // <Link href="/preview-pdf">
+                  //   <a target="_blank">
+                  <Button className="download-btn" onClick={handlePreView}>
+                    Download Will
+                  </Button>
+                  //   </a>
+                  // </Link>
                 )}
               </Col>
             </Row>
