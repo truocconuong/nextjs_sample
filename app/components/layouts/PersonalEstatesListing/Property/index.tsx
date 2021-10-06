@@ -383,6 +383,7 @@ function PropertyLayout(props: IProps) {
 
   const handleAddProperty = () => {
     if (isShowForm) return;
+    setNumberForm(listData.length + 1);
     setIsShowForm(true);
     setDisabledEdit(false);
   };

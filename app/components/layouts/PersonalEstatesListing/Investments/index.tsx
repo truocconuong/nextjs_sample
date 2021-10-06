@@ -305,6 +305,7 @@ function InvestmentsLayout(props: IProps) {
 
   const handleAddInvestment = () => {
     if (isShowForm) return;
+    setNumberForm(listData.length + 1);
     setIsShowForm(true);
     setDisabledEdit(false);
   };
