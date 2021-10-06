@@ -328,6 +328,7 @@ function BankAccountLayout(props: IProps) {
 
   const handleAddBankAccount = () => {
     if (isShowForm) return;
+    setNumberForm(listData.length + 1);
     setIsShowForm(true);
     setDisabledEdit(false);
   };

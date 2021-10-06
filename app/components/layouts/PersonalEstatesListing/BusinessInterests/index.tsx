@@ -19,7 +19,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {IData} from "@constant/data.interface";
 import {v4 as uuidv4} from "uuid";
-import {formatNumberMoney, isValidMoney, isValidPercent, limitLength} from "@util/index";
+import {
+  formatNumberMoney,
+  isValidMoney,
+  isValidPercent,
+  limitLength,
+} from "@util/index";
 
 interface IProps {
   isLogin: boolean;
@@ -49,7 +54,7 @@ function BusinessInterestsLayout(props: IProps) {
     company_name: "",
     company_uen: "",
     position: "",
-    estimated_current_market_value: '',
+    estimated_current_market_value: "",
     percentage_share: 0,
   });
   // const [isContinue, setIsContinue] = useState(false);
@@ -62,7 +67,9 @@ function BusinessInterestsLayout(props: IProps) {
     if (categoryData?.business_interests) {
       const temp = categoryData?.business_interests.map(item => ({
         ...item,
-        estimated_current_market_value: item?.estimated_current_market_value && formatNumberMoney(item?.estimated_current_market_value),
+        estimated_current_market_value:
+          item?.estimated_current_market_value &&
+          formatNumberMoney(item?.estimated_current_market_value),
       }));
       setListData(temp);
       setNumberForm(categoryData.business_interests.length + 1);
@@ -118,7 +125,7 @@ function BusinessInterestsLayout(props: IProps) {
       company_name: "",
       company_uen: "",
       position: "",
-      estimated_current_market_value: '',
+      estimated_current_market_value: "",
       percentage_share: 0,
     });
   };
@@ -160,7 +167,7 @@ function BusinessInterestsLayout(props: IProps) {
     const submitData = {
       ...data,
       estimated_current_market_value: Number(
-        data?.estimated_current_market_value.toString().replaceAll(',','')
+        data?.estimated_current_market_value.toString().replaceAll(",", "")
       ),
       percentage_share: Number(data?.percentage_share),
     };
@@ -270,6 +277,7 @@ function BusinessInterestsLayout(props: IProps) {
 
   const handleAddInvestment = () => {
     if (isShowForm) return;
+    setNumberForm(listData.length + 1);
     setIsShowForm(true);
     setDisabledEdit(false);
   };
@@ -421,7 +429,8 @@ function BusinessInterestsLayout(props: IProps) {
                               placeholder: "0.00",
                               value: data?.estimated_current_market_value,
                               name: "estimated_current_market_value",
-                              onChange: e => handleChangeInputNumberWithMoney(e),
+                              onChange: e =>
+                                handleChangeInputNumberWithMoney(e),
                             }}
                           ></InputField>
                           <span className="estimate-text w-full mt-16">
@@ -440,7 +449,8 @@ function BusinessInterestsLayout(props: IProps) {
                               placeholder: "0.00",
                               value: data?.percentage_share,
                               name: "percentage_share",
-                              onChange: e => handleChangeInputNumberWithPercent(e),
+                              onChange: e =>
+                                handleChangeInputNumberWithPercent(e),
                               type: "number",
                             }}
                           ></InputField>

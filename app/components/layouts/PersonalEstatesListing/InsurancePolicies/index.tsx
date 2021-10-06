@@ -310,6 +310,7 @@ function InsurancePolicyLayout(props: IProps) {
 
   const handleAddInsurancePolicy = () => {
     if (isShowForm) return;
+    setNumberForm(listData.length + 1);
     setIsShowForm(true);
     setDisabledEdit(false);
   };
