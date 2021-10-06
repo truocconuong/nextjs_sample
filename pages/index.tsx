@@ -39,7 +39,7 @@ const App = () => {
     checkAuthentication();
   }, []);
   return (
-    authenticated === null ? <Spin />
+    authenticated === null ? <Spin className="spinning" size="large"/>
       : (
         authenticated === false ?
           <Layout style-={{ backgroundColor: 'white' }}>

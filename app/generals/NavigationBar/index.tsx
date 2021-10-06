@@ -81,8 +81,15 @@ const NavigationBar = () => {
   );
 
   const returnToDashBoard = () => {
-    if(router.pathname !== "/start-your-will-create"){
-      router.push("/start-your-will-create");
+    const token = localStorage.getItem('accessToken');
+    if(token){
+      if(router.pathname !== "/your-lagacy"){
+        router.push("/your-lagacy");
+      }
+    }else{
+      if(router.pathname !== "/start-your-will-create"){
+        router.push("/start-your-will-create");
+      }
     }
   };
 

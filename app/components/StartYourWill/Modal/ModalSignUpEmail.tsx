@@ -11,8 +11,10 @@ import { MAX_LENGTH_NAME } from "@constant/index";
 function ModalSignUpEmail(props) {
   const { showModal, setShowModal, onSignUpEmail, name, emailProps } = props;
   const [email, setEmail] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
 
   const handleSignUp = () => {
+    setIsValidEmail(isEmail(email));
     onSignUpEmail(email);
     // setShowModal(false);
   };
@@ -58,11 +60,20 @@ function ModalSignUpEmail(props) {
                 if(e?.target?.value.length > MAX_LENGTH_NAME){
                   return;
                 }
-                setEmail(e.target.value)
+                if(!e.target.value){
+                  setIsValidEmail(true);
+                }
+                setEmail(e.target.value);
+                
               },
+              onKeyUp: e => {
+                if(e.key === "Enter"){
+                  handleSignUp();
+                }
+              }
             }}
-            isError={email && !isEmail(email)}
-            displayErrorText={email && !isEmail(email)}
+            isError={email && !isValidEmail}
+            displayErrorText={email && !isValidEmail}
             errorTextStr="Email is invalid."
           />
         </div>
@@ -70,7 +81,7 @@ function ModalSignUpEmail(props) {
           <Button
             className="continue-btn"
             onClick={handleSignUp}
-            disabled={(email && !isEmail(email)) || !email ? true : false}
+            disabled={!email}
           >
             Sign Up
           </Button>

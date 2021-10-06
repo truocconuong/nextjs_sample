@@ -187,6 +187,11 @@ const SignInForm = (props: ISignInFormProps) => {
                   value: signInFormData.email,
                   onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                     onChangeSignInFormValue("email", e?.target?.value),
+                    onKeyUp: e => {
+                      if(e.key === "Enter"){
+                        onSignIn();
+                      }
+                    }
                 }}
                 isError={(signInFormData.email && !isEmail(signInFormData.email)) || isSignInFailed}
                 displayErrorText={(signInFormData.email && !isEmail(signInFormData.email)) || isSignInFailed}
