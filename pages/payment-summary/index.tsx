@@ -29,7 +29,7 @@ import {
 } from "../../redux/actions/startYourWill";
 
 const stripePromise = loadStripe(
-  "pk_test_51JAn9sI5dgnlrNcIU23Yp4RczCcPO673EJFlUdzewVXZk1g0Fs5U54CWbnNE8CJxK1Os0SjU1CBtEIu9b2QlBAgy00EVpaX6c5"
+  "pk_test_51Jh2KtCJSOzLAaHox6xQzynJjpBpAdZd7YRH94Zg0LcKTwsEkUKYjTz8PzFHtWpw6GibxkDd2n7ReHpFN4WIozsn00PpU14G8A"
 );
 
 function PaymentSummary() {
