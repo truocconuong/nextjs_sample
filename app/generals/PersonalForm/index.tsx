@@ -12,6 +12,7 @@ interface PersonalFormProps {
   backgroundColor: string;
   displayButton?: boolean;
   onIconClick: () => void;
+  onGetUserInformationBySingpass?: () => void;
 }
 const PersonalForm = (props: PersonalFormProps) => {
   const {
@@ -24,7 +25,8 @@ const PersonalForm = (props: PersonalFormProps) => {
     textButton,
     backgroundColor,
     displayButton,
-    onIconClick
+    onIconClick,
+    onGetUserInformationBySingpass
   } = props;
   return (
     <div
@@ -51,7 +53,7 @@ const PersonalForm = (props: PersonalFormProps) => {
         </div>
         {displayButton &&
           <div className="btn-input-info-wrap">
-            <CustomButton type="primary" className="btn-input-info">
+            <CustomButton type="primary" className="btn-input-info" onClick={onGetUserInformationBySingpass}>
               {textButton}
             </CustomButton>
           </div>

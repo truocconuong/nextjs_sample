@@ -9,6 +9,7 @@ import {createSelector} from "reselect";
 import {
   CategoryActions,
   ProgressActions,
+  SingpassActions,
   UserActions,
 } from "../../../../redux/actions";
 import {useDispatch} from "react-redux";
@@ -17,8 +18,11 @@ import {
   PersonalMobileIcon,
   TipIcon,
 } from "../../../../public/images";
-import {IData, IPersonalInformation} from "@constant/data.interface";
+import {IData, IPersonalInformation, ISingpassGetEnv, ISingpassPersonalData} from "@constant/data.interface";
 import {v4 as uuidv4} from "uuid";
+import router from "next/router";
+import { NotificationWarning } from "@generals/notifications";
+import { saveCategoriesData } from "@redux/actions/category";
 const PersonalInformation = () => {
   const dispatch = useDispatch();
   const [visibleModal, setVisibleModal] = useState(false);
@@ -145,6 +149,13 @@ const PersonalInformation = () => {
     }
   };
 
+  useEffect(() => {
+    const isErrorSingpass = localStorage.getItem("hasErrorSingpass");
+    if(isErrorSingpass === "true"){
+      NotificationWarning("An error occurred while retrieving information from Singpass");
+    }
+  }, [])
+
   const toDataApiUpdatePersonalInformation = (data: DataFormInput) => {
     return {
       full_legal_name: data.legalName,
@@ -157,9 +168,61 @@ const PersonalInformation = () => {
     };
   };
 
+  const onGetUserInformationBySingpass = () => {
+    const purpose = "Get Information From Singpass";
+    const authoriseUrl = singpassEnv._authApiUrl + "?client_id=" + singpassEnv._clientId +
+      "&attributes=" + singpassEnv._attributes +
+      "&purpose=" + purpose +
+      "&state=" + encodeURIComponent("123") +
+      "&redirect_uri=" + singpassEnv._redirectUrl;
+    router?.push(authoriseUrl);
+  }
+
+  useEffect(() => {
+    const singpassCode = localStorage.getItem("code");
+    if(singpassCode){
+      dispatch(SingpassActions.getSingpassEnv)
+    }
+  }, [])
+
+  const singpassEnv = useSelector(
+    createSelector(
+      (state: any) => state?.singpass,
+      (singpass: ISingpassGetEnv) => {
+        return singpass;
+      }
+    )
+  );
+
+  const singpassPersonalInformation = useSelector(
+    createSelector(
+      (state: any) => state?.singpasPersonal,
+      (singpasPersonal: ISingpassPersonalData) => {
+        return singpasPersonal;
+      }
+    )
+  );
+
+  useEffect(() => {
+    dispatch(SingpassActions.getSingpassEnv(null, (res) => {
+    }))
+  }, [])
+
   const onEditCard = (id: number) => {
     setVisibleFormInput(true);
   };
+
+
+  useEffect(() => {
+    if(singpassPersonalInformation){
+      const newCategoryData: IData = {
+        ...categoryData,
+        full_legal_name: singpassPersonalInformation?.name?.value,
+      }
+
+      dispatch(saveCategoriesData(newCategoryData));
+    }
+  }, [])
   const classNameWrapper =
     "personal-wrapper" +
     (isMobile
@@ -181,6 +244,7 @@ const PersonalInformation = () => {
           title="Personal Information"
           textButton="Retrieve Myinfo with Singpass"
           backgroundColor="#ffede9"
+          onGetUserInformationBySingpass={onGetUserInformationBySingpass}
         />
         <div
           className={

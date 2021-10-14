@@ -7,6 +7,7 @@ import userSaga from "./user";
 import starYourWillSaga from "./startYourWill";
 import postContactFormSaga from './contact';
 import getProfileSaga from "./profile";
+import singpassSaga from "./singpass";
 
 export default function* rootSaga() {
   yield all([
@@ -17,6 +18,7 @@ export default function* rootSaga() {
     userSaga(),
     starYourWillSaga(),
     postContactFormSaga(),
-    getProfileSaga()
+    getProfileSaga(),
+    singpassSaga(),
   ]);
 }

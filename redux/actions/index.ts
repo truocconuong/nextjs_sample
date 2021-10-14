@@ -5,6 +5,7 @@ import * as MasterDataActions from "./masterdata";
 import * as CategoryActions from "./category";
 import * as UserActions from "./user";
 import * as PersonalEstatesListingActions from "./personalEstatesListing";
+import * as SingpassActions from "./singgpass";
 
 export {
   ProgressActions,
@@ -14,4 +15,5 @@ export {
   CategoryActions,
   UserActions,
   PersonalEstatesListingActions,
+  SingpassActions,
 };
