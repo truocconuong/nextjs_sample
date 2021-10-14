@@ -202,3 +202,128 @@ export interface IResponseGetProfile {
   full_legal_name: string;
   email: string;
 }
+
+export interface ISingpassGetEnv {
+  _attributes: string;
+  _authApiUrl: string;
+  _authLevel: string;
+  _clientId: string;
+  _clientSecret: string;
+  _personApiUrl: string;
+  _privateKeyContent: string;
+  _publicCertContent: string;
+  _redirectUrl: string;
+  _tokenApiUrl: string;
+}
+
+
+//SING PASS DATA 
+export interface Residentialstatus {
+  lastupdated: string;
+  code: string;
+  source: string;
+  classification: string;
+  desc: string;
+}
+
+export interface Name {
+  lastupdated: string;
+  source: string;
+  classification: string;
+  value: string;
+}
+
+export interface Sex {
+  lastupdated: string;
+  code: string;
+  source: string;
+  classification: string;
+  desc: string;
+}
+
+export interface Nationality {
+  lastupdated: string;
+  code: string;
+  source: string;
+  classification: string;
+  desc: string;
+}
+
+export interface Uinfin {
+  lastupdated: string;
+  source: string;
+  classification: string;
+  value: string;
+}
+
+export interface Dob {
+  lastupdated: string;
+  source: string;
+  classification: string;
+  value: string;
+}
+
+export interface Country {
+  code: string;
+  desc: string;
+}
+
+export interface Unit {
+  value: string;
+}
+
+export interface Street {
+  value: string;
+}
+
+export interface Block {
+  value: string;
+}
+
+export interface Postal {
+  value: string;
+}
+
+export interface Floor {
+  value: string;
+}
+
+export interface Building {
+  value: string;
+}
+
+export interface Address {
+  country: Country;
+  unit: Unit;
+  street: Street;
+  block: Block;
+  postal: Postal;
+  type: string;
+  floor: Floor;
+  building: Building;
+}
+
+export interface Hdbownership {
+  address: Address;
+  lastupdated: string;
+  source: string;
+  classification: string;
+}
+
+export interface ISingpassPersonalData {
+  residentialstatus: Residentialstatus;
+  name: Name;
+  sex: Sex;
+  nationality: Nationality;
+  uinfin: Uinfin;
+  dob: Dob;
+  hdbownership: Hdbownership[];
+  childrenbirthrecords: any[];
+  sponsoredchildrenrecords: any[];
+}
+
+export interface RootObject {
+  status: string;
+  text: Text;
+}
+

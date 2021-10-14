@@ -34,3 +34,7 @@ export const isDoneEstalisted = (category: IData) => {
 export const isEmptyObject = (obj: object) => {
     return obj && Object.keys(obj).length === 0 && obj.constructor === Object;
 }
+
+export const toObjectQueryParams = (search: string) => {
+    return JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) })
+}

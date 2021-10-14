@@ -4,13 +4,17 @@ import sizeBrowserReducer from "./sizeBrowser";
 import startYourWillReducer from "./startYourWill";
 import masterdataReducer from "./masterdata";
 import categoryReducer from "./category";
+import singpassReducer from "./singpass";
+import singpasPersonalInformationReducer from "./singpasPersonalInformation";
 
 const appReducers = combineReducers({
   progress: progressReducer,
   sizeBrowser: sizeBrowserReducer,
   startYourWill: startYourWillReducer,
   masterdata: masterdataReducer,
-  category: categoryReducer
+  category: categoryReducer,
+  singpass: singpassReducer,
+  singpasPersonal: singpasPersonalInformationReducer,
 });
 
 const rootReducers = (state, action) => {
